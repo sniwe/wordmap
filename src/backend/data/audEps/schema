@@ -1,0 +1,44 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "label": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "text": {
+        "type": "string"
+      },
+      "media": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "originalName": {
+              "type": "string"
+            },
+            "storedName": {
+              "type": "string"
+            },
+            "mimeType": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "audioFileRef": {
+        "type": "string"
+      },
+      "audioTitle": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": true
+  }
+}

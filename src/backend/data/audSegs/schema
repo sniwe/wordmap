@@ -1,0 +1,30 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "audEpIndex": {
+        "type": "integer"
+      },
+      "_id": {
+        "type": "string"
+      },
+      "tcs": {
+        "type": "number"
+      },
+      "tce": {
+        "type": ["number", "string"]
+      },
+      "ssHead": {
+        "type": "string"
+      },
+      "label": {
+        "type": "string"
+      },
+      "text": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": true
+  }
+}

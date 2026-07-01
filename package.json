@@ -1,0 +1,13 @@
+{
+  "name": "vanilla-js-edit-notes",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/public/server.js --dev",
+    "build": "vite build",
+    "start": "node src/public/server.js"
+  },
+  "devDependencies": {
+    "vite": "^8.1.2"
+  }
+}

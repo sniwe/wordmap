@@ -1,0 +1,774 @@
+{
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments",
+    "notes": [
+      {
+        "text": "subSeg input auto-focuses on audSeg entered state triggered",
+        "createdAt": "2026-07-01T14:17:29.281Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T22:18:54.1518335+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs",
+    "notes": [
+      {
+        "text": "subSeg input height should be max-content",
+        "createdAt": "2026-07-01T14:16:52.534Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T22:18:54.1518335+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list",
+    "notes": [
+      {
+        "text": "let the first list item always be an ethereal addAudEpBtn-only item that users can use to initialize new audEps to the top of the list.",
+        "createdAt": "2026-07-01T02:43:36.331Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:46:05.3283288+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "let the ethereal seed item display without border, min height max-content/auto and aligned to right.",
+        "createdAt": "2026-07-01T02:52:56.661Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:54:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "let the user cycle selection of list item by ctrl+arrowup/down keypress;",
+        "createdAt": "2026-07-01T03:03:27.962Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T11:06:16.1435728+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "on right side of audEpLabel text, after 20px gap, display a currentTime digit display of format `${currentPBTime}:${maxTime}`; user keypress of spacebar while targeting the item will toggle audio playback. display will update in real time",
+        "createdAt": "2026-07-01T03:11:48.251Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T11:13:45.4361398+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "cycle selection targeting on list is displaying target indiccation on wrong itme index",
+        "createdAt": "2026-07-01T03:18:44.913Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T11:19:32.9535274+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "index of items in list should be based on actual display order"
+          ]
+        }
+      },
+      {
+        "text": "cycle tareting needs to be able to target all indexes. deafults to target index -1 on page load",
+        "createdAt": "2026-07-01T03:37:39.633Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T11:42:08.9264974+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "index of items in list  should be based on actual display order",
+        "createdAt": "2026-07-01T03:42:55.513Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T11:44:17.3913856+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "cycle targeting should cycle from top to bottom of list (visual order of appearance top to bottom) - at perssent it is working in reverse",
+        "createdAt": "2026-07-01T03:45:53.184Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T11:47:05.6203987+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "ctrl+arrowup/down selection uses visual top-to-bottom cycling now"
+          ]
+        }
+      },
+      {
+        "text": "space keypress on cycle target udpates time element as if audio is playing but im not hearing any audio",
+        "createdAt": "2026-07-01T03:55:10.977Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T12:00:03.6852689+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "current audio playback handling with real audio elements and playback labels"
+          ]
+        }
+      },
+      {
+        "text": "the page cannot handle two concurrent audio streams. update to ensure that they hand off properly",
+        "createdAt": "2026-07-01T04:06:23.428Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T12:24:31.4702217+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "ctrl+backspace on targeted audEp triggers item confirm delete dialogue. while confrm dialogue open, targeting style changes color to red. let dialogue be contained as a second state on item with \"cancel\" and \"confirm\" labelled buttons corresponding to actions. auto-focus cancel option. tab press or ctrl arrow right/left cycles between options",
+        "createdAt": "2026-07-01T04:16:42.997Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T12:24:31.4702217+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "non-augmented (no ctrl hold, shift hold, etc) arrow left/right keypress while targeting audEp seeks audio playback",
+        "createdAt": "2026-07-01T05:03:49.417Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T12:24:31.4702217+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "seek is +-5sec depending on direction",
+        "createdAt": "2026-07-01T05:04:08.073Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T12:24:31.4702217+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "seek +5 sec on arrow right, -5 sec on arrow left",
+        "createdAt": "2026-07-01T05:16:16.219Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T12:24:31.4702217+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "enter press on cycle selected target triggers entered state lock on target item:\na container of width parent box -10px width expands under audEp text+time line;\ncontainer contains #audSegs list defaulting empty with placeholder text (subtle, greyed) \"no audSegs yet..\"",
+        "createdAt": "2026-07-01T06:12:26.048Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T14:16:32.6908624+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "ctrl+backspace from entered state collapses the entered state container and unlocks it",
+        "createdAt": "2026-07-01T06:20:39.781Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T14:24:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "initialize a data collection for audSegs in C:\\retry\\src\\backend\\data",
+        "createdAt": "2026-07-01T06:21:31.450Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T14:24:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "while in entered state, ctrl+arrow left/right is used to cycle select targeting on audSeg items",
+        "createdAt": "2026-07-01T07:25:40.200Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T15:10:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "while an audEp is in entered state, ctrl+arrowup/down will not cycle audEp targeting, but instead jump audSeg cycle targeting across rows, e.g. audSeg cycle targeting index 0 ctrl+down keypress will jump to target audSeg index 3, etc",
+        "createdAt": "2026-07-01T14:00:52.593Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T22:05:16.4746256+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > input.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > input.item__subseg-input",
+    "notes": [
+      {
+        "text": "add an onInput dedounced (500ms) save that persists the content of subSeg item to collection data entry. note that like audSegs relationship to audEp, subSegs also has a similar relationship to audSeg - a list of references pointing to connected audSeg item populate the subSeg list",
+        "createdAt": "2026-07-01T12:58:29.802Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T21:03:26.2489528+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "ctrl+backspace in input focused state blocks default behavior of input and instead triggers audSeg exit",
+        "createdAt": "2026-07-01T13:29:29.311Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T21:31:07.7248427+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "reduce input text font size to 10",
+        "createdAt": "2026-07-01T13:40:06.787Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T21:40:42.4553126+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1)": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1)",
+    "notes": [
+      {
+        "text": "reduce padding either side of input by half",
+        "createdAt": "2026-07-01T12:52:59.878Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T20:53:47.8663336+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > aside#note-sidebar.note-sidebar.is-open > html > body > #app > aside#note-sidebar.note-sidebar.is-open > textarea#note-input.note-sidebar__input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > aside#note-sidebar.note-sidebar.is-open > html > body > #app > aside#note-sidebar.note-sidebar.is-open > textarea#note-input.note-sidebar__input",
+    "notes": [
+      {
+        "text": "set up collection dir for subSegs under C:\\retry\\src\\backend\\data",
+        "createdAt": "2026-07-01T12:50:57.558Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T20:52:35.6810736+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1)": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1)",
+    "notes": [
+      {
+        "text": "on entered state audSeg, let time text display on the top right",
+        "createdAt": "2026-07-01T12:47:45.885Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T20:48:28.0657045+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "on line under time text, display subSeg list. default state is a single ethereal item containing only a rich text input of full width minus 10px padding;",
+        "createdAt": "2026-07-01T12:49:43.147Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T20:51:25.8062180+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments",
+    "notes": [
+      {
+        "text": "let audSegs list be data-backed by C:\\retry\\src\\backend\\data\\audSegs in the same way as audEp list is except that audSeg colleciton items are linked by a reference field to their parent audEp and will only display on it, not other audEps",
+        "createdAt": "2026-07-01T06:45:53.021Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T14:49:51.8884073+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "audSegs will display as 3-items max per row flexbox cards list. user can add a card by the audSeg capture flow detailed in C:\\Users\\Qub\\orderBot\\obv\\Excalidraw\\app\\page.elements\\audEpRpt.audEpItem.md",
+        "createdAt": "2026-07-01T06:53:35.356Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T15:00:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "audSeg add action needs to be wired and set up to correctly add items and references to data, then re-render the audEp item with freshly added audSeg(s)",
+        "createdAt": "2026-07-01T07:19:27.437Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T15:03:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "align text content on audSeg cards to center of their cards;\ncard height still not max content - should be height of contained text plus minimal vertical padding for readability only",
+        "createdAt": "2026-07-01T07:29:39.696Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T15:15:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "ctrl+arrowRight/left can be used from audEp entered state to cycle selection target on audSegs (same style as audEP cycle selection);\nenter press while targeting audSeg  will lock to that target and clamp audio playback to its start and end times (playback wraps), also seeking to its start time",
+        "createdAt": "2026-07-01T07:46:42.265Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T15:48:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "audSeg items will reorganize as follows when an enter press locks an audSeg to entered state: \n1) IF the entered audSeg is not the first audSeg, it will be moved to occupy its own row alone. its width will become the entire row. audSegs after it will be moved to continue as normal on following row(s). If it is the first audSeg, it will fill the current row and others will be moved down. If it is the last audSeg, it will be moved down to its own row and will occupy the whole row. when entered state exited, the default 3-cards per row will be restored.\n2)",
+        "createdAt": "2026-07-01T11:55:53.208Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T19:57:38.1329140+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > aside#note-sidebar.note-sidebar.is-open > html > body > #app > aside#note-sidebar.note-sidebar.is-open > div#note-list.note-sidebar__notes:nth-of-type(3) > html > body > #app > aside#note-sidebar.note-sidebar.is-open > div#note-list.note-sidebar__notes:nth-of-type(3) > details.note-history > html > body > #app > aside#note-sidebar.note-sidebar.is-open > div#note-list.note-sidebar__notes:nth-of-type(3) > details.note-history > div.note-history__body": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > aside#note-sidebar.note-sidebar.is-open > html > body > #app > aside#note-sidebar.note-sidebar.is-open > div#note-list.note-sidebar__notes:nth-of-type(3) > html > body > #app > aside#note-sidebar.note-sidebar.is-open > div#note-list.note-sidebar__notes:nth-of-type(3) > details.note-history > html > body > #app > aside#note-sidebar.note-sidebar.is-open > div#note-list.note-sidebar__notes:nth-of-type(3) > details.note-history > div.note-history__body",
+    "notes": [
+      {
+        "text": "let history be filtered to show only active and partially active entries under the target",
+        "createdAt": "2026-07-01T11:44:12.212Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T19:45:33.0124406+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment",
+    "notes": [
+      {
+        "text": "height should be auto max content",
+        "createdAt": "2026-07-01T07:21:43.000Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T15:05:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "shift held (for audSeg add action) should not prevent seek from firing during it",
+        "createdAt": "2026-07-01T07:22:43.273Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T15:05:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > li.item.item--delete-confirm > html > body > li.item.item--delete-confirm > div.item__delete-dialog > html > body > li.item.item--delete-confirm > div.item__delete-dialog > button.item__delete-action:nth-of-type(2)": {
+    "selector": "html > html > body > html > body > li.item.item--delete-confirm > html > body > li.item.item--delete-confirm > div.item__delete-dialog > html > body > li.item.item--delete-confirm > div.item__delete-dialog > button.item__delete-action:nth-of-type(2)",
+    "notes": [
+      {
+        "text": "delete confirm button needs to clear the relevant C:\\retry\\src\\backend\\data files",
+        "createdAt": "2026-07-01T04:26:49.420Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T12:24:31.4702217+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item:nth-of-type(2) > span.item__content > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item:nth-of-type(2) > span.item__content > span.item__time:nth-of-type(2)": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item:nth-of-type(2) > span.item__content > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item:nth-of-type(2) > span.item__content > span.item__time:nth-of-type(2)",
+    "notes": [
+      {
+        "text": "should be 00:00 - not 00:00:00:00",
+        "createdAt": "2026-07-01T03:14:24.943Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T11:15:23.4517460+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--seed:nth-of-type(1)": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--seed:nth-of-type(1)",
+    "notes": [
+      {
+        "text": "remove padding on this item",
+        "createdAt": "2026-07-01T02:55:43.347Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:56:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1)": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1)",
+    "notes": [
+      {
+        "text": "dimensions = max content with 10px padding",
+        "createdAt": "2026-07-01T01:39:34.312Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T09:40:05.3543261+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "when no audEp items to list (because data empty) the list should show one ethereal (not based on data) to allow user to seed first item",
+        "createdAt": "2026-07-01T02:31:25.776Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:29:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item",
+    "notes": [
+      {
+        "text": "if connected audEp data has an audio file ref, hide the addAudEpBtn;\nplan text on top left of item shows audio title;",
+        "createdAt": "2026-07-01T02:25:43.232Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:28:15.3516476+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item > button.addAudEp-button": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item > button.addAudEp-button",
+    "notes": [
+      {
+        "text": "increase dimensions to 15*15px",
+        "createdAt": "2026-07-01T02:14:53.894Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:15:12.7233767+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "click on this button triggers file picker allowing user to pick an audio file for upload to C:\\retry\\src\\backend\\data\\media  . the uploaded media will have a reference stored on audEp collection item.",
+        "createdAt": "2026-07-01T02:22:26.709Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:28:15.3516476+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul.list": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul.list",
+    "notes": [
+      {
+        "text": "replace placeholder text with rich input. min width is 45px. default height is 25px.",
+        "createdAt": "2026-07-01T01:41:27.201Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T09:41:46.5770742+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "replace with addAudEp button and sidebar-driven edit notes instead"
+          ]
+        }
+      },
+      {
+        "text": "all items min-height 35px and min width 50px;",
+        "createdAt": "2026-07-01T02:19:59.846Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:20:23.3365106+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item > button.addAudEp-button": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item > button.addAudEp-button",
+    "notes": [
+      {
+        "text": "needs to display within the bounds of parent item",
+        "createdAt": "2026-07-01T02:12:24.287Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:12:55.8195812+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item:nth-of-type(1)": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item:nth-of-type(1)",
+    "notes": [
+      {
+        "text": "replace input with a single \"addAudEp\" button with label \"+\"; dimensions10*10px; sits on top right corner of item",
+        "createdAt": "2026-07-01T02:04:35.200Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:10:27.9036438+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list",
+    "notes": [
+      {
+        "text": "set up data dir in /src/backend/data;\ncreate an /audEps collection subDir containing two files: 1) schema (a definition of collection json schema); 2) items.json (the .json of items of this collection);\nlet items of this list be sourced from there. if no items yet, display only one item;",
+        "createdAt": "2026-07-01T02:01:26.118Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T10:10:26.9036438+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item:nth-of-type(1) > input.rich-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul.list > li.item:nth-of-type(1) > input.rich-input",
+    "notes": [
+      {
+        "text": "keypresses (e.g \"enter\", ctrl+b) on this input are not triggering the expected rich text input behaviors",
+        "createdAt": "2026-07-01T01:44:41.533Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T09:43:31.0000000+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "the list was replaced by selector-driven note editing and audEp controls"
+          ]
+        }
+      },
+      {
+        "text": "make the placeholder on inputs true placeholder only text and faded to low opacity. when user focuses that placeholder should vanishs and only continue to show on blur if content still empty",
+        "createdAt": "2026-07-01T01:45:46.656Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T09:43:31.0000000+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "the rich input no longer exists"
+          ]
+        }
+      }
+    ]
+  },
+  "html > body > div#canvas": {
+    "selector": "html > body > div#canvas",
+    "notes": [
+      {
+        "text": "move to top right corner of page",
+        "createdAt": "2026-07-01T00:45:08.465Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T09:34:03.6463071+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "move to top left corner of page with 20px gap from edges"
+          ]
+        }
+      },
+      {
+        "text": "move to top left corner of page with 20px gap from edges",
+        "createdAt": "2026-07-01T01:02:35.464Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T09:34:03.6463071+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  }
+}
