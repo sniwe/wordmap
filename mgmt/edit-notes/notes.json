@@ -247,19 +247,14 @@
           "missing": "",
           "replacedBy": []
         }
-      }
-    ]
-  },
-  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
-    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input",
-    "notes": [
+      },
       {
-        "text": "input width is growing with input content. we only need input height to grow with content",
-        "createdAt": "2026-07-02T02:37:20.100Z",
+        "text": "audSeg list not centering in dev properly. fix this. it should have equal padding either side",
+        "createdAt": "2026-07-02T03:23:37.934Z",
         "applied": true,
-        "appliedAt": "2026-07-02T10:39:34.3053661+08:00",
+        "appliedAt": "2026-07-02T11:18:00.0000000+08:00",
         "functionalityStatus": {
-          "state": "unknown",
+          "state": "active",
           "remaining": "",
           "missing": "",
           "replacedBy": []
@@ -325,6 +320,81 @@
         "appliedAt": "2026-07-02T10:06:55.1594515+08:00",
         "functionalityStatus": {
           "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "when all content deleted off of subSegInput, subsequent inputted input is treated as being within the subSeg bubble span. fix this so that after delete, it behaves as default",
+        "createdAt": "2026-07-02T03:05:33.664Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T11:04:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "let input content wrap once it reaches row width",
+        "createdAt": "2026-07-02T03:20:45.662Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T11:12:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel",
+    "notes": [
+      {
+        "text": "this needs to not grow width with content input",
+        "createdAt": "2026-07-02T03:18:37.393Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T11:12:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input",
+    "notes": [
+      {
+        "text": "enter keypress while subSeg bubble cycle target active will be a no-op for the time being",
+        "createdAt": "2026-07-02T03:13:02.681Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T11:06:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input",
+    "notes": [
+      {
+        "text": "input width is growing with input content. we only need input height to grow with content",
+        "createdAt": "2026-07-02T02:37:20.100Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T10:39:34.3053661+08:00",
+        "functionalityStatus": {
+          "state": "unknown",
           "remaining": "",
           "missing": "",
           "replacedBy": []

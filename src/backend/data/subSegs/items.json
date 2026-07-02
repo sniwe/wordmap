@@ -2,16 +2,16 @@
   {
     "_id": "13c2b56c-ae4a-4e6f-b6c9-3404519b1aec",
     "audSegId": "0-0",
-    "text": "<span class=\"subseg-bubble\">this</span> is the <br><span class=\"subseg-bubble\">first test </span> ok, all is well thennot sure",
+    "text": "this is <span class=\"subseg-bubble\">much better </span> <br>i am much better for having this<br><br>",
     "createdAt": "2026-07-01T14:10:39.788Z",
-    "updatedAt": "2026-07-02T02:35:36.815Z"
+    "updatedAt": "2026-07-02T03:46:19.532Z"
   },
   {
-    "_id": "71c25b89-09bb-4c83-92d9-6250309f0e10",
+    "_id": "b5888930-8198-4737-8f95-5764dd4ba657",
     "audSegId": "0-1",
-    "text": "boop<br>this is the <span class=\"subseg-bubble\">second</span> and it has a new line here<br>",
-    "createdAt": "2026-07-01T14:10:44.249Z",
-    "updatedAt": "2026-07-02T02:35:47.490Z"
+    "text": "<br>",
+    "createdAt": "2026-07-02T03:34:53.950Z",
+    "updatedAt": "2026-07-02T03:34:55.384Z"
   },
   {
     "_id": "e4067440-c85a-43e8-8cd6-144ff38c6d88",

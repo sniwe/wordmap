@@ -66,6 +66,77 @@ const subSegDraftTextByAudSegId = new Map();
 const subSegSaveTimers = new Map();
 const subSegBubbleEscapeState = new Map();
 const subSegBubbleTargetIndexByAudSegId = new Map();
+if (import.meta.env.DEV) {
+  createDevReloadTone();
+}
+
+function createDevReloadTone() {
+  const AudioContextCtor = window.AudioContext ?? window.webkitAudioContext;
+  if (!AudioContextCtor) {
+    return null;
+  }
+
+  const storageKey = 'dev-reload-tone-pending';
+  const context = new AudioContextCtor();
+
+  const play = async () => {
+    try {
+      if (context.state === 'suspended') {
+        await context.resume();
+      }
+
+      const now = context.currentTime;
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 880;
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.06, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+      oscillator.connect(gain);
+      gain.connect(context.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.2);
+      oscillator.onended = () => {
+        oscillator.disconnect();
+        gain.disconnect();
+      };
+      sessionStorage.removeItem(storageKey);
+    } catch {
+      // ponytail: best-effort dev chime, silence is fine when autoplay is blocked.
+    }
+  };
+
+  if (sessionStorage.getItem(storageKey) === '1') {
+    sessionStorage.removeItem(storageKey);
+  } else {
+    void play();
+  }
+
+  window.addEventListener(
+    'pointerdown',
+    () => {
+      context.resume().catch(() => {});
+    },
+    { once: true, passive: true }
+  );
+  window.addEventListener(
+    'keydown',
+    () => {
+      context.resume().catch(() => {});
+    },
+    { once: true }
+  );
+
+  if (import.meta.hot) {
+    import.meta.hot.on('vite:beforeFullReload', () => {
+      sessionStorage.setItem(storageKey, '1');
+      void play();
+    });
+  }
+
+  return { play };
+}
 
 function renderAudEps(items) {
   const source = [{ __seed: true }, ...items];
@@ -414,7 +485,16 @@ function syncSubSegBubbleTarget(editor, restoreCaret = false) {
   const targetIndex = subSegBubbleTargetIndexByAudSegId.get(audSegId);
 
   bubbles.forEach((bubble) => bubble.classList.remove('is-targeted'));
-  if (!bubbles.length || !Number.isInteger(targetIndex) || targetIndex < 0 || targetIndex >= bubbles.length) {
+  if (!bubbles.length) {
+    subSegBubbleTargetIndexByAudSegId.set(audSegId, -1);
+    subSegBubbleEscapeState.delete(audSegId);
+    if (restoreCaret) {
+      setCaretToEnd(editor);
+    }
+    return;
+  }
+
+  if (!Number.isInteger(targetIndex) || targetIndex < 0 || targetIndex >= bubbles.length) {
     if (restoreCaret) {
       setCaretToEnd(editor);
     }
@@ -1278,6 +1358,11 @@ document.addEventListener('keydown', (event) => {
     const bubbleTargetActive = subSegBubbleTargetIndexByAudSegId.get(audSegId) ?? -1;
 
     if (event.key === 'Enter') {
+      if (editor && bubbleTargetActive >= 0) {
+        event.preventDefault();
+        return;
+      }
+
       if (editor && wrapSelectedSubSegText(editor)) {
         event.preventDefault();
       }

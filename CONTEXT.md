@@ -14,6 +14,7 @@
 | `audSeg card row` | The wrapped flexbox card layout used to show up to three `audSeg` items per row. |
 | `audSeg item` | A single card inside the `audSegs` row layout. |
 | `audSeg targeting` | Keyboard focus/selection cycling across `audSeg` cards while inside entered state. |
+| `audSeg target indicator` | The blue outline used to show the currently targeted `audSeg` card. |
 | `audSeg row jump` | `Ctrl+ArrowUp/Down` moves `audSeg` targeting by whole visual rows of 3 cards inside entered `audEp` state. |
 | `audSeg capture flow` | Shift creates a tentative `audSeg`; Shift+Space commits its end time and saves it. |
 | `audSeg add action` | The wired capture/save flow that creates an `audSeg`, stores its parent reference, and rerenders the parent `audEp`. |
@@ -25,7 +26,12 @@
 | `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
 | `subSeg bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
+| `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
+| `subSeg enter guard` | `Enter` does nothing while a `subSeg` bubble target is active. |
+| `subSeg wrap at row width` | `subSeg` content wraps inside the row instead of widening the editor or its panel. |
 | `subSeg bubble persistence` | Saving and reloading the editor markup so a captured `subSeg bubble` reappears after refresh. |
+| `entered panel width lock` | The entered `audEp` panel stays width-constrained instead of growing to match subSeg content. |
+| `audSeg list balance` | The `audSeg` list keeps equal horizontal padding on both sides in dev. |
 | `subSeg bubble no target` | The `-1` cycle state that means no bubble is currently targeted. |
 | `capture subSeg` | The Enter-key action that wraps a highlighted substring in a `subSeg bubble`. |
 | `bubble edge escape` | The double-space escape that moves the caret out of a `subSeg bubble` and keeps only one outside space. |
@@ -33,6 +39,7 @@
 | `subSeg save debounce` | The 500ms delayed save that persists `subSeg` input text to the `subSegs` collection for the selected `audSeg`. |
 | `subSeg save no rerender` | Successful debounced `subSeg` saves update persistence and in-memory state without rerendering the entered `audEp` subtree, so focus stays on the input. |
 | `subSeg unload flush` | The `pagehide` fallback that sends any pending debounced `subSeg` text to persistence before a page reload or navigation. |
+| `dev reload tone` | The short 880Hz chime that plays on Vite dev reloads once the browser has allowed audio playback. |
 | `subSeg playback hotkey` | `Ctrl+Space` while focused in a `subSeg` input toggles audio playback and other key combinations are ignored by the global shortcut layer. |
 | `subSeg auto-focus` | The immediate focus jump to the `subSeg` input after Enter locks an `audSeg` into entered state. |
 | `subSeg focused guard` | The document-level shortcut handler checks the focused `subSeg` input first so `Ctrl+Backspace` exits entered `audSeg` state instead of deleting a word. |
