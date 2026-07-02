@@ -21,9 +21,14 @@
 | `shift-release cancel` | The auto-removal of a tentative `audSeg` draft when `Shift` is released without committing it with `Shift+Space`. |
 | `entered audSeg state` | The locked `audSeg` row mutation applied after Enter, distinct from the temporary targeted state used while cycling with arrows. |
 | `subSeg list` | The one-row list rendered under an entered `audSeg`'s time text, currently seeded with a single ethereal editor item. |
-| `subSeg editor` | The textarea inside the seed `subSeg` item that accepts text, saves on debounce, and keeps Enter as a newline. |
-| `subSeg editor height` | The textarea grows with its content instead of staying collapsed to a fixed line box. |
+| `subSeg editor` | The contenteditable host inside the seed `subSeg` item that accepts text, saves on debounce, and keeps Enter as a newline. |
+| `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
+| `subSeg bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
+| `subSeg bubble persistence` | Saving and reloading the editor markup so a captured `subSeg bubble` reappears after refresh. |
+| `subSeg bubble no target` | The `-1` cycle state that means no bubble is currently targeted. |
+| `capture subSeg` | The Enter-key action that wraps a highlighted substring in a `subSeg bubble`. |
+| `bubble edge escape` | The double-space escape that moves the caret out of a `subSeg bubble` and keeps only one outside space. |
 | `subSegs collection` | The backend scaffold under `src/backend/data/subSegs` for sub-segment records tied to an `audSeg`. |
 | `subSeg save debounce` | The 500ms delayed save that persists `subSeg` input text to the `subSegs` collection for the selected `audSeg`. |
 | `subSeg save no rerender` | Successful debounced `subSeg` saves update persistence and in-memory state without rerendering the entered `audEp` subtree, so focus stays on the input. |
@@ -41,6 +46,7 @@
 | `functionalityStatus` | Per-note lifecycle record that tracks whether the note's described functionality is active, retired, or partially active, plus what remains, what is missing, and what replaced it. |
 | `functionalityStatus maintenance skill` | The skill used to update `functionalityStatus` records as runtime behavior changes. |
 | `edit-notes store` | The persisted note file tree under `mgmt/edit-notes`, with `notes.json` as the source of truth for saved selector notes. |
+| `list-unapplied-notes.mjs` | The lightweight filter script that reads `notes.json` and prints only falsey or missing `applied` notes to stdout. |
 | `sidebar targeting` | `Ctrl+click`-based selector capture for elements inside the edit-notes sidebar itself, used to add notes about the sidebar's own components and behavior. |
 | `selector chain` | The clickable breadcrumb trail in the edit-notes sidebar that switches the active note target to an ancestor selector. |
 | `dist build output` | The production Vite output tree under `mgmt/dist`. |

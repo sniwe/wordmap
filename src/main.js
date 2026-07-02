@@ -64,6 +64,8 @@ const pendingSeekByIndex = new Map();
 const pendingSeekFrameByIndex = new Map();
 const subSegDraftTextByAudSegId = new Map();
 const subSegSaveTimers = new Map();
+const subSegBubbleEscapeState = new Map();
+const subSegBubbleTargetIndexByAudSegId = new Map();
 
 function renderAudEps(items) {
   const source = [{ __seed: true }, ...items];
@@ -220,7 +222,7 @@ function lockSelectedAudSegPlayback() {
     const input = audEpList.querySelector(
       `.item__segment--entered .item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(item._id ?? ''))}"]`
     );
-    if (input instanceof HTMLTextAreaElement) {
+    if (input instanceof HTMLElement) {
       input.focus({ preventScroll: true });
     }
   });
@@ -265,27 +267,89 @@ function getSubSegItemForAudSeg(audSegId) {
   return state.subSegItems.find((item) => item?.audSegId === audSegId) ?? null;
 }
 
+function sanitizeSubSegMarkup(value) {
+  if (typeof value !== 'string' || !value) {
+    return '';
+  }
+
+  if (!value.includes('<')) {
+    return escapeHtml(value);
+  }
+
+  const template = document.createElement('template');
+  template.innerHTML = value;
+  const blockTags = new Set(['DIV', 'P', 'LI']);
+
+  const serializeChildren = (nodes) => {
+    let output = '';
+    for (const node of nodes) {
+      const chunk = serializeNode(node);
+      if (!chunk) {
+        continue;
+      }
+
+      if (node.nodeType === Node.ELEMENT_NODE && blockTags.has(node.tagName) && output && !output.endsWith('<br>')) {
+        output += '<br>';
+      }
+
+      output += chunk;
+    }
+
+    return output;
+  };
+
+  const serializeNode = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      return escapeHtml(node.textContent ?? '');
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return '';
+    }
+
+    if (node.tagName === 'BR') {
+      return '<br>';
+    }
+
+    if (node.tagName === 'SPAN' && node.classList.contains('subseg-bubble')) {
+      const bubbleContent = serializeChildren(node.childNodes);
+      return `<span class="subseg-bubble">${bubbleContent}</span>`;
+    }
+
+    if (blockTags.has(node.tagName)) {
+      const blockContent = serializeChildren(node.childNodes);
+      return blockContent || '<br>';
+    }
+
+    return serializeChildren(node.childNodes);
+  };
+
+  return serializeChildren(template.content.childNodes);
+}
+
 function renderSubSegList(audSegItem) {
   const audSegId = audSegItem?._id || '';
   const subSegItem = getSubSegItemForAudSeg(audSegId);
   const value = subSegDraftTextByAudSegId.get(audSegId) ?? subSegItem?.text ?? '';
+  const content = sanitizeSubSegMarkup(value);
   return `
     <ul class="item__subsegs" aria-label="subSegs">
       <li class="item__subseg item__subseg--seed">
-        <textarea
+        <div
           class="item__subseg-input"
           aria-label="subSeg input"
-          placeholder=""
-          rows="1"
+          role="textbox"
+          contenteditable="true"
+          spellcheck="false"
           data-subseg-audseg-id="${escapeHtml(audSegId)}"
-        >${escapeHtml(value)}</textarea>
+        >${content}</div>
       </li>
     </ul>
   `;
 }
 
 function autosizeSubSegInput(input) {
-  if (!(input instanceof HTMLTextAreaElement)) {
+  if (!(input instanceof HTMLElement)) {
     return;
   }
 
@@ -297,6 +361,219 @@ function syncSubSegTextareaHeights() {
   audEpList.querySelectorAll('.item__subseg-input').forEach((input) => {
     autosizeSubSegInput(input);
   });
+}
+
+function getSubSegEditorText(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return '';
+  }
+
+  return editor.innerText.replace(/\u00a0/g, ' ');
+}
+
+function getSubSegEditorMarkup(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return '';
+  }
+
+  return sanitizeSubSegMarkup(editor.innerHTML);
+}
+
+function getSubSegBubbles(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return [];
+  }
+
+  return [...editor.querySelectorAll('.subseg-bubble')];
+}
+
+function setCaretToEnd(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return;
+  }
+
+  const selection = document.getSelection();
+  if (!selection) {
+    return;
+  }
+
+  const range = document.createRange();
+  range.selectNodeContents(editor);
+  range.collapse(false);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+function syncSubSegBubbleTarget(editor, restoreCaret = false) {
+  if (!(editor instanceof HTMLElement)) {
+    return;
+  }
+
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  const bubbles = getSubSegBubbles(editor);
+  const targetIndex = subSegBubbleTargetIndexByAudSegId.get(audSegId);
+
+  bubbles.forEach((bubble) => bubble.classList.remove('is-targeted'));
+  if (!bubbles.length || !Number.isInteger(targetIndex) || targetIndex < 0 || targetIndex >= bubbles.length) {
+    if (restoreCaret) {
+      setCaretToEnd(editor);
+    }
+    return;
+  }
+
+  bubbles[targetIndex].classList.add('is-targeted');
+}
+
+function cycleSubSegBubbleTarget(editor, step) {
+  if (!(editor instanceof HTMLElement) || !step) {
+    return false;
+  }
+
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  const bubbles = getSubSegBubbles(editor);
+  if (!bubbles.length) {
+    return false;
+  }
+
+  const currentIndex = Number.isInteger(subSegBubbleTargetIndexByAudSegId.get(audSegId))
+    ? subSegBubbleTargetIndexByAudSegId.get(audSegId)
+    : -1;
+  const slots = bubbles.length + 1;
+  const nextIndex = ((currentIndex + 1 + step + slots) % slots) - 1;
+
+  subSegBubbleTargetIndexByAudSegId.set(audSegId, nextIndex);
+  syncSubSegBubbleTarget(editor, nextIndex === -1);
+  return true;
+}
+
+function syncSubSegEditorDraft(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return;
+  }
+
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  const markup = getSubSegEditorMarkup(editor);
+  subSegDraftTextByAudSegId.set(audSegId, markup);
+  autosizeSubSegInput(editor);
+  scheduleSubSegSave(audSegId, markup);
+  syncSubSegBubbleTarget(editor, false);
+}
+
+function setCaretAfterNode(node) {
+  const selection = document.getSelection();
+  if (!selection || !node.parentNode) {
+    return;
+  }
+
+  const range = document.createRange();
+  range.setStartAfter(node);
+  range.collapse(true);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
+function getSubSegBubbleBoundary(editor) {
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || !selection.isCollapsed || !editor.contains(selection.anchorNode)) {
+    return null;
+  }
+
+  const anchorNode = selection.anchorNode;
+  const bubble = anchorNode.nodeType === Node.ELEMENT_NODE
+    ? anchorNode.closest('.subseg-bubble')
+    : anchorNode.parentElement?.closest('.subseg-bubble');
+
+  if (!(bubble instanceof HTMLElement) || !editor.contains(bubble)) {
+    return null;
+  }
+
+  if (anchorNode.nodeType === Node.TEXT_NODE) {
+    const text = anchorNode.textContent ?? '';
+    if (selection.anchorOffset === 0) {
+      return { bubble, edge: 'start' };
+    }
+
+    if (selection.anchorOffset === text.length) {
+      return { bubble, edge: 'end' };
+    }
+  }
+
+  if (anchorNode.nodeType === Node.ELEMENT_NODE) {
+    if (selection.anchorOffset === 0) {
+      return { bubble, edge: 'start' };
+    }
+
+    if (selection.anchorOffset === anchorNode.childNodes.length) {
+      return { bubble, edge: 'end' };
+    }
+  }
+
+  return null;
+}
+
+function wrapSelectedSubSegText(editor) {
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || selection.isCollapsed) {
+    return false;
+  }
+
+  const range = selection.getRangeAt(0);
+  if (!editor.contains(range.startContainer) || !editor.contains(range.endContainer)) {
+    return false;
+  }
+
+  const bubble = document.createElement('span');
+  bubble.className = 'subseg-bubble';
+  bubble.append(range.extractContents());
+  range.insertNode(bubble);
+
+  const caret = document.createRange();
+  caret.setStartAfter(bubble);
+  caret.collapse(true);
+  selection.removeAllRanges();
+  selection.addRange(caret);
+  syncSubSegEditorDraft(editor);
+  return true;
+}
+
+function handleSubSegBubbleSpace(editor) {
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  const pending = subSegBubbleEscapeState.get(audSegId);
+  const now = Date.now();
+  const boundary = getSubSegBubbleBoundary(editor);
+  const targetIndex = Number.isInteger(subSegBubbleTargetIndexByAudSegId.get(audSegId))
+    ? subSegBubbleTargetIndexByAudSegId.get(audSegId)
+    : -1;
+
+  if (pending && now - pending.at < 250) {
+    subSegBubbleEscapeState.delete(audSegId);
+    if (targetIndex >= 0) {
+      subSegBubbleTargetIndexByAudSegId.set(audSegId, -1);
+      syncSubSegBubbleTarget(editor, true);
+    }
+    return true;
+  }
+
+  if (!boundary) {
+    if (targetIndex >= 0) {
+      subSegBubbleEscapeState.set(audSegId, { edge: 'end', at: now });
+      return true;
+    }
+
+    return false;
+  }
+
+  const spaceNode = document.createTextNode(' ');
+  if (boundary.edge === 'start') {
+    boundary.bubble.parentNode?.insertBefore(spaceNode, boundary.bubble);
+  } else {
+    boundary.bubble.parentNode?.insertBefore(spaceNode, boundary.bubble.nextSibling);
+  }
+
+  setCaretAfterNode(spaceNode);
+  subSegBubbleEscapeState.set(audSegId, { edge: boundary.edge, at: now });
+  syncSubSegEditorDraft(editor);
+  return true;
 }
 
 function scheduleSubSegSave(audSegId, text) {
@@ -964,6 +1241,13 @@ function isFocusedSubSegInput() {
   return active instanceof Element && active.closest(subSegInputSelector);
 }
 
+function getFocusedSubSegEditor() {
+  const active = document.activeElement;
+  return active instanceof HTMLElement && active.closest(subSegInputSelector) instanceof HTMLElement
+    ? active.closest(subSegInputSelector)
+    : null;
+}
+
 document.addEventListener('mousemove', (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (!event.ctrlKey || !target || target.closest(pointerGuardSelector)) {
@@ -981,7 +1265,51 @@ document.addEventListener('keydown', (event) => {
   }
 
   if (isFocusedSubSegInput()) {
+    const editor = getFocusedSubSegEditor();
+    const audSegId = editor?.dataset.subsegAudsegId || '';
+    const bubbleTargetActive = subSegBubbleTargetIndexByAudSegId.get(audSegId) ?? -1;
+
     if (event.key === 'Enter') {
+      if (editor && wrapSelectedSubSegText(editor)) {
+        event.preventDefault();
+      }
+      return;
+    }
+
+    if (event.key === ' ' && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
+      if (editor && handleSubSegBubbleSpace(editor)) {
+        event.preventDefault();
+        return;
+      }
+
+      if (editor && bubbleTargetActive >= 0) {
+        event.preventDefault();
+      }
+      return;
+    }
+
+    if (
+      event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey &&
+      !event.shiftKey &&
+      (event.key === 'ArrowLeft' || event.key === 'ArrowRight')
+    ) {
+      if (editor && cycleSubSegBubbleTarget(editor, event.key === 'ArrowRight' ? 1 : -1)) {
+        event.preventDefault();
+      }
+      return;
+    }
+
+    if (event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
+      if (editor && subSegBubbleTargetIndexByAudSegId.get(editor.dataset.subsegAudsegId || '') !== -1) {
+        subSegBubbleTargetIndexByAudSegId.set(editor.dataset.subsegAudsegId || '', -1);
+        syncSubSegBubbleTarget(editor, true);
+        event.preventDefault();
+        return;
+      }
+      event.preventDefault();
+      closeEnteredAudSeg();
       return;
     }
 
@@ -991,9 +1319,9 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
-    if (event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
+    if (editor && bubbleTargetActive >= 0) {
       event.preventDefault();
-      closeEnteredAudSeg();
+      return;
     }
     return;
   }
@@ -1191,16 +1519,12 @@ audEpList.addEventListener('click', (event) => {
 });
 
 audEpList.addEventListener('input', (event) => {
-  const input =
-    event.target instanceof HTMLTextAreaElement ? event.target.closest('.item__subseg-input') : null;
-  if (!(input instanceof HTMLTextAreaElement)) {
+  const input = event.target instanceof Element ? event.target.closest('.item__subseg-input') : null;
+  if (!(input instanceof HTMLElement)) {
     return;
   }
 
-  const audSegId = input.dataset.subsegAudsegId || '';
-  subSegDraftTextByAudSegId.set(audSegId, input.value);
-  autosizeSubSegInput(input);
-  scheduleSubSegSave(input.dataset.subsegAudsegId || '', input.value);
+  syncSubSegEditorDraft(input);
 });
 
 window.addEventListener('pagehide', () => {

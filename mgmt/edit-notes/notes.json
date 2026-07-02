@@ -1,4 +1,161 @@
 {
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input",
+    "notes": [
+      {
+        "text": "ctrl+arrow left/right while focused to input will cycle targeting of bubbles on subSeg input ccontent. cycle target style is blue border (same color as other cycle selects); \nctrl+shift+left/right arrow and left right arrow keypresses are not to be impacted by this new keypress behavior",
+        "createdAt": "2026-07-02T01:04:15.211Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T09:07:46.9818900+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "while subSeg bubble currently being cycle targeted, ctrl+backspace will first set cycling to -1. only if no cycle target active will exit audSeg trigger",
+        "createdAt": "2026-07-02T01:21:22.706Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T09:23:28.2685193+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "while subSeg cycle target active, input loses cursor. when cycle target is -1, it is restored to the end of the input",
+        "createdAt": "2026-07-02T01:25:31.990Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T09:50:17.3400825+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "while subSeg cycle target active, normal text input is disabled on the input- note that other keypresses used to control bubble cycle and selection are unaffected. once cycle target is -1, normal input works again",
+        "createdAt": "2026-07-02T01:53:15.094Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T09:54:25.5445514+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "debug: save is not persisting new lines on input rich text through reloads",
+        "createdAt": "2026-07-02T02:06:02.740Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T10:06:55.1594515+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > body": {
+    "selector": "html > html > body > html > body > body",
+    "notes": [
+      {
+        "text": "write \"lol\" dead center of page in faded text 30px size",
+        "createdAt": "2026-07-02T01:42:01.476Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T09:54:25.5445514+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "remove \"lol\"",
+        "createdAt": "2026-07-02T01:54:45.492Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T10:06:55.1594515+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs",
+    "notes": [
+      {
+        "text": "creation of bubble will also trigger subSeg data save which persists the bubble on the input.",
+        "createdAt": "2026-07-02T00:41:49.120Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T08:43:19.7054483+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > textarea.item__subseg-input": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs > li.item__subseg.item__subseg--seed > textarea.item__subseg-input",
+    "notes": [
+      {
+        "text": "enter keypress while a substring is highlighted on input content text will trigger \"capture subSeg\" action - for the time being this action will only place the substring within a \"bubble\" stye span that wraps the subString with a pseudo  container span;\nthis will not block or otherwise interfere with plain lone enter keypress behavior on input;",
+        "createdAt": "2026-07-01T23:47:44.936Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T08:12:13.3381549+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "rapid space keypress *2 on either extreme index of the subSeg bubble span will break the cursor free of the bubble and replace the resulting double space characters with a single space character that is not within the span bounds;",
+        "createdAt": "2026-07-01T23:49:33.660Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T08:12:13.3381549+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > textarea.item__subseg-input": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > textarea.item__subseg-input",
+    "notes": [
+      {
+        "text": "enter keypress while a substring is highlighted on input content text will trigger \"capture subSeg\" action - for the time being this action will only place the substring within a \"bubble\" stye span that wraps the subString with a pseudo  container span;\nthis will not block or otherwise interfere with plain lone enter keypress behavior on input;",
+        "createdAt": "2026-07-01T23:47:18.405Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T08:12:13.3381549+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
   "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments": {
     "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments",
     "notes": [

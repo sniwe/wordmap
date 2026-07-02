@@ -186,6 +186,32 @@ body {
   background: #fff;
   overflow: hidden;
   resize: none;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  outline: none;
+  text-align: left;
+}
+
+.item__subseg-input:focus {
+  border-color: #0b63ce;
+}
+
+.subseg-bubble {
+  display: inline-block;
+  padding: 0;
+  border: 1px solid #222;
+  border-radius: 999px;
+  background: #eef3ff;
+}
+
+.subseg-bubble.is-targeted {
+  outline: 3px solid #0b63ce;
+  outline-offset: 2px;
+}
+
+.subseg-bubble::selection,
+.subseg-bubble *::selection {
+  background: #cddcff;
 }
 
 .item__segment-text {
