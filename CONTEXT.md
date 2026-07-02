@@ -41,7 +41,7 @@
 | `public` | The `src/public` directory that holds the Node server entry point. |
 | `tentative audSeg` | A temporary in-memory `audSeg` draft shown during capture before persistence. |
 | `pbNow` | The current playback time read when starting an `audSeg` capture. |
-| `ctrl+backspace precedence` | `Ctrl+Backspace` first exits locked `audSeg` entered state when present; otherwise it exits entered `audEp` state, and only then falls back to delete confirm. |
+| `ctrl+backspace target reset` | `Ctrl+Backspace` clears `audEp` cycle targeting back to `-1` and closes any delete dialog; `Delete` opens the delete confirm dialog for the targeted `audEp`. |
 | `delete confirm dialog` | The in-item confirmation state shown before deleting an `audEp`. |
 | `functionalityStatus` | Per-note lifecycle record that tracks whether the note's described functionality is active, retired, or partially active, plus what remains, what is missing, and what replaced it. |
 | `functionalityStatus maintenance skill` | The skill used to update `functionalityStatus` records as runtime behavior changes. |

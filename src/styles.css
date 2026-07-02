@@ -49,6 +49,10 @@ body {
   flex-direction: column;
   align-items: stretch;
   gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .item.is-targeted {
@@ -103,7 +107,9 @@ body {
 }
 
 .item__entered-panel {
-  width: calc(100% - 10px);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin-left: 10px;
 }
 
@@ -178,6 +184,9 @@ body {
 .item__subseg-input {
   display: block;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   min-height: 25px;
   padding: 4px 5px;
   border: 1px solid #222;

@@ -4,14 +4,21 @@
     "audSegId": "0-0",
     "text": "<span class=\"subseg-bubble\">this</span> is the <br><span class=\"subseg-bubble\">first test </span> ok, all is well thennot sure",
     "createdAt": "2026-07-01T14:10:39.788Z",
-    "updatedAt": "2026-07-02T02:30:10.598Z"
+    "updatedAt": "2026-07-02T02:35:36.815Z"
   },
   {
     "_id": "71c25b89-09bb-4c83-92d9-6250309f0e10",
     "audSegId": "0-1",
-    "text": "boop<br><br><br>this is the <span class=\"subseg-bubble\">second</span> and it has a new line here<br>",
+    "text": "boop<br>this is the <span class=\"subseg-bubble\">second</span> and it has a new line here<br>",
     "createdAt": "2026-07-01T14:10:44.249Z",
-    "updatedAt": "2026-07-02T02:30:20.474Z"
+    "updatedAt": "2026-07-02T02:35:47.490Z"
+  },
+  {
+    "_id": "e4067440-c85a-43e8-8cd6-144ff38c6d88",
+    "audSegId": "0-2",
+    "text": "\\it was the <span class=\"subseg-bubble\">best of times</span>, if was the blurst of times<br><span class=\"subseg-bubble\">stupid monkey</span>! i do",
+    "createdAt": "2026-07-02T02:36:02.895Z",
+    "updatedAt": "2026-07-02T02:40:32.064Z"
   },
   {
     "_id": "e7ca1ffa-b69b-487a-a2c4-669fdcee074b",

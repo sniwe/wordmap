@@ -965,6 +965,14 @@ function cycleAudEpSelection(step) {
   }
 }
 
+function clearAudEpSelection() {
+  state.selectedAudEpIndex = -1;
+  state.selectedAudSegIndex = -1;
+  state.deleteDialogIndex = -1;
+  state.deleteDialogChoice = 'cancel';
+  renderAudEps(state.audEpItems);
+}
+
 async function loadAudEps() {
   resetAudioPlayers();
   const response = await fetch('/api/audEps/items');
@@ -1334,12 +1342,15 @@ document.addEventListener('keydown', (event) => {
     }
 
     if (event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
+      if (event.key === 'Backspace') {
+        event.preventDefault();
+        clearAudEpSelection();
+        return;
+      }
+
       if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
         event.preventDefault();
         cycleDeleteDialogChoice(event.key === 'ArrowRight' ? 1 : -1);
-      } else if (event.key === 'Backspace') {
-        event.preventDefault();
-        confirmDeleteSelectedAudEp();
       }
       return;
     }
@@ -1406,6 +1417,12 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
+    if (event.key === 'Delete' && state.selectedAudEpIndex > 0) {
+      event.preventDefault();
+      openDeleteDialog();
+      return;
+    }
+
     if (event.key === 'Backspace' && state.enteredAudSegIndex >= 0) {
       event.preventDefault();
       closeEnteredAudSeg();
@@ -1420,7 +1437,7 @@ document.addEventListener('keydown', (event) => {
 
     if (event.key === 'Backspace') {
       event.preventDefault();
-      openDeleteDialog();
+      clearAudEpSelection();
       return;
     }
 
