@@ -9,6 +9,24 @@
       "text": {
         "type": "string"
       },
+      "context": {
+        "type": "string"
+      },
+      "refs": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "audSegId": {
+              "type": "string"
+            },
+            "subSegId": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
       "createdAt": {
         "type": "string"
       },

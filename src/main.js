@@ -3,6 +3,16 @@ import './styles.css';
 const app = document.querySelector('#app');
 
 app.innerHTML = `
+  <div class="settings-shell">
+    <button class="settings-button" id="settings-button" type="button" aria-haspopup="menu" aria-expanded="false">⚙</button>
+    <div class="settings-popover" id="settings-popover" role="menu" hidden>
+      <label class="settings-popover__item">
+        <input type="checkbox" />
+        <span>codex CLI worker</span>
+      </label>
+    </div>
+  </div>
+  <div class="worker-toast" id="worker-toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
   <div class="container" id="canvas">
     <ul class="list" id="audep-list"></ul>
   </div>
@@ -25,6 +35,10 @@ app.innerHTML = `
 
 const probe = document.querySelector('#selector-probe');
 const sidebar = document.querySelector('#note-sidebar');
+const settingsButton = document.querySelector('#settings-button');
+const settingsPopover = document.querySelector('#settings-popover');
+const settingsPopoverCheckbox = settingsPopover?.querySelector('input[type="checkbox"]');
+const workerToast = document.querySelector('#worker-toast');
 const audEpList = document.querySelector('#audep-list');
 const noteSelector = document.querySelector('#note-selector');
 const noteInput = document.querySelector('#note-input');
@@ -66,8 +80,11 @@ const pendingSeekFrameByIndex = new Map();
 const subSegDraftTextByAudSegId = new Map();
 const subSegDraftPayloadByAudSegId = new Map();
 const subSegSaveTimers = new Map();
-const subSegBubbleEscapeState = new Map();
-const subSegBubbleTargetIndexByAudSegId = new Map();
+const langUnitBubbleEscapeState = new Map();
+const langUnitBubbleTargetIndexByAudSegId = new Map();
+let settingsOpen = false;
+let codexWordRootInferenceEnabled = localStorage.getItem('codex-word-root-inference-enabled') === '1';
+let workerToastTimer = null;
 if (import.meta.env.DEV) {
   createDevReloadTone();
 }
@@ -202,6 +219,7 @@ function renderAudEps(items) {
   syncAudEpPlaybackLabels();
   lockEnteredAudSegWidths();
   syncSubSegTextareaHeights();
+  syncLangUnitRefsLists();
 }
 
 function getAudEpItems() {
@@ -258,6 +276,10 @@ function getAudSegItemsForAudEp(index) {
     .sort((a, b) => Number(a?.tcs ?? 0) - Number(b?.tcs ?? 0));
 }
 
+function getAudSegItemById(audSegId) {
+  return state.audSegItems.find((item) => item?._id === audSegId) ?? null;
+}
+
 function getAudSegPlaybackLock(index) {
   const lock = state.audSegPlaybackLock;
   return lock && lock.audEpIndex === index ? lock : null;
@@ -306,10 +328,41 @@ function lockSelectedAudSegPlayback() {
       `.item__segment--entered .item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(item._id ?? ''))}"]`
     );
     if (input instanceof HTMLElement) {
+      syncLangUnitBubbleTarget(input, false);
       input.focus({ preventScroll: true });
     }
   });
   seekAudio(state.selectedAudEpIndex - 1, tcs - (getAudioForIndex(state.selectedAudEpIndex - 1)?.currentTime || 0));
+}
+
+function openLangUnitRef(ref) {
+  if (!(ref instanceof HTMLElement)) {
+    return;
+  }
+
+  const audSegId = ref.dataset.audsegId || '';
+  const langUnitId = ref.dataset.langunitId || '';
+  const audSegItem = getAudSegItemById(audSegId);
+  if (!audSegItem) {
+    return;
+  }
+
+  const audEpIndex = Number(audSegItem.audEpIndex);
+  if (!Number.isInteger(audEpIndex) || audEpIndex < 0) {
+    return;
+  }
+
+  const items = getAudSegItemsForAudEp(audEpIndex);
+  const selectedAudSegIndex = items.findIndex((item) => item?._id === audSegId);
+  if (selectedAudSegIndex < 0) {
+    return;
+  }
+
+  state.selectedAudEpIndex = audEpIndex + 1;
+  state.enteredAudEpIndex = audEpIndex;
+  state.selectedAudSegIndex = selectedAudSegIndex;
+  langUnitBubbleTargetIndexByAudSegId.set(audSegId, getLangUnitBubbleIndex(audSegId, langUnitId));
+  lockSelectedAudSegPlayback();
 }
 
 function renderAudSegList(audEpIndex) {
@@ -326,11 +379,13 @@ function renderAudSegList(audEpIndex) {
           const tce = item.tce == null || item.tce === '' ? '  ' : formatTime(Number(item.tce));
           const hasLabel = Boolean(String(label).trim());
           const subSegMarkup = isEntered ? renderSubSegList(item) : '';
+          const langUnitRefsMarkup = isEntered ? renderLangUnitRefsList(item) : '';
           return `
             <li class="item__segment${isDraft ? ' item__segment--draft' : ''}${isEntered ? ' item__segment--entered' : ''}${isTargeted ? ' is-targeted' : ''}">
               <span class="item__segment-timing">${escapeHtml(`${tcs}-${tce}`)}</span>
               ${hasLabel ? `<span class="item__segment-text">${escapeHtml(label)}</span>` : ''}
               ${subSegMarkup}
+              ${langUnitRefsMarkup}
             </li>
           `;
         })
@@ -350,8 +405,62 @@ function getSubSegItemForAudSeg(audSegId) {
   return state.subSegItems.find((item) => item?.audSegId === audSegId) ?? null;
 }
 
+function getLangUnitBubbleIndex(audSegId, langUnitId) {
+  if (!audSegId || !langUnitId) {
+    return -1;
+  }
+
+  const subSegItem = getSubSegItemForAudSeg(audSegId);
+  const payload = subSegDraftPayloadByAudSegId.get(audSegId);
+  const tokens = Array.isArray(payload?.content)
+    ? payload.content
+    : Array.isArray(subSegItem?.content)
+      ? subSegItem.content
+      : [];
+  let bubbleIndex = -1;
+
+  for (const token of tokens) {
+    if (token?.type !== 'langUnitRef') {
+      continue;
+    }
+
+    bubbleIndex += 1;
+    if (String(token.langUnitId ?? '') === langUnitId) {
+      return bubbleIndex;
+    }
+  }
+
+  return -1;
+}
+
 function getLangUnitItem(langUnitId) {
   return state.langUnitItems.find((item) => item?._id === langUnitId) ?? null;
+}
+
+function getLangUnitItemByText(text) {
+  return state.langUnitItems.find((item) => String(item?.text ?? '') === text) ?? null;
+}
+
+function getLangUnitReferenceCount(langUnitId) {
+  if (!langUnitId) {
+    return 0;
+  }
+
+  const langUnit = getLangUnitItem(langUnitId);
+  if (Array.isArray(langUnit?.refs) && langUnit.refs.length) {
+    return langUnit.refs.length;
+  }
+
+  let count = 0;
+  for (const subSegItem of state.subSegItems) {
+    for (const token of Array.isArray(subSegItem?.content) ? subSegItem.content : []) {
+      if (token?.type === 'langUnitRef' && String(token.langUnitId ?? '') === langUnitId) {
+        count += 1;
+      }
+    }
+  }
+
+  return count;
 }
 
 function sanitizeSubSegMarkup(value) {
@@ -360,7 +469,7 @@ function sanitizeSubSegMarkup(value) {
   }
 
   if (!value.includes('<')) {
-    return escapeHtml(value);
+    return escapeHtml(value).replaceAll('\n', '<br>');
   }
 
   const template = document.createElement('template');
@@ -398,11 +507,11 @@ function sanitizeSubSegMarkup(value) {
       return '<br>';
     }
 
-    if (node.tagName === 'SPAN' && node.classList.contains('subseg-bubble')) {
+    if (node.tagName === 'SPAN' && node.classList.contains('langunit-bubble')) {
       const bubbleContent = serializeChildren(node.childNodes);
       const langUnitId = node.getAttribute('data-langunit-id');
       const dataAttr = langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : '';
-      return `<span class="subseg-bubble"${dataAttr}>${bubbleContent}</span>`;
+      return `<span class="langunit-bubble"${dataAttr}>${bubbleContent}</span>`;
     }
 
     if (blockTags.has(node.tagName)) {
@@ -435,7 +544,8 @@ function renderSubSegContentTokens(tokens) {
         const langUnitId = String(token.langUnitId ?? '').trim();
         const langUnit = getLangUnitItem(langUnitId);
         const text = String(langUnit?.text ?? token.text ?? '');
-        return `<span class="subseg-bubble"${langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : ''}>${escapeHtml(text)}</span>`;
+        const count = Math.max(1, getLangUnitReferenceCount(langUnitId));
+        return `<span class="langunit-bubble"${langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : ''}${count > 1 ? ` data-langunit-count="${count}"` : ''}>${escapeHtml(text)}</span>`;
       }
 
       return '';
@@ -465,6 +575,78 @@ function renderSubSegList(audSegItem) {
   `;
 }
 
+function renderLangUnitRefsList(audSegItem) {
+  const audSegId = audSegItem?._id || '';
+  const targetIndex = langUnitBubbleTargetIndexByAudSegId.get(audSegId);
+  const subSegItem = getSubSegItemForAudSeg(audSegId);
+  const payload = subSegDraftPayloadByAudSegId.get(audSegId);
+  const tokens = Array.isArray(payload?.content) ? payload.content : Array.isArray(subSegItem?.content) ? subSegItem.content : [];
+  let bubbleIndex = -1;
+  let langUnitId = '';
+  for (const token of tokens) {
+    if (token?.type !== 'langUnitRef') {
+      continue;
+    }
+
+    bubbleIndex += 1;
+    if (bubbleIndex === targetIndex) {
+      langUnitId = String(token.langUnitId ?? '').trim();
+      break;
+    }
+  }
+
+  const langUnit = getLangUnitItem(langUnitId);
+  const subSegId = subSegItem?._id || '';
+  const refs = Array.isArray(langUnit?.refs)
+    ? langUnit.refs.filter((ref) => String(ref?.subSegId ?? '') !== subSegId)
+    : [];
+
+  if (!langUnitId || refs.length < 1 || (Array.isArray(langUnit?.refs) ? langUnit.refs.length : 0) < 2) {
+    return '<ul class="item__langunit-refs" hidden></ul>';
+  }
+
+  const context = String(langUnit?.context ?? langUnit?.text ?? '').trim();
+  const items = refs
+    .map(
+      (ref) => `
+        <li class="item__langunit-ref" data-subseg-id="${escapeHtml(String(ref?.subSegId ?? ''))}" data-audseg-id="${escapeHtml(String(ref?.audSegId ?? ''))}" data-langunit-id="${escapeHtml(langUnitId)}">
+          <span class="item__langunit-ref-context">${escapeHtml(getSubSegItemForAudSeg(String(ref?.audSegId ?? ''))?.text ?? context).replaceAll('\n', '<br>')}</span>
+        </li>
+      `
+    )
+    .join('');
+
+  return `
+    <ul class="item__langunit-refs">
+      ${items}
+    </ul>
+  `;
+}
+
+function isLangUnitContextBoundary(char) {
+  return char === '\n' || char === '.' || char === '。' || char === '．' || char === '｡';
+}
+
+function getLangUnitBubbleContext(text, start, end) {
+  let contextStart = 0;
+  for (let index = start - 1; index >= 0; index -= 1) {
+    if (isLangUnitContextBoundary(text[index])) {
+      contextStart = index + 1;
+      break;
+    }
+  }
+
+  let contextEnd = text.length;
+  for (let index = end; index < text.length; index += 1) {
+    if (isLangUnitContextBoundary(text[index])) {
+      contextEnd = index;
+      break;
+    }
+  }
+
+  return text.slice(contextStart, contextEnd);
+}
+
 function extractSubSegEditorPayload(editor) {
   if (!(editor instanceof HTMLElement)) {
     return { content: [], langUnits: [] };
@@ -472,7 +654,8 @@ function extractSubSegEditorPayload(editor) {
 
   const content = [];
   const langUnitsById = new Map();
-  const appendText = (text) => {
+  let plainText = '';
+  const appendContentText = (text) => {
     if (!text) {
       return;
     }
@@ -488,7 +671,9 @@ function extractSubSegEditorPayload(editor) {
 
   const walk = (node) => {
     if (node.nodeType === Node.TEXT_NODE) {
-      appendText(node.textContent ?? '');
+      const text = node.textContent ?? '';
+      plainText += text;
+      appendContentText(text);
       return;
     }
 
@@ -497,11 +682,12 @@ function extractSubSegEditorPayload(editor) {
     }
 
     if (node.tagName === 'BR') {
-      appendText('\n');
+      plainText += '\n';
+      appendContentText('\n');
       return;
     }
 
-    if (node.tagName === 'SPAN' && node.classList.contains('subseg-bubble')) {
+    if (node.tagName === 'SPAN' && node.classList.contains('langunit-bubble')) {
       const bubbleText = node.textContent ?? '';
       let langUnitId = node.getAttribute('data-langunit-id') || '';
       if (!langUnitId) {
@@ -509,9 +695,13 @@ function extractSubSegEditorPayload(editor) {
         node.setAttribute('data-langunit-id', langUnitId);
       }
 
+      const start = plainText.length;
+      plainText += bubbleText;
       langUnitsById.set(langUnitId, {
         _id: langUnitId,
         text: bubbleText,
+        start,
+        end: plainText.length,
       });
       content.push({ type: 'langUnitRef', langUnitId });
       return;
@@ -522,7 +712,8 @@ function extractSubSegEditorPayload(editor) {
     }
 
     if (node.tagName === 'DIV' || node.tagName === 'P' || node.tagName === 'LI') {
-      appendText('\n');
+      plainText += '\n';
+      appendContentText('\n');
     }
   };
 
@@ -540,9 +731,15 @@ function extractSubSegEditorPayload(editor) {
     content.pop();
   }
 
+  const langUnits = [...langUnitsById.values()].map(({ start, end, ...langUnit }) => ({
+    ...langUnit,
+    // ponytail: sentence boundary scan stays simple; newline and full-stop punctuation are enough here.
+    context: getLangUnitBubbleContext(plainText, start, end),
+  }));
+
   return {
     content,
-    langUnits: [...langUnitsById.values()],
+    langUnits,
     text: getSubSegEditorText(editor),
   };
 }
@@ -599,12 +796,12 @@ function getSubSegEditorMarkup(editor) {
   return sanitizeSubSegMarkup(editor.innerHTML);
 }
 
-function getSubSegBubbles(editor) {
+function getLangUnitBubbles(editor) {
   if (!(editor instanceof HTMLElement)) {
     return [];
   }
 
-  return [...editor.querySelectorAll('.subseg-bubble')];
+  return [...editor.querySelectorAll('.langunit-bubble')];
 }
 
 function setCaretToEnd(editor) {
@@ -624,19 +821,19 @@ function setCaretToEnd(editor) {
   selection.addRange(range);
 }
 
-function syncSubSegBubbleTarget(editor, restoreCaret = false) {
+function syncLangUnitBubbleTarget(editor, restoreCaret = false) {
   if (!(editor instanceof HTMLElement)) {
     return;
   }
 
   const audSegId = editor.dataset.subsegAudsegId || '';
-  const bubbles = getSubSegBubbles(editor);
-  const targetIndex = subSegBubbleTargetIndexByAudSegId.get(audSegId);
+  const bubbles = getLangUnitBubbles(editor);
+  const targetIndex = langUnitBubbleTargetIndexByAudSegId.get(audSegId);
 
   bubbles.forEach((bubble) => bubble.classList.remove('is-targeted'));
   if (!bubbles.length) {
-    subSegBubbleTargetIndexByAudSegId.set(audSegId, -1);
-    subSegBubbleEscapeState.delete(audSegId);
+    langUnitBubbleTargetIndexByAudSegId.set(audSegId, -1);
+    langUnitBubbleEscapeState.delete(audSegId);
     if (restoreCaret) {
       setCaretToEnd(editor);
     }
@@ -647,31 +844,33 @@ function syncSubSegBubbleTarget(editor, restoreCaret = false) {
     if (restoreCaret) {
       setCaretToEnd(editor);
     }
+    syncLangUnitRefsLists();
     return;
   }
 
   bubbles[targetIndex].classList.add('is-targeted');
+  syncLangUnitRefsLists();
 }
 
-function cycleSubSegBubbleTarget(editor, step) {
+function cycleLangUnitBubbleTarget(editor, step) {
   if (!(editor instanceof HTMLElement) || !step) {
     return false;
   }
 
   const audSegId = editor.dataset.subsegAudsegId || '';
-  const bubbles = getSubSegBubbles(editor);
+  const bubbles = getLangUnitBubbles(editor);
   if (!bubbles.length) {
     return false;
   }
 
-  const currentIndex = Number.isInteger(subSegBubbleTargetIndexByAudSegId.get(audSegId))
-    ? subSegBubbleTargetIndexByAudSegId.get(audSegId)
+  const currentIndex = Number.isInteger(langUnitBubbleTargetIndexByAudSegId.get(audSegId))
+    ? langUnitBubbleTargetIndexByAudSegId.get(audSegId)
     : -1;
   const slots = bubbles.length + 1;
   const nextIndex = ((currentIndex + 1 + step + slots) % slots) - 1;
 
-  subSegBubbleTargetIndexByAudSegId.set(audSegId, nextIndex);
-  syncSubSegBubbleTarget(editor, nextIndex === -1);
+  langUnitBubbleTargetIndexByAudSegId.set(audSegId, nextIndex);
+  syncLangUnitBubbleTarget(editor, nextIndex === -1);
   return true;
 }
 
@@ -688,7 +887,23 @@ function syncSubSegEditorDraft(editor) {
   autosizeSubSegInput(editor);
   scheduleSubSegSave(audSegId);
   void saveSubSeg(audSegId);
-  syncSubSegBubbleTarget(editor, false);
+  syncLangUnitBubbleTarget(editor, false);
+}
+
+function syncLangUnitRefsLists() {
+  audEpList.querySelectorAll('.item__subseg-input').forEach((editor) => {
+    if (!(editor instanceof HTMLElement)) {
+      return;
+    }
+
+    const audSegId = editor.dataset.subsegAudsegId || '';
+    const container = editor.closest('.item__segment--entered')?.querySelector('.item__langunit-refs');
+    if (!(container instanceof HTMLElement)) {
+      return;
+    }
+
+    container.outerHTML = renderLangUnitRefsList({ _id: audSegId });
+  });
 }
 
 function setCaretAfterNode(node) {
@@ -704,7 +919,7 @@ function setCaretAfterNode(node) {
   selection.addRange(range);
 }
 
-function getSubSegBubbleBoundary(editor) {
+function getLangUnitBubbleBoundary(editor) {
   const selection = document.getSelection();
   if (!selection || !selection.rangeCount || !selection.isCollapsed || !editor.contains(selection.anchorNode)) {
     return null;
@@ -712,8 +927,8 @@ function getSubSegBubbleBoundary(editor) {
 
   const anchorNode = selection.anchorNode;
   const bubble = anchorNode.nodeType === Node.ELEMENT_NODE
-    ? anchorNode.closest('.subseg-bubble')
-    : anchorNode.parentElement?.closest('.subseg-bubble');
+    ? anchorNode.closest('.langunit-bubble')
+    : anchorNode.parentElement?.closest('.langunit-bubble');
 
   if (!(bubble instanceof HTMLElement) || !editor.contains(bubble)) {
     return null;
@@ -755,8 +970,12 @@ function wrapSelectedSubSegText(editor) {
   }
 
   const bubble = document.createElement('span');
-  bubble.className = 'subseg-bubble';
-  bubble.dataset.langunitId = createItemId();
+  bubble.className = 'langunit-bubble';
+  const text = range.toString();
+  const langUnit = getLangUnitItemByText(text);
+  const langUnitId = langUnit?._id || createItemId();
+  bubble.dataset.langunitId = langUnitId;
+  bubble.dataset.langunitCount = String(Math.max(1, getLangUnitReferenceCount(langUnitId) + 1));
   bubble.append(range.extractContents());
   range.insertNode(bubble);
 
@@ -769,27 +988,27 @@ function wrapSelectedSubSegText(editor) {
   return true;
 }
 
-function handleSubSegBubbleSpace(editor) {
+function handleLangUnitBubbleSpace(editor) {
   const audSegId = editor.dataset.subsegAudsegId || '';
-  const pending = subSegBubbleEscapeState.get(audSegId);
+  const pending = langUnitBubbleEscapeState.get(audSegId);
   const now = Date.now();
-  const boundary = getSubSegBubbleBoundary(editor);
-  const targetIndex = Number.isInteger(subSegBubbleTargetIndexByAudSegId.get(audSegId))
-    ? subSegBubbleTargetIndexByAudSegId.get(audSegId)
+  const boundary = getLangUnitBubbleBoundary(editor);
+  const targetIndex = Number.isInteger(langUnitBubbleTargetIndexByAudSegId.get(audSegId))
+    ? langUnitBubbleTargetIndexByAudSegId.get(audSegId)
     : -1;
 
   if (pending && now - pending.at < 250) {
-    subSegBubbleEscapeState.delete(audSegId);
+    langUnitBubbleEscapeState.delete(audSegId);
     if (targetIndex >= 0) {
-      subSegBubbleTargetIndexByAudSegId.set(audSegId, -1);
-      syncSubSegBubbleTarget(editor, true);
+      langUnitBubbleTargetIndexByAudSegId.set(audSegId, -1);
+      syncLangUnitBubbleTarget(editor, true);
     }
     return true;
   }
 
   if (!boundary) {
     if (targetIndex >= 0) {
-      subSegBubbleEscapeState.set(audSegId, { edge: 'end', at: now });
+      langUnitBubbleEscapeState.set(audSegId, { edge: 'end', at: now });
       return true;
     }
 
@@ -804,7 +1023,7 @@ function handleSubSegBubbleSpace(editor) {
   }
 
   setCaretAfterNode(spaceNode);
-  subSegBubbleEscapeState.set(audSegId, { edge: boundary.edge, at: now });
+  langUnitBubbleEscapeState.set(audSegId, { edge: boundary.edge, at: now });
   syncSubSegEditorDraft(editor);
   return true;
 }
@@ -868,6 +1087,8 @@ async function saveSubSeg(audSegId) {
     return;
   }
 
+  const knownLangUnitIds = new Set(state.langUnitItems.map((item) => item?._id).filter(Boolean));
+
   const response = await fetch('/api/subSegs/items', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -878,15 +1099,25 @@ async function saveSubSeg(audSegId) {
     return;
   }
 
-  const saved = await response.json();
+  const result = await response.json();
+  const saved = result?.subSeg ?? result;
   subSegDraftTextByAudSegId.delete(audSegId);
   subSegDraftPayloadByAudSegId.delete(audSegId);
-  if (payload.langUnits?.length) {
+  if (Array.isArray(result?.langUnits)) {
+    mergeLangUnitItems(result.langUnits);
+  } else if (payload.langUnits?.length) {
     mergeLangUnitItems(payload.langUnits);
+  }
+  const inferredLangUnits = Array.isArray(result?.langUnits) ? result.langUnits : (payload.langUnits ?? []);
+  for (const langUnit of inferredLangUnits) {
+    if (langUnit?._id && !knownLangUnitIds.has(langUnit._id)) {
+      void inferLangUnitRoot(langUnit);
+    }
   }
   state.subSegItems = saved
     ? [saved, ...state.subSegItems.filter((item) => item?.audSegId !== audSegId)]
     : state.subSegItems.filter((item) => item?.audSegId !== audSegId);
+  syncLangUnitRefsLists();
 }
 
 function createAudSegDraft() {
@@ -1474,6 +1705,95 @@ function syncNoteDecorations() {
   });
 }
 
+function syncSettingsPopover() {
+  if (!settingsButton || !settingsPopover) {
+    return;
+  }
+
+  settingsButton.setAttribute('aria-expanded', String(settingsOpen));
+  settingsPopover.hidden = !settingsOpen;
+  if (settingsPopoverCheckbox instanceof HTMLInputElement) {
+    settingsPopoverCheckbox.checked = codexWordRootInferenceEnabled;
+  }
+}
+
+function toggleSettingsPopover(forceOpen) {
+  settingsOpen = typeof forceOpen === 'boolean' ? forceOpen : !settingsOpen;
+  syncSettingsPopover();
+}
+
+function showWorkerToast(message) {
+  if (!workerToast) {
+    return;
+  }
+
+  workerToast.textContent = message;
+  workerToast.hidden = false;
+  clearTimeout(workerToastTimer);
+  workerToastTimer = setTimeout(() => {
+    if (workerToast) {
+      workerToast.hidden = true;
+    }
+  }, 1800);
+}
+
+async function refreshCodexWorkerStatus() {
+  if (!codexWordRootInferenceEnabled) {
+    return;
+  }
+
+  const response = await fetch('/api/codex-worker/status');
+  if (!response.ok) {
+    return;
+  }
+
+  const status = await response.json();
+  if (status?.primeComplete) {
+    showWorkerToast('test prime complete');
+  }
+}
+
+function setCodexWordRootInferenceEnabled(enabled) {
+  codexWordRootInferenceEnabled = Boolean(enabled);
+  localStorage.setItem('codex-word-root-inference-enabled', codexWordRootInferenceEnabled ? '1' : '0');
+  syncSettingsPopover();
+  showWorkerToast(codexWordRootInferenceEnabled ? 'on detected' : 'off detected');
+  if (codexWordRootInferenceEnabled) {
+    void refreshCodexWorkerStatus();
+  }
+}
+
+async function inferLangUnitRoot(langUnit) {
+  if (!codexWordRootInferenceEnabled || !(langUnit?._id)) {
+    return;
+  }
+
+  if (!/^[A-Za-z]+$/.test(String(langUnit.text ?? '').trim())) {
+    return;
+  }
+
+  const response = await fetch(`/api/langUnits/items/${encodeURIComponent(langUnit._id)}/root`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      context: String(langUnit.context ?? ''),
+      target: String(langUnit.text ?? ''),
+      substring: String(langUnit.text ?? ''),
+    }),
+  });
+
+  if (!response.ok) {
+    return;
+  }
+
+  const result = await response.json();
+  const updated = result?.langUnit ?? result;
+  if (updated?._id) {
+    mergeLangUnitItems([updated]);
+  }
+  showWorkerToast(`payload complete: ${String(result?.res ?? updated?.root ?? '')}`);
+}
+
 function openSidebar(selector, element) {
   state.activeSelector = selector;
   state.activeElement = element;
@@ -1516,6 +1836,38 @@ function getFocusedSubSegEditor() {
     : null;
 }
 
+function isSpaceKey(event) {
+  return (
+    event.key === ' ' ||
+    event.key === 'Space' ||
+    event.key === 'Spacebar' ||
+    event.code === 'Space' ||
+    event.keyCode === 32 ||
+    event.which === 32
+  );
+}
+
+function isCtrlModifierActive(event) {
+  return Boolean(event.ctrlKey || event.getModifierState?.('Control'));
+}
+
+function isCtrlSpacePlaybackToggle(event) {
+  if (!isCtrlModifierActive(event) || event.metaKey || event.altKey || event.shiftKey) {
+    return false;
+  }
+
+  return isSpaceKey(event) || event.key === 'Process' || (event.keyCode === 229 && event.code === 'Space');
+}
+
+function isCtrlPlaybackToggle(event) {
+  if (!isCtrlModifierActive(event) || event.metaKey || event.altKey || event.shiftKey) {
+    return false;
+  }
+
+  const key = String(event.key ?? '').toLowerCase();
+  return isCtrlSpacePlaybackToggle(event) || key === 'p' || event.code === 'KeyP';
+}
+
 document.addEventListener('mousemove', (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (!event.ctrlKey || !target || target.closest(pointerGuardSelector)) {
@@ -1535,10 +1887,10 @@ document.addEventListener('keydown', (event) => {
   if (isFocusedSubSegInput()) {
     const editor = getFocusedSubSegEditor();
     const audSegId = editor?.dataset.subsegAudsegId || '';
-    const bubbleTargetActive = subSegBubbleTargetIndexByAudSegId.get(audSegId) ?? -1;
+    const langUnitBubbleTargetActive = langUnitBubbleTargetIndexByAudSegId.get(audSegId) ?? -1;
 
     if (event.key === 'Enter') {
-      if (editor && bubbleTargetActive >= 0) {
+      if (editor && langUnitBubbleTargetActive >= 0) {
         event.preventDefault();
         return;
       }
@@ -1549,13 +1901,13 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
-    if (event.key === ' ' && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
-      if (editor && handleSubSegBubbleSpace(editor)) {
+    if (isSpaceKey(event) && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
+      if (editor && handleLangUnitBubbleSpace(editor)) {
         event.preventDefault();
         return;
       }
 
-      if (editor && bubbleTargetActive >= 0) {
+      if (editor && langUnitBubbleTargetActive >= 0) {
         event.preventDefault();
       }
       return;
@@ -1568,16 +1920,16 @@ document.addEventListener('keydown', (event) => {
       !event.shiftKey &&
       (event.key === 'ArrowLeft' || event.key === 'ArrowRight')
     ) {
-      if (editor && cycleSubSegBubbleTarget(editor, event.key === 'ArrowRight' ? 1 : -1)) {
+      if (editor && cycleLangUnitBubbleTarget(editor, event.key === 'ArrowRight' ? 1 : -1)) {
         event.preventDefault();
       }
       return;
     }
 
-    if (event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
-      if (editor && subSegBubbleTargetIndexByAudSegId.get(editor.dataset.subsegAudsegId || '') !== -1) {
-        subSegBubbleTargetIndexByAudSegId.set(editor.dataset.subsegAudsegId || '', -1);
-        syncSubSegBubbleTarget(editor, true);
+    if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
+      if (editor && langUnitBubbleTargetIndexByAudSegId.get(editor.dataset.subsegAudsegId || '') !== -1) {
+        langUnitBubbleTargetIndexByAudSegId.set(editor.dataset.subsegAudsegId || '', -1);
+        syncLangUnitBubbleTarget(editor, true);
         event.preventDefault();
         return;
       }
@@ -1586,13 +1938,13 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
-    if (event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && event.key === ' ') {
+    if (isCtrlPlaybackToggle(event)) {
       event.preventDefault();
       toggleSelectedAudEpPlayback();
       return;
     }
 
-    if (editor && bubbleTargetActive >= 0) {
+    if (editor && langUnitBubbleTargetActive >= 0) {
       event.preventDefault();
       return;
     }
@@ -1606,7 +1958,7 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
-    if (event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
+    if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey) {
       if (event.key === 'Backspace') {
         event.preventDefault();
         clearAudEpSelection();
@@ -1620,7 +1972,7 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
-    if (event.key === 'Enter' || event.key === ' ') {
+    if (event.key === 'Enter' || isSpaceKey(event)) {
       event.preventDefault();
       if (state.deleteDialogChoice === 'confirm') {
         confirmDeleteSelectedAudEp();
@@ -1739,7 +2091,7 @@ document.addEventListener('keydown', (event) => {
     return;
   }
 
-  if (state.enteredAudEpIndex >= 0 && state.audSegDraftId && event.key === ' ' && event.shiftKey) {
+  if (state.enteredAudEpIndex >= 0 && state.audSegDraftId && isSpaceKey(event) && event.shiftKey) {
     event.preventDefault();
     void commitAudSegDraft();
     return;
@@ -1761,7 +2113,7 @@ document.addEventListener('keydown', (event) => {
     }
   }
 
-  if (event.key === ' ') {
+  if (isSpaceKey(event)) {
     event.preventDefault();
     toggleSelectedAudEpPlayback();
   }
@@ -1779,6 +2131,14 @@ document.addEventListener('keyup', (event) => {
 });
 
 audEpList.addEventListener('click', (event) => {
+  const langUnitRef = event.target instanceof Element ? event.target.closest('.item__langunit-ref') : null;
+  if (langUnitRef instanceof HTMLElement) {
+    event.preventDefault();
+    event.stopPropagation();
+    openLangUnitRef(langUnitRef);
+    return;
+  }
+
   const deleteButton = event.target instanceof Element ? event.target.closest('[data-delete-action]') : null;
   if (deleteButton) {
     const action = deleteButton.dataset.deleteAction;
@@ -1861,6 +2221,24 @@ document.addEventListener(
   true
 );
 
+settingsButton?.addEventListener('click', (event) => {
+  event.stopPropagation();
+  toggleSettingsPopover();
+});
+
+settingsPopoverCheckbox?.addEventListener('change', () => {
+  setCodexWordRootInferenceEnabled(settingsPopoverCheckbox.checked);
+});
+
+document.addEventListener('click', (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  if (target?.closest('.settings-shell')) {
+    return;
+  }
+
+  toggleSettingsPopover(false);
+});
+
 saveButton.addEventListener('click', async () => {
   const text = noteInput.value.trim();
   if (!text || !state.activeSelector) {
@@ -1929,4 +2307,8 @@ fetch('/api/notes')
     state.notesBySelector = {};
   });
 
+syncSettingsPopover();
+if (codexWordRootInferenceEnabled) {
+  void refreshCodexWorkerStatus();
+}
 reloadAudData();

@@ -1,7 +1,9 @@
 import http from 'node:http';
 import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
+import { spawn } from 'node:child_process';
 import path from 'node:path';
+import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { createServer as createViteServer } from 'vite';
@@ -22,6 +24,8 @@ const audSegSchemaFile = path.join(audSegDir, 'schema');
 const langUnitDir = path.join(root, 'src', 'backend', 'data', 'langUnits');
 const langUnitItemsFile = path.join(langUnitDir, 'items.json');
 const langUnitSchemaFile = path.join(langUnitDir, 'schema');
+const codexWorkerDir = path.join(root, 'mgmt', 'codex-worker');
+const codexWorkerEntry = path.join(codexWorkerDir, 'src', 'index.js');
 const subSegDir = path.join(root, 'src', 'backend', 'data', 'subSegs');
 const subSegItemsFile = path.join(subSegDir, 'items.json');
 const subSegSchemaFile = path.join(subSegDir, 'schema');
@@ -274,6 +278,58 @@ async function writeLangUnitItems(items) {
   await fs.writeFile(langUnitItemsFile, JSON.stringify(items, null, 2));
 }
 
+function collectLangUnitRefsById(subSegItems) {
+  const refsById = new Map();
+
+  for (const subSegItem of Array.isArray(subSegItems) ? subSegItems : []) {
+    const subSegId = String(subSegItem?._id ?? '').trim();
+    const audSegId = String(subSegItem?.audSegId ?? '').trim();
+    if (!subSegId || !audSegId) {
+      continue;
+    }
+
+    for (const token of Array.isArray(subSegItem?.content) ? subSegItem.content : []) {
+      const langUnitId = String(token?.langUnitId ?? '').trim();
+      if (token?.type !== 'langUnitRef' || !langUnitId) {
+        continue;
+      }
+
+      const refs = refsById.get(langUnitId) ?? [];
+      refs.push({ audSegId, subSegId });
+      refsById.set(langUnitId, refs);
+    }
+  }
+
+  return refsById;
+}
+
+function normalizeLangUnitRefs(refs) {
+  const seen = new Set();
+  const normalized = [];
+
+  for (const ref of Array.isArray(refs) ? refs : []) {
+    if (!ref || typeof ref !== 'object') {
+      continue;
+    }
+
+    const audSegId = String(ref.audSegId ?? '').trim();
+    const subSegId = String(ref.subSegId ?? '').trim();
+    if (!audSegId || !subSegId) {
+      continue;
+    }
+
+    const key = `${audSegId}\u0000${subSegId}`;
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    normalized.push({ audSegId, subSegId });
+  }
+
+  return normalized;
+}
+
 function sortLangUnitItems(items) {
   return items.slice().sort((a, b) => {
     const createdA = Date.parse(a?.createdAt ?? '');
@@ -286,7 +342,7 @@ function sortLangUnitItems(items) {
   });
 }
 
-function normalizeLangUnitItems(items) {
+function normalizeLangUnitItems(items, refsById = new Map()) {
   const seenIds = new Set();
   let changed = false;
 
@@ -301,17 +357,170 @@ function normalizeLangUnitItems(items) {
       changed = true;
     }
 
+    const refs = normalizeLangUnitRefs(refsById.get(id) ?? item.refs);
+    if (JSON.stringify(refs) !== JSON.stringify(Array.isArray(item.refs) ? item.refs : [])) {
+      changed = true;
+    }
+
     seenIds.add(id);
     return {
       ...item,
       _id: id,
       text: String(item.text ?? ''),
+      context: String(item.context ?? ''),
+      refs,
       createdAt: typeof item.createdAt === 'string' && item.createdAt ? item.createdAt : new Date().toISOString(),
       updatedAt: typeof item.updatedAt === 'string' && item.updatedAt ? item.updatedAt : new Date().toISOString(),
     };
   });
 
   return [normalized, changed];
+}
+
+async function rebuildLangUnitItems() {
+  const refsById = collectLangUnitRefsById(await readSubSegItems());
+  const [items, changed] = normalizeLangUnitItems(await readLangUnitItems(), refsById);
+  if (changed) {
+    await writeLangUnitItems(items);
+  }
+
+  return sortLangUnitItems(items);
+}
+
+let codexWorkerClient = null;
+let codexWorkerPrimeComplete = false;
+let codexWorkerPrimeResolve = null;
+let codexWorkerPrimePromise = Promise.resolve();
+
+function getCodexWorkerClient() {
+  if (codexWorkerClient) {
+    return codexWorkerClient;
+  }
+
+  const child = spawn(process.execPath, [codexWorkerEntry], {
+    cwd: codexWorkerDir,
+    env: {
+      ...process.env,
+      CODEX_WORKER_STREAMED: '1',
+    },
+    stdio: ['pipe', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+  const stdout = createInterface({ input: child.stdout });
+  const pending = [];
+  let queue = Promise.resolve();
+
+  codexWorkerPrimeComplete = false;
+  codexWorkerPrimePromise = new Promise((resolve) => {
+    codexWorkerPrimeResolve = resolve;
+  });
+
+  child.stderr.on('data', (chunk) => {
+    const text = String(chunk);
+    process.stderr.write(text);
+    if (text.includes('[codex-worker] ready') && !codexWorkerPrimeComplete) {
+      codexWorkerPrimeComplete = true;
+      codexWorkerPrimeResolve?.();
+      codexWorkerPrimeResolve = null;
+    }
+  });
+
+  child.on('exit', () => {
+    codexWorkerClient = null;
+    codexWorkerPrimeResolve?.();
+    codexWorkerPrimeComplete = false;
+    codexWorkerPrimeResolve = null;
+    codexWorkerPrimePromise = Promise.resolve();
+    while (pending.length) {
+      pending.shift()?.reject(new Error('Codex worker exited.'));
+    }
+  });
+
+  stdout.on('line', (line) => {
+    const entry = pending.shift();
+    if (!entry) {
+      return;
+    }
+
+    try {
+      entry.resolve(JSON.parse(line));
+    } catch (error) {
+      entry.reject(error);
+    }
+  });
+
+  codexWorkerClient = {
+    request(payload) {
+      const job = queue.then(() => new Promise((resolve, reject) => {
+        pending.push({ resolve, reject });
+        child.stdin.write(`${JSON.stringify(payload)}\n`);
+      }));
+      queue = job.then(() => undefined, () => undefined);
+      return job;
+    },
+    close() {
+      child.kill();
+    },
+  };
+
+  return codexWorkerClient;
+}
+
+async function waitForCodexWorkerPrimeComplete() {
+  getCodexWorkerClient();
+  await codexWorkerPrimePromise;
+  return codexWorkerPrimeComplete;
+}
+
+async function inferLangUnitRoot(langUnitId, payload) {
+  const worker = getCodexWorkerClient();
+  const result = await worker.request(payload);
+  const root = String(result?.res ?? '').trim();
+  if (!root) {
+    return null;
+  }
+
+  const items = await readLangUnitItems();
+  const now = new Date().toISOString();
+  let updated = null;
+  const next = items.map((item) => {
+    if (String(item?._id ?? '') !== String(langUnitId ?? '')) {
+      return item;
+    }
+
+    updated = {
+      ...item,
+      root,
+      updatedAt: now,
+    };
+    return updated;
+  });
+
+  if (!updated) {
+    return null;
+  }
+
+  await writeLangUnitItems(sortLangUnitItems(next));
+  return { langUnit: updated, res: root };
+}
+
+process.once('exit', () => {
+  codexWorkerClient?.close();
+});
+
+async function handleCodexWorkerApi(req, res, url) {
+  if (req.method !== 'GET' || url.pathname !== '/api/codex-worker/status') {
+    return false;
+  }
+
+  await waitForCodexWorkerPrimeComplete();
+  send(
+    res,
+    200,
+    { 'Content-Type': 'application/json; charset=utf-8' },
+    JSON.stringify({ primeComplete: codexWorkerPrimeComplete })
+  );
+  return true;
 }
 
 function normalizeAudSegItems(items) {
@@ -602,12 +811,45 @@ async function handleAudSegApi(req, res, url) {
 
 async function handleLangUnitApi(req, res, url) {
   if (req.method === 'GET' && url.pathname === '/api/langUnits/items') {
-    const [items, changed] = normalizeLangUnitItems(await readLangUnitItems());
-    if (changed) {
-      await writeLangUnitItems(items);
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(await rebuildLangUnitItems()));
+    return true;
+  }
+
+  if (req.method === 'POST') {
+    const match = /^\/api\/langUnits\/items\/([^/]+)\/root$/.exec(url.pathname);
+    if (!match) {
+      return false;
     }
 
-    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(sortLangUnitItems(items)));
+    let payload = {};
+    try {
+      payload = JSON.parse(await readBody(req) || '{}');
+    } catch {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'invalid JSON' }));
+      return true;
+    }
+
+    const langUnitId = decodeURIComponent(match[1] || '').trim();
+    const context = String(payload.context ?? '').trim();
+    const target = String(payload.target ?? '').trim();
+    const substring = String(payload.substring ?? '').trim();
+    if (!langUnitId || !context || !target || !substring) {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'langUnitId, context, target, and substring are required' }));
+      return true;
+    }
+
+    if (!/^[A-Za-z]+$/.test(target)) {
+      send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(null));
+      return true;
+    }
+
+    const result = await inferLangUnitRoot(langUnitId, { context, target, substring });
+    if (!result) {
+      send(res, 404, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'langUnit not found' }));
+      return true;
+    }
+
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(result));
     return true;
   }
 
@@ -671,6 +913,7 @@ async function handleSubSegApi(req, res, url) {
         await writeSubSegItems(sortSubSegItems(items));
       }
 
+      await rebuildLangUnitItems();
       send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(null));
       return true;
     }
@@ -691,7 +934,8 @@ async function handleSubSegApi(req, res, url) {
     }
 
     await writeSubSegItems(sortSubSegItems(items));
-    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(saved));
+    const updatedLangUnits = await rebuildLangUnitItems();
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSeg: saved, langUnits: updatedLangUnits }));
     return true;
   }
 
@@ -716,6 +960,10 @@ async function createApp() {
       const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
 
       if (url.pathname === '/api/notes' && (await handleNotesApi(req, res))) {
+        return;
+      }
+
+      if (url.pathname.startsWith('/api/codex-worker/') && (await handleCodexWorkerApi(req, res, url))) {
         return;
       }
 
@@ -756,6 +1004,10 @@ async function createApp() {
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
 
     if (url.pathname === '/api/notes' && (await handleNotesApi(req, res))) {
+      return;
+    }
+
+    if (url.pathname.startsWith('/api/codex-worker/') && (await handleCodexWorkerApi(req, res, url))) {
       return;
     }
 

@@ -2,7 +2,13 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
-import { buildPrompt, normalizeRequest, parseCodexJsonl, parseEnvelope } from './core.js';
+import {
+  buildPrompt,
+  normalizeLanguageUnitRoot,
+  normalizeRequest,
+  parseCodexJsonl,
+  parseEnvelope,
+} from './core.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const workerRoot = resolve(here, '..');
@@ -27,6 +33,8 @@ const parsed = parseCodexJsonl([
 ].join('\n'));
 assert.equal(parsed.threadId, 'thread-123');
 assert.deepEqual(parseEnvelope(parsed.finalText), { res: 'root' });
+assert.equal(normalizeLanguageUnitRoot({ target: 'newest' }, 'newest'), 'new');
+assert.equal(normalizeLanguageUnitRoot({ target: 'published' }, 'published'), 'publish');
 
 const live = spawnSync(process.execPath, [workerEntry, '--demo'], {
   cwd: workerRoot,

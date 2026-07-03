@@ -73,6 +73,33 @@ export function parseFinalEnvelope(text) {
   }
 }
 
+export function normalizeLanguageUnitRoot(request, result) {
+  const target = String(request?.target ?? '').trim();
+  const value = String(result ?? target).trim();
+  if (!value) {
+    return value;
+  }
+
+  const lower = value.toLowerCase();
+  if (lower.length > 4 && lower.endsWith('iest')) {
+    return `${value.slice(0, -4)}y`;
+  }
+
+  if (lower.length > 3 && lower.endsWith('est')) {
+    return value.slice(0, -3);
+  }
+
+  if (lower.length > 3 && lower.endsWith('ied')) {
+    return `${value.slice(0, -3)}y`;
+  }
+
+  if (lower.length > 2 && lower.endsWith('ed')) {
+    return value.slice(0, -2);
+  }
+
+  return value;
+}
+
 export function parseCodexJsonl(stdout) {
   let threadId = null;
   let finalText = null;

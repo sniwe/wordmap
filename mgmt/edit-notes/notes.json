@@ -1,12 +1,12 @@
 {
-  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.subseg-bubble": {
-    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.subseg-bubble",
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context",
     "notes": [
       {
-        "text": "we are to set up a system whereby bubble span contents are not persisted on subSeg content primarily, but instead subSeg content stores a reference pointing to a \"langUnits\" collection. \ninitialize this collection. \nedit exiswting logic so that on audSeg entered state init subSeg content with bubble spans loads in bubbles based on references connected to langUnit item",
-        "createdAt": "2026-07-03T00:09:06.319Z",
+        "text": "this needs display lines with breaks faithfully - in the same way as source data",
+        "createdAt": "2026-07-03T05:52:46.530Z",
         "applied": true,
-        "appliedAt": "2026-07-03T08:18:42.2438765+08:00",
+        "appliedAt": "2026-07-03T13:40:00.0000000+08:00",
         "functionalityStatus": {
           "state": "active",
           "remaining": "",
@@ -16,21 +16,104 @@
       }
     ]
   },
-  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list": {
-    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list",
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input",
     "notes": [
       {
-        "text": "perform deep debug: audSeg and subSeg items are incorrectly pairing to newly added audEps rather than the audEp they were created on",
-        "createdAt": "2026-07-02T04:16:17.240Z",
+        "text": "subSeg input failing to render line breaks faithfully to data",
+        "createdAt": "2026-07-03T05:48:11.234Z",
         "applied": true,
-        "appliedAt": "2026-07-02T12:19:42.8165610+08:00",
+        "appliedAt": "2026-07-03T13:36:00.0000000+08:00",
         "functionalityStatus": {
-          "state": "retired",
+          "state": "active",
           "remaining": "",
           "missing": "",
-          "replacedBy": [
-            "audSegs stay linked by audSegId and audEp insert/delete only shifts audEpIndex"
-          ]
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > label.settings-popover__item > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > label.settings-popover__item > span": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > label.settings-popover__item > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > label.settings-popover__item > span",
+    "notes": [
+      {
+        "text": "if the langUnit target is not a single english word, let it short-circuit and not fire (until we set up specific handling later)",
+        "createdAt": "2026-07-03T05:41:38.102Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T13:33:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.langunit-bubble:nth-of-type(2)": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.langunit-bubble:nth-of-type(2)",
+    "notes": [
+      {
+        "text": "hide the badge entirely on that langUnit if ref count is <2",
+        "createdAt": "2026-07-03T05:26:57.847Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T13:28:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.langunit-bubble:nth-of-type(1)": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(3) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.langunit-bubble:nth-of-type(1)",
+    "notes": [
+      {
+        "text": "don't show badge if ref count is 1",
+        "createdAt": "2026-07-03T05:22:51.712Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T13:26:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > label.settings-popover__item > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > label.settings-popover__item > input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > label.settings-popover__item > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > label.settings-popover__item > input",
+    "notes": [
+      {
+        "text": "when checkbox checked for codex CLI worker, the app will have codex word root inference enabled. this means that upon langUnit creation an async request is sent to C:\\retry\\mgmt\\codex-worker worker instance thread, when it returns, its res property is used to update the langUnit's \"root\" property in the background while the user continues to use the app seamlessly",
+        "createdAt": "2026-07-03T04:51:32.559Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T13:21:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover",
+    "notes": [
+      {
+        "text": "add a single item with checkbox and text \"codex CLI worker\"",
+        "createdAt": "2026-07-03T04:47:13.804Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T12:47:33.4372057+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
         }
       }
     ]
@@ -72,6 +155,217 @@
           "remaining": "",
           "missing": "",
           "replacedBy": []
+        }
+      },
+      {
+        "text": "on very top right corner of page add a settings button with gear icon as label. make same size as addAudEpBtn. click will open a popover dropdown container (empty for time being - display \"no options yet..\").",
+        "createdAt": "2026-07-03T04:40:38.459Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T12:43:44.5297245+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context",
+    "notes": [
+      {
+        "text": "let click of an item trigger automatic navigation of UI state to the clicked target, including exiting of current subSeg, audSeg (and audEp if needed) and entering of the target audSeg and cycle selecction of the langUnit bubble",
+        "createdAt": "2026-07-03T04:28:05.136Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T12:37:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__langunit-refs:nth-of-type(2)": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__langunit-refs:nth-of-type(2)",
+    "notes": [
+      {
+        "text": "list items not updating after exiting a previous audSeg with cycle target on langUnit bubble and moving to a different audSeg and cycle targeting a langUnit bubble there",
+        "createdAt": "2026-07-03T04:22:49.766Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T12:24:34.9191980+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context",
+    "notes": [
+      {
+        "text": "item should grow with content up to max widthf",
+        "createdAt": "2026-07-03T04:09:46.811Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T12:10:09.8612885+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref",
+    "notes": [
+      {
+        "text": "wrong edge - should clamp off the right edge of audSeg entered state container",
+        "createdAt": "2026-07-03T04:08:05.345Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T12:08:35.8056818+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > span.item__content > ul.item__langunit-refs": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > span.item__content > ul.item__langunit-refs",
+    "notes": [
+      {
+        "text": "this is positioned wrong. clamp beside \"item__segment item__segment--entered is-targeted\"",
+        "createdAt": "2026-07-03T03:52:04.629Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T11:52:59.1239090+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > span.item__content": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > span.item__content",
+    "notes": [
+      {
+        "text": "add a collapsed by default, empty by default langUnitRefs list off the right edge of this container. leave a 5px gap between this container and the new list. list items will be max height 20px and width max-content with max width of 50px (wrapping after that). when the user cycle targets a langUnit bubble with 2 or more refs within subSeg input the langUnitRefs list will populate with langunits for the target (filtering out that already shown on the subSeg). let items' context show on the item as plain text in small font",
+        "createdAt": "2026-07-03T03:34:46.572Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T11:39:29.0180920+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input",
+    "notes": [
+      {
+        "text": "enter keypress while subSeg bubble cycle target active will be a no-op for the time being",
+        "createdAt": "2026-07-02T03:13:02.681Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T11:06:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "now that we we have langUnits set up, modify langUnit creation flow to do this: 1) first check if the langunits collection has any other items of the same content. if yes, rather than creating a band new langUnit, just add a new reference pointing to the current target subSeg (and/or audSeg - whatever makes sense); 2) let a tiny round number badge show on top right ccorner of langunit bubble shwoing the number of references for that langUnit. \nlike this, langUnits across audSegs are aware fo each other",
+        "createdAt": "2026-07-03T02:32:49.420Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T10:40:25.4216784+08:00",
+        "source": "terminal",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
+    "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input",
+    "notes": [
+      {
+        "text": "let langUnit bubble also persist its immediate \"context\" to collection entry. this refers to the subString of subSeg input content containing the langUnit bubble, with start bounded by either content start, line start (preceding line break / new line) or full stop character (includes both chinese mandarin, english and japanese unicode full stops) , and end being bounded by content end, line end or full stop. note that beginning and end boundings that fall within the span of the langUnit itself are not counted",
+        "createdAt": "2026-07-03T01:27:41.681Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T09:30:04.2658552+08:00",
+        "source": "terminal",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.subseg-bubble": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.subseg-bubble",
+    "notes": [
+      {
+        "text": "we are to set up a system whereby bubble span contents are not persisted on subSeg content primarily, but instead subSeg content stores a reference pointing to a \"langUnits\" collection. \ninitialize this collection. \nedit exiswting logic so that on audSeg entered state init subSeg content with bubble spans loads in bubbles based on references connected to langUnit item",
+        "createdAt": "2026-07-03T00:09:06.319Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T08:18:42.2438765+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "rename the subSeg bubble on subSeg input to the langUnit bubble",
+        "createdAt": "2026-07-03T09:13:30.6194874+08:00",
+        "applied": true,
+        "appliedAt": "2026-07-03T09:13:30.6194874+08:00",
+        "source": "terminal",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list",
+    "notes": [
+      {
+        "text": "perform deep debug: audSeg and subSeg items are incorrectly pairing to newly added audEps rather than the audEp they were created on",
+        "createdAt": "2026-07-02T04:16:17.240Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T12:19:42.8165610+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "audSegs stay linked by audSegId and audEp insert/delete only shifts audEpIndex"
+          ]
         }
       }
     ]
@@ -436,23 +730,6 @@
         "createdAt": "2026-07-02T03:18:37.393Z",
         "applied": true,
         "appliedAt": "2026-07-02T11:12:00.0000000+08:00",
-        "functionalityStatus": {
-          "state": "active",
-          "remaining": "",
-          "missing": "",
-          "replacedBy": []
-        }
-      }
-    ]
-  },
-  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
-    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input",
-    "notes": [
-      {
-        "text": "enter keypress while subSeg bubble cycle target active will be a no-op for the time being",
-        "createdAt": "2026-07-02T03:13:02.681Z",
-        "applied": true,
-        "appliedAt": "2026-07-02T11:06:00.0000000+08:00",
         "functionalityStatus": {
           "state": "active",
           "remaining": "",

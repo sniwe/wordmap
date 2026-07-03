@@ -5,6 +5,8 @@
 | `audEp` | An audio episode item in the list, backed by `src/backend/data/audEps/items.json`. |
 | `audEp list` | The main list rendered in the canvas for `audEp` items. |
 | `addAudEp button` | The `+` button used to add or upload a new `audEp`. |
+| `settings button` | The top-right gear button that opens the placeholder settings popover. |
+| `settings popover` | The empty dropdown panel anchored to the settings button and currently showing `no options yet..`. |
 | `ethereal seed item` | A non-data-driven placeholder list item shown when the list needs a starter entry. |
 | `cycle targeting` | Keyboard-driven selection movement through list items. |
 | `entered state lock` | The expanded inline panel state on a targeted `audEp` after pressing `Enter`. |
@@ -27,19 +29,26 @@
 | `subSeg editor` | The contenteditable host inside the seed `subSeg` item that accepts text, saves on debounce, and keeps Enter as a newline. |
 | `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
-| `subSeg bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
+| `langUnit bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
+| `langUnit reuse by text` | The creation rule that reuses an existing `langUnit` record when the selected bubble text exactly matches an already stored `langUnit`. |
+| `langUnit reference badge` | The tiny round count badge on a `langUnit bubble` that shows how many `subSeg` references point at that `langUnit`. |
+| `langUnit refs list` | The collapsible side list beside an active `langUnit bubble` that shows other refs to that `langUnit` and their context text. |
+| `langUnit refs` | The persisted reverse-link list on a `langUnit` record that stores which `audSeg`/`subSeg` pairs reference it. |
+| `langUnit ref jump` | The click action on a `langUnit refs list` item that exits the current editor state and jumps to the referenced `audSeg` and bubble. |
+| `subSeg bubble` | Deprecated previous name for the `langUnit bubble`. |
 | `subSeg ref content` | The saved `subSeg` payload model that stores text tokens plus `langUnit` references instead of persisting bubble HTML directly. |
 | `langUnits collection` | The backend scaffold under `src/backend/data/langUnits` for reusable bubble text records. |
 | `langUnit item` | A reusable text record referenced by `subSeg` bubble spans through `data-langunit-id` and saved `langUnitRef` tokens. |
+| `langUnit context` | The immediate sentence or line substring around a `langUnit bubble`, persisted on the `langUnit` record. |
 | `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
 | `subSeg enter guard` | `Enter` does nothing while a `subSeg` bubble target is active. |
 | `subSeg wrap at row width` | `subSeg` content wraps inside the row instead of widening the editor or its panel. |
-| `subSeg bubble persistence` | Saving and reloading the editor markup so a captured `subSeg bubble` reappears after refresh. |
+| `langUnit bubble persistence` | Saving and reloading the editor markup so a captured `langUnit bubble` reappears after refresh. |
 | `entered panel width lock` | The entered `audEp` panel stays width-constrained instead of growing to match subSeg content. |
 | `audSeg list balance` | The `audSeg` list keeps equal horizontal padding on both sides in dev. |
-| `subSeg bubble no target` | The `-1` cycle state that means no bubble is currently targeted. |
-| `capture subSeg` | The Enter-key action that wraps a highlighted substring in a `subSeg bubble`. |
-| `bubble edge escape` | The double-space escape that moves the caret out of a `subSeg bubble` and keeps only one outside space. |
+| `langUnit bubble no target` | The `-1` cycle state that means no bubble is currently targeted. |
+| `capture subSeg` | The Enter-key action that wraps a highlighted substring in a `langUnit bubble`. |
+| `bubble edge escape` | The double-space escape that moves the caret out of a `langUnit bubble` and keeps only one outside space. |
 | `subSegs collection` | The backend scaffold under `src/backend/data/subSegs` for sub-segment records tied to an `audSeg`. |
 | `subSeg save debounce` | The 500ms delayed save that persists `subSeg` input text to the `subSegs` collection for the selected `audSeg`. |
 | `subSeg save no rerender` | Successful debounced `subSeg` saves update persistence and in-memory state without rerendering the entered `audEp` subtree, so focus stays on the input. |
@@ -66,10 +75,15 @@
 | `retired` | The described behavior no longer exists in the current runtime. |
 | `partially active` | Some described behavior remains, with the missing parts and replacements recorded separately. |
 | `rich input` | The editable item input that supports text editing behavior beyond a plain placeholder. |
+| `codex CLI worker` | The checkbox label inside the settings popover for the long-lived Codex CLI worker. |
+| `codex word root inference` | The checkbox-controlled flow that asks the Codex worker to fill in a langUnit's `root` after creation. |
 | `codex worker` | The mini-module under `mgmt/codex-worker` that keeps one long-lived Codex CLI terminal session alive for scripted prompt/response work. |
+| `codex worker status toast` | The tiny bottom-left viewport toast that reports worker readiness and payload completion. |
+| `single English word target` | The root-inference guard that allows only one ASCII word token to trigger worker lookup. |
 | `worker terminal` | The spawned Node-managed terminal process that hosts the Codex CLI worker and exposes stdin, stdout, and stderr for monitoring. |
 | `discern-languageUnit-root` | The planned tailored skill that reads `context` and `target` strings plus a substring and returns the resolved `langUnitRoot`. |
 | `langUnitRoot` | The final resolved language-unit root string returned by the worker in the envelope `{res: ${langUnitRoot}}`. |
+| `langUnit root` | The persisted inferred root string on a `langUnit` record. |
 | `same codex thread` | The single persisted Codex conversation/session the worker reuses across requests instead of starting a fresh one per run. |
 | `worker request` | One JSON payload with `context`, `target`, and `substring` consumed by the codex worker. |
 | `worker session id` | The stored Codex thread id reused by `resume` for the next request in the same worker process. |
