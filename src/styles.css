@@ -171,6 +171,8 @@ body {
   flex-direction: column;
   gap: 6px;
   width: 100%;
+  min-width: 0;
+  contain: inline-size;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -178,6 +180,8 @@ body {
 
 .item__subseg {
   width: 100%;
+  min-width: 0;
+  contain: inline-size;
 }
 
 .item__subseg--seed {
@@ -189,6 +193,7 @@ body {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  align-self: stretch;
   box-sizing: border-box;
   min-height: 25px;
   padding: 4px 5px;
@@ -199,7 +204,9 @@ body {
   overflow: hidden;
   resize: none;
   white-space: pre-wrap;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  line-break: anywhere;
   outline: none;
   text-align: left;
 }
@@ -212,7 +219,7 @@ body {
   display: inline-block;
   padding: 0;
   border: 1px solid #222;
-  border-radius: 999px;
+  border-radius: 5px;
   background: #eef3ff;
   max-width: 100%;
   white-space: normal;

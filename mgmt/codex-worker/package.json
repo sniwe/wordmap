@@ -1,0 +1,10 @@
+{
+  "name": "codex-worker-mini-module",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node src/index.js",
+    "start": "node src/index.js",
+    "test": "node src/self-test.js"
+  }
+}

@@ -19,6 +19,9 @@ const audEpSchemaFile = path.join(audEpDir, 'schema');
 const audSegDir = path.join(root, 'src', 'backend', 'data', 'audSegs');
 const audSegItemsFile = path.join(audSegDir, 'items.json');
 const audSegSchemaFile = path.join(audSegDir, 'schema');
+const langUnitDir = path.join(root, 'src', 'backend', 'data', 'langUnits');
+const langUnitItemsFile = path.join(langUnitDir, 'items.json');
+const langUnitSchemaFile = path.join(langUnitDir, 'schema');
 const subSegDir = path.join(root, 'src', 'backend', 'data', 'subSegs');
 const subSegItemsFile = path.join(subSegDir, 'items.json');
 const subSegSchemaFile = path.join(subSegDir, 'schema');
@@ -243,7 +246,11 @@ async function writeAudEpItems(items) {
 
 async function readAudSegItems() {
   try {
-    return JSON.parse(await fs.readFile(audSegItemsFile, 'utf8'));
+    const [items, changed] = normalizeAudSegItems(JSON.parse(await fs.readFile(audSegItemsFile, 'utf8')));
+    if (changed) {
+      await writeAudSegItems(items);
+    }
+    return items;
   } catch {
     return [];
   }
@@ -252,6 +259,81 @@ async function readAudSegItems() {
 async function writeAudSegItems(items) {
   await fs.mkdir(audSegDir, { recursive: true });
   await fs.writeFile(audSegItemsFile, JSON.stringify(items, null, 2));
+}
+
+async function readLangUnitItems() {
+  try {
+    return JSON.parse(await fs.readFile(langUnitItemsFile, 'utf8'));
+  } catch {
+    return [];
+  }
+}
+
+async function writeLangUnitItems(items) {
+  await fs.mkdir(langUnitDir, { recursive: true });
+  await fs.writeFile(langUnitItemsFile, JSON.stringify(items, null, 2));
+}
+
+function sortLangUnitItems(items) {
+  return items.slice().sort((a, b) => {
+    const createdA = Date.parse(a?.createdAt ?? '');
+    const createdB = Date.parse(b?.createdAt ?? '');
+    if (!Number.isNaN(createdA) && !Number.isNaN(createdB) && createdA !== createdB) {
+      return createdA - createdB;
+    }
+
+    return String(a?._id ?? '').localeCompare(String(b?._id ?? ''));
+  });
+}
+
+function normalizeLangUnitItems(items) {
+  const seenIds = new Set();
+  let changed = false;
+
+  const normalized = (Array.isArray(items) ? items : []).map((item) => {
+    if (!item || typeof item !== 'object') {
+      changed = true;
+      return item;
+    }
+
+    const id = typeof item._id === 'string' && item._id && !seenIds.has(item._id) ? item._id : randomUUID();
+    if (id !== item._id) {
+      changed = true;
+    }
+
+    seenIds.add(id);
+    return {
+      ...item,
+      _id: id,
+      text: String(item.text ?? ''),
+      createdAt: typeof item.createdAt === 'string' && item.createdAt ? item.createdAt : new Date().toISOString(),
+      updatedAt: typeof item.updatedAt === 'string' && item.updatedAt ? item.updatedAt : new Date().toISOString(),
+    };
+  });
+
+  return [normalized, changed];
+}
+
+function normalizeAudSegItems(items) {
+  const seenIds = new Set();
+  let changed = false;
+
+  const normalized = (Array.isArray(items) ? items : []).map((item) => {
+    if (!item || typeof item !== 'object') {
+      changed = true;
+      return item;
+    }
+
+    const id = typeof item._id === 'string' && item._id && !seenIds.has(item._id) ? item._id : randomUUID();
+    if (id !== item._id) {
+      changed = true;
+    }
+
+    seenIds.add(id);
+    return id === item._id ? item : { ...item, _id: id };
+  });
+
+  return [normalized, changed];
 }
 
 async function readSubSegItems() {
@@ -502,9 +584,8 @@ async function handleAudSegApi(req, res, url) {
     }
 
     const items = await readAudSegItems();
-    const sameParentCount = items.filter((item) => Number(item?.audEpIndex) === audEpIndex).length;
     const item = {
-      _id: `${audEpIndex}-${sameParentCount}`,
+      _id: randomUUID(),
       audEpIndex,
       tcs,
       tce,
@@ -513,6 +594,20 @@ async function handleAudSegApi(req, res, url) {
     items.push(item);
     await writeAudSegItems(sortAudSegItems(items));
     send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(item));
+    return true;
+  }
+
+  return false;
+}
+
+async function handleLangUnitApi(req, res, url) {
+  if (req.method === 'GET' && url.pathname === '/api/langUnits/items') {
+    const [items, changed] = normalizeLangUnitItems(await readLangUnitItems());
+    if (changed) {
+      await writeLangUnitItems(items);
+    }
+
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(sortLangUnitItems(items)));
     return true;
   }
 
@@ -535,15 +630,42 @@ async function handleSubSegApi(req, res, url) {
     }
 
     const audSegId = String(payload.audSegId ?? '').trim();
+    const content = Array.isArray(payload.content) ? payload.content : null;
     const text = String(payload.text ?? '');
+    const langUnits = Array.isArray(payload.langUnits) ? payload.langUnits : [];
     if (!audSegId) {
       send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'audSegId is required' }));
       return true;
     }
 
+    if (langUnits.length) {
+      const existingLangUnits = await readLangUnitItems();
+      const langUnitMap = new Map(existingLangUnits.map((item) => [String(item?._id ?? ''), item]));
+
+      for (const langUnit of langUnits) {
+        if (!langUnit || typeof langUnit !== 'object') {
+          continue;
+        }
+
+        const id = String(langUnit._id ?? '').trim() || randomUUID();
+        const now = new Date().toISOString();
+        const current = langUnitMap.get(id);
+        langUnitMap.set(id, {
+          ...current,
+          ...langUnit,
+          _id: id,
+          text: String(langUnit.text ?? current?.text ?? ''),
+          createdAt: current?.createdAt || String(langUnit.createdAt ?? now),
+          updatedAt: now,
+        });
+      }
+
+      await writeLangUnitItems(sortLangUnitItems([...langUnitMap.values()]));
+    }
+
     const items = await readSubSegItems();
     const index = items.findIndex((item) => item?.audSegId === audSegId);
-    if (!text.trim()) {
+    if ((content && !content.length) || (!content && !text.trim())) {
       if (index >= 0) {
         items.splice(index, 1);
         await writeSubSegItems(sortSubSegItems(items));
@@ -556,6 +678,7 @@ async function handleSubSegApi(req, res, url) {
     const saved = {
       _id: index >= 0 ? items[index]._id : randomUUID(),
       audSegId,
+      ...(content ? { content } : {}),
       text,
       createdAt: index >= 0 ? items[index].createdAt : new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -596,6 +719,10 @@ async function createApp() {
         return;
       }
 
+      if (url.pathname.startsWith('/api/langUnits/') && (await handleLangUnitApi(req, res, url))) {
+        return;
+      }
+
       if (url.pathname.startsWith('/api/subSegs/') && (await handleSubSegApi(req, res, url))) {
         return;
       }
@@ -629,6 +756,10 @@ async function createApp() {
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
 
     if (url.pathname === '/api/notes' && (await handleNotesApi(req, res))) {
+      return;
+    }
+
+    if (url.pathname.startsWith('/api/langUnits/') && (await handleLangUnitApi(req, res, url))) {
       return;
     }
 

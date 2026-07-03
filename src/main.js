@@ -41,6 +41,7 @@ const state = {
   audEpItems: [],
   audSegItems: [],
   subSegItems: [],
+  langUnitItems: [],
   pendingUploadIndex: 0,
   selectedAudEpIndex: -1,
   enteredAudEpIndex: -1,
@@ -63,11 +64,16 @@ const audioPlayers = new Map();
 const pendingSeekByIndex = new Map();
 const pendingSeekFrameByIndex = new Map();
 const subSegDraftTextByAudSegId = new Map();
+const subSegDraftPayloadByAudSegId = new Map();
 const subSegSaveTimers = new Map();
 const subSegBubbleEscapeState = new Map();
 const subSegBubbleTargetIndexByAudSegId = new Map();
 if (import.meta.env.DEV) {
   createDevReloadTone();
+}
+
+function createItemId() {
+  return crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
 function createDevReloadTone() {
@@ -86,21 +92,26 @@ function createDevReloadTone() {
       }
 
       const now = context.currentTime;
-      const oscillator = context.createOscillator();
-      const gain = context.createGain();
-      oscillator.type = 'sine';
-      oscillator.frequency.value = 880;
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.06, now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
-      oscillator.connect(gain);
-      gain.connect(context.destination);
-      oscillator.start(now);
-      oscillator.stop(now + 0.2);
-      oscillator.onended = () => {
-        oscillator.disconnect();
-        gain.disconnect();
+      const playTone = (frequency, startTime, duration) => {
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+        oscillator.type = 'sine';
+        oscillator.frequency.value = frequency;
+        gain.gain.setValueAtTime(0.0001, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.06, startTime + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration - 0.02);
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+        oscillator.start(startTime);
+        oscillator.stop(startTime + duration);
+        oscillator.onended = () => {
+          oscillator.disconnect();
+          gain.disconnect();
+        };
       };
+
+      playTone(880, now, 0.25);
+      playTone(1175, now + 0.25, 0.25);
       sessionStorage.removeItem(storageKey);
     } catch {
       // ponytail: best-effort dev chime, silence is fine when autoplay is blocked.
@@ -189,7 +200,8 @@ function renderAudEps(items) {
     .join('');
   syncAudEpSelection();
   syncAudEpPlaybackLabels();
-  requestAnimationFrame(syncSubSegTextareaHeights);
+  lockEnteredAudSegWidths();
+  syncSubSegTextareaHeights();
 }
 
 function getAudEpItems() {
@@ -338,6 +350,10 @@ function getSubSegItemForAudSeg(audSegId) {
   return state.subSegItems.find((item) => item?.audSegId === audSegId) ?? null;
 }
 
+function getLangUnitItem(langUnitId) {
+  return state.langUnitItems.find((item) => item?._id === langUnitId) ?? null;
+}
+
 function sanitizeSubSegMarkup(value) {
   if (typeof value !== 'string' || !value) {
     return '';
@@ -384,7 +400,9 @@ function sanitizeSubSegMarkup(value) {
 
     if (node.tagName === 'SPAN' && node.classList.contains('subseg-bubble')) {
       const bubbleContent = serializeChildren(node.childNodes);
-      return `<span class="subseg-bubble">${bubbleContent}</span>`;
+      const langUnitId = node.getAttribute('data-langunit-id');
+      const dataAttr = langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : '';
+      return `<span class="subseg-bubble"${dataAttr}>${bubbleContent}</span>`;
     }
 
     if (blockTags.has(node.tagName)) {
@@ -398,11 +416,39 @@ function sanitizeSubSegMarkup(value) {
   return serializeChildren(template.content.childNodes);
 }
 
+function renderSubSegContentTokens(tokens) {
+  if (!Array.isArray(tokens)) {
+    return '';
+  }
+
+  return tokens
+    .map((token) => {
+      if (!token || typeof token !== 'object') {
+        return '';
+      }
+
+      if (token.type === 'text') {
+        return escapeHtml(String(token.text ?? '')).replaceAll('\n', '<br>');
+      }
+
+      if (token.type === 'langUnitRef') {
+        const langUnitId = String(token.langUnitId ?? '').trim();
+        const langUnit = getLangUnitItem(langUnitId);
+        const text = String(langUnit?.text ?? token.text ?? '');
+        return `<span class="subseg-bubble"${langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : ''}>${escapeHtml(text)}</span>`;
+      }
+
+      return '';
+    })
+    .join('');
+}
+
 function renderSubSegList(audSegItem) {
   const audSegId = audSegItem?._id || '';
   const subSegItem = getSubSegItemForAudSeg(audSegId);
-  const value = subSegDraftTextByAudSegId.get(audSegId) ?? subSegItem?.text ?? '';
-  const content = sanitizeSubSegMarkup(value);
+  const value = subSegDraftTextByAudSegId.get(audSegId);
+  const renderedContent = subSegItem?.content ? renderSubSegContentTokens(subSegItem.content) : '';
+  const content = value ?? (renderedContent || sanitizeSubSegMarkup(subSegItem?.text ?? ''));
   return `
     <ul class="item__subsegs" aria-label="subSegs">
       <li class="item__subseg item__subseg--seed">
@@ -419,6 +465,88 @@ function renderSubSegList(audSegItem) {
   `;
 }
 
+function extractSubSegEditorPayload(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return { content: [], langUnits: [] };
+  }
+
+  const content = [];
+  const langUnitsById = new Map();
+  const appendText = (text) => {
+    if (!text) {
+      return;
+    }
+
+    const last = content[content.length - 1];
+    if (last?.type === 'text') {
+      last.text += text;
+      return;
+    }
+
+    content.push({ type: 'text', text });
+  };
+
+  const walk = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      appendText(node.textContent ?? '');
+      return;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return;
+    }
+
+    if (node.tagName === 'BR') {
+      appendText('\n');
+      return;
+    }
+
+    if (node.tagName === 'SPAN' && node.classList.contains('subseg-bubble')) {
+      const bubbleText = node.textContent ?? '';
+      let langUnitId = node.getAttribute('data-langunit-id') || '';
+      if (!langUnitId) {
+        langUnitId = createItemId();
+        node.setAttribute('data-langunit-id', langUnitId);
+      }
+
+      langUnitsById.set(langUnitId, {
+        _id: langUnitId,
+        text: bubbleText,
+      });
+      content.push({ type: 'langUnitRef', langUnitId });
+      return;
+    }
+
+    for (const child of node.childNodes) {
+      walk(child);
+    }
+
+    if (node.tagName === 'DIV' || node.tagName === 'P' || node.tagName === 'LI') {
+      appendText('\n');
+    }
+  };
+
+  for (const child of editor.childNodes) {
+    walk(child);
+  }
+
+  while (content.length && content[content.length - 1]?.type === 'text') {
+    const tail = content[content.length - 1];
+    tail.text = tail.text.replace(/\n+$/g, '');
+    if (tail.text) {
+      break;
+    }
+
+    content.pop();
+  }
+
+  return {
+    content,
+    langUnits: [...langUnitsById.values()],
+    text: getSubSegEditorText(editor),
+  };
+}
+
 function autosizeSubSegInput(input) {
   if (!(input instanceof HTMLElement)) {
     return;
@@ -431,6 +559,27 @@ function autosizeSubSegInput(input) {
 function syncSubSegTextareaHeights() {
   audEpList.querySelectorAll('.item__subseg-input').forEach((input) => {
     autosizeSubSegInput(input);
+  });
+}
+
+function lockEnteredAudSegWidths() {
+  audEpList.querySelectorAll('.item__segment--entered').forEach((segment) => {
+    if (!(segment instanceof HTMLElement)) {
+      return;
+    }
+
+    const width = Math.ceil(segment.getBoundingClientRect().width);
+    if (!Number.isFinite(width) || width <= 0) {
+      return;
+    }
+
+    segment.style.width = `${width}px`;
+    segment.style.maxWidth = `${width}px`;
+
+    const input = segment.querySelector('.item__subseg-input');
+    if (input instanceof HTMLElement) {
+      input.style.maxWidth = '100%';
+    }
   });
 }
 
@@ -533,9 +682,12 @@ function syncSubSegEditorDraft(editor) {
 
   const audSegId = editor.dataset.subsegAudsegId || '';
   const markup = getSubSegEditorMarkup(editor);
+  const payload = extractSubSegEditorPayload(editor);
   subSegDraftTextByAudSegId.set(audSegId, markup);
+  subSegDraftPayloadByAudSegId.set(audSegId, payload);
   autosizeSubSegInput(editor);
-  scheduleSubSegSave(audSegId, markup);
+  scheduleSubSegSave(audSegId);
+  void saveSubSeg(audSegId);
   syncSubSegBubbleTarget(editor, false);
 }
 
@@ -604,6 +756,7 @@ function wrapSelectedSubSegText(editor) {
 
   const bubble = document.createElement('span');
   bubble.className = 'subseg-bubble';
+  bubble.dataset.langunitId = createItemId();
   bubble.append(range.extractContents());
   range.insertNode(bubble);
 
@@ -656,7 +809,7 @@ function handleSubSegBubbleSpace(editor) {
   return true;
 }
 
-function scheduleSubSegSave(audSegId, text) {
+function scheduleSubSegSave(audSegId) {
   if (!audSegId) {
     return;
   }
@@ -668,15 +821,15 @@ function scheduleSubSegSave(audSegId, text) {
 
   const timer = setTimeout(() => {
     subSegSaveTimers.delete(audSegId);
-    void saveSubSeg(audSegId, text);
+    void saveSubSeg(audSegId);
   }, 500);
 
   subSegSaveTimers.set(audSegId, timer);
 }
 
 function flushSubSegSave(audSegId) {
-  const text = subSegDraftTextByAudSegId.get(audSegId);
-  if (typeof text !== 'string') {
+  const payload = subSegDraftPayloadByAudSegId.get(audSegId);
+  if (!payload) {
     return;
   }
 
@@ -686,25 +839,39 @@ function flushSubSegSave(audSegId) {
     subSegSaveTimers.delete(audSegId);
   }
 
-  const body = JSON.stringify({ audSegId, text });
+  const body = JSON.stringify({ audSegId, ...payload });
   if (navigator.sendBeacon) {
     navigator.sendBeacon('/api/subSegs/items', new Blob([body], { type: 'application/json' }));
     return;
   }
 
-  void saveSubSeg(audSegId, text);
+  void saveSubSeg(audSegId);
 }
 
-async function saveSubSeg(audSegId, text) {
-  const payload = {
-    audSegId,
-    text,
-  };
+function mergeLangUnitItems(items) {
+  const next = new Map(state.langUnitItems.map((item) => [item?._id, item]));
+
+  for (const item of items) {
+    if (!item?._id) {
+      continue;
+    }
+
+    next.set(item._id, item);
+  }
+
+  state.langUnitItems = [...next.values()];
+}
+
+async function saveSubSeg(audSegId) {
+  const payload = subSegDraftPayloadByAudSegId.get(audSegId);
+  if (!payload) {
+    return;
+  }
 
   const response = await fetch('/api/subSegs/items', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ audSegId, ...payload }),
   });
 
   if (!response.ok) {
@@ -713,6 +880,10 @@ async function saveSubSeg(audSegId, text) {
 
   const saved = await response.json();
   subSegDraftTextByAudSegId.delete(audSegId);
+  subSegDraftPayloadByAudSegId.delete(audSegId);
+  if (payload.langUnits?.length) {
+    mergeLangUnitItems(payload.langUnits);
+  }
   state.subSegItems = saved
     ? [saved, ...state.subSegItems.filter((item) => item?.audSegId !== audSegId)]
     : state.subSegItems.filter((item) => item?.audSegId !== audSegId);
@@ -1071,6 +1242,14 @@ async function loadAudSegs() {
   renderAudEps(state.audEpItems);
 }
 
+async function loadLangUnits() {
+  const response = await fetch('/api/langUnits/items');
+  state.langUnitItems = await response.json();
+  if (state.enteredAudEpIndex >= 0) {
+    renderAudEps(state.audEpItems);
+  }
+}
+
 async function loadSubSegs() {
   const response = await fetch('/api/subSegs/items');
   state.subSegItems = await response.json();
@@ -1082,6 +1261,7 @@ async function loadSubSegs() {
 async function reloadAudData() {
   await loadAudEps();
   await loadAudSegs();
+  await loadLangUnits();
   await loadSubSegs();
 }
 

@@ -14,6 +14,24 @@
       },
       "text": {
         "type": "string"
+      },
+      "content": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            },
+            "langUnitId": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        }
       }
     },
     "additionalProperties": true

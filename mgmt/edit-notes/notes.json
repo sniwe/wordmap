@@ -1,4 +1,81 @@
 {
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.subseg-bubble": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list > li.item.item--entered:nth-of-type(3) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.subseg-bubble",
+    "notes": [
+      {
+        "text": "we are to set up a system whereby bubble span contents are not persisted on subSeg content primarily, but instead subSeg content stores a reference pointing to a \"langUnits\" collection. \ninitialize this collection. \nedit exiswting logic so that on audSeg entered state init subSeg content with bubble spans loads in bubbles based on references connected to langUnit item",
+        "createdAt": "2026-07-03T00:09:06.319Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T08:18:42.2438765+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list",
+    "notes": [
+      {
+        "text": "perform deep debug: audSeg and subSeg items are incorrectly pairing to newly added audEps rather than the audEp they were created on",
+        "createdAt": "2026-07-02T04:16:17.240Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T12:19:42.8165610+08:00",
+        "functionalityStatus": {
+          "state": "retired",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": [
+            "audSegs stay linked by audSegId and audEp insert/delete only shifts audEpIndex"
+          ]
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > body": {
+    "selector": "html > html > body > html > body > body",
+    "notes": [
+      {
+        "text": "write \"lol\" dead center of page in faded text 30px size",
+        "createdAt": "2026-07-02T01:42:01.476Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T09:54:25.5445514+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "remove \"lol\"",
+        "createdAt": "2026-07-02T01:54:45.492Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T10:06:55.1594515+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "write \"lol\" dead center of page in faded text 30px size",
+        "createdAt": "2026-07-02T03:53:16.383Z",
+        "applied": true,
+        "appliedAt": "2026-07-02T11:24:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
   "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list": {
     "selector": "html > body > #app > div#canvas.container:nth-of-type(1) > ul#audep-list.list",
     "notes": [
@@ -395,35 +472,6 @@
         "appliedAt": "2026-07-02T10:39:34.3053661+08:00",
         "functionalityStatus": {
           "state": "unknown",
-          "remaining": "",
-          "missing": "",
-          "replacedBy": []
-        }
-      }
-    ]
-  },
-  "html > html > body > html > body > body": {
-    "selector": "html > html > body > html > body > body",
-    "notes": [
-      {
-        "text": "write \"lol\" dead center of page in faded text 30px size",
-        "createdAt": "2026-07-02T01:42:01.476Z",
-        "applied": true,
-        "appliedAt": "2026-07-02T09:54:25.5445514+08:00",
-        "functionalityStatus": {
-          "state": "active",
-          "remaining": "",
-          "missing": "",
-          "replacedBy": []
-        }
-      },
-      {
-        "text": "remove \"lol\"",
-        "createdAt": "2026-07-02T01:54:45.492Z",
-        "applied": true,
-        "appliedAt": "2026-07-02T10:06:55.1594515+08:00",
-        "functionalityStatus": {
-          "state": "active",
           "remaining": "",
           "missing": "",
           "replacedBy": []
