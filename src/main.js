@@ -2371,6 +2371,15 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
+    if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey) {
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        if (editor && cycleLangUnitBubbleTarget(editor, event.key === 'ArrowRight' ? 1 : -1)) {
+          event.preventDefault();
+          return;
+        }
+      }
+    }
+
     if (event.key === 'Enter') {
       if (editor && wrapSelectedSubSegText(editor)) {
         event.preventDefault();
