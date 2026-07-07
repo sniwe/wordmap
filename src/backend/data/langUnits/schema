@@ -20,8 +20,17 @@
             "subSegId": {
               "type": "string"
             },
+            "start": {
+              "type": "number"
+            },
+            "end": {
+              "type": "number"
+            },
             "remote": {
               "type": "boolean"
+            },
+            "cycleGroupId": {
+              "type": "string"
             },
             "context": {
               "type": "object",

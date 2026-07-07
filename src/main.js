@@ -440,12 +440,13 @@ function getOrderedLangUnitIds(tokens) {
     }
 
     const langUnitId = String(token.langUnitId ?? '').trim();
-    if (!langUnitId || seen.has(langUnitId)) {
+    const groupId = getLangUnitCycleTargetId(langUnitId);
+    if (!groupId || seen.has(groupId)) {
       continue;
     }
 
-    seen.add(langUnitId);
-    ids.push(langUnitId);
+    seen.add(groupId);
+    ids.push(groupId);
   }
 
   return ids;
@@ -456,6 +457,11 @@ function getLangUnitBubbleIndex(audSegId, langUnitId) {
     return -1;
   }
 
+  const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"]`);
+  if (editor instanceof HTMLElement) {
+    return getLangUnitBubbleGroupIds(editor).indexOf(getLangUnitCycleTargetId(langUnitId));
+  }
+
   const subSegItem = getSubSegItemForAudSeg(audSegId);
   const payload = subSegDraftPayloadByAudSegId.get(audSegId);
   const tokens = Array.isArray(payload?.content)
@@ -463,11 +469,31 @@ function getLangUnitBubbleIndex(audSegId, langUnitId) {
     : Array.isArray(subSegItem?.content)
       ? subSegItem.content
       : [];
-  return getOrderedLangUnitIds(tokens).indexOf(langUnitId);
+  return getOrderedLangUnitIds(tokens).indexOf(getLangUnitCycleTargetId(langUnitId));
 }
 
 function getLangUnitItem(langUnitId) {
   return state.langUnitItems.find((item) => item?._id === langUnitId) ?? null;
+}
+
+function getLangUnitCycleTargetId(langUnitId, seen = new Set()) {
+  const id = String(langUnitId ?? '').trim();
+  if (!id || seen.has(id)) {
+    return id;
+  }
+
+  seen.add(id);
+  const item = getLangUnitItem(id);
+  if (!item) {
+    return id;
+  }
+
+  const linkTargetId = String(item.instances?.find((instance) => instance?.cycleGroupId)?.cycleGroupId ?? '').trim();
+  if (!linkTargetId || linkTargetId === id) {
+    return id;
+  }
+
+  return getLangUnitCycleTargetId(linkTargetId, seen) || id;
 }
 
 function getLangUnitText(langUnit) {
@@ -501,7 +527,8 @@ function getSubSegContentTokens(audSegId) {
 }
 
 function getLangUnitReferenceCount(langUnitId) {
-  if (!langUnitId) {
+  const id = String(langUnitId ?? '').trim();
+  if (!id) {
     return 0;
   }
 
@@ -514,7 +541,7 @@ function getLangUnitReferenceCount(langUnitId) {
     }
 
     for (const token of getSubSegContentTokens(String(subSegItem?.audSegId ?? ''))) {
-      if (token?.type === 'langUnitRef' && String(token.langUnitId ?? '') === langUnitId) {
+      if (token?.type === 'langUnitRef' && String(token.langUnitId ?? '') === id) {
         count += 1;
         seenSubSegIds.add(subSegId);
         break;
@@ -574,9 +601,11 @@ function sanitizeSubSegMarkup(value) {
       const bubbleContent = serializeChildren(node.childNodes);
       const langUnitId = node.getAttribute('data-langunit-id');
       const langUnitRemote = node.getAttribute('data-langunit-remote');
+      const langUnitCycleGroupId = node.getAttribute('data-langunit-cycle-group-id');
       const dataAttr = langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : '';
       const remoteAttr = langUnitRemote ? ' data-langunit-remote="1"' : '';
-      return `<span class="langunit-bubble"${dataAttr}${remoteAttr}>${bubbleContent}</span>`;
+      const cycleGroupAttr = langUnitCycleGroupId ? ` data-langunit-cycle-group-id="${escapeHtml(langUnitCycleGroupId)}"` : '';
+      return `<span class="langunit-bubble"${dataAttr}${remoteAttr}${cycleGroupAttr}>${bubbleContent}</span>`;
     }
 
     if (blockTags.has(node.tagName)) {
@@ -618,13 +647,13 @@ function isBreakPlaceholderBlock(node) {
   return childNodes.length === 1 && childNodes[0].nodeType === Node.ELEMENT_NODE && childNodes[0].tagName === 'BR';
 }
 
-function renderSubSegContentTokens(tokens) {
+function renderSubSegContentTokens(tokens, subSegId = '') {
   if (!Array.isArray(tokens)) {
     return '';
   }
 
   const segments = [];
-  const seen = new Set();
+  const seen = new Map();
   let currentBubble = null;
 
   const flushBubble = () => {
@@ -657,9 +686,20 @@ function renderSubSegContentTokens(tokens) {
     }
 
     const langUnit = getLangUnitItem(langUnitId);
+    const occurrenceIndex = Number.isInteger(seen.get(langUnitId)) ? seen.get(langUnitId) : 0;
+    seen.set(langUnitId, occurrenceIndex + 1);
+    const instancesForSubSeg = Array.isArray(langUnit?.instances)
+      ? langUnit.instances.filter((instance) => String(instance?.subSegId ?? '') === String(subSegId ?? ''))
+      : [];
+    const instance = instancesForSubSeg[occurrenceIndex] ?? instancesForSubSeg[0] ?? null;
+    const cycleGroupId = String(instance?.cycleGroupId ?? '').trim();
     const text = String(getLangUnitText(langUnit) || token.text || '');
-    const remote = token.remote === true;
-    if (currentBubble && currentBubble.langUnitId === langUnitId) {
+    const remote = token.remote === true || (cycleGroupId && cycleGroupId !== langUnitId);
+    if (
+      currentBubble &&
+      currentBubble.langUnitId === langUnitId &&
+      currentBubble.cycleGroupId === cycleGroupId
+    ) {
       currentBubble.text += text;
       continue;
     }
@@ -670,8 +710,8 @@ function renderSubSegContentTokens(tokens) {
       langUnitId,
       text,
       remote,
+      cycleGroupId,
     };
-    seen.add(langUnitId);
   }
 
   flushBubble();
@@ -686,7 +726,10 @@ function renderSubSegContentTokens(tokens) {
         const count = Math.max(1, getLangUnitReferenceCount(segment.langUnitId));
         const remoteAttr = segment.remote ? ' data-langunit-remote="1"' : '';
         const countAttr = segment.remote || count <= 1 ? '' : ` data-langunit-count="${count}"`;
-        return `<span class="langunit-bubble" data-langunit-id="${escapeHtml(segment.langUnitId)}"${remoteAttr}${countAttr}>${escapeHtml(segment.text)}</span>`;
+        const cycleGroupAttr = segment.cycleGroupId
+          ? ` data-langunit-cycle-group-id="${escapeHtml(segment.cycleGroupId)}"`
+          : '';
+        return `<span class="langunit-bubble" data-langunit-id="${escapeHtml(segment.langUnitId)}"${remoteAttr}${countAttr}${cycleGroupAttr}>${escapeHtml(segment.text)}</span>`;
       }
 
       return '';
@@ -698,7 +741,7 @@ function renderSubSegList(audSegItem) {
   const audSegId = audSegItem?._id || '';
   const subSegItem = getSubSegItemForAudSeg(audSegId);
   const value = subSegDraftTextByAudSegId.get(audSegId);
-  const renderedContent = subSegItem?.content ? renderSubSegContentTokens(subSegItem.content) : '';
+  const renderedContent = subSegItem?.content ? renderSubSegContentTokens(subSegItem.content, subSegItem?._id ?? '') : '';
   const hasLangUnitRefs = Array.isArray(subSegItem?.content) && subSegItem.content.some((token) => token?.type === 'langUnitRef');
   const content = value ?? (hasLangUnitRefs ? renderedContent : sanitizeSubSegMarkup(subSegItem?.text ?? '') || renderedContent);
   return `
@@ -944,16 +987,25 @@ function extractSubSegEditorPayload(editor) {
 
       const start = plainText.length;
       plainText += bubbleText;
-      const existing = langUnitsById.has(langUnitId);
+      const existing = langUnitsById.get(langUnitId);
+      const cycleGroupId = String(node.getAttribute('data-langunit-cycle-group-id') ?? '').trim();
       if (!existing) {
         langUnitsById.set(langUnitId, {
           _id: langUnitId,
           text: bubbleText,
-          start,
-          end: plainText.length,
+          instances: [],
         });
       }
-      content.push({ type: 'langUnitRef', langUnitId, remote: cycleTargetActive && existing });
+      langUnitsById.get(langUnitId).instances.push({
+        ...(audSegId ? { audSegId } : {}),
+        ...(subSegId ? { subSegId } : {}),
+        remote: cycleTargetActive && Boolean(existing),
+        ...(cycleGroupId ? { cycleGroupId } : {}),
+        start,
+        end: plainText.length,
+        context: createLangUnitContext(getLangUnitBubbleContext(plainText, start, plainText.length)),
+      });
+      content.push({ type: 'langUnitRef', langUnitId, remote: cycleTargetActive && Boolean(existing) });
       return;
     }
 
@@ -974,16 +1026,9 @@ function extractSubSegEditorPayload(editor) {
     walk(child);
   }
 
-  const langUnits = [...langUnitsById.values()].map(({ start, end, ...langUnit }) => ({
+  const langUnits = [...langUnitsById.values()].map((langUnit) => ({
     ...langUnit,
-    instances: [
-      {
-        ...(audSegId ? { audSegId } : {}),
-        ...(subSegId ? { subSegId } : {}),
-        remote: false,
-        context: createLangUnitContext(getLangUnitBubbleContext(plainText, start, end)),
-      },
-    ],
+    instances: Array.isArray(langUnit.instances) ? langUnit.instances : [],
   }));
 
   return {
@@ -1059,12 +1104,13 @@ function getLangUnitBubbleGroupIds(editor) {
 
   for (const bubble of getLangUnitBubbles(editor)) {
     const langUnitId = String(bubble?.dataset?.langunitId ?? '').trim();
-    if (!langUnitId || seen.has(langUnitId)) {
+    const groupId = String(bubble?.dataset?.langunitCycleGroupId ?? '').trim() || langUnitId;
+    if (!groupId || seen.has(groupId)) {
       continue;
     }
 
-    seen.add(langUnitId);
-    ids.push(langUnitId);
+    seen.add(groupId);
+    ids.push(groupId);
   }
 
   return ids;
@@ -1125,7 +1171,7 @@ function syncLangUnitBubbleTarget(editor, restoreCaret = false) {
   }
 
   bubbles
-    .filter((bubble) => String(bubble?.dataset?.langunitId ?? '').trim() === targetLangUnitId)
+    .filter((bubble) => getLangUnitCycleTargetId(bubble?.dataset?.langunitId) === targetLangUnitId)
     .forEach((bubble) => bubble.classList.add('is-targeted'));
   syncLangUnitRefsLists();
 }
@@ -1168,7 +1214,7 @@ function unwrapLangUnitBubbleTarget(editor) {
   }
 
   const bubbles = getLangUnitBubbles(editor).filter(
-    (bubble) => String(bubble?.dataset?.langunitId ?? '').trim() === targetLangUnitId
+    (bubble) => getLangUnitCycleTargetId(bubble?.dataset?.langunitId) === targetLangUnitId
   );
   if (!bubbles.length) {
     return false;
@@ -1198,18 +1244,19 @@ function refreshLangUnitBubbleGroupStyles(editor) {
   const seen = new Set();
   for (const bubble of getLangUnitBubbles(editor)) {
     const langUnitId = String(bubble.dataset.langunitId ?? '').trim();
-    if (!langUnitId) {
+    const groupId = String(bubble.dataset.langunitCycleGroupId ?? '').trim() || langUnitId;
+    if (!groupId) {
       bubble.removeAttribute('data-langunit-remote');
       bubble.removeAttribute('data-langunit-count');
       continue;
     }
 
-    const count = Math.max(1, getLangUnitReferenceCount(langUnitId));
-    if (seen.has(langUnitId)) {
+    const count = Math.max(1, getLangUnitReferenceCount(groupId));
+    if (langUnitId !== groupId || seen.has(groupId)) {
       bubble.setAttribute('data-langunit-remote', '1');
       bubble.removeAttribute('data-langunit-count');
     } else {
-      seen.add(langUnitId);
+      seen.add(groupId);
       bubble.removeAttribute('data-langunit-remote');
       if (count > 1) {
         bubble.setAttribute('data-langunit-count', String(count));
@@ -1320,7 +1367,8 @@ function mergeAdjacentLangUnitBubbleRuns(editor, bubble) {
   while (
     prev instanceof HTMLElement &&
     prev.classList.contains('langunit-bubble') &&
-    String(prev.dataset.langunitId ?? '').trim() === langUnitId
+    String(prev.dataset.langunitId ?? '').trim() === langUnitId &&
+    String(prev.dataset.langunitCycleGroupId ?? '').trim() === String(bubble.dataset.langunitCycleGroupId ?? '').trim()
   ) {
     prev.textContent = `${prev.textContent ?? ''}${mergedBubble.textContent ?? ''}`;
     mergedBubble.remove();
@@ -1332,7 +1380,8 @@ function mergeAdjacentLangUnitBubbleRuns(editor, bubble) {
   while (
     next instanceof HTMLElement &&
     next.classList.contains('langunit-bubble') &&
-    String(next.dataset.langunitId ?? '').trim() === langUnitId
+    String(next.dataset.langunitId ?? '').trim() === langUnitId &&
+    String(next.dataset.langunitCycleGroupId ?? '').trim() === String(bubble.dataset.langunitCycleGroupId ?? '').trim()
   ) {
     mergedBubble.textContent = `${mergedBubble.textContent ?? ''}${next.textContent ?? ''}`;
     next.remove();
@@ -1356,9 +1405,17 @@ function wrapSelectedSubSegText(editor) {
   const bubble = document.createElement('span');
   bubble.className = 'langunit-bubble';
   const text = range.toString();
-  const langUnit = getLangUnitItemByText(text);
-  const langUnitId = langUnit?._id || createItemId();
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  const targetIndex = Number.isInteger(langUnitBubbleTargetIndexByAudSegId.get(audSegId))
+    ? langUnitBubbleTargetIndexByAudSegId.get(audSegId)
+    : -1;
+  const targetLangUnitId = getLangUnitBubbleGroupIds(editor)[targetIndex] ?? '';
+  const langUnit = targetLangUnitId ? null : getLangUnitItemByText(text);
+  const langUnitId = targetLangUnitId ? createItemId() : langUnit?._id || createItemId();
   bubble.dataset.langunitId = langUnitId;
+  if (targetLangUnitId) {
+    bubble.dataset.langunitCycleGroupId = targetLangUnitId;
+  }
   bubble.dataset.langunitCount = String(Math.max(1, getLangUnitReferenceCount(langUnitId) + 1));
   bubble.append(range.extractContents());
   range.insertNode(bubble);

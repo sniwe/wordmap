@@ -33,8 +33,10 @@
 | `remote section` | A non-contiguous span that belongs to the same `langUnit bubble` group as an anchor bubble, rendered with bubble styling plus a dotted connector back to the anchor. |
 | `linked bubble group` | The set of contiguous and remote `langUnit` spans that share one cycle-target index and are treated as one logical capture unit. |
 | `dotted connector` | The subtle dotted underline used to visually link a remote section back to its anchor `langUnit bubble`. |
-| `langUnit instance` | One persisted reverse-link record inside a `langUnit.instances` array; it carries `audSegId`, `subSegId`, `remote`, `context`, and any extra occurrence metadata needed. |
+| `langUnit instance` | One persisted reverse-link record inside a `langUnit.instances` array; it carries `audSegId`, `subSegId`, `start`, `end`, `remote`, `context`, and any extra occurrence metadata needed. |
 | `langUnit ref` | Legacy shorthand for `langUnit instance`. |
+| `langUnit extension` | A new `langUnit` created from a selected substring while a cycle-target is active; its context instance stores the shared `cycleGroupId`. |
+| `langUnit cycle group` | The shared group identifier stored on context-bound instances so cycle targeting and dotted underline rendering treat linked langUnits as one group. |
 | `langUnit reuse by text` | The creation rule that reuses an existing `langUnit` record when the selected bubble text exactly matches an already stored `langUnit`. |
 | `langUnit text canonicalization` | The storage rule that collapses identical bubble text into one `langUnit` record and rewrites saved `subSeg` references to the canonical `langUnitId`. |
 | `langUnit add badge` | The tiny round count badge on a `langUnit bubble` that shows how many direct references belong to that `langUnit`. |

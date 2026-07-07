@@ -312,6 +312,9 @@ function normalizeLangUnitItem(item, now = new Date().toISOString()) {
   delete normalized.captures;
   delete normalized.context;
   delete normalized.content;
+  delete normalized.start;
+  delete normalized.end;
+  delete normalized.linkTargetLangUnitId;
   return normalized;
 }
 
@@ -426,6 +429,7 @@ function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
     }
 
     let plainText = '';
+    const seenLangUnitIds = new Map();
     for (const token of Array.isArray(subSegItem?.content) ? subSegItem.content : []) {
       if (!token || typeof token !== 'object' || token.type !== 'langUnitRef') {
         if (token?.type === 'text') {
@@ -443,11 +447,24 @@ function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
       const start = plainText.length;
       plainText += langUnitText;
       const end = plainText.length;
+      const occurrenceIndex = Number.isInteger(seenLangUnitIds.get(langUnitId)) ? seenLangUnitIds.get(langUnitId) : 0;
+      seenLangUnitIds.set(langUnitId, occurrenceIndex + 1);
+      const existingInstances = Array.isArray(langUnitsById.get(langUnitId)?.instances)
+        ? langUnitsById.get(langUnitId).instances.filter(
+          (instance) =>
+            String(instance?.audSegId ?? '') === audSegId &&
+            String(instance?.subSegId ?? '') === subSegId
+        )
+        : [];
+      const existingInstance = existingInstances[occurrenceIndex] ?? existingInstances[0] ?? null;
       const instances = instancesById.get(langUnitId) ?? [];
       instances.push({
         audSegId,
         subSegId,
         remote: token.remote === true,
+        ...(String(existingInstance?.cycleGroupId ?? '').trim() ? { cycleGroupId: String(existingInstance.cycleGroupId).trim() } : {}),
+        start,
+        end,
         context: normalizeLangUnitContext(getLangUnitBubbleContext(plainText, start, end)),
       });
       instancesById.set(langUnitId, instances);
@@ -513,6 +530,9 @@ function normalizeLangUnitInstance(instance) {
     ...(String(instance.audSegId ?? '').trim() ? { audSegId: String(instance.audSegId).trim() } : {}),
     ...(String(instance.subSegId ?? '').trim() ? { subSegId: String(instance.subSegId).trim() } : {}),
     remote: instance.remote === true,
+    ...(String(instance.cycleGroupId ?? '').trim() ? { cycleGroupId: String(instance.cycleGroupId).trim() } : {}),
+    ...(Number.isFinite(instance.start) && instance.start >= 0 ? { start: instance.start } : {}),
+    ...(Number.isFinite(instance.end) && instance.end >= 0 ? { end: instance.end } : {}),
     context: normalizeLangUnitContext(instance.context ?? instance),
   };
 }
@@ -531,6 +551,9 @@ function normalizeLangUnitInstances(instances) {
       String(normalizedInstance.audSegId ?? ''),
       String(normalizedInstance.subSegId ?? ''),
       normalizedInstance.remote ? '1' : '0',
+      String(normalizedInstance.cycleGroupId ?? ''),
+      String(Number.isFinite(normalizedInstance.start) ? normalizedInstance.start : ''),
+      String(Number.isFinite(normalizedInstance.end) ? normalizedInstance.end : ''),
       JSON.stringify(normalizedInstance.context),
     ].join('\u0000');
     if (seen.has(key)) {
@@ -688,6 +711,8 @@ function normalizeLangUnitCaptures(captures) {
     const text = String(capture.text ?? '');
     const captureIndex = Number.isInteger(capture.captureIndex) && capture.captureIndex >= 0 ? capture.captureIndex : 0;
     const remote = capture.remote === true;
+    const start = Number.isFinite(capture.start) && capture.start >= 0 ? capture.start : null;
+    const end = Number.isFinite(capture.end) && capture.end >= 0 ? capture.end : null;
     const context = capture.context && typeof capture.context === 'object' && !Array.isArray(capture.context)
       ? normalizeLangUnitContext(capture.context)
       : null;
@@ -707,6 +732,8 @@ function normalizeLangUnitCaptures(captures) {
       text,
       captureIndex,
       remote,
+      ...(start != null ? { start } : {}),
+      ...(end != null ? { end } : {}),
       ...(context ? { context } : {}),
     });
   }
@@ -1002,6 +1029,9 @@ function normalizeLangUnitItems(items, capturesById = new Map()) {
           ...(capture.audSegId ? { audSegId: capture.audSegId } : {}),
           ...(capture.subSegId ? { subSegId: capture.subSegId } : {}),
           remote: capture.remote === true,
+          ...(capture.cycleGroupId ? { cycleGroupId: capture.cycleGroupId } : {}),
+          ...(Number.isFinite(capture.start) ? { start: capture.start } : {}),
+          ...(Number.isFinite(capture.end) ? { end: capture.end } : {}),
           ...(capture.context ? { context: capture.context } : {}),
         }))
       ),

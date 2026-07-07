@@ -1,12 +1,133 @@
 {
-  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context": {
-    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context",
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input",
     "notes": [
       {
-        "text": "this needs display lines with breaks faithfully - in the same way as source data",
-        "createdAt": "2026-07-03T05:52:46.530Z",
+        "text": "see context obj type capture logic. at present this is incapable of distinguishing \"chinPhrase\" (actual chinese phrases of more than one word) and \"chinWord\" (a single word unit in chinese). to address this, we want to develop additional functionality for the codex worker: 1) we will ensure that existing funcctionality remains intact, callable and properly wired; 2) we will set up additional functionality by which when the user sends an ambiguous chinPhrase type context (which may be chinWord) it is properly distinuished and passed back, being updated on saved data in the background (with UI reading the update as it is saved so it can make use of the disambiguated context type); 3) toggling on/off of this ffunctionality (\"chin disambiguation) will be controlled by a new option on setttings list. checking the option's checkbox will turn it on.",
+        "createdAt": "2026-07-05T07:20:04.378Z",
         "applied": true,
-        "appliedAt": "2026-07-03T13:40:00.0000000+08:00",
+        "appliedAt": "2026-07-05T15:48:35.2591410+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "new line render lost on audSeg reload - please patch",
+        "createdAt": "2026-07-06T04:41:08.810Z",
+        "applied": true,
+        "appliedAt": "2026-07-06T12:45:46.2908025+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "still failing to render new line / line break properly",
+        "createdAt": "2026-07-06T04:59:38.201Z",
+        "applied": true,
+        "appliedAt": "2026-07-06T13:00:58.1685810+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "dont strip new lines/breaks from input",
+        "createdAt": "2026-07-07T05:51:08.838Z",
+        "applied": true,
+        "appliedAt": "2026-07-07T13:51:38.4254747+08:00",
+        "functionalityStatus": {
+          "state": "unknown",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "dotted underline associated with cycleGroupId \"6b73213b-9435-4478-bdc9-206184b4b6df\" should decorate the chacters interposing \"gayest\" and \"could\" langUnits .",
+        "createdAt": "2026-07-07T06:16:02.125Z",
+        "functionalityStatus": {
+          "state": "unknown",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input",
+    "notes": [
+      {
+        "text": "ctrl+delete while cycle-targeting a langUnit bubble should revert it from bubble to regular text and update saved data with the change",
+        "createdAt": "2026-07-05T04:37:13.245Z",
+        "applied": true,
+        "appliedAt": "2026-07-05T12:38:53.7571978+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "patch: subSeg input focused state ctrl+backspace keypress prevents default and firest audSeg entered state exit",
+        "createdAt": "2026-07-07T01:42:49.490Z",
+        "applied": true,
+        "appliedAt": "2026-07-07T09:45:35.7835238+08:00",
+        "functionalityStatus": {
+          "state": "unknown",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > aside#note-sidebar.note-sidebar.is-open > html > body > #app > aside#note-sidebar.note-sidebar.is-open > textarea#note-input.note-sidebar__input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > aside#note-sidebar.note-sidebar.is-open > html > body > #app > aside#note-sidebar.note-sidebar.is-open > textarea#note-input.note-sidebar__input",
+    "notes": [
+      {
+        "text": "set up collection dir for subSegs under C:\\retry\\src\\backend\\data",
+        "createdAt": "2026-07-01T12:50:57.558Z",
+        "applied": true,
+        "appliedAt": "2026-07-01T20:52:35.6810736+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "line formatting on input not saving proper line breaks. please patch to fix",
+        "createdAt": "2026-07-05T09:28:07.447Z",
+        "applied": true,
+        "appliedAt": "2026-07-05T17:30:47.4095663+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > button#settings-button.settings-button": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > button#settings-button.settings-button",
+    "notes": [
+      {
+        "text": "fix button click toggle expand/collapse of settings option list container",
+        "createdAt": "2026-07-05T08:01:54.850Z",
+        "applied": true,
+        "appliedAt": "2026-07-05T17:30:47.4095663+08:00",
         "functionalityStatus": {
           "state": "active",
           "remaining": "",
@@ -24,6 +145,103 @@
         "createdAt": "2026-07-03T05:48:11.234Z",
         "applied": true,
         "appliedAt": "2026-07-03T13:36:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "we are to edit data captured with \n\"context\" property value as follows: it will be an obj with props including current value string as \"text\". a second property \"type\" will be determined for context - either chinPhrase, chinFuzzWord, engPhrase or engWord. defintion guidelines are as follows: 1) chinPhrase will consist of chinese mandarin characters, punctuation and other symbols, and english characters (but only insofar as they correspond to possible chinese yinyin (e.g. hello !== pinyin but \"haluo\" does)). if entire context is english characters but corresponds to possible pinyin, then type is \"chinFuzzWord\". note that pinyin can optionally include digits 1-5 after a pinyin syllable (denoting tone mark); 2) engPhrase will consist of primarily english characters as well as optional punctuation and other symbols, and must contain one or more space characters. if no spaces but comprised of english characters (optional symbols and punctuation included) and does not consist only of subStrings that correspond to pinyin, then it is of type \"engWord\";",
+        "createdAt": "2026-07-05T06:30:38.218Z",
+        "applied": true,
+        "appliedAt": "2026-07-05T12:50:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.langunit-bubble": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.langunit-bubble",
+    "notes": [
+      {
+        "text": "update langUnit reference count badge: the count should not include those langUnits that are disconnected from any context references, e.g. \"test\" in \"db7f19e1-ad41-4b24-aad7-bf6750b2c8f5\" incorrectly reads count as two after previous langUnit bubble was ctrl+delete removed. patch for this",
+        "createdAt": "2026-07-05T04:44:34.954Z",
+        "applied": true,
+        "appliedAt": "2026-07-05T12:45:39.9391893+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > li.item.item--entered > html > body > li.item.item--entered > div.item__entered-panel > html > body > li.item.item--entered > div.item__entered-panel > ul#audSegs.item__segments > html > body > li.item.item--entered > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--delete-confirm": {
+    "selector": "html > html > body > html > body > li.item.item--entered > html > body > li.item.item--entered > div.item__entered-panel > html > body > li.item.item--entered > div.item__entered-panel > ul#audSegs.item__segments > html > body > li.item.item--entered > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--delete-confirm",
+    "notes": [
+      {
+        "text": "tab keypress failign to focus option buttons",
+        "createdAt": "2026-07-05T03:36:43.070Z",
+        "applied": true,
+        "appliedAt": "2026-07-05T11:37:07.9113664+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.langunit-bubble": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(2) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input > span.langunit-bubble",
+    "notes": [
+      {
+        "text": "ctrl+delete keypress while cycle-targeting a langUnit bubble will trigger conversion of the bubble back to regular text content on the subSeg input.",
+        "createdAt": "2026-07-05T03:18:31.606Z",
+        "applied": true,
+        "appliedAt": "2026-07-05T11:21:39.2461983+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment:nth-of-type(2)": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment:nth-of-type(2)",
+    "notes": [
+      {
+        "text": "ctrl+delete while cycle targeting a non-entered audSeg will trigger a dialogue for delete audSeg",
+        "createdAt": "2026-07-05T03:17:03.011Z",
+        "applied": true,
+        "appliedAt": "2026-07-05T11:21:39.2461983+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__langunit-refs:nth-of-type(2) > li.item__langunit-ref > span.item__langunit-ref-context",
+    "notes": [
+      {
+        "text": "this needs display lines with breaks faithfully - in the same way as source data",
+        "createdAt": "2026-07-03T05:52:46.530Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T13:40:00.0000000+08:00",
         "functionalityStatus": {
           "state": "active",
           "remaining": "",
@@ -92,6 +310,19 @@
         "createdAt": "2026-07-03T04:51:32.559Z",
         "applied": true,
         "appliedAt": "2026-07-03T13:21:00.0000000+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "shift the codex worker's word-root inference into the prompt itself, with the local worker code acting as pass-through parsing only",
+        "source": "terminal",
+        "createdAt": "2026-07-03T01:00:00.000Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T01:00:00.000Z",
         "functionalityStatus": {
           "state": "active",
           "remaining": "",
@@ -902,23 +1133,6 @@
         "createdAt": "2026-07-01T12:52:59.878Z",
         "applied": true,
         "appliedAt": "2026-07-01T20:53:47.8663336+08:00",
-        "functionalityStatus": {
-          "state": "active",
-          "remaining": "",
-          "missing": "",
-          "replacedBy": []
-        }
-      }
-    ]
-  },
-  "html > html > body > html > body > #app > html > body > #app > aside#note-sidebar.note-sidebar.is-open > html > body > #app > aside#note-sidebar.note-sidebar.is-open > textarea#note-input.note-sidebar__input": {
-    "selector": "html > html > body > html > body > #app > html > body > #app > aside#note-sidebar.note-sidebar.is-open > html > body > #app > aside#note-sidebar.note-sidebar.is-open > textarea#note-input.note-sidebar__input",
-    "notes": [
-      {
-        "text": "set up collection dir for subSegs under C:\\retry\\src\\backend\\data",
-        "createdAt": "2026-07-01T12:50:57.558Z",
-        "applied": true,
-        "appliedAt": "2026-07-01T20:52:35.6810736+08:00",
         "functionalityStatus": {
           "state": "active",
           "remaining": "",
