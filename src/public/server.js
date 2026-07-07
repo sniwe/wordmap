@@ -267,7 +267,14 @@ async function writeAudSegItems(items) {
 
 async function readLangUnitItems() {
   try {
-    return JSON.parse(await fs.readFile(langUnitItemsFile, 'utf8'));
+    const items = JSON.parse(await fs.readFile(langUnitItemsFile, 'utf8'));
+    const [normalized] = normalizeLangUnitItemsForStorage(Array.isArray(items) ? items : []);
+    const changed = JSON.stringify(normalized) !== JSON.stringify(Array.isArray(items) ? items : []);
+    if (changed) {
+      await writeLangUnitItems(normalized);
+    }
+
+    return normalized;
   } catch {
     return [];
   }
@@ -275,11 +282,141 @@ async function readLangUnitItems() {
 
 async function writeLangUnitItems(items) {
   await fs.mkdir(langUnitDir, { recursive: true });
-  await fs.writeFile(langUnitItemsFile, JSON.stringify(items, null, 2));
+  const [normalized] = normalizeLangUnitItemsForStorage(Array.isArray(items) ? items : []);
+  await fs.writeFile(langUnitItemsFile, JSON.stringify(normalized, null, 2));
 }
 
-function collectLangUnitRefsById(subSegItems) {
-  const refsById = new Map();
+function normalizeLangUnitItem(item, now = new Date().toISOString()) {
+  if (!item || typeof item !== 'object') {
+    return null;
+  }
+
+  const _id = String(item._id ?? '').trim() || randomUUID();
+  const instances = normalizeLangUnitInstances(item.instances ?? (item.context ? [{ context: item.context }] : []));
+  const normalized = {
+    ...item,
+    _id,
+    text: String(item.text ?? ''),
+    instances,
+    createdAt: item.createdAt || now,
+    updatedAt: item.updatedAt || now,
+  };
+
+  const root = String(item.root ?? '').trim();
+  if (root) {
+    normalized.root = root;
+  } else {
+    delete normalized.root;
+  }
+
+  delete normalized.captures;
+  delete normalized.context;
+  delete normalized.content;
+  return normalized;
+}
+
+function mergeLangUnitItems(existingItems, incomingItems) {
+  const now = new Date().toISOString();
+  const byId = new Map();
+
+  for (const item of Array.isArray(existingItems) ? existingItems : []) {
+    const normalized = normalizeLangUnitItem(item, now);
+    if (normalized) {
+      byId.set(normalized._id, normalized);
+    }
+  }
+
+  for (const item of Array.isArray(incomingItems) ? incomingItems : []) {
+    const normalized = normalizeLangUnitItem(item, now);
+    if (!normalized) {
+      continue;
+    }
+
+    const previous = byId.get(normalized._id);
+    byId.set(normalized._id, {
+      ...(previous ?? {}),
+      ...normalized,
+      text: String(normalized.text ?? previous?.text ?? ''),
+      instances: normalizeLangUnitInstances(normalized.instances.length ? normalized.instances : previous?.instances ?? []),
+      createdAt: previous?.createdAt || normalized.createdAt,
+      updatedAt: normalized.updatedAt || previous?.updatedAt || now,
+    });
+  }
+
+  return sortLangUnitItems([...byId.values()]);
+}
+
+function normalizeSubSegContentForStorage(content) {
+  let changed = false;
+  const normalized = [];
+
+  for (const token of Array.isArray(content) ? content : []) {
+    if (!token || typeof token !== 'object') {
+      normalized.push(token);
+      continue;
+    }
+
+    if (token.type !== 'langUnitRef') {
+      normalized.push(token);
+      continue;
+    }
+
+    const langUnitId = String(token.langUnitId ?? '').trim();
+    if (!langUnitId) {
+      changed = true;
+      continue;
+    }
+
+    const nextToken = {
+      type: 'langUnitRef',
+      langUnitId,
+    };
+    if (token.remote === true) {
+      nextToken.remote = true;
+    }
+    if (token.remote === true || Object.prototype.hasOwnProperty.call(token, 'text') || Object.keys(token).length !== Object.keys(nextToken).length) {
+      changed = true;
+    }
+    normalized.push(nextToken);
+  }
+
+  return [normalized, changed];
+}
+
+function normalizeSubSegItemsForStorage(items) {
+  const normalized = [];
+  let changed = false;
+
+  for (const item of Array.isArray(items) ? items : []) {
+    if (!item || typeof item !== 'object') {
+      normalized.push(item);
+      continue;
+    }
+
+    const content = Array.isArray(item.content) ? item.content : null;
+    if (!content) {
+      normalized.push(item);
+      continue;
+    }
+
+    const [nextContent, contentChanged] = normalizeSubSegContentForStorage(content);
+    if (!contentChanged) {
+      normalized.push(item);
+      continue;
+    }
+
+    changed = true;
+    normalized.push({
+      ...item,
+      content: nextContent,
+    });
+  }
+
+  return [normalized, changed];
+}
+
+function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
+  const instancesById = new Map();
 
   for (const subSegItem of Array.isArray(subSegItems) ? subSegItems : []) {
     const subSegId = String(subSegItem?._id ?? '').trim();
@@ -288,46 +425,512 @@ function collectLangUnitRefsById(subSegItems) {
       continue;
     }
 
+    let plainText = '';
+    for (const token of Array.isArray(subSegItem?.content) ? subSegItem.content : []) {
+      if (!token || typeof token !== 'object' || token.type !== 'langUnitRef') {
+        if (token?.type === 'text') {
+          plainText += String(token.text ?? '');
+        }
+        continue;
+      }
+
+      const langUnitId = String(token.langUnitId ?? '').trim();
+      if (!langUnitId) {
+        continue;
+      }
+
+      const langUnitText = String(langUnitsById.get(langUnitId)?.text ?? '');
+      const start = plainText.length;
+      plainText += langUnitText;
+      const end = plainText.length;
+      const instances = instancesById.get(langUnitId) ?? [];
+      instances.push({
+        audSegId,
+        subSegId,
+        remote: token.remote === true,
+        context: normalizeLangUnitContext(getLangUnitBubbleContext(plainText, start, end)),
+      });
+      instancesById.set(langUnitId, instances);
+    }
+  }
+
+  return instancesById;
+}
+
+function collectLangUnitCapturesById(subSegItems) {
+  const capturesById = new Map();
+
+  for (const subSegItem of Array.isArray(subSegItems) ? subSegItems : []) {
+    const subSegId = String(subSegItem?._id ?? '').trim();
+    const audSegId = String(subSegItem?.audSegId ?? '').trim();
+    if (!subSegId || !audSegId) {
+      continue;
+    }
+
+    let captureIndex = 0;
+    const seenLangUnitIds = new Set();
+    let plainText = '';
     for (const token of Array.isArray(subSegItem?.content) ? subSegItem.content : []) {
       const langUnitId = String(token?.langUnitId ?? '').trim();
+      if (token?.type === 'text') {
+        plainText += String(token.text ?? '');
+        continue;
+      }
+
       if (token?.type !== 'langUnitRef' || !langUnitId) {
         continue;
       }
 
-      const refs = refsById.get(langUnitId) ?? [];
-      refs.push({ audSegId, subSegId });
-      refsById.set(langUnitId, refs);
+      const bubbleText = String(token.text ?? '');
+      const remote = token.remote === true || (token.remote == null && seenLangUnitIds.has(langUnitId));
+      const start = plainText.length;
+      plainText += bubbleText;
+      const end = plainText.length;
+      const captures = capturesById.get(langUnitId) ?? [];
+      captures.push({
+        audSegId,
+        subSegId,
+        text: bubbleText,
+        captureIndex,
+        remote,
+        ...(captureIndex === 0 ? { context: createLangUnitContext(getLangUnitBubbleContext(plainText, start, end)) } : {}),
+      });
+      capturesById.set(langUnitId, captures);
+      seenLangUnitIds.add(langUnitId);
+      captureIndex += 1;
     }
   }
 
-  return refsById;
+  return capturesById;
 }
 
-function normalizeLangUnitRefs(refs) {
+function normalizeLangUnitInstance(instance) {
+  if (!instance || typeof instance !== 'object') {
+    return null;
+  }
+
+  return {
+    ...(String(instance.audSegId ?? '').trim() ? { audSegId: String(instance.audSegId).trim() } : {}),
+    ...(String(instance.subSegId ?? '').trim() ? { subSegId: String(instance.subSegId).trim() } : {}),
+    remote: instance.remote === true,
+    context: normalizeLangUnitContext(instance.context ?? instance),
+  };
+}
+
+function normalizeLangUnitInstances(instances) {
   const seen = new Set();
   const normalized = [];
 
-  for (const ref of Array.isArray(refs) ? refs : []) {
-    if (!ref || typeof ref !== 'object') {
+  for (const instance of Array.isArray(instances) ? instances : []) {
+    const normalizedInstance = normalizeLangUnitInstance(instance);
+    if (!normalizedInstance) {
       continue;
     }
 
-    const audSegId = String(ref.audSegId ?? '').trim();
-    const subSegId = String(ref.subSegId ?? '').trim();
-    if (!audSegId || !subSegId) {
-      continue;
-    }
-
-    const key = `${audSegId}\u0000${subSegId}`;
+    const key = [
+      String(normalizedInstance.audSegId ?? ''),
+      String(normalizedInstance.subSegId ?? ''),
+      normalizedInstance.remote ? '1' : '0',
+      JSON.stringify(normalizedInstance.context),
+    ].join('\u0000');
     if (seen.has(key)) {
       continue;
     }
 
     seen.add(key);
-    normalized.push({ audSegId, subSegId });
+    normalized.push(normalizedInstance);
   }
 
   return normalized;
+}
+
+function expandLangUnitCaptures(parentId, captures, existingItemsById = new Map()) {
+  const normalizedCaptures = normalizeLangUnitCaptures(captures);
+  if (!normalizedCaptures.length) {
+    return [];
+  }
+
+  const [primary] = normalizedCaptures;
+  const now = new Date().toISOString();
+  const existingBase = existingItemsById.get(parentId);
+  const nextInstances = normalizeLangUnitInstances([
+    ...(existingBase?.instances ?? []),
+    ...normalizedCaptures.map((capture) => ({
+      ...(capture.audSegId ? { audSegId: capture.audSegId } : {}),
+      ...(capture.subSegId ? { subSegId: capture.subSegId } : {}),
+      remote: capture.remote === true,
+      ...(capture.context ? { context: capture.context } : {}),
+    })),
+  ]);
+  const base = {
+    ...existingBase,
+    _id: parentId,
+    text: String(primary.text ?? existingBase?.text ?? ''),
+    instances: nextInstances,
+    createdAt: existingBase?.createdAt || now,
+    updatedAt: existingBase?.updatedAt || now,
+  };
+  delete base.captures;
+  return [base];
+}
+
+function normalizeLangUnitItemsForStorage(items) {
+  const seen = new Set();
+  const normalized = [];
+
+  for (const item of Array.isArray(items) ? items : []) {
+    const normalizedItem = normalizeLangUnitItem(item);
+    if (!normalizedItem) {
+      continue;
+    }
+
+    if (seen.has(normalizedItem._id)) {
+      continue;
+    }
+
+    seen.add(normalizedItem._id);
+    normalized.push(normalizedItem);
+  }
+
+  return [sortLangUnitItems(normalized)];
+}
+
+function syncLangUnitInstances(items, instancesById) {
+  const now = new Date().toISOString();
+  let changed = false;
+  const normalized = [];
+
+  for (const item of Array.isArray(items) ? items : []) {
+    const normalizedItem = normalizeLangUnitItem(item, now);
+    if (!normalizedItem) {
+      continue;
+    }
+
+    const nextInstances = normalizeLangUnitInstances(instancesById.get(normalizedItem._id) ?? []);
+    const itemChanged = JSON.stringify(nextInstances) !== JSON.stringify(normalizedItem.instances);
+    if (itemChanged) {
+      changed = true;
+    }
+
+    normalized.push({
+      ...normalizedItem,
+      instances: nextInstances,
+      updatedAt: itemChanged ? now : normalizedItem.updatedAt,
+    });
+  }
+
+  return [sortLangUnitItems(normalized), changed];
+}
+
+function flattenLangUnitItems(items) {
+  const seen = new Set();
+  const normalized = [];
+
+  for (const item of Array.isArray(items) ? items : []) {
+    if (!item || typeof item !== 'object') {
+      continue;
+    }
+
+    const id = typeof item._id === 'string' && item._id ? item._id : randomUUID();
+    const captures = normalizeLangUnitCaptures(item.captures);
+    if (captures.length) {
+      const existingItemsById = new Map(normalized.map((entry) => [entry._id, entry]));
+      const expanded = expandLangUnitCaptures(id, captures, existingItemsById);
+      for (const entry of expanded) {
+        if (!entry || typeof entry !== 'object') {
+          continue;
+        }
+
+        const key = String(entry._id ?? '');
+        if (key && seen.has(key)) {
+          continue;
+        }
+
+        if (key) {
+          seen.add(key);
+        }
+        normalized.push({
+          ...entry,
+          instances: normalizeLangUnitInstances(entry.instances),
+        });
+      }
+      continue;
+    }
+
+    const key = String(id ?? '');
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    const { captures: _legacyCaptures, ...rest } = item;
+    normalized.push({
+      ...rest,
+      _id: id,
+      instances: normalizeLangUnitInstances(rest.instances),
+    });
+  }
+
+  return normalized;
+}
+
+function normalizeLangUnitCaptures(captures) {
+  const seen = new Set();
+  const normalized = [];
+
+  for (const capture of Array.isArray(captures) ? captures : []) {
+    if (!capture || typeof capture !== 'object') {
+      continue;
+    }
+
+    const audSegId = String(capture.audSegId ?? '').trim();
+    const subSegId = String(capture.subSegId ?? '').trim();
+    const text = String(capture.text ?? '');
+    const captureIndex = Number.isInteger(capture.captureIndex) && capture.captureIndex >= 0 ? capture.captureIndex : 0;
+    const remote = capture.remote === true;
+    const context = capture.context && typeof capture.context === 'object' && !Array.isArray(capture.context)
+      ? normalizeLangUnitContext(capture.context)
+      : null;
+    if (!audSegId || !subSegId) {
+      continue;
+    }
+
+    const key = `${audSegId}\u0000${subSegId}\u0000${captureIndex}\u0000${text}\u0000${remote ? '1' : '0'}`;
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    normalized.push({
+      audSegId,
+      subSegId,
+      text,
+      captureIndex,
+      remote,
+      ...(context ? { context } : {}),
+    });
+  }
+
+  return normalized;
+}
+
+function remapSubSegLangUnitIds(items, idMap) {
+  const normalized = [];
+  let changed = false;
+
+  for (const item of Array.isArray(items) ? items : []) {
+    if (!item || typeof item !== 'object') {
+      normalized.push(item);
+      continue;
+    }
+
+    const content = Array.isArray(item.content) ? item.content : null;
+    if (!content) {
+      normalized.push(item);
+      continue;
+    }
+
+    let contentChanged = false;
+    const nextContent = content.map((token) => {
+      if (!token || typeof token !== 'object' || token.type !== 'langUnitRef') {
+        return token;
+      }
+
+      const langUnitId = String(token.langUnitId ?? '').trim();
+      const nextLangUnitId = String(idMap.get(langUnitId) ?? langUnitId).trim();
+      if (!nextLangUnitId || nextLangUnitId === langUnitId) {
+        return token;
+      }
+
+      contentChanged = true;
+      return {
+        ...token,
+        langUnitId: nextLangUnitId,
+      };
+    });
+
+    if (!contentChanged) {
+      normalized.push(item);
+      continue;
+    }
+
+    changed = true;
+    normalized.push({
+      ...item,
+      content: nextContent,
+    });
+  }
+
+  return [normalized, changed];
+}
+
+function getLangUnitPrimaryCapture(item) {
+  return null;
+}
+
+function getLangUnitText(item) {
+  return String(item?.text ?? '');
+}
+
+function getLangUnitContext(item) {
+  const instanceContext = Array.isArray(item?.instances)
+    ? item.instances.find((instance) => instance?.context)?.context
+    : null;
+  if (instanceContext && typeof instanceContext === 'object' && !Array.isArray(instanceContext)) {
+    return normalizeLangUnitContext(instanceContext);
+  }
+
+  if (item?.context && typeof item.context === 'object' && !Array.isArray(item.context)) {
+    return normalizeLangUnitContext(item.context);
+  }
+
+  return normalizeLangUnitContext('');
+}
+
+function getLangUnitContextType(text) {
+  const value = String(text ?? '').trim();
+  if (!value) {
+    return 'engWord';
+  }
+
+  const hasChineseCharacters = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u.test(value);
+  const letterTokens = value.split(/[^A-Za-z1-5]+/).filter(Boolean);
+  const hasSpaces = /\s/.test(value);
+  const onlyEnglishishChars = /^[A-Za-z0-9\s\p{P}\p{S}]+$/u.test(value);
+  const allTokensArePinyin = letterTokens.length > 0 && letterTokens.every((token) => countPinyinSyllables(token) > 0);
+
+  if (hasChineseCharacters) {
+    if (!/[A-Za-z]/.test(value) || allTokensArePinyin) {
+      return 'chinPhrase';
+    }
+
+    return 'engPhrase';
+  }
+
+  if (onlyEnglishishChars && allTokensArePinyin) {
+    const pinyinSyllableCount = letterTokens.reduce((count, token) => count + countPinyinSyllables(token), 0);
+    return pinyinSyllableCount >= 2 ? 'chinPhrase' : 'chinFuzzWord';
+  }
+
+  if (hasSpaces) {
+    return 'engPhrase';
+  }
+
+  return 'engWord';
+}
+
+function countPinyinSyllables(text) {
+  const value = String(text ?? '').toLowerCase().replace(/[1-5]/g, '');
+  if (!value) {
+    return 0;
+  }
+
+  let count = 0;
+  let index = 0;
+  while (index < value.length) {
+    let matched = '';
+    for (let end = value.length; end > index; end -= 1) {
+      const chunk = value.slice(index, end);
+      if (PINYIN_SYLLABLES.has(chunk)) {
+        matched = chunk;
+        break;
+      }
+    }
+
+    if (!matched) {
+      return 0;
+    }
+
+    count += 1;
+    index += matched.length;
+  }
+
+  return count;
+}
+
+const PINYIN_INITIALS = ['zh', 'ch', 'sh', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'r', 'z', 'c', 's'];
+const PINYIN_FINALS = [
+  'a', 'ai', 'an', 'ang', 'ao', 'e', 'ei', 'en', 'eng', 'er',
+  'o', 'ong', 'ou', 'i', 'ia', 'ian', 'iang', 'iao', 'ie', 'in', 'ing', 'iong',
+  'u', 'ua', 'uai', 'uan', 'uang', 'ui', 'un', 'uo', 'v', 've', 'van', 'vn',
+];
+const PINYIN_SYLLABLES = new Set([
+  'zhi', 'chi', 'shi', 'ri', 'zi', 'ci', 'si', 'yi', 'wu', 'yu', 'yue', 'yuan', 'yun', 'yin', 'ying',
+  'ng', 'hm', 'hng',
+  ...PINYIN_INITIALS.flatMap((initial) => PINYIN_FINALS.map((final) => `${initial}${final}`)),
+  ...PINYIN_FINALS,
+]);
+
+function normalizeLangUnitContext(context) {
+  if (context && typeof context === 'object' && !Array.isArray(context)) {
+    const text = String(context.text ?? '');
+    const storedType = String(context.type ?? '').trim();
+    const hasChineseCharacters = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u.test(text);
+    const hasLatinCharacters = /[A-Za-z]/.test(text);
+    return {
+      text,
+      type: storedType === 'chinWord' && hasChineseCharacters && !hasLatinCharacters
+        ? 'chinWord'
+        : getLangUnitContextType(text),
+    };
+  }
+
+  const text = String(context ?? '');
+  return {
+    text,
+    type: getLangUnitContextType(text),
+  };
+}
+
+function createLangUnitContext(text) {
+  const value = String(text ?? '');
+  return {
+    text: value,
+    type: getLangUnitContextType(value),
+  };
+}
+
+function normalizeLangUnitContextType(type) {
+  const value = String(type ?? '').trim();
+  return value === 'chinWord' || value === 'chinPhrase' ? value : '';
+}
+
+function hasChineseCharacters(value) {
+  return /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u.test(String(value ?? ''));
+}
+
+const LANG_UNIT_CONTEXT_BOUNDARIES = new Set(['\r', '\n', '\u2028', '\u2029', '.', '。', '．', '｡']);
+
+function isLangUnitContextBoundary(char) {
+  return LANG_UNIT_CONTEXT_BOUNDARIES.has(char);
+}
+
+function getLangUnitBubbleContext(text, start, end) {
+  let contextStart = 0;
+  for (let index = start - 1; index >= 0; index -= 1) {
+    if (isLangUnitContextBoundary(text[index])) {
+      contextStart = index + 1;
+      break;
+    }
+  }
+
+  let contextEnd = text.length;
+  for (let index = end; index < text.length; index += 1) {
+    if (isLangUnitContextBoundary(text[index])) {
+      contextEnd = index;
+      break;
+    }
+  }
+
+  return text.slice(contextStart, contextEnd);
+}
+
+function isChineseDisambiguationCandidate(contextText, targetText, substringText) {
+  return (
+    hasChineseCharacters(contextText) &&
+    hasChineseCharacters(targetText) &&
+    hasChineseCharacters(substringText)
+  );
 }
 
 function sortLangUnitItems(items) {
@@ -342,49 +945,185 @@ function sortLangUnitItems(items) {
   });
 }
 
-function normalizeLangUnitItems(items, refsById = new Map()) {
-  const seenIds = new Set();
-  let changed = false;
+function normalizeLangUnitItems(items, capturesById = new Map()) {
+  const existingItemsByText = new Map(
+    normalizeLangUnitItemsForStorage(flattenLangUnitItems(items))[0].map((item) => [String(item?.text ?? ''), item])
+  );
+  const groupedByText = new Map();
+  const textOrder = [];
 
-  const normalized = (Array.isArray(items) ? items : []).map((item) => {
-    if (!item || typeof item !== 'object') {
-      changed = true;
-      return item;
+  for (const [sourceId, captures] of capturesById.entries()) {
+    const normalizedCaptures = normalizeLangUnitCaptures(captures);
+    if (!normalizedCaptures.length) {
+      continue;
     }
 
-    const id = typeof item._id === 'string' && item._id && !seenIds.has(item._id) ? item._id : randomUUID();
-    if (id !== item._id) {
-      changed = true;
+    const text = String(normalizedCaptures[0]?.text ?? '');
+    let group = groupedByText.get(text);
+    if (!group) {
+      group = {
+        sourceIds: [],
+        captures: [],
+      };
+      groupedByText.set(text, group);
+      textOrder.push(text);
     }
 
-    const refs = normalizeLangUnitRefs(refsById.get(id) ?? item.refs);
-    if (JSON.stringify(refs) !== JSON.stringify(Array.isArray(item.refs) ? item.refs : [])) {
-      changed = true;
+    group.sourceIds.push(sourceId);
+    group.captures.push(...normalizedCaptures);
+  }
+
+  const now = new Date().toISOString();
+  const normalized = [];
+  const idMap = new Map();
+
+  for (const text of textOrder) {
+    const group = groupedByText.get(text);
+    const captures = normalizeLangUnitCaptures(group?.captures);
+    if (!captures.length) {
+      continue;
     }
 
-    seenIds.add(id);
-    return {
-      ...item,
-      _id: id,
-      text: String(item.text ?? ''),
-      context: String(item.context ?? ''),
-      refs,
-      createdAt: typeof item.createdAt === 'string' && item.createdAt ? item.createdAt : new Date().toISOString(),
-      updatedAt: typeof item.updatedAt === 'string' && item.updatedAt ? item.updatedAt : new Date().toISOString(),
-    };
-  });
+    const existingItem = existingItemsByText.get(text);
+    const canonicalId = String(existingItem?._id ?? group.sourceIds[0] ?? '').trim() || randomUUID();
+    for (const sourceId of group.sourceIds) {
+      const trimmed = String(sourceId ?? '').trim();
+      if (trimmed && trimmed !== canonicalId) {
+        idMap.set(trimmed, canonicalId);
+      }
+    }
 
-  return [normalized, changed];
+    normalized.push({
+      ...(existingItem ?? {}),
+      _id: canonicalId,
+      text,
+      instances: normalizeLangUnitInstances(
+        captures.map((capture) => ({
+          ...(capture.audSegId ? { audSegId: capture.audSegId } : {}),
+          ...(capture.subSegId ? { subSegId: capture.subSegId } : {}),
+          remote: capture.remote === true,
+          ...(capture.context ? { context: capture.context } : {}),
+        }))
+      ),
+      createdAt: existingItem?.createdAt || now,
+      updatedAt: existingItem?.updatedAt || now,
+    });
+  }
+
+  const merged = sortLangUnitItems(normalized);
+  return [merged, idMap, JSON.stringify(merged) !== JSON.stringify(normalizeLangUnitItemsForStorage(flattenLangUnitItems(items))[0])];
 }
 
 async function rebuildLangUnitItems() {
-  const refsById = collectLangUnitRefsById(await readSubSegItems());
-  const [items, changed] = normalizeLangUnitItems(await readLangUnitItems(), refsById);
+  const subSegItems = await readSubSegItems();
+  const [nextSubSegItems, subSegChanged] = normalizeSubSegItemsForStorage(subSegItems);
+  if (subSegChanged) {
+    await writeSubSegItems(sortSubSegItems(nextSubSegItems));
+  }
+
+  const langUnitItems = await readLangUnitItems();
+  const instancesById = collectLangUnitInstancesById(nextSubSegItems, new Map(langUnitItems.map((item) => [String(item?._id ?? ''), item])));
+  const [items, changed] = syncLangUnitInstances(langUnitItems, instancesById);
   if (changed) {
     await writeLangUnitItems(items);
   }
 
   return sortLangUnitItems(items);
+}
+
+async function requestCodexWorker(payload) {
+  const worker = getCodexWorkerClient();
+  return worker.request(payload);
+}
+
+async function inferLangUnitContextType(langUnitId, payload) {
+  const result = await requestCodexWorker({ task: 'contextType', ...payload });
+  const type = normalizeLangUnitContextType(result?.res);
+  if (!type) {
+    return null;
+  }
+
+  const items = await readLangUnitItems();
+  const now = new Date().toISOString();
+  let updated = null;
+  const next = items.map((item) => {
+    if (String(item?._id ?? '') !== String(langUnitId ?? '')) {
+      return item;
+    }
+
+    const context = getLangUnitContext(item);
+    if (context.type === type) {
+      return item;
+    }
+
+    const nextInstances = normalizeLangUnitInstances(item.instances ?? (item.context ? [{ context: item.context }] : []));
+    if (!nextInstances.length) {
+      const nextItem = {
+        ...item,
+        instances: [{ context: { ...context, type } }],
+        updatedAt: now,
+      };
+      updated = nextItem;
+      return nextItem;
+    }
+
+    nextInstances[0] = {
+      ...nextInstances[0],
+      context: { ...context, type },
+    };
+
+    updated = {
+      ...item,
+      instances: nextInstances,
+      updatedAt: now,
+    };
+    return updated;
+  });
+
+  if (!updated) {
+    return null;
+  }
+
+  await writeLangUnitItems(sortLangUnitItems(next));
+  return { langUnit: updated, res: type };
+}
+
+async function maybeDisambiguateLangUnitContexts(langUnits, enabled) {
+  if (!enabled) {
+    return langUnits;
+  }
+
+  const next = [...(Array.isArray(langUnits) ? langUnits : [])];
+  let changed = false;
+
+  for (let index = 0; index < next.length; index += 1) {
+    const langUnit = next[index];
+    if (!langUnit || typeof langUnit !== 'object') {
+      continue;
+    }
+
+    const context = getLangUnitContext(langUnit);
+    const targetText = String(getLangUnitText(langUnit)).trim();
+    const substringText = targetText;
+    if (context.type !== 'chinPhrase' || !isChineseDisambiguationCandidate(context.text, targetText, substringText)) {
+      continue;
+    }
+
+    const result = await inferLangUnitContextType(langUnit._id, {
+      context: context.text,
+      target: targetText,
+      substring: substringText,
+    });
+
+    if (!result?.langUnit) {
+      continue;
+    }
+
+    next[index] = result.langUnit;
+    changed = true;
+  }
+
+  return changed ? sortLangUnitItems(next) : langUnits;
 }
 
 let codexWorkerClient = null;
@@ -473,8 +1212,7 @@ async function waitForCodexWorkerPrimeComplete() {
 }
 
 async function inferLangUnitRoot(langUnitId, payload) {
-  const worker = getCodexWorkerClient();
-  const result = await worker.request(payload);
+  const result = await requestCodexWorker({ task: 'root', ...payload });
   const root = String(result?.res ?? '').trim();
   if (!root) {
     return null;
@@ -806,6 +1544,33 @@ async function handleAudSegApi(req, res, url) {
     return true;
   }
 
+  if (req.method === 'DELETE' && url.pathname.startsWith('/api/audSegs/items/')) {
+    const audSegId = decodeURIComponent(url.pathname.slice('/api/audSegs/items/'.length)).trim();
+    if (!audSegId) {
+      send(res, 404, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'item not found' }));
+      return true;
+    }
+
+    const items = await readAudSegItems();
+    const index = items.findIndex((item) => item?._id === audSegId);
+    if (index < 0) {
+      send(res, 404, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'item not found' }));
+      return true;
+    }
+
+    items.splice(index, 1);
+    await writeAudSegItems(sortAudSegItems(items));
+
+    const subSegItems = await readSubSegItems();
+    await writeSubSegItems(
+      sortSubSegItems(subSegItems.filter((item) => item?.audSegId !== audSegId))
+    );
+    await rebuildLangUnitItems();
+
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ deletedId: audSegId }));
+    return true;
+  }
+
   return false;
 }
 
@@ -874,39 +1639,15 @@ async function handleSubSegApi(req, res, url) {
     const audSegId = String(payload.audSegId ?? '').trim();
     const content = Array.isArray(payload.content) ? payload.content : null;
     const text = String(payload.text ?? '');
-    const langUnits = Array.isArray(payload.langUnits) ? payload.langUnits : [];
+    const disambiguateChinContexts = payload.disambiguateChinContexts === true;
     if (!audSegId) {
       send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'audSegId is required' }));
       return true;
     }
 
-    if (langUnits.length) {
-      const existingLangUnits = await readLangUnitItems();
-      const langUnitMap = new Map(existingLangUnits.map((item) => [String(item?._id ?? ''), item]));
-
-      for (const langUnit of langUnits) {
-        if (!langUnit || typeof langUnit !== 'object') {
-          continue;
-        }
-
-        const id = String(langUnit._id ?? '').trim() || randomUUID();
-        const now = new Date().toISOString();
-        const current = langUnitMap.get(id);
-        langUnitMap.set(id, {
-          ...current,
-          ...langUnit,
-          _id: id,
-          text: String(langUnit.text ?? current?.text ?? ''),
-          createdAt: current?.createdAt || String(langUnit.createdAt ?? now),
-          updatedAt: now,
-        });
-      }
-
-      await writeLangUnitItems(sortLangUnitItems([...langUnitMap.values()]));
-    }
-
     const items = await readSubSegItems();
     const index = items.findIndex((item) => item?.audSegId === audSegId);
+    const [normalizedContent] = normalizeSubSegContentForStorage(content ?? []);
     if ((content && !content.length) || (!content && !text.trim())) {
       if (index >= 0) {
         items.splice(index, 1);
@@ -921,7 +1662,7 @@ async function handleSubSegApi(req, res, url) {
     const saved = {
       _id: index >= 0 ? items[index]._id : randomUUID(),
       audSegId,
-      ...(content ? { content } : {}),
+      ...(Array.isArray(normalizedContent) ? { content: normalizedContent } : {}),
       text,
       createdAt: index >= 0 ? items[index].createdAt : new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -934,8 +1675,18 @@ async function handleSubSegApi(req, res, url) {
     }
 
     await writeSubSegItems(sortSubSegItems(items));
+    if (Array.isArray(payload.langUnits) && payload.langUnits.length) {
+      await writeLangUnitItems(mergeLangUnitItems(await readLangUnitItems(), payload.langUnits));
+    }
     const updatedLangUnits = await rebuildLangUnitItems();
-    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSeg: saved, langUnits: updatedLangUnits }));
+    const refreshedSubSegItems = await readSubSegItems();
+    const refreshedSubSeg = refreshedSubSegItems.find((item) => String(item?.audSegId ?? '') === audSegId) ?? saved;
+    if (disambiguateChinContexts) {
+      void maybeDisambiguateLangUnitContexts(updatedLangUnits, true).catch((error) => {
+        process.stderr.write(`[codex-worker] ${error.message}\n`);
+      });
+    }
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSeg: refreshedSubSeg, langUnits: updatedLangUnits }));
     return true;
   }
 

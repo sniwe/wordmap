@@ -30,16 +30,31 @@
 | `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
 | `langUnit bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
+| `remote section` | A non-contiguous span that belongs to the same `langUnit bubble` group as an anchor bubble, rendered with bubble styling plus a dotted connector back to the anchor. |
+| `linked bubble group` | The set of contiguous and remote `langUnit` spans that share one cycle-target index and are treated as one logical capture unit. |
+| `dotted connector` | The subtle dotted underline used to visually link a remote section back to its anchor `langUnit bubble`. |
+| `langUnit instance` | One persisted reverse-link record inside a `langUnit.instances` array; it carries `audSegId`, `subSegId`, `remote`, `context`, and any extra occurrence metadata needed. |
+| `langUnit ref` | Legacy shorthand for `langUnit instance`. |
 | `langUnit reuse by text` | The creation rule that reuses an existing `langUnit` record when the selected bubble text exactly matches an already stored `langUnit`. |
-| `langUnit reference badge` | The tiny round count badge on a `langUnit bubble` that shows how many `subSeg` references point at that `langUnit`. |
-| `langUnit refs list` | The collapsible side list beside an active `langUnit bubble` that shows other refs to that `langUnit` and their context text. |
-| `langUnit refs` | The persisted reverse-link list on a `langUnit` record that stores which `audSeg`/`subSeg` pairs reference it. |
-| `langUnit ref jump` | The click action on a `langUnit refs list` item that exits the current editor state and jumps to the referenced `audSeg` and bubble. |
+| `langUnit text canonicalization` | The storage rule that collapses identical bubble text into one `langUnit` record and rewrites saved `subSeg` references to the canonical `langUnitId`. |
+| `langUnit add badge` | The tiny round count badge on a `langUnit bubble` that shows how many direct references belong to that `langUnit`. |
+| `langUnit add list` | The collapsible side list beside an active `langUnit bubble` that shows other reference locations for that `langUnit` and their context text. |
+| `langUnit add links` | The in-memory reverse-link list for a `langUnit` record that stores which `audSeg`/`subSeg` pairs contain its direct references; it is derived from subSeg content and not persisted. |
+| `langUnit capture jump` | The click action on a `langUnit capture list` item that exits the current editor state and jumps to the referenced `audSeg` and bubble. |
 | `subSeg bubble` | Deprecated previous name for the `langUnit bubble`. |
 | `subSeg ref content` | The saved `subSeg` payload model that stores text tokens plus `langUnit` references instead of persisting bubble HTML directly. |
+| `normalized langUnit model` | The target storage design where `langUnit` owns the lexical text and metadata while `subSeg` stores only lightweight occurrence pointers. |
+| `pointer-only langUnitRef` | The intended `subSeg.content` reference shape that keeps only `langUnitId` plus non-lexical occurrence metadata such as `remote`. |
+| `langUnit occurrence binding` | One saved link from a `subSeg` capture to a `langUnit`, counted as an occurrence rather than a new lexical identity. |
 | `langUnits collection` | The backend scaffold under `src/backend/data/langUnits` for reusable bubble text records. |
-| `langUnit item` | A reusable text record referenced by `subSeg` bubble spans through `data-langunit-id` and saved `langUnitRef` tokens. |
-| `langUnit context` | The immediate sentence or line substring around a `langUnit bubble`, persisted on the `langUnit` record. |
+| `langUnit item` | A reusable text record referenced by `subSeg` bubble spans through `data-langunit-id` and saved `langUnitRef` tokens; it owns `text`, `root`, and `instances`, with context living on the instances. |
+| `langUnit reverse link` | The stored list of occurrence bindings that point back to a `langUnit` from its `subSeg` locations; the runtime now treats these as `instances`. |
+| `langUnit context` | The immediate sentence or line substring around a specific `langUnit instance`, persisted on the instance record rather than the parent `langUnit`. |
+| `langUnit context object` | The persisted occurrence-context shape with `{ text, type }`, attached to a `langUnit instance` and where `type` is one of `chinPhrase`, `chinWord`, `chinFuzzWord`, `engPhrase`, or `engWord`. |
+| `langUnit context normalization` | The loader/save rule that recomputes an instance `context.type` from the stored text and only preserves `chinWord` for Chinese-only text. |
+| `chinWord` | A single Chinese lexical unit, used when the chin disambiguation flow decides a `langUnit` is narrower than a phrase. |
+| `chin disambiguation` | The Settings-controlled worker-backed flow that refines ambiguous Chinese instance `context.type` values in the background after save. |
+| `pinyin chinPhrase` | Pure ASCII pinyin-like context text, or mixed Chinese plus only valid pinyin syllables, that can be segmented into 2 or more valid pinyin syllables, so it is captured as `chinPhrase` instead of `chinFuzzWord` or `engPhrase`. |
 | `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
 | `subSeg enter guard` | `Enter` does nothing while a `subSeg` bubble target is active. |
 | `subSeg wrap at row width` | `subSeg` content wraps inside the row instead of widening the editor or its panel. |
@@ -52,6 +67,7 @@
 | `subSegs collection` | The backend scaffold under `src/backend/data/subSegs` for sub-segment records tied to an `audSeg`. |
 | `subSeg save debounce` | The 500ms delayed save that persists `subSeg` input text to the `subSegs` collection for the selected `audSeg`. |
 | `subSeg save no rerender` | Successful debounced `subSeg` saves update persistence and in-memory state without rerendering the entered `audEp` subtree, so focus stays on the input. |
+| `subSeg line break persistence` | The rule that newline characters in a saved `subSeg` editor value are preserved and rerendered as visible line breaks instead of being trimmed away. |
 | `subSeg unload flush` | The `pagehide` fallback that sends any pending debounced `subSeg` text to persistence before a page reload or navigation. |
 | `dev reload tone` | The short 880Hz chime that plays on Vite dev reloads once the browser has allowed audio playback. |
 | `subSeg playback hotkey` | `Ctrl+Space` while focused in a `subSeg` input toggles audio playback and other key combinations are ignored by the global shortcut layer. |
@@ -64,6 +80,8 @@
 | `pbNow` | The current playback time read when starting an `audSeg` capture. |
 | `ctrl+backspace target reset` | `Ctrl+Backspace` clears `audEp` cycle targeting back to `-1` and closes any delete dialog; `Delete` opens the delete confirm dialog for the targeted `audEp`. |
 | `delete confirm dialog` | The in-item confirmation state shown before deleting an `audEp`. |
+| `audSeg delete dialog` | The in-row confirmation state shown before deleting an `audSeg`. |
+| `audSeg delete confirm` | The confirm action that deletes the targeted `audSeg` and its dependent `subSeg` data. |
 | `functionalityStatus` | Per-note lifecycle record that tracks whether the note's described functionality is active, retired, or partially active, plus what remains, what is missing, and what replaced it. |
 | `functionalityStatus maintenance skill` | The skill used to update `functionalityStatus` records as runtime behavior changes. |
 | `edit-notes store` | The persisted note file tree under `mgmt/edit-notes`, with `notes.json` as the source of truth for saved selector notes. |
@@ -78,6 +96,8 @@
 | `codex CLI worker` | The checkbox label inside the settings popover for the long-lived Codex CLI worker. |
 | `codex word root inference` | The checkbox-controlled flow that asks the Codex worker to fill in a langUnit's `root` after creation. |
 | `codex worker` | The mini-module under `mgmt/codex-worker` that keeps one long-lived Codex CLI terminal session alive for scripted prompt/response work. |
+| `codex worker context-type request` | The worker request mode that asks Codex to return `chinWord` or `chinPhrase` for an ambiguous Chinese context. |
+| `prompt-shaped root inference` | The worker prompt wording and examples that steer Codex to return the English base/root directly, instead of relying on local suffix-stripping code. |
 | `codex worker status toast` | The tiny bottom-left viewport toast that reports worker readiness and payload completion. |
 | `single English word target` | The root-inference guard that allows only one ASCII word token to trigger worker lookup. |
 | `worker terminal` | The spawned Node-managed terminal process that hosts the Codex CLI worker and exposes stdin, stdout, and stderr for monitoring. |

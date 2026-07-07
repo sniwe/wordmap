@@ -7,8 +7,12 @@ app.innerHTML = `
     <button class="settings-button" id="settings-button" type="button" aria-haspopup="menu" aria-expanded="false">⚙</button>
     <div class="settings-popover" id="settings-popover" role="menu" hidden>
       <label class="settings-popover__item">
-        <input type="checkbox" />
+        <input type="checkbox" data-settings-toggle="codex-worker" />
         <span>codex CLI worker</span>
+      </label>
+      <label class="settings-popover__item">
+        <input type="checkbox" data-settings-toggle="chin-disambiguation" />
+        <span>chin disambiguation</span>
       </label>
     </div>
   </div>
@@ -37,7 +41,8 @@ const probe = document.querySelector('#selector-probe');
 const sidebar = document.querySelector('#note-sidebar');
 const settingsButton = document.querySelector('#settings-button');
 const settingsPopover = document.querySelector('#settings-popover');
-const settingsPopoverCheckbox = settingsPopover?.querySelector('input[type="checkbox"]');
+const settingsPopoverWorkerCheckbox = settingsPopover?.querySelector('[data-settings-toggle="codex-worker"]');
+const settingsPopoverChinDisambiguationCheckbox = settingsPopover?.querySelector('[data-settings-toggle="chin-disambiguation"]');
 const workerToast = document.querySelector('#worker-toast');
 const audEpList = document.querySelector('#audep-list');
 const noteSelector = document.querySelector('#note-selector');
@@ -64,6 +69,8 @@ const state = {
   audSegDraftId: '',
   audSegPlaybackLock: null,
   deleteDialogIndex: -1,
+  deleteDialogKind: 'audEp',
+  deleteDialogAudSegId: '',
   deleteDialogChoice: 'cancel',
   notesBySelector: {},
   activeSelector: '',
@@ -84,6 +91,7 @@ const langUnitBubbleEscapeState = new Map();
 const langUnitBubbleTargetIndexByAudSegId = new Map();
 let settingsOpen = false;
 let codexWordRootInferenceEnabled = localStorage.getItem('codex-word-root-inference-enabled') === '1';
+let chinDisambiguationEnabled = localStorage.getItem('chin-disambiguation-enabled') === '1';
 let workerToastTimer = null;
 if (import.meta.env.DEV) {
   createDevReloadTone();
@@ -173,6 +181,9 @@ function renderAudEps(items) {
     state.enteredAudEpIndex = -1;
     state.selectedAudSegIndex = -1;
     state.enteredAudSegIndex = -1;
+    state.deleteDialogIndex = -1;
+    state.deleteDialogKind = 'audEp';
+    state.deleteDialogAudSegId = '';
   } else {
     state.enteredAudEpIndex = Math.max(-1, Math.min(state.enteredAudEpIndex, items.length - 1));
   }
@@ -182,7 +193,10 @@ function renderAudEps(items) {
       const displayIndex = index;
       const dataIndex = Math.max(index - 1, 0);
       const mediaName = item.__seed ? '' : item.audioFileRef || item.media?.[item.media.length - 1]?.storedName || '';
-      const deleteDialogOpen = !item.__seed && state.deleteDialogIndex === displayIndex;
+      const deleteDialogOpen =
+        !item.__seed &&
+        state.deleteDialogKind === 'audEp' &&
+        state.deleteDialogIndex === displayIndex;
       const isEntered = !item.__seed && state.enteredAudEpIndex === dataIndex;
       const audSegMarkup = isEntered ? renderAudSegList(dataIndex) : '';
       return `
@@ -374,18 +388,29 @@ function renderAudSegList(audEpIndex) {
           const isDraft = item._id && item._id === state.audSegDraftId;
           const isTargeted = itemIndex === state.selectedAudSegIndex;
           const isEntered = itemIndex === state.enteredAudSegIndex;
+          const deleteDialogOpen =
+            state.deleteDialogKind === 'audSeg' && state.deleteDialogAudSegId === String(item._id ?? '');
+          const isReorganized = isEntered || deleteDialogOpen;
           const label = item.ssHead ?? item.label ?? item.text ?? '';
           const tcs = formatTime(Number(item.tcs ?? 0));
           const tce = item.tce == null || item.tce === '' ? '  ' : formatTime(Number(item.tce));
           const hasLabel = Boolean(String(label).trim());
-          const subSegMarkup = isEntered ? renderSubSegList(item) : '';
-          const langUnitRefsMarkup = isEntered ? renderLangUnitRefsList(item) : '';
+          const subSegMarkup = isEntered && !deleteDialogOpen ? renderSubSegList(item) : '';
+          const langUnitRefsMarkup = isEntered && !deleteDialogOpen ? renderLangUnitRefsList(item) : '';
           return `
-            <li class="item__segment${isDraft ? ' item__segment--draft' : ''}${isEntered ? ' item__segment--entered' : ''}${isTargeted ? ' is-targeted' : ''}">
+            <li class="item__segment${isDraft ? ' item__segment--draft' : ''}${isReorganized ? ' item__segment--entered' : ''}${deleteDialogOpen ? ' item__segment--delete-confirm' : ''}${isTargeted ? ' is-targeted' : ''}" data-audseg-id="${escapeHtml(String(item._id ?? ''))}">
               <span class="item__segment-timing">${escapeHtml(`${tcs}-${tce}`)}</span>
               ${hasLabel ? `<span class="item__segment-text">${escapeHtml(label)}</span>` : ''}
-              ${subSegMarkup}
-              ${langUnitRefsMarkup}
+              ${deleteDialogOpen ? `
+                <div class="item__delete-dialog" role="group" aria-label="Delete audSeg confirmation">
+                  <span class="item__delete-text">Delete this audSeg?</span>
+                  <button class="item__delete-action" type="button" data-delete-action="cancel"${state.deleteDialogChoice === 'cancel' ? ' autofocus' : ''}>cancel</button>
+                  <button class="item__delete-action" type="button" data-delete-action="confirm"${state.deleteDialogChoice === 'confirm' ? ' autofocus' : ''}>confirm</button>
+                </div>
+              ` : `
+                ${subSegMarkup}
+                ${langUnitRefsMarkup}
+              `}
             </li>
           `;
         })
@@ -405,6 +430,27 @@ function getSubSegItemForAudSeg(audSegId) {
   return state.subSegItems.find((item) => item?.audSegId === audSegId) ?? null;
 }
 
+function getOrderedLangUnitIds(tokens) {
+  const ids = [];
+  const seen = new Set();
+
+  for (const token of Array.isArray(tokens) ? tokens : []) {
+    if (token?.type !== 'langUnitRef') {
+      continue;
+    }
+
+    const langUnitId = String(token.langUnitId ?? '').trim();
+    if (!langUnitId || seen.has(langUnitId)) {
+      continue;
+    }
+
+    seen.add(langUnitId);
+    ids.push(langUnitId);
+  }
+
+  return ids;
+}
+
 function getLangUnitBubbleIndex(audSegId, langUnitId) {
   if (!audSegId || !langUnitId) {
     return -1;
@@ -417,28 +463,41 @@ function getLangUnitBubbleIndex(audSegId, langUnitId) {
     : Array.isArray(subSegItem?.content)
       ? subSegItem.content
       : [];
-  let bubbleIndex = -1;
-
-  for (const token of tokens) {
-    if (token?.type !== 'langUnitRef') {
-      continue;
-    }
-
-    bubbleIndex += 1;
-    if (String(token.langUnitId ?? '') === langUnitId) {
-      return bubbleIndex;
-    }
-  }
-
-  return -1;
+  return getOrderedLangUnitIds(tokens).indexOf(langUnitId);
 }
 
 function getLangUnitItem(langUnitId) {
   return state.langUnitItems.find((item) => item?._id === langUnitId) ?? null;
 }
 
+function getLangUnitText(langUnit) {
+  return String(langUnit?.text ?? '');
+}
+
+function getLangUnitContextText(langUnit) {
+  const instanceContext = Array.isArray(langUnit?.instances)
+    ? langUnit.instances.find((instance) => instance?.context)?.context
+    : null;
+  if (instanceContext && typeof instanceContext === 'object') {
+    return String(instanceContext.text ?? '');
+  }
+
+  return '';
+}
+
 function getLangUnitItemByText(text) {
-  return state.langUnitItems.find((item) => String(item?.text ?? '') === text) ?? null;
+  const value = String(text ?? '');
+  return state.langUnitItems.find((item) => getLangUnitText(item) === value) ?? null;
+}
+
+function getSubSegContentTokens(audSegId) {
+  const payload = subSegDraftPayloadByAudSegId.get(audSegId);
+  if (Array.isArray(payload?.content)) {
+    return payload.content;
+  }
+
+  const subSegItem = getSubSegItemForAudSeg(audSegId);
+  return Array.isArray(subSegItem?.content) ? subSegItem.content : [];
 }
 
 function getLangUnitReferenceCount(langUnitId) {
@@ -446,16 +505,19 @@ function getLangUnitReferenceCount(langUnitId) {
     return 0;
   }
 
-  const langUnit = getLangUnitItem(langUnitId);
-  if (Array.isArray(langUnit?.refs) && langUnit.refs.length) {
-    return langUnit.refs.length;
-  }
-
+  const seenSubSegIds = new Set();
   let count = 0;
   for (const subSegItem of state.subSegItems) {
-    for (const token of Array.isArray(subSegItem?.content) ? subSegItem.content : []) {
+    const subSegId = String(subSegItem?._id ?? '').trim();
+    if (!subSegId || seenSubSegIds.has(subSegId)) {
+      continue;
+    }
+
+    for (const token of getSubSegContentTokens(String(subSegItem?.audSegId ?? ''))) {
       if (token?.type === 'langUnitRef' && String(token.langUnitId ?? '') === langUnitId) {
         count += 1;
+        seenSubSegIds.add(subSegId);
+        break;
       }
     }
   }
@@ -468,6 +530,7 @@ function sanitizeSubSegMarkup(value) {
     return '';
   }
 
+  value = normalizeSubSegLineBreaks(value);
   if (!value.includes('<')) {
     return escapeHtml(value).replaceAll('\n', '<br>');
   }
@@ -496,7 +559,7 @@ function sanitizeSubSegMarkup(value) {
 
   const serializeNode = (node) => {
     if (node.nodeType === Node.TEXT_NODE) {
-      return escapeHtml(node.textContent ?? '');
+      return escapeHtml(normalizeSubSegLineBreaks(node.textContent ?? '')).replaceAll('\n', '<br>');
     }
 
     if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -510,11 +573,17 @@ function sanitizeSubSegMarkup(value) {
     if (node.tagName === 'SPAN' && node.classList.contains('langunit-bubble')) {
       const bubbleContent = serializeChildren(node.childNodes);
       const langUnitId = node.getAttribute('data-langunit-id');
+      const langUnitRemote = node.getAttribute('data-langunit-remote');
       const dataAttr = langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : '';
-      return `<span class="langunit-bubble"${dataAttr}>${bubbleContent}</span>`;
+      const remoteAttr = langUnitRemote ? ' data-langunit-remote="1"' : '';
+      return `<span class="langunit-bubble"${dataAttr}${remoteAttr}>${bubbleContent}</span>`;
     }
 
     if (blockTags.has(node.tagName)) {
+      if (isBreakPlaceholderBlock(node)) {
+        return '<br>';
+      }
+
       const blockContent = serializeChildren(node.childNodes);
       return blockContent || '<br>';
     }
@@ -525,27 +594,99 @@ function sanitizeSubSegMarkup(value) {
   return serializeChildren(template.content.childNodes);
 }
 
+function normalizeSubSegLineBreaks(value) {
+  return String(value ?? '').replace(/\r\n?/g, '\n');
+}
+
+function isBreakPlaceholderBlock(node) {
+  if (!(node instanceof HTMLElement)) {
+    return false;
+  }
+
+  if (!['DIV', 'P', 'LI'].includes(node.tagName)) {
+    return false;
+  }
+
+  const childNodes = [...node.childNodes].filter((child) => {
+    if (child.nodeType !== Node.TEXT_NODE) {
+      return true;
+    }
+
+    return Boolean(String(child.textContent ?? '').trim());
+  });
+
+  return childNodes.length === 1 && childNodes[0].nodeType === Node.ELEMENT_NODE && childNodes[0].tagName === 'BR';
+}
+
 function renderSubSegContentTokens(tokens) {
   if (!Array.isArray(tokens)) {
     return '';
   }
 
-  return tokens
-    .map((token) => {
-      if (!token || typeof token !== 'object') {
-        return '';
+  const segments = [];
+  const seen = new Set();
+  let currentBubble = null;
+
+  const flushBubble = () => {
+    if (!currentBubble) {
+      return;
+    }
+
+    segments.push(currentBubble);
+    currentBubble = null;
+  };
+
+  for (const token of tokens) {
+    if (!token || typeof token !== 'object') {
+      continue;
+    }
+
+    if (token.type === 'text') {
+      flushBubble();
+      segments.push({ type: 'text', text: String(token.text ?? '') });
+      continue;
+    }
+
+    if (token.type !== 'langUnitRef') {
+      continue;
+    }
+
+    const langUnitId = String(token.langUnitId ?? '').trim();
+    if (!langUnitId) {
+      continue;
+    }
+
+    const langUnit = getLangUnitItem(langUnitId);
+    const text = String(getLangUnitText(langUnit) || token.text || '');
+    const remote = token.remote === true;
+    if (currentBubble && currentBubble.langUnitId === langUnitId) {
+      currentBubble.text += text;
+      continue;
+    }
+
+    flushBubble();
+    currentBubble = {
+      type: 'bubble',
+      langUnitId,
+      text,
+      remote,
+    };
+    seen.add(langUnitId);
+  }
+
+  flushBubble();
+
+  return segments
+    .map((segment) => {
+      if (segment.type === 'text') {
+        return escapeHtml(normalizeSubSegLineBreaks(segment.text)).replaceAll('\n', '<br>');
       }
 
-      if (token.type === 'text') {
-        return escapeHtml(String(token.text ?? '')).replaceAll('\n', '<br>');
-      }
-
-      if (token.type === 'langUnitRef') {
-        const langUnitId = String(token.langUnitId ?? '').trim();
-        const langUnit = getLangUnitItem(langUnitId);
-        const text = String(langUnit?.text ?? token.text ?? '');
-        const count = Math.max(1, getLangUnitReferenceCount(langUnitId));
-        return `<span class="langunit-bubble"${langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : ''}${count > 1 ? ` data-langunit-count="${count}"` : ''}>${escapeHtml(text)}</span>`;
+      if (segment.type === 'bubble') {
+        const count = Math.max(1, getLangUnitReferenceCount(segment.langUnitId));
+        const remoteAttr = segment.remote ? ' data-langunit-remote="1"' : '';
+        const countAttr = segment.remote || count <= 1 ? '' : ` data-langunit-count="${count}"`;
+        return `<span class="langunit-bubble" data-langunit-id="${escapeHtml(segment.langUnitId)}"${remoteAttr}${countAttr}>${escapeHtml(segment.text)}</span>`;
       }
 
       return '';
@@ -558,7 +699,8 @@ function renderSubSegList(audSegItem) {
   const subSegItem = getSubSegItemForAudSeg(audSegId);
   const value = subSegDraftTextByAudSegId.get(audSegId);
   const renderedContent = subSegItem?.content ? renderSubSegContentTokens(subSegItem.content) : '';
-  const content = value ?? (renderedContent || sanitizeSubSegMarkup(subSegItem?.text ?? ''));
+  const hasLangUnitRefs = Array.isArray(subSegItem?.content) && subSegItem.content.some((token) => token?.type === 'langUnitRef');
+  const content = value ?? (hasLangUnitRefs ? renderedContent : sanitizeSubSegMarkup(subSegItem?.text ?? '') || renderedContent);
   return `
     <ul class="item__subsegs" aria-label="subSegs">
       <li class="item__subseg item__subseg--seed">
@@ -581,32 +723,38 @@ function renderLangUnitRefsList(audSegItem) {
   const subSegItem = getSubSegItemForAudSeg(audSegId);
   const payload = subSegDraftPayloadByAudSegId.get(audSegId);
   const tokens = Array.isArray(payload?.content) ? payload.content : Array.isArray(subSegItem?.content) ? subSegItem.content : [];
-  let bubbleIndex = -1;
-  let langUnitId = '';
-  for (const token of tokens) {
-    if (token?.type !== 'langUnitRef') {
-      continue;
-    }
-
-    bubbleIndex += 1;
-    if (bubbleIndex === targetIndex) {
-      langUnitId = String(token.langUnitId ?? '').trim();
-      break;
-    }
-  }
+  const langUnitId = getOrderedLangUnitIds(tokens)[targetIndex] ?? '';
 
   const langUnit = getLangUnitItem(langUnitId);
   const subSegId = subSegItem?._id || '';
-  const refs = Array.isArray(langUnit?.refs)
-    ? langUnit.refs.filter((ref) => String(ref?.subSegId ?? '') !== subSegId)
-    : [];
+  const links = [];
+  const seen = new Set();
+  for (const subSegItem of state.subSegItems) {
+    const itemSubSegId = String(subSegItem?._id ?? '').trim();
+    const itemAudSegId = String(subSegItem?.audSegId ?? '').trim();
+    if (!itemSubSegId || !itemAudSegId) {
+      continue;
+    }
 
-  if (!langUnitId || refs.length < 1 || (Array.isArray(langUnit?.refs) ? langUnit.refs.length : 0) < 2) {
+    const tokens = getSubSegContentTokens(itemAudSegId);
+    if (!tokens.some((token) => token?.type === 'langUnitRef' && String(token.langUnitId ?? '') === langUnitId)) {
+      continue;
+    }
+
+    if (itemSubSegId === subSegId || seen.has(itemSubSegId)) {
+      continue;
+    }
+
+    seen.add(itemSubSegId);
+    links.push({ audSegId: itemAudSegId, subSegId: itemSubSegId });
+  }
+
+  if (!langUnitId || links.length < 1) {
     return '<ul class="item__langunit-refs" hidden></ul>';
   }
 
-  const context = String(langUnit?.context ?? langUnit?.text ?? '').trim();
-  const items = refs
+  const context = getLangUnitContextText(langUnit) || String(getLangUnitText(langUnit) ?? '').trim();
+  const items = links
     .map(
       (ref) => `
         <li class="item__langunit-ref" data-subseg-id="${escapeHtml(String(ref?.subSegId ?? ''))}" data-audseg-id="${escapeHtml(String(ref?.audSegId ?? ''))}" data-langunit-id="${escapeHtml(langUnitId)}">
@@ -623,8 +771,10 @@ function renderLangUnitRefsList(audSegItem) {
   `;
 }
 
+const LANG_UNIT_CONTEXT_BOUNDARIES = new Set(['\r', '\n', '\u2028', '\u2029', '.', '。', '．', '｡']);
+
 function isLangUnitContextBoundary(char) {
-  return char === '\n' || char === '.' || char === '。' || char === '．' || char === '｡';
+  return LANG_UNIT_CONTEXT_BOUNDARIES.has(char);
 }
 
 function getLangUnitBubbleContext(text, start, end) {
@@ -647,6 +797,88 @@ function getLangUnitBubbleContext(text, start, end) {
   return text.slice(contextStart, contextEnd);
 }
 
+function getLangUnitContextType(text) {
+  const value = String(text ?? '').trim();
+  if (!value) {
+    return 'engWord';
+  }
+
+  const hasChineseCharacters = /[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u.test(value);
+  const letterTokens = value.split(/[^A-Za-z1-5]+/).filter(Boolean);
+  const hasSpaces = /\s/.test(value);
+  const onlyEnglishishChars = /^[A-Za-z0-9\s\p{P}\p{S}]+$/u.test(value);
+  const allTokensArePinyin = letterTokens.length > 0 && letterTokens.every((token) => countPinyinSyllables(token) > 0);
+
+  if (hasChineseCharacters) {
+    if (!/[A-Za-z]/.test(value) || allTokensArePinyin) {
+      return 'chinPhrase';
+    }
+
+    return 'engPhrase';
+  }
+
+  if (onlyEnglishishChars && allTokensArePinyin) {
+    const pinyinSyllableCount = letterTokens.reduce((count, token) => count + countPinyinSyllables(token), 0);
+    return pinyinSyllableCount >= 2 ? 'chinPhrase' : 'chinFuzzWord';
+  }
+
+  if (hasSpaces) {
+    return 'engPhrase';
+  }
+
+  return 'engWord';
+}
+
+function countPinyinSyllables(text) {
+  const value = String(text ?? '').toLowerCase().replace(/[1-5]/g, '');
+  if (!value) {
+    return 0;
+  }
+
+  let count = 0;
+  let index = 0;
+  while (index < value.length) {
+    let matched = '';
+    for (let end = value.length; end > index; end -= 1) {
+      const chunk = value.slice(index, end);
+      if (PINYIN_SYLLABLES.has(chunk)) {
+        matched = chunk;
+        break;
+      }
+    }
+
+    if (!matched) {
+      return 0;
+    }
+
+    count += 1;
+    index += matched.length;
+  }
+
+  return count;
+}
+
+const PINYIN_INITIALS = ['zh', 'ch', 'sh', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'r', 'z', 'c', 's'];
+const PINYIN_FINALS = [
+  'a', 'ai', 'an', 'ang', 'ao', 'e', 'ei', 'en', 'eng', 'er',
+  'o', 'ong', 'ou', 'i', 'ia', 'ian', 'iang', 'iao', 'ie', 'in', 'ing', 'iong',
+  'u', 'ua', 'uai', 'uan', 'uang', 'ui', 'un', 'uo', 'v', 've', 'van', 'vn',
+];
+const PINYIN_SYLLABLES = new Set([
+  'zhi', 'chi', 'shi', 'ri', 'zi', 'ci', 'si', 'yi', 'wu', 'yu', 'yue', 'yuan', 'yun', 'yin', 'ying',
+  'ng', 'hm', 'hng',
+  ...PINYIN_INITIALS.flatMap((initial) => PINYIN_FINALS.map((final) => `${initial}${final}`)),
+  ...PINYIN_FINALS,
+]);
+
+function createLangUnitContext(text) {
+  const value = String(text ?? '');
+  return {
+    text: value,
+    type: getLangUnitContextType(value),
+  };
+}
+
 function extractSubSegEditorPayload(editor) {
   if (!(editor instanceof HTMLElement)) {
     return { content: [], langUnits: [] };
@@ -654,24 +886,33 @@ function extractSubSegEditorPayload(editor) {
 
   const content = [];
   const langUnitsById = new Map();
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  const subSegId = getSubSegItemForAudSeg(audSegId)?._id || '';
+  const cycleTargetActive = (langUnitBubbleTargetIndexByAudSegId.get(audSegId) ?? -1) >= 0;
   let plainText = '';
   const appendContentText = (text) => {
     if (!text) {
       return;
     }
 
-    const last = content[content.length - 1];
-    if (last?.type === 'text') {
-      last.text += text;
-      return;
-    }
+    for (const chunk of String(text).split(/(\n)/)) {
+      if (!chunk) {
+        continue;
+      }
 
-    content.push({ type: 'text', text });
+      const last = content[content.length - 1];
+      if (chunk !== '\n' && last?.type === 'text') {
+        last.text += chunk;
+        continue;
+      }
+
+      content.push({ type: 'text', text: chunk });
+    }
   };
 
   const walk = (node) => {
     if (node.nodeType === Node.TEXT_NODE) {
-      const text = node.textContent ?? '';
+      const text = normalizeSubSegLineBreaks(node.textContent);
       plainText += text;
       appendContentText(text);
       return;
@@ -687,6 +928,12 @@ function extractSubSegEditorPayload(editor) {
       return;
     }
 
+    if (isBreakPlaceholderBlock(node)) {
+      plainText += '\n';
+      appendContentText('\n');
+      return;
+    }
+
     if (node.tagName === 'SPAN' && node.classList.contains('langunit-bubble')) {
       const bubbleText = node.textContent ?? '';
       let langUnitId = node.getAttribute('data-langunit-id') || '';
@@ -697,13 +944,16 @@ function extractSubSegEditorPayload(editor) {
 
       const start = plainText.length;
       plainText += bubbleText;
-      langUnitsById.set(langUnitId, {
-        _id: langUnitId,
-        text: bubbleText,
-        start,
-        end: plainText.length,
-      });
-      content.push({ type: 'langUnitRef', langUnitId });
+      const existing = langUnitsById.has(langUnitId);
+      if (!existing) {
+        langUnitsById.set(langUnitId, {
+          _id: langUnitId,
+          text: bubbleText,
+          start,
+          end: plainText.length,
+        });
+      }
+      content.push({ type: 'langUnitRef', langUnitId, remote: cycleTargetActive && existing });
       return;
     }
 
@@ -712,6 +962,9 @@ function extractSubSegEditorPayload(editor) {
     }
 
     if (node.tagName === 'DIV' || node.tagName === 'P' || node.tagName === 'LI') {
+      if (isBreakPlaceholderBlock(node)) {
+        return;
+      }
       plainText += '\n';
       appendContentText('\n');
     }
@@ -721,20 +974,16 @@ function extractSubSegEditorPayload(editor) {
     walk(child);
   }
 
-  while (content.length && content[content.length - 1]?.type === 'text') {
-    const tail = content[content.length - 1];
-    tail.text = tail.text.replace(/\n+$/g, '');
-    if (tail.text) {
-      break;
-    }
-
-    content.pop();
-  }
-
   const langUnits = [...langUnitsById.values()].map(({ start, end, ...langUnit }) => ({
     ...langUnit,
-    // ponytail: sentence boundary scan stays simple; newline and full-stop punctuation are enough here.
-    context: getLangUnitBubbleContext(plainText, start, end),
+    instances: [
+      {
+        ...(audSegId ? { audSegId } : {}),
+        ...(subSegId ? { subSegId } : {}),
+        remote: false,
+        context: createLangUnitContext(getLangUnitBubbleContext(plainText, start, end)),
+      },
+    ],
   }));
 
   return {
@@ -785,7 +1034,7 @@ function getSubSegEditorText(editor) {
     return '';
   }
 
-  return editor.innerText.replace(/\u00a0/g, ' ');
+  return normalizeSubSegLineBreaks(editor.innerText).replace(/\u00a0/g, ' ');
 }
 
 function getSubSegEditorMarkup(editor) {
@@ -802,6 +1051,23 @@ function getLangUnitBubbles(editor) {
   }
 
   return [...editor.querySelectorAll('.langunit-bubble')];
+}
+
+function getLangUnitBubbleGroupIds(editor) {
+  const ids = [];
+  const seen = new Set();
+
+  for (const bubble of getLangUnitBubbles(editor)) {
+    const langUnitId = String(bubble?.dataset?.langunitId ?? '').trim();
+    if (!langUnitId || seen.has(langUnitId)) {
+      continue;
+    }
+
+    seen.add(langUnitId);
+    ids.push(langUnitId);
+  }
+
+  return ids;
 }
 
 function setCaretToEnd(editor) {
@@ -828,7 +1094,9 @@ function syncLangUnitBubbleTarget(editor, restoreCaret = false) {
 
   const audSegId = editor.dataset.subsegAudsegId || '';
   const bubbles = getLangUnitBubbles(editor);
+  const groupIds = getLangUnitBubbleGroupIds(editor);
   const targetIndex = langUnitBubbleTargetIndexByAudSegId.get(audSegId);
+  const targetLangUnitId = groupIds[targetIndex] ?? '';
 
   bubbles.forEach((bubble) => bubble.classList.remove('is-targeted'));
   if (!bubbles.length) {
@@ -840,7 +1108,7 @@ function syncLangUnitBubbleTarget(editor, restoreCaret = false) {
     return;
   }
 
-  if (!Number.isInteger(targetIndex) || targetIndex < 0 || targetIndex >= bubbles.length) {
+  if (!Number.isInteger(targetIndex) || targetIndex < 0 || targetIndex >= groupIds.length) {
     if (restoreCaret) {
       setCaretToEnd(editor);
     }
@@ -848,7 +1116,17 @@ function syncLangUnitBubbleTarget(editor, restoreCaret = false) {
     return;
   }
 
-  bubbles[targetIndex].classList.add('is-targeted');
+  if (!targetLangUnitId) {
+    if (restoreCaret) {
+      setCaretToEnd(editor);
+    }
+    syncLangUnitRefsLists();
+    return;
+  }
+
+  bubbles
+    .filter((bubble) => String(bubble?.dataset?.langunitId ?? '').trim() === targetLangUnitId)
+    .forEach((bubble) => bubble.classList.add('is-targeted'));
   syncLangUnitRefsLists();
 }
 
@@ -858,20 +1136,88 @@ function cycleLangUnitBubbleTarget(editor, step) {
   }
 
   const audSegId = editor.dataset.subsegAudsegId || '';
-  const bubbles = getLangUnitBubbles(editor);
-  if (!bubbles.length) {
+  const groups = getLangUnitBubbleGroupIds(editor);
+  if (!groups.length) {
     return false;
   }
 
   const currentIndex = Number.isInteger(langUnitBubbleTargetIndexByAudSegId.get(audSegId))
     ? langUnitBubbleTargetIndexByAudSegId.get(audSegId)
     : -1;
-  const slots = bubbles.length + 1;
+  const slots = groups.length + 1;
   const nextIndex = ((currentIndex + 1 + step + slots) % slots) - 1;
 
   langUnitBubbleTargetIndexByAudSegId.set(audSegId, nextIndex);
   syncLangUnitBubbleTarget(editor, nextIndex === -1);
   return true;
+}
+
+function unwrapLangUnitBubbleTarget(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return false;
+  }
+
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  const groups = getLangUnitBubbleGroupIds(editor);
+  const targetIndex = Number.isInteger(langUnitBubbleTargetIndexByAudSegId.get(audSegId))
+    ? langUnitBubbleTargetIndexByAudSegId.get(audSegId)
+    : -1;
+  const targetLangUnitId = groups[targetIndex] ?? '';
+  if (targetIndex < 0 || !targetLangUnitId) {
+    return false;
+  }
+
+  const bubbles = getLangUnitBubbles(editor).filter(
+    (bubble) => String(bubble?.dataset?.langunitId ?? '').trim() === targetLangUnitId
+  );
+  if (!bubbles.length) {
+    return false;
+  }
+
+  let lastTextNode = null;
+  for (const bubble of bubbles) {
+    const textNode = document.createTextNode(bubble.textContent ?? '');
+    bubble.replaceWith(textNode);
+    lastTextNode = textNode;
+  }
+
+  langUnitBubbleTargetIndexByAudSegId.set(audSegId, -1);
+  syncLangUnitBubbleTarget(editor, true);
+  syncSubSegEditorDraft(editor);
+  if (lastTextNode) {
+    setCaretAfterNode(lastTextNode);
+  }
+  return true;
+}
+
+function refreshLangUnitBubbleGroupStyles(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return;
+  }
+
+  const seen = new Set();
+  for (const bubble of getLangUnitBubbles(editor)) {
+    const langUnitId = String(bubble.dataset.langunitId ?? '').trim();
+    if (!langUnitId) {
+      bubble.removeAttribute('data-langunit-remote');
+      bubble.removeAttribute('data-langunit-count');
+      continue;
+    }
+
+    const count = Math.max(1, getLangUnitReferenceCount(langUnitId));
+    if (seen.has(langUnitId)) {
+      bubble.setAttribute('data-langunit-remote', '1');
+      bubble.removeAttribute('data-langunit-count');
+    } else {
+      seen.add(langUnitId);
+      bubble.removeAttribute('data-langunit-remote');
+      if (count > 1) {
+        bubble.setAttribute('data-langunit-count', String(count));
+      } else {
+        bubble.removeAttribute('data-langunit-count');
+      }
+    }
+  }
 }
 
 function syncSubSegEditorDraft(editor) {
@@ -884,6 +1230,7 @@ function syncSubSegEditorDraft(editor) {
   const payload = extractSubSegEditorPayload(editor);
   subSegDraftTextByAudSegId.set(audSegId, markup);
   subSegDraftPayloadByAudSegId.set(audSegId, payload);
+  refreshLangUnitBubbleGroupStyles(editor);
   autosizeSubSegInput(editor);
   scheduleSubSegSave(audSegId);
   void saveSubSeg(audSegId);
@@ -958,6 +1305,43 @@ function getLangUnitBubbleBoundary(editor) {
   return null;
 }
 
+function mergeAdjacentLangUnitBubbleRuns(editor, bubble) {
+  if (!(editor instanceof HTMLElement) || !(bubble instanceof HTMLElement)) {
+    return bubble;
+  }
+
+  const langUnitId = String(bubble.dataset.langunitId ?? '').trim();
+  if (!langUnitId) {
+    return bubble;
+  }
+
+  let mergedBubble = bubble;
+  let prev = mergedBubble.previousSibling;
+  while (
+    prev instanceof HTMLElement &&
+    prev.classList.contains('langunit-bubble') &&
+    String(prev.dataset.langunitId ?? '').trim() === langUnitId
+  ) {
+    prev.textContent = `${prev.textContent ?? ''}${mergedBubble.textContent ?? ''}`;
+    mergedBubble.remove();
+    mergedBubble = prev;
+    prev = mergedBubble.previousSibling;
+  }
+
+  let next = mergedBubble.nextSibling;
+  while (
+    next instanceof HTMLElement &&
+    next.classList.contains('langunit-bubble') &&
+    String(next.dataset.langunitId ?? '').trim() === langUnitId
+  ) {
+    mergedBubble.textContent = `${mergedBubble.textContent ?? ''}${next.textContent ?? ''}`;
+    next.remove();
+    next = mergedBubble.nextSibling;
+  }
+
+  return mergedBubble;
+}
+
 function wrapSelectedSubSegText(editor) {
   const selection = document.getSelection();
   if (!selection || !selection.rangeCount || selection.isCollapsed) {
@@ -979,8 +1363,11 @@ function wrapSelectedSubSegText(editor) {
   bubble.append(range.extractContents());
   range.insertNode(bubble);
 
+  const mergedBubble = mergeAdjacentLangUnitBubbleRuns(editor, bubble);
+  refreshLangUnitBubbleGroupStyles(editor);
+
   const caret = document.createRange();
-  caret.setStartAfter(bubble);
+  caret.setStartAfter(mergedBubble);
   caret.collapse(true);
   selection.removeAllRanges();
   selection.addRange(caret);
@@ -1047,7 +1434,10 @@ function scheduleSubSegSave(audSegId) {
 }
 
 function flushSubSegSave(audSegId) {
-  const payload = subSegDraftPayloadByAudSegId.get(audSegId);
+  const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"]`);
+  const payload = editor instanceof HTMLElement
+    ? extractSubSegEditorPayload(editor)
+    : subSegDraftPayloadByAudSegId.get(audSegId);
   if (!payload) {
     return;
   }
@@ -1088,11 +1478,13 @@ async function saveSubSeg(audSegId) {
   }
 
   const knownLangUnitIds = new Set(state.langUnitItems.map((item) => item?._id).filter(Boolean));
+  const liveEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"]`);
+  const nextPayload = liveEditor instanceof HTMLElement ? extractSubSegEditorPayload(liveEditor) : payload;
 
   const response = await fetch('/api/subSegs/items', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ audSegId, ...payload }),
+    body: JSON.stringify({ audSegId, disambiguateChinContexts: chinDisambiguationEnabled, ...nextPayload }),
   });
 
   if (!response.ok) {
@@ -1105,10 +1497,10 @@ async function saveSubSeg(audSegId) {
   subSegDraftPayloadByAudSegId.delete(audSegId);
   if (Array.isArray(result?.langUnits)) {
     mergeLangUnitItems(result.langUnits);
-  } else if (payload.langUnits?.length) {
-    mergeLangUnitItems(payload.langUnits);
+  } else if (nextPayload.langUnits?.length) {
+    mergeLangUnitItems(nextPayload.langUnits);
   }
-  const inferredLangUnits = Array.isArray(result?.langUnits) ? result.langUnits : (payload.langUnits ?? []);
+  const inferredLangUnits = Array.isArray(result?.langUnits) ? result.langUnits : (nextPayload.langUnits ?? []);
   for (const langUnit of inferredLangUnits) {
     if (langUnit?._id && !knownLangUnitIds.has(langUnit._id)) {
       void inferLangUnitRoot(langUnit);
@@ -1379,6 +1771,11 @@ function closeEnteredAudSeg() {
     return;
   }
 
+  const audSegId = String(state.audSegItems[state.enteredAudSegIndex]?._id ?? '');
+  if (audSegId) {
+    flushSubSegSave(audSegId);
+  }
+
   state.enteredAudSegIndex = -1;
   state.audSegPlaybackLock = null;
   renderAudEps(state.audEpItems);
@@ -1501,44 +1898,78 @@ function getSelectedAudEpDataIndex() {
 }
 
 function renderDeleteDialog() {
-  if (state.deleteDialogIndex < 0) {
+  if (state.deleteDialogKind === 'audEp' && state.deleteDialogIndex < 0) {
+    return;
+  }
+
+  if (state.deleteDialogKind === 'audSeg' && !state.deleteDialogAudSegId) {
     return;
   }
 
   renderAudEps(state.audEpItems);
-  const dialogButton = audEpList.querySelector(
-    `.item[data-audep-index="${state.deleteDialogIndex}"] [data-delete-action="${state.deleteDialogChoice}"]`
-  );
+  const dialogButton =
+    state.deleteDialogKind === 'audSeg'
+      ? audEpList.querySelector(
+          `.item__segment[data-audseg-id="${CSS.escape(state.deleteDialogAudSegId)}"] [data-delete-action="${state.deleteDialogChoice}"]`
+        )
+      : audEpList.querySelector(
+          `.item[data-audep-index="${state.deleteDialogIndex}"] [data-delete-action="${state.deleteDialogChoice}"]`
+        );
   dialogButton?.focus();
 }
 
 function openDeleteDialog() {
+  const selectedAudSegItem = getSelectedAudSegItem();
+  if (selectedAudSegItem?._id) {
+    state.deleteDialogKind = 'audSeg';
+    state.deleteDialogIndex = -1;
+    state.deleteDialogAudSegId = selectedAudSegItem._id;
+    state.deleteDialogChoice = 'cancel';
+    renderDeleteDialog();
+    return;
+  }
+
   if (state.selectedAudEpIndex <= 0) {
     return;
   }
 
+  state.deleteDialogKind = 'audEp';
   state.deleteDialogIndex = state.selectedAudEpIndex;
+  state.deleteDialogAudSegId = '';
   state.deleteDialogChoice = 'cancel';
   renderDeleteDialog();
 }
 
 function closeDeleteDialog() {
-  if (state.deleteDialogIndex < 0) {
+  const dialogKind = state.deleteDialogKind;
+  if (dialogKind === 'audEp' && state.deleteDialogIndex < 0) {
     return;
   }
 
+  if (dialogKind === 'audSeg' && !state.deleteDialogAudSegId) {
+    return;
+  }
+
+  state.deleteDialogKind = 'audEp';
   state.deleteDialogIndex = -1;
+  state.deleteDialogAudSegId = '';
   state.deleteDialogChoice = 'cancel';
-  state.selectedAudSegIndex = -1;
+  if (dialogKind !== 'audSeg') {
+    state.selectedAudSegIndex = -1;
+  }
   renderAudEps(state.audEpItems);
 }
 
-function cycleDeleteDialogChoice() {
-  if (state.deleteDialogIndex < 0) {
+function cycleDeleteDialogChoice(step = 1) {
+  if (state.deleteDialogKind !== 'audSeg' && state.deleteDialogIndex < 0) {
     return;
   }
 
-  state.deleteDialogChoice = state.deleteDialogChoice === 'cancel' ? 'confirm' : 'cancel';
+  if (state.deleteDialogKind === 'audSeg' && !state.deleteDialogAudSegId) {
+    return;
+  }
+
+  state.deleteDialogChoice = step < 0 ? 'cancel' : 'confirm';
   renderDeleteDialog();
 }
 
@@ -1557,7 +1988,32 @@ async function confirmDeleteSelectedAudEp() {
   }
 
   state.deleteDialogIndex = -1;
+  state.deleteDialogKind = 'audEp';
+  state.deleteDialogAudSegId = '';
   state.deleteDialogChoice = 'cancel';
+  await reloadAudData();
+}
+
+async function confirmDeleteSelectedAudSeg() {
+  const audSegId = state.deleteDialogAudSegId;
+  if (!audSegId) {
+    return;
+  }
+
+  const response = await fetch(`/api/audSegs/items/${encodeURIComponent(audSegId)}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    return;
+  }
+
+  state.deleteDialogIndex = -1;
+  state.deleteDialogKind = 'audEp';
+  state.deleteDialogAudSegId = '';
+  state.deleteDialogChoice = 'cancel';
+  state.selectedAudSegIndex = -1;
+  state.enteredAudSegIndex = -1;
   await reloadAudData();
 }
 
@@ -1712,8 +2168,11 @@ function syncSettingsPopover() {
 
   settingsButton.setAttribute('aria-expanded', String(settingsOpen));
   settingsPopover.hidden = !settingsOpen;
-  if (settingsPopoverCheckbox instanceof HTMLInputElement) {
-    settingsPopoverCheckbox.checked = codexWordRootInferenceEnabled;
+  if (settingsPopoverWorkerCheckbox instanceof HTMLInputElement) {
+    settingsPopoverWorkerCheckbox.checked = codexWordRootInferenceEnabled;
+  }
+  if (settingsPopoverChinDisambiguationCheckbox instanceof HTMLInputElement) {
+    settingsPopoverChinDisambiguationCheckbox.checked = chinDisambiguationEnabled;
   }
 }
 
@@ -1722,7 +2181,7 @@ function toggleSettingsPopover(forceOpen) {
   syncSettingsPopover();
 }
 
-function showWorkerToast(message) {
+function showWorkerToast(message, durationMs = 1800) {
   if (!workerToast) {
     return;
   }
@@ -1734,22 +2193,26 @@ function showWorkerToast(message) {
     if (workerToast) {
       workerToast.hidden = true;
     }
-  }, 1800);
+  }, durationMs);
 }
 
-async function refreshCodexWorkerStatus() {
-  if (!codexWordRootInferenceEnabled) {
+async function refreshCodexWorkerStatus({ startup = false } = {}) {
+  if (startup) {
+    showWorkerToast('codex worker starting...', 3000);
+  } else if (!codexWordRootInferenceEnabled) {
     return;
   }
 
+  showWorkerToast('codex worker ping send...', 1200);
   const response = await fetch('/api/codex-worker/status');
   if (!response.ok) {
     return;
   }
 
+  showWorkerToast('codex worker ping seen', 1200);
   const status = await response.json();
   if (status?.primeComplete) {
-    showWorkerToast('test prime complete');
+    showWorkerToast(startup ? 'codex worker ready' : 'codex worker ready', 3000);
   }
 }
 
@@ -1757,10 +2220,17 @@ function setCodexWordRootInferenceEnabled(enabled) {
   codexWordRootInferenceEnabled = Boolean(enabled);
   localStorage.setItem('codex-word-root-inference-enabled', codexWordRootInferenceEnabled ? '1' : '0');
   syncSettingsPopover();
-  showWorkerToast(codexWordRootInferenceEnabled ? 'on detected' : 'off detected');
+  showWorkerToast(codexWordRootInferenceEnabled ? 'codex worker enabled' : 'codex worker disabled', 2500);
   if (codexWordRootInferenceEnabled) {
     void refreshCodexWorkerStatus();
   }
+}
+
+function setChinDisambiguationEnabled(enabled) {
+  chinDisambiguationEnabled = Boolean(enabled);
+  localStorage.setItem('chin-disambiguation-enabled', chinDisambiguationEnabled ? '1' : '0');
+  syncSettingsPopover();
+  showWorkerToast(chinDisambiguationEnabled ? 'chin disambiguation enabled' : 'chin disambiguation disabled', 2500);
 }
 
 async function inferLangUnitRoot(langUnit) {
@@ -1768,17 +2238,18 @@ async function inferLangUnitRoot(langUnit) {
     return;
   }
 
-  if (!/^[A-Za-z]+$/.test(String(langUnit.text ?? '').trim())) {
+  if (!/^[A-Za-z]+$/.test(String(getLangUnitText(langUnit) ?? '').trim())) {
     return;
   }
 
+  showWorkerToast('codex worker ping send...', 1200);
   const response = await fetch(`/api/langUnits/items/${encodeURIComponent(langUnit._id)}/root`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      context: String(langUnit.context ?? ''),
-      target: String(langUnit.text ?? ''),
-      substring: String(langUnit.text ?? ''),
+      context: getLangUnitContextText(langUnit),
+      target: String(getLangUnitText(langUnit) ?? ''),
+      substring: String(getLangUnitText(langUnit) ?? ''),
     }),
   });
 
@@ -1786,6 +2257,7 @@ async function inferLangUnitRoot(langUnit) {
     return;
   }
 
+  showWorkerToast('codex worker ping seen', 1200);
   const result = await response.json();
   const updated = result?.langUnit ?? result;
   if (updated?._id) {
@@ -1887,16 +2359,22 @@ document.addEventListener('keydown', (event) => {
   if (isFocusedSubSegInput()) {
     const editor = getFocusedSubSegEditor();
     const audSegId = editor?.dataset.subsegAudsegId || '';
-    const langUnitBubbleTargetActive = langUnitBubbleTargetIndexByAudSegId.get(audSegId) ?? -1;
+    if (isCtrlPlaybackToggle(event)) {
+      event.preventDefault();
+      toggleSelectedAudEpPlayback();
+      return;
+    }
+
+    if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
+      event.preventDefault();
+      closeEnteredAudSeg();
+      return;
+    }
 
     if (event.key === 'Enter') {
-      if (editor && langUnitBubbleTargetActive >= 0) {
-        event.preventDefault();
-        return;
-      }
-
       if (editor && wrapSelectedSubSegText(editor)) {
         event.preventDefault();
+        return;
       }
       return;
     }
@@ -1906,52 +2384,51 @@ document.addEventListener('keydown', (event) => {
         event.preventDefault();
         return;
       }
-
-      if (editor && langUnitBubbleTargetActive >= 0) {
-        event.preventDefault();
-      }
-      return;
     }
 
-    if (
-      event.ctrlKey &&
-      !event.metaKey &&
-      !event.altKey &&
-      !event.shiftKey &&
-      (event.key === 'ArrowLeft' || event.key === 'ArrowRight')
-    ) {
-      if (editor && cycleLangUnitBubbleTarget(editor, event.key === 'ArrowRight' ? 1 : -1)) {
-        event.preventDefault();
-      }
-      return;
-    }
-
-    if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
-      if (editor && langUnitBubbleTargetIndexByAudSegId.get(editor.dataset.subsegAudsegId || '') !== -1) {
-        langUnitBubbleTargetIndexByAudSegId.set(editor.dataset.subsegAudsegId || '', -1);
-        syncLangUnitBubbleTarget(editor, true);
-        event.preventDefault();
-        return;
-      }
-      event.preventDefault();
-      closeEnteredAudSeg();
-      return;
-    }
-
-    if (isCtrlPlaybackToggle(event)) {
-      event.preventDefault();
-      toggleSelectedAudEpPlayback();
-      return;
-    }
-
-    if (editor && langUnitBubbleTargetActive >= 0) {
-      event.preventDefault();
-      return;
-    }
     return;
   }
 
-  if (state.deleteDialogIndex >= 0) {
+  if (state.deleteDialogKind === 'audSeg' || state.deleteDialogIndex >= 0) {
+    if (state.deleteDialogKind === 'audSeg') {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        cycleDeleteDialogChoice(event.shiftKey ? -1 : 1);
+        return;
+      }
+
+      if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey) {
+        if (event.key === 'Backspace') {
+          event.preventDefault();
+          closeDeleteDialog();
+          return;
+        }
+
+        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+          event.preventDefault();
+          cycleDeleteDialogChoice(event.key === 'ArrowRight' ? 1 : -1);
+        }
+        return;
+      }
+
+      if (event.key === 'Enter' || isSpaceKey(event)) {
+        event.preventDefault();
+        if (state.deleteDialogChoice === 'confirm') {
+          confirmDeleteSelectedAudSeg();
+        } else {
+          closeDeleteDialog();
+        }
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        closeDeleteDialog();
+      }
+
+      return;
+    }
+
     if (event.key === 'Tab') {
       event.preventDefault();
       cycleDeleteDialogChoice(event.shiftKey ? -1 : 1);
@@ -2031,6 +2508,12 @@ document.addEventListener('keydown', (event) => {
               )
             );
       renderAudEps(state.audEpItems);
+      return;
+    }
+
+    if (event.key === 'Delete' && getSelectedAudSegItem()) {
+      event.preventDefault();
+      openDeleteDialog();
       return;
     }
 
@@ -2142,10 +2625,18 @@ audEpList.addEventListener('click', (event) => {
   const deleteButton = event.target instanceof Element ? event.target.closest('[data-delete-action]') : null;
   if (deleteButton) {
     const action = deleteButton.dataset.deleteAction;
-    if (action === 'confirm') {
-      confirmDeleteSelectedAudEp();
+    if (state.deleteDialogKind === 'audSeg') {
+      if (action === 'confirm') {
+        confirmDeleteSelectedAudSeg();
+      } else {
+        closeDeleteDialog();
+      }
     } else {
-      closeDeleteDialog();
+      if (action === 'confirm') {
+        confirmDeleteSelectedAudEp();
+      } else {
+        closeDeleteDialog();
+      }
     }
     return;
   }
@@ -2226,8 +2717,12 @@ settingsButton?.addEventListener('click', (event) => {
   toggleSettingsPopover();
 });
 
-settingsPopoverCheckbox?.addEventListener('change', () => {
-  setCodexWordRootInferenceEnabled(settingsPopoverCheckbox.checked);
+settingsPopoverWorkerCheckbox?.addEventListener('change', () => {
+  setCodexWordRootInferenceEnabled(settingsPopoverWorkerCheckbox.checked);
+});
+
+settingsPopoverChinDisambiguationCheckbox?.addEventListener('change', () => {
+  setChinDisambiguationEnabled(settingsPopoverChinDisambiguationCheckbox.checked);
 });
 
 document.addEventListener('click', (event) => {
@@ -2240,8 +2735,8 @@ document.addEventListener('click', (event) => {
 });
 
 saveButton.addEventListener('click', async () => {
-  const text = noteInput.value.trim();
-  if (!text || !state.activeSelector) {
+  const text = noteInput.value;
+  if (!text.trim() || !state.activeSelector) {
     return;
   }
 
@@ -2308,7 +2803,5 @@ fetch('/api/notes')
   });
 
 syncSettingsPopover();
-if (codexWordRootInferenceEnabled) {
-  void refreshCodexWorkerStatus();
-}
+void refreshCodexWorkerStatus({ startup: true });
 reloadAudData();

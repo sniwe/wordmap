@@ -1,154 +1,19 @@
 [
   {
-    "_id": "688adf9c-7b6c-485a-931b-333e02611ba9",
-    "text": "stupid monkey",
-    "refs": [
+    "_id": "1c8d399a-b150-4144-98fa-da66dbb84faa",
+    "text": "test",
+    "instances": [
       {
-        "audSegId": "0-2",
-        "subSegId": "e4067440-c85a-43e8-8cd6-144ff38c6d88"
+        "audSegId": "92543c4e-2d1a-4c9b-b3dd-f6fabe5862eb",
+        "subSegId": "4586a7cd-b7e9-4c7a-af24-c6aa94779b41",
+        "remote": false,
+        "context": {
+          "text": "this is a test",
+          "type": "engPhrase"
+        }
       }
     ],
-    "createdAt": "2026-07-03T08:18:42.2438765+08:00",
-    "updatedAt": "2026-07-03T08:18:42.2438765+08:00",
-    "context": ""
-  },
-  {
-    "_id": "7e3f7347-01e2-4a35-8283-afeb165874db",
-    "text": "best of times",
-    "refs": [
-      {
-        "audSegId": "0-2",
-        "subSegId": "e4067440-c85a-43e8-8cd6-144ff38c6d88"
-      }
-    ],
-    "createdAt": "2026-07-03T08:18:42.2438765+08:00",
-    "updatedAt": "2026-07-03T08:18:42.2438765+08:00",
-    "context": ""
-  },
-  {
-    "_id": "9abd5bd4-836f-4603-9e6b-ff8de5e030ea",
-    "text": "dummmmb",
-    "refs": [
-      {
-        "audSegId": "f0a5c162-2ce4-40bc-ab57-8d1bdcf8c9e1",
-        "subSegId": "a40488a5-381b-4df9-b072-44ef3a305b8e"
-      }
-    ],
-    "createdAt": "2026-07-03T08:18:42.2438765+08:00",
-    "updatedAt": "2026-07-03T08:18:42.2438765+08:00",
-    "context": ""
-  },
-  {
-    "_id": "ee49fb64-1ad2-4e84-b5a8-f128de4ebf3f",
-    "text": "test line",
-    "refs": [
-      {
-        "audSegId": "2df81df9-aa14-49d9-8e7d-9127a3b57491",
-        "subSegId": "59cc1536-8a67-4f87-8552-8f01348b773c"
-      }
-    ],
-    "createdAt": "2026-07-03T00:37:12.135Z",
-    "updatedAt": "2026-07-03T00:37:12.135Z",
-    "context": ""
-  },
-  {
-    "_id": "0ae2dbfd-d8b9-41b5-999c-b58c3e227079",
-    "text": "李nannan",
-    "createdAt": "2026-07-03T00:42:27.175Z",
-    "updatedAt": "2026-07-03T05:51:48.815Z",
-    "context": "this is 李nannan",
-    "refs": [
-      {
-        "audSegId": "d57e8720-777d-4494-8b97-ba6b9ce8f559",
-        "subSegId": "39f2782f-0216-4fab-bc2c-d06e8969765b"
-      },
-      {
-        "audSegId": "f7c63672-2eff-4b80-aa8f-6942fab22b95",
-        "subSegId": "589d2572-fe1d-4c17-87a4-a448fe3337ed"
-      }
-    ]
-  },
-  {
-    "_id": "5e92de5b-cc6a-4663-b139-8222642a9611",
-    "text": "\"The Age of the Brand\" ",
-    "context": "published an article called \"The Age of the Brand\"  this is 李nannan",
-    "createdAt": "2026-07-03T01:32:53.975Z",
-    "updatedAt": "2026-07-03T05:51:15.822Z",
-    "refs": [
-      {
-        "audSegId": "f7c63672-2eff-4b80-aa8f-6942fab22b95",
-        "subSegId": "353ab65d-7938-4b42-84fa-4c899fdf0e1d"
-      }
-    ]
-  },
-  {
-    "_id": "e461c5b6-f5bd-4d1f-8c4d-2300bf2d601e",
-    "text": "published",
-    "context": "published an article called \"The Age of the Brand\"  this is 李nannan",
-    "createdAt": "2026-07-03T05:07:32.738Z",
-    "updatedAt": "2026-07-03T05:51:15.822Z",
-    "refs": [
-      {
-        "audSegId": "f7c63672-2eff-4b80-aa8f-6942fab22b95",
-        "subSegId": "353ab65d-7938-4b42-84fa-4c899fdf0e1d"
-      }
-    ],
-    "root": "publish"
-  },
-  {
-    "_id": "48dce736-e9b8-40e0-a27e-df6b4ae9cd39",
-    "text": "newest",
-    "context": "a newest item now lalalathis is the greatest shit i'eve ever seenyou are a faggy bitch boy",
-    "createdAt": "2026-07-03T05:11:01.988Z",
-    "updatedAt": "2026-07-03T05:22:07.580Z",
-    "refs": [
-      {
-        "audSegId": "9bed2996-ec32-4985-849e-d43b277c6100",
-        "subSegId": "64e9a632-676f-4e73-a545-da684b7630fd"
-      }
-    ],
-    "root": "new"
-  },
-  {
-    "_id": "7c195ebf-445b-4623-bfc4-8308a134a383",
-    "text": "greatest",
-    "context": "a newest item now lalalathis is the greatest shit i'eve ever seenyou are a faggy bitch boy",
-    "createdAt": "2026-07-03T05:20:41.003Z",
-    "updatedAt": "2026-07-03T05:22:07.580Z",
-    "refs": [
-      {
-        "audSegId": "9bed2996-ec32-4985-849e-d43b277c6100",
-        "subSegId": "64e9a632-676f-4e73-a545-da684b7630fd"
-      }
-    ],
-    "root": "greatest"
-  },
-  {
-    "_id": "a5e1e83e-b9ec-4155-98b8-3affe24d3888",
-    "text": "faggy",
-    "context": "a newest item now lalalathis is the greatest shit i'eve ever seenyou are a faggy bitch boy",
-    "createdAt": "2026-07-03T05:22:07.580Z",
-    "updatedAt": "2026-07-03T05:22:09.639Z",
-    "refs": [
-      {
-        "audSegId": "9bed2996-ec32-4985-849e-d43b277c6100",
-        "subSegId": "64e9a632-676f-4e73-a545-da684b7630fd"
-      }
-    ],
-    "root": "fag"
-  },
-  {
-    "_id": "5ec49818-ab39-4f94-b8f1-1d67f29a40fa",
-    "text": "卑鄙",
-    "context": "卑鄙小人",
-    "createdAt": "2026-07-03T05:35:17.529Z",
-    "updatedAt": "2026-07-03T05:35:20.105Z",
-    "refs": [
-      {
-        "audSegId": "75751bd3-043e-43b8-84e2-07afbd7251e4",
-        "subSegId": "03cb0493-d74a-4e4c-a2d3-bfb0ad238f11"
-      }
-    ],
-    "root": "卑鄙"
+    "createdAt": "2026-07-07T02:40:47.883Z",
+    "updatedAt": "2026-07-07T02:40:47.886Z"
   }
 ]

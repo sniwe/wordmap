@@ -9,10 +9,7 @@
       "text": {
         "type": "string"
       },
-      "context": {
-        "type": "string"
-      },
-      "refs": {
+      "instances": {
         "type": "array",
         "items": {
           "type": "object",
@@ -22,8 +19,40 @@
             },
             "subSegId": {
               "type": "string"
+            },
+            "remote": {
+              "type": "boolean"
+            },
+            "context": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "chinPhrase",
+                    "chinWord",
+                    "chinFuzzWord",
+                    "engPhrase",
+                    "engWord"
+                  ]
+                }
+              },
+              "required": [
+                "text",
+                "type"
+              ],
+              "additionalProperties": true
             }
           },
+          "required": [
+            "audSegId",
+            "subSegId",
+            "remote",
+            "context"
+          ],
           "additionalProperties": true
         }
       },
