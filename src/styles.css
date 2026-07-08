@@ -44,6 +44,13 @@ body {
   font-size: 12px;
   line-height: 1.25;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings-popover[hidden] {
+  display: none;
 }
 
 .settings-popover__item {
@@ -52,6 +59,20 @@ body {
   gap: 6px;
   cursor: default;
   user-select: none;
+}
+
+.settings-popover__action {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-popover__action:hover {
+  text-decoration: underline;
 }
 
 .worker-toast {
@@ -125,7 +146,8 @@ body {
   outline-offset: 2px;
 }
 
-.item--delete-confirm.is-targeted {
+.item--delete-confirm.is-targeted,
+.item__segment--delete-confirm.is-targeted {
   outline-color: #c31919;
 }
 
@@ -352,6 +374,22 @@ body {
 .langunit-bubble.is-targeted {
   outline: 3px solid #0b63ce;
   outline-offset: 2px;
+}
+
+.langunit-bubble[data-langunit-remote="1"] {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(11, 99, 206, 0.75);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.langunit-connector {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgba(11, 99, 206, 0.75);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
 }
 
 .langunit-bubble::selection,

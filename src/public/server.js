@@ -296,7 +296,7 @@ function normalizeLangUnitItem(item, now = new Date().toISOString()) {
   const normalized = {
     ...item,
     _id,
-    text: String(item.text ?? ''),
+    text: String(item.text ?? '').trim(),
     instances,
     createdAt: item.createdAt || now,
     updatedAt: item.updatedAt || now,
@@ -386,6 +386,40 @@ function normalizeSubSegContentForStorage(content) {
   return [normalized, changed];
 }
 
+function rewriteSubSegContentWithoutLangUnits(content, langUnitsById = new Map()) {
+  const nextContent = [];
+  let changed = false;
+
+  for (const token of Array.isArray(content) ? content : []) {
+    if (!token || typeof token !== 'object') {
+      nextContent.push(token);
+      continue;
+    }
+
+    if (token.type !== 'langUnitRef') {
+      nextContent.push(token);
+      continue;
+    }
+
+    const langUnitId = String(token.langUnitId ?? '').trim();
+    if (!langUnitId) {
+      changed = true;
+      continue;
+    }
+
+    const text = String(token.text ?? langUnitsById.get(langUnitId)?.text ?? '');
+    if (!text) {
+      changed = true;
+      continue;
+    }
+
+    nextContent.push({ type: 'text', text });
+    changed = true;
+  }
+
+  return [nextContent, changed];
+}
+
 function normalizeSubSegItemsForStorage(items) {
   const normalized = [];
   let changed = false;
@@ -430,6 +464,7 @@ function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
 
     let plainText = '';
     const seenLangUnitIds = new Map();
+    const pendingInstances = [];
     for (const token of Array.isArray(subSegItem?.content) ? subSegItem.content : []) {
       if (!token || typeof token !== 'object' || token.type !== 'langUnitRef') {
         if (token?.type === 'text') {
@@ -458,16 +493,21 @@ function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
         : [];
       const existingInstance = existingInstances[occurrenceIndex] ?? existingInstances[0] ?? null;
       const instances = instancesById.get(langUnitId) ?? [];
-      instances.push({
+      const instance = {
         audSegId,
         subSegId,
         remote: token.remote === true,
         ...(String(existingInstance?.cycleGroupId ?? '').trim() ? { cycleGroupId: String(existingInstance.cycleGroupId).trim() } : {}),
         start,
         end,
-        context: normalizeLangUnitContext(getLangUnitBubbleContext(plainText, start, end)),
-      });
+      };
+      instances.push(instance);
+      pendingInstances.push(instance);
       instancesById.set(langUnitId, instances);
+    }
+
+    for (const instance of pendingInstances) {
+      instance.context = normalizeLangUnitContext(getLangUnitBubbleContext(plainText, instance.start, instance.end));
     }
   }
 
@@ -487,6 +527,7 @@ function collectLangUnitCapturesById(subSegItems) {
     let captureIndex = 0;
     const seenLangUnitIds = new Set();
     let plainText = '';
+    const pendingCaptures = [];
     for (const token of Array.isArray(subSegItem?.content) ? subSegItem.content : []) {
       const langUnitId = String(token?.langUnitId ?? '').trim();
       if (token?.type === 'text') {
@@ -504,17 +545,26 @@ function collectLangUnitCapturesById(subSegItems) {
       plainText += bubbleText;
       const end = plainText.length;
       const captures = capturesById.get(langUnitId) ?? [];
-      captures.push({
+      const capture = {
         audSegId,
         subSegId,
         text: bubbleText,
         captureIndex,
         remote,
-        ...(captureIndex === 0 ? { context: createLangUnitContext(getLangUnitBubbleContext(plainText, start, end)) } : {}),
-      });
+        start,
+        end,
+      };
+      captures.push(capture);
+      pendingCaptures.push(capture);
       capturesById.set(langUnitId, captures);
       seenLangUnitIds.add(langUnitId);
       captureIndex += 1;
+    }
+
+    for (const capture of pendingCaptures) {
+      if (capture.captureIndex === 0) {
+        capture.context = createLangUnitContext(getLangUnitBubbleContext(plainText, capture.start, capture.end));
+      }
     }
   }
 
@@ -708,7 +758,7 @@ function normalizeLangUnitCaptures(captures) {
 
     const audSegId = String(capture.audSegId ?? '').trim();
     const subSegId = String(capture.subSegId ?? '').trim();
-    const text = String(capture.text ?? '');
+    const text = String(capture.text ?? '').trim();
     const captureIndex = Number.isInteger(capture.captureIndex) && capture.captureIndex >= 0 ? capture.captureIndex : 0;
     const remote = capture.remote === true;
     const start = Number.isFinite(capture.start) && capture.start >= 0 ? capture.start : null;
@@ -801,7 +851,14 @@ function getLangUnitText(item) {
 
 function getLangUnitContext(item) {
   const instanceContext = Array.isArray(item?.instances)
-    ? item.instances.find((instance) => instance?.context)?.context
+    ? item.instances.reduce((best, instance) => {
+      const context = instance?.context;
+      if (!context || typeof context !== 'object' || Array.isArray(context)) {
+        return best;
+      }
+
+      return String(context.text ?? '').length > String(best?.text ?? '').length ? context : best;
+    }, null)
     : null;
   if (instanceContext && typeof instanceContext === 'object' && !Array.isArray(instanceContext)) {
     return normalizeLangUnitContext(instanceContext);
@@ -974,7 +1031,7 @@ function sortLangUnitItems(items) {
 
 function normalizeLangUnitItems(items, capturesById = new Map()) {
   const existingItemsByText = new Map(
-    normalizeLangUnitItemsForStorage(flattenLangUnitItems(items))[0].map((item) => [String(item?.text ?? ''), item])
+    normalizeLangUnitItemsForStorage(flattenLangUnitItems(items))[0].map((item) => [String(item?.text ?? '').trim(), item])
   );
   const groupedByText = new Map();
   const textOrder = [];
@@ -985,7 +1042,7 @@ function normalizeLangUnitItems(items, capturesById = new Map()) {
       continue;
     }
 
-    const text = String(normalizedCaptures[0]?.text ?? '');
+    const text = String(normalizedCaptures[0]?.text ?? '').trim();
     let group = groupedByText.get(text);
     if (!group) {
       group = {
@@ -1610,6 +1667,48 @@ async function handleLangUnitApi(req, res, url) {
     return true;
   }
 
+  if (req.method === 'DELETE' && url.pathname === '/api/langUnits/items') {
+    const subSegItems = await readSubSegItems();
+    const langUnitItems = await readLangUnitItems();
+    const langUnitsById = new Map(langUnitItems.map((item) => [String(item?._id ?? ''), item]));
+    const nextSubSegItems = [];
+
+    for (const item of Array.isArray(subSegItems) ? subSegItems : []) {
+      if (!item || typeof item !== 'object') {
+        nextSubSegItems.push(item);
+        continue;
+      }
+
+      const content = Array.isArray(item.content) ? item.content : null;
+      if (!content) {
+        nextSubSegItems.push(item);
+        continue;
+      }
+
+      const [nextContent, contentChanged] = rewriteSubSegContentWithoutLangUnits(content, langUnitsById);
+      const nextText = nextContent
+        .map((token) => (token?.type === 'text' ? String(token.text ?? '') : ''))
+        .join('');
+
+      if (!contentChanged) {
+        nextSubSegItems.push(item);
+        continue;
+      }
+
+      nextSubSegItems.push({
+        ...item,
+        content: nextContent,
+        text: nextText,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+
+    await writeSubSegItems(sortSubSegItems(nextSubSegItems));
+    await writeLangUnitItems([]);
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ langUnits: [] }));
+    return true;
+  }
+
   if (req.method === 'POST') {
     const match = /^\/api\/langUnits\/items\/([^/]+)\/root$/.exec(url.pathname);
     if (!match) {
@@ -1654,6 +1753,13 @@ async function handleLangUnitApi(req, res, url) {
 async function handleSubSegApi(req, res, url) {
   if (req.method === 'GET' && url.pathname === '/api/subSegs/items') {
     send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(sortSubSegItems(await readSubSegItems())));
+    return true;
+  }
+
+  if (req.method === 'DELETE' && url.pathname === '/api/subSegs/items') {
+    await writeSubSegItems([]);
+    await rebuildLangUnitItems();
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSegs: [] }));
     return true;
   }
 

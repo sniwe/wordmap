@@ -70,6 +70,9 @@
 | `subSeg save debounce` | The 500ms delayed save that persists `subSeg` input text to the `subSegs` collection for the selected `audSeg`. |
 | `subSeg save no rerender` | Successful debounced `subSeg` saves update persistence and in-memory state without rerendering the entered `audEp` subtree, so focus stays on the input. |
 | `subSeg line break persistence` | The rule that newline characters in a saved `subSeg` editor value are preserved and rerendered as visible line breaks instead of being trimmed away. |
+| `subSeg bulk clear` | The settings action that deletes every persisted `subSeg` record and refreshes the entered `audEp` view. |
+| `subSeg draft reset` | The settings action that clears unsaved in-memory `subSeg` draft state and cancels pending saves. |
+| `langUnit bulk clear` | The settings action that clears all persisted `langUnit` records and rewrites `subSeg` content back to plain text. |
 | `subSeg unload flush` | The `pagehide` fallback that sends any pending debounced `subSeg` text to persistence before a page reload or navigation. |
 | `dev reload tone` | The short 880Hz chime that plays on Vite dev reloads once the browser has allowed audio playback. |
 | `subSeg playback hotkey` | `Ctrl+Space` while focused in a `subSeg` input toggles audio playback and other key combinations are ignored by the global shortcut layer. |
