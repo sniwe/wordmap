@@ -136,12 +136,9 @@ body {
   overflow: visible;
 }
 
-.item.is-targeted {
-  outline: 3px solid #0b63ce;
-  outline-offset: 2px;
-}
-
-.item__segment.is-targeted {
+.item.is-targeted,
+.item__segment.is-targeted,
+.langunit-bubble.is-targeted {
   outline: 3px solid #0b63ce;
   outline-offset: 2px;
 }
@@ -328,6 +325,11 @@ body {
   text-align: left;
 }
 
+.item__subseg-input--placeholder:empty::before {
+  content: attr(data-placeholder);
+  opacity: 0.45;
+}
+
 .item__subseg-input:focus {
   border-color: #0b63ce;
 }
@@ -369,11 +371,6 @@ body {
 .langunit-bubble:not([data-langunit-count])::after,
 .langunit-bubble[data-langunit-count="1"]::after {
   content: none;
-}
-
-.langunit-bubble.is-targeted {
-  outline: 3px solid #0b63ce;
-  outline-offset: 2px;
 }
 
 .langunit-bubble[data-langunit-remote="1"] {

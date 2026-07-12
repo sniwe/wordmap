@@ -1,26 +1,13 @@
 [
   {
-    "_id": "4d1e7f52-55c2-47ec-b0fc-3e3f86303f74",
+    "_id": "cc4f9891-47df-4c59-9af1-71a46ac7ca80",
     "text": "test",
-    "instances": [
-      {
-        "audSegId": "b4ae0f63-d7c5-4825-a686-806e9fc38e90",
-        "subSegId": "bc977dd5-fe34-4a6f-8f94-bd5998e19143",
-        "remote": false,
-        "cycleGroupId": "4d1e7f52-55c2-47ec-b0fc-3e3f86303f74",
-        "start": 10,
-        "end": 14,
-        "context": {
-          "text": "this is a test line",
-          "type": "engPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "test",
       "type": "engWord"
     },
-    "createdAt": "2026-07-12T02:18:32.819Z",
-    "updatedAt": "2026-07-12T02:29:30.612Z"
+    "createdAt": "2026-07-12T07:08:46.696Z",
+    "updatedAt": "2026-07-12T07:08:47.285Z"
   }
 ]

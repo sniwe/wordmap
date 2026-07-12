@@ -26,6 +26,9 @@
 | `shift-release cancel` | The auto-removal of a tentative `audSeg` draft when `Shift` is released without committing it with `Shift+Space`. |
 | `entered audSeg state` | The locked `audSeg` row mutation applied after Enter, distinct from the temporary targeted state used while cycling with arrows. |
 | `subSeg list` | The one-row list rendered under an entered `audSeg`'s time text, currently seeded with a single ethereal editor item. |
+| `subSeg root row` | The persistent `subSeg` editor row with `isRoot: true` that owns the main text for an entered `audSeg`. |
+| `subSeg cycle row` | The non-root `subSeg` editor row with `isRoot: false` that appears when a `langUnit` target is active. |
+| `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and cycle rows each need their own `subSegId`. |
 | `subSeg editor` | The contenteditable host inside the seed `subSeg` item that accepts text, saves on debounce, and keeps Enter as a newline. |
 | `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |

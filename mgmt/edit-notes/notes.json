@@ -109,6 +109,18 @@
           "missing": "",
           "replacedBy": []
         }
+      },
+      {
+        "text": "let cycle-targeting of langUnit trigger render of a second subSeg item to subSeg list. let this second subSeg initially have input collapsed and show placeholder text \"no subSeg yet..\", indicating that the subSeg linked to this langUnit is not yet initialized.\nenter press on targeted langUnit bubble will trigger initialization which involves: 1) creation of a new linked subSeg item. these non-top level subSegs will carry a \"isRoot\" property of value = false to distinguish them from the top level subSegs defined in code up until this point. we will update existing subSeg creation code so that top-level subSegs have the appropriate isRoot=true property;\n2) the placeholder will collapse and input on subSeg will expand;\n3) ctrl+backspace from subSeg input on non-root subSeg will collapse pass focus back to the root-level subSeg's input;\nctrl+backspace removign cycle targeting from langUnit bubble will cause de-population of the non-root subSeg from subSeg list;",
+        "createdAt": "2026-07-12T02:56:18.399Z",
+        "applied": true,
+        "appliedAt": "2026-07-12T10:57:18.3812532+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
       }
     ]
   },

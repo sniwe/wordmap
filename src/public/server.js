@@ -1581,6 +1581,12 @@ function sortSubSegItems(items) {
       return audSegA.localeCompare(audSegB);
     }
 
+    const rootA = a?.isRoot !== false;
+    const rootB = b?.isRoot !== false;
+    if (rootA !== rootB) {
+      return rootA ? -1 : 1;
+    }
+
     const createdA = Date.parse(a?.createdAt ?? '');
     const createdB = Date.parse(b?.createdAt ?? '');
     if (!Number.isNaN(createdA) && !Number.isNaN(createdB) && createdA !== createdB) {
@@ -1947,9 +1953,25 @@ async function handleSubSegApi(req, res, url) {
   }
 
   if (req.method === 'DELETE' && url.pathname === '/api/subSegs/items') {
-    await writeSubSegItems([]);
+    let payload = {};
+    try {
+      payload = JSON.parse(await readBody(req) || '{}');
+    } catch {
+      payload = {};
+    }
+
+    const subSegId = String(payload.subSegId ?? '').trim();
+    if (!subSegId) {
+      await writeSubSegItems([]);
+      await rebuildLangUnitItems();
+      send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSegs: [] }));
+      return true;
+    }
+
+    const subSegItems = await readSubSegItems();
+    await writeSubSegItems(sortSubSegItems(subSegItems.filter((item) => String(item?._id ?? '') !== subSegId)));
     await rebuildLangUnitItems();
-    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSegs: [] }));
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ deletedId: subSegId }));
     return true;
   }
 
@@ -1962,19 +1984,25 @@ async function handleSubSegApi(req, res, url) {
       return true;
     }
 
+    const subSegId = String(payload.subSegId ?? '').trim();
     const audSegId = String(payload.audSegId ?? '').trim();
     const content = Array.isArray(payload.content) ? payload.content : null;
     const text = String(payload.text ?? '');
+    const isRoot = payload.isRoot !== false;
+    const linkTargetLangUnitId = String(payload.linkTargetLangUnitId ?? '').trim();
     const disambiguateChinContexts = payload.disambiguateChinContexts === true;
-    if (!audSegId) {
-      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'audSegId is required' }));
+    if (!subSegId && !audSegId) {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'subSegId or audSegId is required' }));
       return true;
     }
 
     const items = await readSubSegItems();
-    const index = items.findIndex((item) => item?.audSegId === audSegId);
+    const index = subSegId
+      ? items.findIndex((item) => String(item?._id ?? '') === subSegId)
+      : items.findIndex((item) => item?.audSegId === audSegId && item?.isRoot !== false);
     const [normalizedContent] = normalizeSubSegContentForStorage(content ?? []);
-    if ((content && !content.length) || (!content && !text.trim())) {
+    const keepEmpty = isRoot === false;
+    if (((content && !content.length) || (!content && !text.trim())) && !keepEmpty) {
       if (index >= 0) {
         items.splice(index, 1);
         await writeSubSegItems(sortSubSegItems(items));
@@ -1986,8 +2014,10 @@ async function handleSubSegApi(req, res, url) {
     }
 
     const saved = {
-      _id: index >= 0 ? items[index]._id : randomUUID(),
+      _id: index >= 0 ? items[index]._id : (subSegId || randomUUID()),
       audSegId,
+      isRoot,
+      ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),
       ...(Array.isArray(normalizedContent) ? { content: normalizedContent } : {}),
       text,
       createdAt: index >= 0 ? items[index].createdAt : new Date().toISOString(),
@@ -2006,7 +2036,7 @@ async function handleSubSegApi(req, res, url) {
     }
     const updatedLangUnits = await rebuildLangUnitItems();
     const refreshedSubSegItems = await readSubSegItems();
-    const refreshedSubSeg = refreshedSubSegItems.find((item) => String(item?.audSegId ?? '') === audSegId) ?? saved;
+    const refreshedSubSeg = refreshedSubSegItems.find((item) => String(item?._id ?? '') === saved._id) ?? saved;
     if (disambiguateChinContexts) {
       void maybeDisambiguateLangUnitContexts(updatedLangUnits, true).catch((error) => {
         process.stderr.write(`[codex-worker] ${error.message}\n`);

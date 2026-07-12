@@ -1,27 +1,41 @@
 [
   {
-    "_id": "bc977dd5-fe34-4a6f-8f94-bd5998e19143",
-    "audSegId": "b4ae0f63-d7c5-4825-a686-806e9fc38e90",
+    "_id": "fa022319-466c-4307-82be-e20f298265f4",
+    "audSegId": "7a2cd8b2-1747-404b-a5d1-eee05205f13a",
+    "isRoot": false,
+    "linkTargetLangUnitId": "cc4f9891-47df-4c59-9af1-71a46ac7ca80",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-12T07:08:33.395Z",
+    "updatedAt": "2026-07-12T07:08:47.282Z"
+  },
+  {
+    "_id": "9b40e1a9-3f0a-4c23-901d-36a776dccfd6",
+    "audSegId": "7a2cd8b2-1747-404b-a5d1-eee05205f13a",
+    "isRoot": false,
     "content": [
       {
         "type": "text",
-        "text": "this is a "
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "4d1e7f52-55c2-47ec-b0fc-3e3f86303f74"
-      },
-      {
-        "type": "text",
-        "text": " line"
-      },
-      {
-        "type": "text",
-        "text": "\nsecond test line feor new line render check"
+        "text": "input on new subSeg"
       }
     ],
-    "text": "this is a test line\nsecond test line feor new line render check",
-    "createdAt": "2026-07-12T02:18:26.925Z",
-    "updatedAt": "2026-07-12T02:29:30.606Z"
+    "text": "input on new subSeg",
+    "createdAt": "2026-07-12T07:08:54.457Z",
+    "updatedAt": "2026-07-12T07:08:54.457Z"
+  },
+  {
+    "_id": "b18b7391-032d-428c-890e-4dd58904bd1d",
+    "audSegId": "7a2cd8b2-1747-404b-a5d1-eee05205f13a",
+    "isRoot": false,
+    "linkTargetLangUnitId": "cc4f9891-47df-4c59-9af1-71a46ac7ca80",
+    "content": [
+      {
+        "type": "text",
+        "text": "input on new subSeg"
+      }
+    ],
+    "text": "input on new subSeg",
+    "createdAt": "2026-07-12T07:09:02.197Z",
+    "updatedAt": "2026-07-12T07:09:02.197Z"
   }
 ]
