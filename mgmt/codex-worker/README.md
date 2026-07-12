@@ -8,6 +8,7 @@ One request is a JSON object with:
 
 ```json
 {
+  "task": "root | contextType",
   "context": "string",
   "target": "string",
   "substring": "string"
@@ -27,6 +28,8 @@ Success goes to stdout only:
 ```json
 { "res": "langUnitRoot" }
 ```
+
+For `task: "contextType"`, `res` is `chinWord` or `chinPhrase`.
 
 Diagnostics go to stderr.
 

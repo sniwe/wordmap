@@ -3,7 +3,7 @@ import { createInterface } from 'node:readline';
 import { mkdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import { buildPrompt, normalizeLanguageUnitRoot, normalizeRequest, parseEnvelope } from './core.js';
+import { buildPrompt, normalizeLanguageUnitContextType, normalizeLanguageUnitRoot, normalizeRequest, parseEnvelope } from './core.js';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const workerDir = resolve(moduleDir, '..');
@@ -406,7 +406,9 @@ async function resolveRequest(payload) {
   await ensureCodexServer();
 
   const envelope = await runTurn(prompt);
-  return { res: normalizeLanguageUnitRoot(request, envelope.res) };
+  return request.task === 'contextType'
+    ? { res: normalizeLanguageUnitContextType(request, envelope.res) }
+    : { res: normalizeLanguageUnitRoot(request, envelope.res) };
 }
 
 async function handleRequest(payload) {

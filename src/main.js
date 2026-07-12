@@ -777,7 +777,9 @@ function renderSubSegList(audSegItem) {
   const value = subSegDraftTextByAudSegId.get(audSegId);
   const renderedContent = subSegItem?.content ? renderSubSegContentTokens(subSegItem.content, subSegItem?._id ?? '') : '';
   const hasLangUnitRefs = Array.isArray(subSegItem?.content) && subSegItem.content.some((token) => token?.type === 'langUnitRef');
-  const content = value ?? (hasLangUnitRefs ? renderedContent : sanitizeSubSegMarkup(subSegItem?.text ?? '') || renderedContent);
+  const content = normalizeSubSegEditorMarkup(
+    value ?? (hasLangUnitRefs ? renderedContent : sanitizeSubSegMarkup(subSegItem?.text ?? '') || renderedContent)
+  );
   return `
     <ul class="item__subsegs" aria-label="subSegs">
       <li class="item__subseg item__subseg--seed">
@@ -956,6 +958,143 @@ function createLangUnitContext(text) {
   };
 }
 
+function countChineseCharacters(value) {
+  return String(value ?? '').match(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/gu)?.length ?? 0;
+}
+
+function isPunctuationOrSymbolOnly(value) {
+  const text = String(value ?? '').trim();
+  return Boolean(text) && /^[\p{P}\p{S}\s]+$/u.test(text) && !/[A-Za-z0-9\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u.test(text);
+}
+
+function normalizeLangUnitTargetType(type) {
+  const value = String(type ?? '').trim();
+  if (value === 'engPart') {
+    return 'engWordPart';
+  }
+
+  return value === 'chinChar' ||
+    value === 'chinWord' ||
+    value === 'chinPhrase' ||
+    value === 'chinFuzz' ||
+    value === 'chinFuzzPart' ||
+    value === 'engWordPart' ||
+    value === 'engWord' ||
+    value === 'engPhrase' ||
+    value === 'no-op'
+    ? value
+    : '';
+}
+
+function isEnglishWordPartSelection(text, start, end) {
+  const value = String(text ?? '');
+  const left = start > 0 ? value[start - 1] : '';
+  const right = Number.isInteger(end) && end < value.length ? value[end] : '';
+  return /[A-Za-z0-9]/.test(left) || /[A-Za-z0-9]/.test(right);
+}
+
+function getLangUnitTargetType(text, contextType = '', selection = {}) {
+  const value = String(text ?? '').trim();
+  const normalizedContextType = String(contextType ?? '').trim();
+  const selectionText = String(selection.text ?? '');
+  const selectionStart = Number.isInteger(selection.start) ? selection.start : null;
+  const selectionEnd = Number.isInteger(selection.end) ? selection.end : null;
+  if (!value || isPunctuationOrSymbolOnly(value)) {
+    return 'no-op';
+  }
+
+  const chineseCharCount = countChineseCharacters(value);
+  const hasChineseCharacters = chineseCharCount > 0;
+  const hasLatinCharacters = /[A-Za-z]/.test(value);
+  const letterTokens = value.split(/[^A-Za-z1-5]+/).filter(Boolean);
+  const hasSpaces = /\s/.test(value);
+  const onlyEnglishishChars = /^[A-Za-z0-9\s\p{P}\p{S}]+$/u.test(value);
+  const allTokensArePinyin = letterTokens.length > 0 && letterTokens.every((token) => countPinyinSyllables(token) > 0);
+  const pinyinSyllableCount = letterTokens.reduce((count, token) => count + countPinyinSyllables(token), 0);
+
+  if (hasChineseCharacters && !hasLatinCharacters) {
+    if (chineseCharCount === 1) {
+      return 'chinChar';
+    }
+
+    return chineseCharCount === 2 ? 'chinWord' : 'chinPhrase';
+  }
+
+  if (hasChineseCharacters) {
+    if (normalizedContextType === 'chinFuzzWord') {
+      return 'chinFuzzPart';
+    }
+
+    if (normalizedContextType === 'engPhrase') {
+      return 'chinPhrase';
+    }
+
+    return 'chinFuzz';
+  }
+
+  if (normalizedContextType === 'engPhrase' && onlyEnglishishChars) {
+    if (isEnglishWordPartSelection(selectionText || value, selectionStart, selectionEnd)) {
+      return 'engWordPart';
+    }
+
+    return hasSpaces ? 'engPhrase' : 'engWord';
+  }
+
+  if (onlyEnglishishChars && allTokensArePinyin) {
+    if (normalizedContextType === 'chinFuzzWord') {
+      return 'chinFuzzPart';
+    }
+
+    if (normalizedContextType === 'engWord') {
+      return pinyinSyllableCount >= 2 ? 'chinFuzz' : 'engWordPart';
+    }
+
+    if (normalizedContextType === 'engPhrase') {
+      return pinyinSyllableCount >= 2 ? 'chinFuzz' : 'engWord';
+    }
+
+    return pinyinSyllableCount >= 2 ? 'chinFuzz' : 'chinFuzz';
+  }
+
+  if (hasSpaces) {
+    return 'engPhrase';
+  }
+
+  if (normalizedContextType === 'engWord') {
+    return 'engWordPart';
+  }
+
+  if (normalizedContextType === 'chinFuzzWord') {
+    return 'engWord';
+  }
+
+  return 'engWord';
+}
+
+function createLangUnitTarget(text, contextType = '', selection = {}) {
+  const value = String(text ?? '');
+  return {
+    text: value,
+    type: getLangUnitTargetType(value, contextType, selection),
+  };
+}
+
+function normalizeLangUnitTarget(target, contextType = '', selection = {}) {
+  if (target && typeof target === 'object' && !Array.isArray(target)) {
+    const type = normalizeLangUnitTargetType(target.type);
+    if (type) {
+      return {
+        text: String(target.text ?? ''),
+        type,
+      };
+    }
+
+    return createLangUnitTarget(target.text ?? '', contextType, selection);
+  }
+
+  return createLangUnitTarget(target ?? '', contextType, selection);
+}
+
 function extractSubSegEditorPayload(editor) {
   if (!(editor instanceof HTMLElement)) {
     return { content: [], langUnits: [] };
@@ -1038,6 +1177,7 @@ function extractSubSegEditorPayload(editor) {
         ...(cycleGroupId ? { cycleGroupId } : {}),
         start,
         end: plainText.length,
+        text: bubbleText,
       };
       langUnitsById.get(langUnitId).instances.push(instance);
       pendingInstances.push(instance);
@@ -1064,12 +1204,26 @@ function extractSubSegEditorPayload(editor) {
 
   for (const instance of pendingInstances) {
     instance.context = createLangUnitContext(getLangUnitBubbleContext(plainText, instance.start, instance.end));
+    instance.target = createLangUnitTarget(instance.text ?? '', instance.context.type, {
+      text: plainText,
+      start: instance.start,
+      end: instance.end,
+    });
   }
 
-  const langUnits = [...langUnitsById.values()].map((langUnit) => ({
-    ...langUnit,
-    instances: Array.isArray(langUnit.instances) ? langUnit.instances : [],
-  }));
+  const langUnits = [...langUnitsById.values()].map((langUnit) => {
+    const instances = Array.isArray(langUnit.instances) ? langUnit.instances : [];
+    const primaryInstance = instances[0] ?? null;
+    return {
+      ...langUnit,
+      target: normalizeLangUnitTarget(primaryInstance?.target ?? langUnit.text ?? '', primaryInstance?.context?.type ?? '', {
+        text: langUnit.text,
+        start: primaryInstance?.start,
+        end: primaryInstance?.end,
+      }),
+      instances,
+    };
+  });
 
   return {
     content,
@@ -1128,6 +1282,10 @@ function getSubSegEditorMarkup(editor) {
   }
 
   return sanitizeSubSegMarkup(editor.innerHTML);
+}
+
+function normalizeSubSegEditorMarkup(value) {
+  return sanitizeSubSegMarkup(String(value ?? ''));
 }
 
 function getLangUnitBubbles(editor) {
@@ -1273,6 +1431,21 @@ function unwrapLangUnitBubbleTarget(editor) {
   if (lastTextNode) {
     setCaretAfterNode(lastTextNode);
   }
+  return true;
+}
+
+function resetLangUnitBubbleTarget(editor, restoreCaret = false) {
+  if (!(editor instanceof HTMLElement)) {
+    return false;
+  }
+
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  if ((langUnitBubbleTargetIndexByAudSegId.get(audSegId) ?? -1) < 0) {
+    return false;
+  }
+
+  langUnitBubbleTargetIndexByAudSegId.set(audSegId, -1);
+  syncLangUnitBubbleTarget(editor, restoreCaret);
   return true;
 }
 
@@ -1480,6 +1653,27 @@ function mergeAdjacentLangUnitBubbleRuns(editor, bubble) {
   return mergedBubble;
 }
 
+function selectionTouchesLangUnitBubble(editor) {
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || selection.isCollapsed) {
+    return false;
+  }
+
+  const range = selection.getRangeAt(0);
+  if (!editor.contains(range.startContainer) || !editor.contains(range.endContainer)) {
+    return false;
+  }
+
+  const bubbles = editor.querySelectorAll('.langunit-bubble');
+  return bubbles.length > 0 && Array.from(bubbles).some((bubble) => {
+    try {
+      return range.intersectsNode(bubble);
+    } catch {
+      return false;
+    }
+  });
+}
+
 function wrapSelectedSubSegText(editor) {
   const selection = document.getSelection();
   if (!selection || !selection.rangeCount || selection.isCollapsed) {
@@ -1517,6 +1711,25 @@ function wrapSelectedSubSegText(editor) {
   caret.collapse(true);
   selection.removeAllRanges();
   selection.addRange(caret);
+  syncSubSegEditorDraft(editor);
+  return true;
+}
+
+function insertSubSegLineBreak(editor) {
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || !editor.contains(selection.anchorNode)) {
+    return false;
+  }
+
+  const range = selection.getRangeAt(0);
+  if (!editor.contains(range.startContainer) || !editor.contains(range.endContainer)) {
+    return false;
+  }
+
+  range.deleteContents();
+  const br = document.createElement('br');
+  range.insertNode(br);
+  setCaretAfterNode(br);
   syncSubSegEditorDraft(editor);
   return true;
 }
@@ -2559,6 +2772,10 @@ document.addEventListener('keydown', (event) => {
 
     if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
       event.preventDefault();
+      if (editor && resetLangUnitBubbleTarget(editor, true)) {
+        showWorkerToast('target cleared', 1200);
+        return;
+      }
       closeEnteredAudSeg();
       return;
     }
@@ -2573,10 +2790,20 @@ document.addEventListener('keydown', (event) => {
     }
 
     if (event.key === 'Enter') {
+      if (editor && selectionTouchesLangUnitBubble(editor)) {
+        event.preventDefault();
+        showWorkerToast('not allowed', 1200);
+        return;
+      }
       if (editor && wrapSelectedSubSegText(editor)) {
         event.preventDefault();
         return;
       }
+      if (editor && insertSubSegLineBreak(editor)) {
+        event.preventDefault();
+        return;
+      }
+      event.preventDefault();
       return;
     }
 

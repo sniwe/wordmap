@@ -33,7 +33,7 @@
 | `remote section` | A non-contiguous span that belongs to the same `langUnit bubble` group as an anchor bubble, rendered with bubble styling plus a dotted connector back to the anchor. |
 | `linked bubble group` | The set of contiguous and remote `langUnit` spans that share one cycle-target index and are treated as one logical capture unit. |
 | `dotted connector` | The subtle dotted underline used to visually link a remote section back to its anchor `langUnit bubble`. |
-| `langUnit instance` | One persisted reverse-link record inside a `langUnit.instances` array; it carries `audSegId`, `subSegId`, `start`, `end`, `remote`, `context`, and any extra occurrence metadata needed. |
+| `langUnit instance` | One persisted reverse-link record inside a `langUnit.instances` array; it carries `audSegId`, `subSegId`, `start`, `end`, `remote`, `context`, `target`, and any extra occurrence metadata needed. |
 | `langUnit ref` | Legacy shorthand for `langUnit instance`. |
 | `langUnit extension` | A new `langUnit` created from a selected substring while a cycle-target is active; its context instance stores the shared `cycleGroupId`. |
 | `langUnit cycle group` | The shared group identifier stored on context-bound instances so cycle targeting and dotted underline rendering treat linked langUnits as one group. |
@@ -54,11 +54,21 @@
 | `langUnit context` | The immediate sentence or line substring around a specific `langUnit instance`, persisted on the instance record rather than the parent `langUnit`. |
 | `langUnit context object` | The persisted occurrence-context shape with `{ text, type }`, attached to a `langUnit instance` and where `type` is one of `chinPhrase`, `chinWord`, `chinFuzzWord`, `engPhrase`, or `engWord`. |
 | `langUnit context normalization` | The loader/save rule that recomputes an instance `context.type` from the stored text and only preserves `chinWord` for Chinese-only text. |
+| `langUnit target` | The captured substring itself, persisted on the instance record alongside `context` and mirrored onto the parent `langUnit.target` so the selected text can be classified separately from its surrounding text. |
+| `langUnit target object` | The persisted occurrence-target shape with `{ text, type }`, attached to a `langUnit instance` and the parent `langUnit`; `type` is one of `chinChar`, `chinWord`, `chinPhrase`, `chinFuzz`, `chinFuzzPart`, `engWordPart`, `engWord`, `engPhrase`, or `no-op`. |
+| `langUnit target normalization` | The loader/save rule that stores the selected substring text, derives its target type from the substring plus `context.type` when needed, and keeps the normalized result on both the instance and the parent `langUnit`. |
+| `chinChar` | A single Chinese character selected as a target. |
+| `chinFuzz` | A target that is Chinese-plus-Latin or pinyin-shaped in a mixed context where the selection should stay tied to Chinese-style capture rules. |
+| `chinFuzzPart` | A mixed or pinyin-shaped target captured while the surrounding context is `chinFuzzWord`. |
+| `engWordPart` | A short English-like target captured inside an `engPhrase` or `engWord` context when the selection is only part of a larger English word. |
+| `no-op` | A rejected or illegal target shape, usually blank or punctuation-only text that should not produce a meaningful capture classification. |
 | `chinWord` | A single Chinese lexical unit, used when the chin disambiguation flow decides a `langUnit` is narrower than a phrase. |
+| `chinFuzzWord` | An ASCII-only pinyin-like target that resolves to exactly 1 syllable; multi-syllable pinyin-like text is treated as `chinPhrase` instead. |
 | `chin disambiguation` | The Settings-controlled worker-backed flow that refines ambiguous Chinese instance `context.type` values in the background after save. |
 | `pinyin chinPhrase` | Pure ASCII pinyin-like context text, or mixed Chinese plus only valid pinyin syllables, that can be segmented into 2 or more valid pinyin syllables, so it is captured as `chinPhrase` instead of `chinFuzzWord` or `engPhrase`. |
 | `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
 | `subSeg enter guard` | `Enter` does nothing while a `subSeg` bubble target is active. |
+| `subSeg illegal-action toast` | The short worker-toast message shown when an attempted subSeg action is blocked and turned into a no-op. |
 | `subSeg wrap at row width` | `subSeg` content wraps inside the row instead of widening the editor or its panel. |
 | `langUnit bubble persistence` | Saving and reloading the editor markup so a captured `langUnit bubble` reappears after refresh. |
 | `entered panel width lock` | The entered `audEp` panel stays width-constrained instead of growing to match subSeg content. |

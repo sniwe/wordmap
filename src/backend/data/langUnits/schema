@@ -54,6 +54,29 @@
                 "type"
               ],
               "additionalProperties": true
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "chinPhrase",
+                    "chinWord",
+                    "chinFuzzWord",
+                    "engPhrase",
+                    "engWord"
+                  ]
+                }
+              },
+              "required": [
+                "text",
+                "type"
+              ],
+              "additionalProperties": true
             }
           },
           "required": [

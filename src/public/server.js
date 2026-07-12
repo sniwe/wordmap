@@ -293,11 +293,22 @@ function normalizeLangUnitItem(item, now = new Date().toISOString()) {
 
   const _id = String(item._id ?? '').trim() || randomUUID();
   const instances = normalizeLangUnitInstances(item.instances ?? (item.context ? [{ context: item.context }] : []));
+  const primaryInstance = instances.find((instance) => instance?.target || instance?.context) ?? instances[0] ?? null;
+  const target = normalizeLangUnitTarget(
+    item.target ?? primaryInstance?.target ?? item.text,
+    primaryInstance?.context?.type ?? item.target?.type ?? '',
+    {
+      text: String(item.text ?? ''),
+      start: Number.isFinite(primaryInstance?.start) ? primaryInstance.start : null,
+      end: Number.isFinite(primaryInstance?.end) ? primaryInstance.end : null,
+    }
+  );
   const normalized = {
     ...item,
     _id,
     text: String(item.text ?? '').trim(),
     instances,
+    target,
     createdAt: item.createdAt || now,
     updatedAt: item.updatedAt || now,
   };
@@ -564,6 +575,11 @@ function collectLangUnitCapturesById(subSegItems) {
     for (const capture of pendingCaptures) {
       if (capture.captureIndex === 0) {
         capture.context = createLangUnitContext(getLangUnitBubbleContext(plainText, capture.start, capture.end));
+        capture.target = createLangUnitTarget(capture.text ?? '', capture.context.type, {
+          text: plainText,
+          start: capture.start,
+          end: capture.end,
+        });
       }
     }
   }
@@ -576,6 +592,12 @@ function normalizeLangUnitInstance(instance) {
     return null;
   }
 
+  const context = normalizeLangUnitContext(instance.context ?? instance);
+  const target = instance.target ? normalizeLangUnitTarget(instance.target, context.type, {
+    text: String(instance.target?.text ?? ''),
+    start: Number.isFinite(instance.start) ? instance.start : null,
+    end: Number.isFinite(instance.end) ? instance.end : null,
+  }) : null;
   return {
     ...(String(instance.audSegId ?? '').trim() ? { audSegId: String(instance.audSegId).trim() } : {}),
     ...(String(instance.subSegId ?? '').trim() ? { subSegId: String(instance.subSegId).trim() } : {}),
@@ -583,7 +605,8 @@ function normalizeLangUnitInstance(instance) {
     ...(String(instance.cycleGroupId ?? '').trim() ? { cycleGroupId: String(instance.cycleGroupId).trim() } : {}),
     ...(Number.isFinite(instance.start) && instance.start >= 0 ? { start: instance.start } : {}),
     ...(Number.isFinite(instance.end) && instance.end >= 0 ? { end: instance.end } : {}),
-    context: normalizeLangUnitContext(instance.context ?? instance),
+    context,
+    ...(target ? { target } : {}),
   };
 }
 
@@ -605,6 +628,7 @@ function normalizeLangUnitInstances(instances) {
       String(Number.isFinite(normalizedInstance.start) ? normalizedInstance.start : ''),
       String(Number.isFinite(normalizedInstance.end) ? normalizedInstance.end : ''),
       JSON.stringify(normalizedInstance.context),
+      JSON.stringify(normalizedInstance.target ?? null),
     ].join('\u0000');
     if (seen.has(key)) {
       continue;
@@ -633,12 +657,17 @@ function expandLangUnitCaptures(parentId, captures, existingItemsById = new Map(
       ...(capture.subSegId ? { subSegId: capture.subSegId } : {}),
       remote: capture.remote === true,
       ...(capture.context ? { context: capture.context } : {}),
+      ...(capture.target ? { target: capture.target } : {}),
     })),
   ]);
   const base = {
     ...existingBase,
     _id: parentId,
     text: String(primary.text ?? existingBase?.text ?? ''),
+    target: normalizeLangUnitTarget(
+      primary.target ?? primary.text ?? existingBase?.target ?? primary.text,
+      primary.context?.type ?? existingBase?.target?.type ?? ''
+    ),
     instances: nextInstances,
     createdAt: existingBase?.createdAt || now,
     updatedAt: existingBase?.updatedAt || now,
@@ -766,6 +795,9 @@ function normalizeLangUnitCaptures(captures) {
     const context = capture.context && typeof capture.context === 'object' && !Array.isArray(capture.context)
       ? normalizeLangUnitContext(capture.context)
       : null;
+    const target = capture.target && typeof capture.target === 'object' && !Array.isArray(capture.target)
+      ? normalizeLangUnitTarget(capture.target, capture.context?.type ?? '')
+      : null;
     if (!audSegId || !subSegId) {
       continue;
     }
@@ -785,6 +817,7 @@ function normalizeLangUnitCaptures(captures) {
       ...(start != null ? { start } : {}),
       ...(end != null ? { end } : {}),
       ...(context ? { context } : {}),
+      ...(target ? { target } : {}),
     });
   }
 
@@ -974,6 +1007,151 @@ function createLangUnitContext(text) {
   };
 }
 
+function countChineseCharacters(value) {
+  return String(value ?? '').match(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/gu)?.length ?? 0;
+}
+
+function isPunctuationOrSymbolOnly(value) {
+  const text = String(value ?? '').trim();
+  return Boolean(text) && /^[\p{P}\p{S}\s]+$/u.test(text) && !/[A-Za-z0-9\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u.test(text);
+}
+
+function normalizeLangUnitTargetType(type) {
+  const value = String(type ?? '').trim();
+  if (value === 'engPart') {
+    return 'engWordPart';
+  }
+
+  return value === 'chinChar' ||
+    value === 'chinWord' ||
+    value === 'chinPhrase' ||
+    value === 'chinFuzz' ||
+    value === 'chinFuzzPart' ||
+    value === 'engWordPart' ||
+    value === 'engWord' ||
+    value === 'engPhrase' ||
+    value === 'no-op'
+    ? value
+    : '';
+}
+
+function isEnglishWordPartSelection(text, start, end) {
+  const value = String(text ?? '');
+  const left = start > 0 ? value[start - 1] : '';
+  const right = Number.isInteger(end) && end < value.length ? value[end] : '';
+  return /[A-Za-z0-9]/.test(left) || /[A-Za-z0-9]/.test(right);
+}
+
+function getLangUnitTargetType(text, contextType = '', selection = {}) {
+  const value = String(text ?? '').trim();
+  const normalizedContextType = String(contextType ?? '').trim();
+  const selectionText = String(selection.text ?? '');
+  const selectionStart = Number.isInteger(selection.start) ? selection.start : null;
+  const selectionEnd = Number.isInteger(selection.end) ? selection.end : null;
+  if (!value || isPunctuationOrSymbolOnly(value)) {
+    return 'no-op';
+  }
+
+  const chineseCharCount = countChineseCharacters(value);
+  const hasChineseCharacters = chineseCharCount > 0;
+  const hasLatinCharacters = /[A-Za-z]/.test(value);
+  const letterTokens = value.split(/[^A-Za-z1-5]+/).filter(Boolean);
+  const hasSpaces = /\s/.test(value);
+  const onlyEnglishishChars = /^[A-Za-z0-9\s\p{P}\p{S}]+$/u.test(value);
+  const allTokensArePinyin = letterTokens.length > 0 && letterTokens.every((token) => countPinyinSyllables(token) > 0);
+  const pinyinSyllableCount = letterTokens.reduce((count, token) => count + countPinyinSyllables(token), 0);
+
+  if (hasChineseCharacters && !hasLatinCharacters) {
+    if (chineseCharCount === 1) {
+      return 'chinChar';
+    }
+
+    return chineseCharCount === 2 ? 'chinWord' : 'chinPhrase';
+  }
+
+  if (hasChineseCharacters) {
+    if (normalizedContextType === 'chinFuzzWord') {
+      return 'chinFuzzPart';
+    }
+
+    if (normalizedContextType === 'engPhrase') {
+      return 'chinPhrase';
+    }
+
+    return 'chinFuzz';
+  }
+
+  if (normalizedContextType === 'engPhrase' && onlyEnglishishChars) {
+    if (isEnglishWordPartSelection(selectionText || value, selectionStart, selectionEnd)) {
+      return 'engWordPart';
+    }
+
+    return hasSpaces ? 'engPhrase' : 'engWord';
+  }
+
+  if (onlyEnglishishChars && allTokensArePinyin) {
+    if (normalizedContextType === 'chinFuzzWord') {
+      return 'chinFuzzPart';
+    }
+
+    if (normalizedContextType === 'engWord') {
+      return pinyinSyllableCount >= 2 ? 'chinFuzz' : 'engWordPart';
+    }
+
+    if (normalizedContextType === 'engPhrase') {
+      return pinyinSyllableCount >= 2 ? 'chinFuzz' : 'engWord';
+    }
+
+    return 'chinFuzz';
+  }
+
+  if (hasSpaces) {
+    return 'engPhrase';
+  }
+
+  if (normalizedContextType === 'engWord') {
+    return 'engWordPart';
+  }
+
+  if (normalizedContextType === 'chinFuzzWord') {
+    return 'engWord';
+  }
+
+  return 'engWord';
+}
+
+function normalizeLangUnitTarget(target, contextType = '', selection = {}) {
+  if (target && typeof target === 'object' && !Array.isArray(target)) {
+    const type = normalizeLangUnitTargetType(target.type);
+    if (type) {
+      return {
+        text: String(target.text ?? ''),
+        type,
+      };
+    }
+
+    const text = String(target.text ?? '');
+    return {
+      text,
+      type: getLangUnitTargetType(text, contextType, selection),
+    };
+  }
+
+  const text = String(target ?? '');
+  return {
+    text,
+    type: getLangUnitTargetType(text, contextType, selection),
+  };
+}
+
+function createLangUnitTarget(text, contextType = '', selection = {}) {
+  const value = String(text ?? '');
+  return {
+    text: value,
+    type: getLangUnitTargetType(value, contextType, selection),
+  };
+}
+
 function normalizeLangUnitContextType(type) {
   const value = String(type ?? '').trim();
   return value === 'chinWord' || value === 'chinPhrase' ? value : '';
@@ -1144,10 +1322,16 @@ async function inferLangUnitContextType(langUnitId, payload) {
     }
 
     const nextInstances = normalizeLangUnitInstances(item.instances ?? (item.context ? [{ context: item.context }] : []));
+    const nextTarget = normalizeLangUnitTarget(item.target ?? item.text, type, {
+      text: String(item.text ?? ''),
+      start: Number.isFinite(nextInstances[0]?.start) ? nextInstances[0].start : null,
+      end: Number.isFinite(nextInstances[0]?.end) ? nextInstances[0].end : null,
+    });
     if (!nextInstances.length) {
       const nextItem = {
         ...item,
-        instances: [{ context: { ...context, type } }],
+        target: nextTarget,
+        instances: [{ context: { ...context, type }, target: nextTarget }],
         updatedAt: now,
       };
       updated = nextItem;
@@ -1157,10 +1341,16 @@ async function inferLangUnitContextType(langUnitId, payload) {
     nextInstances[0] = {
       ...nextInstances[0],
       context: { ...context, type },
+      target: normalizeLangUnitTarget(nextInstances[0].target ?? item.text, type, {
+        text: String(item.text ?? ''),
+        start: Number.isFinite(nextInstances[0].start) ? nextInstances[0].start : null,
+        end: Number.isFinite(nextInstances[0].end) ? nextInstances[0].end : null,
+      }),
     };
 
     updated = {
       ...item,
+      target: nextTarget,
       instances: nextInstances,
       updatedAt: now,
     };

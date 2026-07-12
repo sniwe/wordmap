@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import {
   buildPrompt,
+  normalizeLanguageUnitContextType,
   normalizeLanguageUnitRoot,
   normalizeRequest,
   parseCodexJsonl,
@@ -25,7 +26,21 @@ assert.match(prompt, /discern-languageUnit-root/);
 assert.match(prompt, /alpha context/);
 assert.match(prompt, /beta target/);
 assert.match(prompt, /gamma substring/);
+assert.match(prompt, /Infer the base English word directly/);
+assert.match(prompt, /faggiest -> fag/);
 assert.match(prompt, /Return only a JSON object/);
+
+const contextRequest = normalizeRequest({
+  task: 'contextType',
+  context: 'alpha context',
+  target: 'beta target',
+  substring: 'gamma substring',
+});
+
+const contextPrompt = buildPrompt(contextRequest);
+assert.match(contextPrompt, /discern-languageUnit-context-type/);
+assert.match(contextPrompt, /chinWord/);
+assert.match(contextPrompt, /chinPhrase/);
 
 const parsed = parseCodexJsonl([
   '{"type":"thread.started","thread_id":"thread-123"}',
@@ -33,8 +48,9 @@ const parsed = parseCodexJsonl([
 ].join('\n'));
 assert.equal(parsed.threadId, 'thread-123');
 assert.deepEqual(parseEnvelope(parsed.finalText), { res: 'root' });
-assert.equal(normalizeLanguageUnitRoot({ target: 'newest' }, 'newest'), 'new');
-assert.equal(normalizeLanguageUnitRoot({ target: 'published' }, 'published'), 'publish');
+assert.equal(normalizeLanguageUnitRoot({ target: 'newest' }, 'new'), 'new');
+assert.equal(normalizeLanguageUnitRoot({ target: 'published' }, 'publish'), 'publish');
+assert.equal(normalizeLanguageUnitContextType({ context: { type: 'chinWord' } }, 'chinWord'), 'chinWord');
 
 const live = spawnSync(process.execPath, [workerEntry, '--demo'], {
   cwd: workerRoot,

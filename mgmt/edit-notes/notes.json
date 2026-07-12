@@ -1,62 +1,4 @@
 {
-  "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > button.settings-popover__action:nth-of-type(2)": {
-    "selector": "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > button.settings-popover__action:nth-of-type(2)",
-    "notes": [
-      {
-        "text": "i asked for \"clear all langUnits\"",
-        "createdAt": "2026-07-08T02:40:05.821Z",
-        "applied": true,
-        "appliedAt": "2026-07-08T10:42:26.0828697+08:00",
-        "functionalityStatus": {
-          "state": "active",
-          "remaining": "",
-          "missing": "",
-          "replacedBy": []
-        }
-      }
-    ]
-  },
-  "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover": {
-    "selector": "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover",
-    "notes": [
-      {
-        "text": "add a single item with checkbox and text \"codex CLI worker\"",
-        "createdAt": "2026-07-03T04:47:13.804Z",
-        "applied": true,
-        "appliedAt": "2026-07-03T12:47:33.4372057+08:00",
-        "functionalityStatus": {
-          "state": "active",
-          "remaining": "",
-          "missing": "",
-          "replacedBy": []
-        }
-      },
-      {
-        "text": "this should be collapsed by default. #settings-button click toggles expand",
-        "createdAt": "2026-07-08T01:52:06.952Z",
-        "applied": true,
-        "appliedAt": "2026-07-08T09:54:55.7433988+08:00",
-        "functionalityStatus": {
-          "state": "active",
-          "remaining": "",
-          "missing": "",
-          "replacedBy": []
-        }
-      },
-      {
-        "text": "add a third and fourth list item to options. let them be buttons. one will clear all subSegs. the other will clear all subSegs.",
-        "createdAt": "2026-07-08T02:32:16.992Z",
-        "applied": true,
-        "appliedAt": "2026-07-08T10:36:15.7452026+08:00",
-        "functionalityStatus": {
-          "state": "active",
-          "remaining": "",
-          "missing": "",
-          "replacedBy": []
-        }
-      }
-    ]
-  },
   "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
     "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered:nth-of-type(1) > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input",
     "notes": [
@@ -137,6 +79,88 @@
         "createdAt": "2026-07-07T10:09:55.854Z",
         "applied": true,
         "appliedAt": "2026-07-07T18:15:31.5102245+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "let input deny enter press to create langUnit from substring of subSegInput where the highlight selected subString from which the langUnit is to be created has 1 or more characters already in langUnit(s) on the current audSeg's subSeg input",
+        "createdAt": "2026-07-12T02:14:09.430Z",
+        "applied": true,
+        "appliedAt": "2026-07-12T10:26:37.9567849+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "while langUnit bubble cycle-targeted ctrl+backspace should first trigger reset of targeting index to -1, then audSeg exit",
+        "createdAt": "2026-07-12T02:25:43.464Z",
+        "applied": true,
+        "appliedAt": "2026-07-12T10:18:28.1070800+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > button.settings-popover__action:nth-of-type(2)": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover > button.settings-popover__action:nth-of-type(2)",
+    "notes": [
+      {
+        "text": "i asked for \"clear all langUnits\"",
+        "createdAt": "2026-07-08T02:40:05.821Z",
+        "applied": true,
+        "appliedAt": "2026-07-08T10:42:26.0828697+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
+  "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div.settings-shell:nth-of-type(1) > html > body > #app > div.settings-shell:nth-of-type(1) > div#settings-popover.settings-popover",
+    "notes": [
+      {
+        "text": "add a single item with checkbox and text \"codex CLI worker\"",
+        "createdAt": "2026-07-03T04:47:13.804Z",
+        "applied": true,
+        "appliedAt": "2026-07-03T12:47:33.4372057+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "this should be collapsed by default. #settings-button click toggles expand",
+        "createdAt": "2026-07-08T01:52:06.952Z",
+        "applied": true,
+        "appliedAt": "2026-07-08T09:54:55.7433988+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      },
+      {
+        "text": "add a third and fourth list item to options. let them be buttons. one will clear all subSegs. the other will clear all subSegs.",
+        "createdAt": "2026-07-08T02:32:16.992Z",
+        "applied": true,
+        "appliedAt": "2026-07-08T10:36:15.7452026+08:00",
         "functionalityStatus": {
           "state": "active",
           "remaining": "",

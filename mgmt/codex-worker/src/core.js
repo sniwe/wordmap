@@ -1,15 +1,30 @@
+const ROOT_TASK = 'root';
+const CONTEXT_TYPE_TASK = 'contextType';
+const CONTEXT_TYPE_VALUES = new Set(['chinWord', 'chinPhrase']);
+
+function normalizeTask(task) {
+  return task === CONTEXT_TYPE_TASK ? CONTEXT_TYPE_TASK : ROOT_TASK;
+}
+
 export function normalizeRequest(value) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error('Request must be a JSON object.');
   }
 
   const request = {
+    task: value.task,
     context: value.context,
     target: value.target,
     substring: value.substring,
   };
 
+  request.task = normalizeTask(request.task);
+
   for (const [key, field] of Object.entries(request)) {
+    if (key === 'task') {
+      continue;
+    }
+
     if (typeof field !== 'string' || field.length === 0) {
       throw new Error(`Request field "${key}" must be a non-empty string.`);
     }
@@ -19,11 +34,29 @@ export function normalizeRequest(value) {
 }
 
 export function buildPrompt(request) {
-  const { context, target, substring } = normalizeRequest(request);
+  const { task, context, target, substring } = normalizeRequest(request);
+
+  if (task === CONTEXT_TYPE_TASK) {
+    return [
+      'You are the discern-languageUnit-context-type worker.',
+      'Read context, target, and substring.',
+      'Decide whether the Chinese context should be tagged as chinWord or chinPhrase.',
+      'Use chinWord for a single Chinese lexical unit.',
+      'Use chinPhrase for a multiword phrase, compound, or broader phrase context.',
+      'Return only a JSON object with the shape {"res":"chinWord"} or {"res":"chinPhrase"}.',
+      '',
+      `context: ${context}`,
+      `target: ${target}`,
+      `substring: ${substring}`,
+    ].join('\n');
+  }
 
   return [
     'You are the discern-languageUnit-root worker.',
     'Read context, target, and substring.',
+    'Infer the base English word directly from the target and substring.',
+    'Prefer the plain root over comparative, superlative, plural, tense, or participle forms.',
+    'Examples: newest -> new; published -> publish; faggiest -> fag.',
     'Resolve the final langUnitRoot only.',
     'Return only a JSON object with the shape {"res":"..."}.',
     '',
@@ -74,30 +107,16 @@ export function parseFinalEnvelope(text) {
 }
 
 export function normalizeLanguageUnitRoot(request, result) {
-  const target = String(request?.target ?? '').trim();
-  const value = String(result ?? target).trim();
-  if (!value) {
+  return String(result ?? request?.target ?? '').trim();
+}
+
+export function normalizeLanguageUnitContextType(request, result) {
+  const value = String(result ?? '').trim();
+  if (CONTEXT_TYPE_VALUES.has(value)) {
     return value;
   }
 
-  const lower = value.toLowerCase();
-  if (lower.length > 4 && lower.endsWith('iest')) {
-    return `${value.slice(0, -4)}y`;
-  }
-
-  if (lower.length > 3 && lower.endsWith('est')) {
-    return value.slice(0, -3);
-  }
-
-  if (lower.length > 3 && lower.endsWith('ied')) {
-    return `${value.slice(0, -3)}y`;
-  }
-
-  if (lower.length > 2 && lower.endsWith('ed')) {
-    return value.slice(0, -2);
-  }
-
-  return value;
+  return request?.context?.type === 'chinWord' ? 'chinWord' : 'chinPhrase';
 }
 
 export function parseCodexJsonl(stdout) {
