@@ -6,6 +6,9 @@
       "label": {
         "type": "string"
       },
+      "_id": {
+        "type": "string"
+      },
       "name": {
         "type": "string"
       },

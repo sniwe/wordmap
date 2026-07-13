@@ -237,7 +237,13 @@ async function serveFile(req, res, filePath) {
 
 async function readAudEpItems() {
   try {
-    return JSON.parse(await fs.readFile(audEpItemsFile, 'utf8'));
+    const items = JSON.parse(await fs.readFile(audEpItemsFile, 'utf8'));
+    const [normalized, changed] = normalizeAudEpItems(Array.isArray(items) ? items : []);
+    if (changed) {
+      await writeAudEpItems(normalized);
+    }
+
+    return normalized;
   } catch {
     return [];
   }
@@ -245,7 +251,30 @@ async function readAudEpItems() {
 
 async function writeAudEpItems(items) {
   await fs.mkdir(audEpDir, { recursive: true });
-  await fs.writeFile(audEpItemsFile, JSON.stringify(items, null, 2));
+  const [normalized] = normalizeAudEpItems(Array.isArray(items) ? items : []);
+  await fs.writeFile(audEpItemsFile, JSON.stringify(normalized, null, 2));
+}
+
+function normalizeAudEpItems(items) {
+  const seenIds = new Set();
+  let changed = false;
+
+  const normalized = (Array.isArray(items) ? items : []).map((item) => {
+    if (!item || typeof item !== 'object') {
+      changed = true;
+      return item;
+    }
+
+    const id = typeof item._id === 'string' && item._id && !seenIds.has(item._id) ? item._id : randomUUID();
+    if (id !== item._id) {
+      changed = true;
+    }
+
+    seenIds.add(id);
+    return id === item._id ? item : { ...item, _id: id };
+  });
+
+  return [normalized, changed];
 }
 
 async function readAudSegItems() {
@@ -1247,7 +1276,13 @@ function normalizeLangUnitItems(items, capturesById = new Map()) {
     }
 
     const existingItem = existingItemsByText.get(text);
-    const canonicalId = String(existingItem?._id ?? group.sourceIds[0] ?? '').trim() || randomUUID();
+    const primaryCapture = captures[0] ?? null;
+    const canonicalId = String(
+      existingItem?._id
+      ?? (primaryCapture?.subSegId ? `${primaryCapture.subSegId}-${primaryCapture.captureIndex ?? 0}` : '')
+      ?? group.sourceIds[0]
+      ?? ''
+    ).trim() || randomUUID();
     for (const sourceId of group.sourceIds) {
       const trimmed = String(sourceId ?? '').trim();
       if (trimmed && trimmed !== canonicalId) {
@@ -1605,6 +1640,12 @@ function sortAudSegItems(items) {
       return indexA - indexB;
     }
 
+    const ordinalA = Number(a?.audSegOrdinal ?? Number.MAX_SAFE_INTEGER);
+    const ordinalB = Number(b?.audSegOrdinal ?? Number.MAX_SAFE_INTEGER);
+    if (ordinalA !== ordinalB) {
+      return ordinalA - ordinalB;
+    }
+
     const tcsA = Number(a?.tcs ?? 0);
     const tcsB = Number(b?.tcs ?? 0);
     if (tcsA !== tcsB) {
@@ -1701,7 +1742,7 @@ async function handleAudEpApi(req, res, url) {
 
     const items = await readAudEpItems();
     const insertIndex = Math.max(0, Math.min(itemIndex, items.length));
-    items.splice(insertIndex, 0, { label: '', media: [] });
+    items.splice(insertIndex, 0, { _id: randomUUID(), label: '', media: [] });
     const audSegItems = await readAudSegItems();
     await writeAudSegItems(shiftAudSegRefs(audSegItems, insertIndex, 1));
 
@@ -1805,6 +1846,8 @@ async function handleAudSegApi(req, res, url) {
     }
 
     const audEpIndex = Number(payload.audEpIndex);
+    const audEpId = String(payload.audEpId ?? '').trim();
+    const audSegOrdinal = Number(payload.audSegOrdinal ?? Number.NaN);
     const tcs = Number(payload.tcs ?? 0);
     const tce = payload.tce === '' || payload.tce == null ? '' : Number(payload.tce);
     const ssHead = String(payload.ssHead ?? '');
@@ -1813,15 +1856,45 @@ async function handleAudSegApi(req, res, url) {
       return true;
     }
 
+    const audEpItems = await readAudEpItems();
+    const parentAudEpId = audEpId || String(audEpItems[audEpIndex]?._id ?? '').trim();
+    if (!parentAudEpId) {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'audEpId is required' }));
+      return true;
+    }
+
     const items = await readAudSegItems();
+    const nextOrdinal = Number.isInteger(audSegOrdinal)
+      ? audSegOrdinal
+      : items.reduce((max, item) => {
+        if (String(item?.audEpId ?? '') !== parentAudEpId) {
+          return max;
+        }
+
+        const suffix = String(item?._id ?? '');
+        const prefix = `${parentAudEpId}-`;
+        if (!suffix.startsWith(prefix)) {
+          return max;
+        }
+
+        const ordinal = Number(suffix.slice(prefix.length));
+        return Number.isInteger(ordinal) && ordinal > max ? ordinal : max;
+      }, -1) + 1;
+    const itemId = `${parentAudEpId}-${nextOrdinal}`;
+    const index = items.findIndex((item) => item?._id === itemId);
     const item = {
-      _id: randomUUID(),
+      _id: itemId,
+      audEpId: parentAudEpId,
       audEpIndex,
       tcs,
       tce,
       ssHead,
     };
-    items.push(item);
+    if (index >= 0) {
+      items[index] = item;
+    } else {
+      items.push(item);
+    }
     await writeAudSegItems(sortAudSegItems(items));
     send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(item));
     return true;
@@ -2001,6 +2074,7 @@ async function handleSubSegApi(req, res, url) {
       ? items.findIndex((item) => String(item?._id ?? '') === subSegId)
       : items.findIndex((item) => item?.audSegId === audSegId && item?.isRoot !== false);
     const [normalizedContent] = normalizeSubSegContentForStorage(content ?? []);
+    const nextSubSegId = subSegId || `${audSegId}-${isRoot ? 0 : 1}`;
     const keepEmpty = isRoot === false;
     if (((content && !content.length) || (!content && !text.trim())) && !keepEmpty) {
       if (index >= 0) {
@@ -2014,7 +2088,7 @@ async function handleSubSegApi(req, res, url) {
     }
 
     const saved = {
-      _id: index >= 0 ? items[index]._id : (subSegId || randomUUID()),
+      _id: index >= 0 ? items[index]._id : nextSubSegId,
       audSegId,
       isRoot,
       ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),

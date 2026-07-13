@@ -3,6 +3,7 @@
 | Term | Definition |
 | --- | --- |
 | `audEp` | An audio episode item in the list, backed by `src/backend/data/audEps/items.json`. |
+| `audEp id` | The stable `_id` on an `audEp`; it is the base id for that episode's `audSeg` and `subSeg` chain. |
 | `audEp list` | The main list rendered in the canvas for `audEp` items. |
 | `addAudEp button` | The `+` button used to add or upload a new `audEp`. |
 | `settings button` | The top-right gear button that opens the placeholder settings popover. |
@@ -15,7 +16,8 @@
 | `audSeg parent ref` | The `audEpIndex` field that ties an `audSeg` record to its parent `audEp`. |
 | `audSeg card row` | The wrapped flexbox card layout used to show up to three `audSeg` items per row. |
 | `audSeg item` | A single card inside the `audSegs` row layout. |
-| `audSeg id` | The stable `_id` assigned to an `audSeg`; it is no longer derived from `audEpIndex` and is used as the foreign key for `subSeg` content. |
+| `audSeg id` | The stable `_id` assigned to an `audSeg`; it is the foreign key for `subSeg` content. |
+| `audSeg derived id` | The chained `audSeg` id format `\`${audEpId}-${audSegOrdinal}\`` used by the new scheme. |
 | `audSeg targeting` | Keyboard focus/selection cycling across `audSeg` cards while inside entered state. |
 | `audSeg target indicator` | The blue outline used to show the currently targeted `audSeg` card. |
 | `audSeg row jump` | `Ctrl+ArrowUp/Down` moves `audSeg` targeting by whole visual rows of 3 cards inside entered `audEp` state. |
@@ -29,6 +31,7 @@
 | `subSeg root row` | The persistent `subSeg` editor row with `isRoot: true` that owns the main text for an entered `audSeg`. |
 | `subSeg cycle row` | The non-root `subSeg` editor row with `isRoot: false` that appears when a `langUnit` target is active. |
 | `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and cycle rows each need their own `subSegId`. |
+| `subSeg derived id` | The chained `subSeg` id format `\`${audSegId}-${subSegOrdinal}\`` used by the new scheme. |
 | `subSeg editor` | The contenteditable host inside the seed `subSeg` item that accepts text, saves on debounce, and keeps Enter as a newline. |
 | `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
@@ -53,6 +56,7 @@
 | `langUnit occurrence binding` | One saved link from a `subSeg` capture to a `langUnit`, counted as an occurrence rather than a new lexical identity. |
 | `langUnits collection` | The backend scaffold under `src/backend/data/langUnits` for reusable bubble text records. |
 | `langUnit item` | A reusable text record referenced by `subSeg` bubble spans through `data-langunit-id` and saved `langUnitRef` tokens; it owns `text`, `root`, and `instances`, with context living on the instances. |
+| `langUnit derived id` | The chained `langUnit` id format `\`${subSegId}-${langUnitOrdinal}\`` used by the new capture scheme. |
 | `langUnit reverse link` | The stored list of occurrence bindings that point back to a `langUnit` from its `subSeg` locations; the runtime now treats these as `instances`. |
 | `langUnit context` | The immediate sentence or line substring around a specific `langUnit instance`, persisted on the instance record rather than the parent `langUnit`. |
 | `langUnit context object` | The persisted occurrence-context shape with `{ text, type }`, attached to a `langUnit instance` and where `type` is one of `chinPhrase`, `chinWord`, `chinFuzzWord`, `engPhrase`, or `engWord`. |

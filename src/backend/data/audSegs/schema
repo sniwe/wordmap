@@ -6,6 +6,9 @@
       "audEpIndex": {
         "type": "integer"
       },
+      "audEpId": {
+        "type": "string"
+      },
       "_id": {
         "type": "string"
       },
