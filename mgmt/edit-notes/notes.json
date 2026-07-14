@@ -1,4 +1,21 @@
 {
+  "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--cycle:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--cycle:nth-of-type(2) > div.item__subseg-input": {
+    "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--cycle:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--cycle:nth-of-type(2) > div.item__subseg-input",
+    "notes": [
+      {
+        "text": "give non-oot subSegs the same ability to spawn child subSegs fom cycle taget langUnit bubble cycle tageted ente pess",
+        "createdAt": "2026-07-14T11:34:06.029Z",
+        "applied": true,
+        "appliedAt": "2026-07-14T19:41:39.4404141+08:00",
+        "functionalityStatus": {
+          "state": "active",
+          "remaining": "",
+          "missing": "",
+          "replacedBy": []
+        }
+      }
+    ]
+  },
   "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input": {
     "selector": "html > html > body > html > body > #app > html > body > #app > div#canvas.container:nth-of-type(3) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > html > body > #app > div#canvas.container:nth-of-type(3) > ul#audep-list.list > li.item.item--entered:nth-of-type(2) > div.item__entered-panel > ul#audSegs.item__segments > li.item__segment.item__segment--entered > ul.item__subsegs:nth-of-type(1) > li.item__subseg.item__subseg--seed > div.item__subseg-input",
     "notes": [
@@ -20,7 +37,7 @@
         "applied": true,
         "appliedAt": "2026-07-07T09:45:35.7835238+08:00",
         "functionalityStatus": {
-          "state": "unknown",
+          "state": "active",
           "remaining": "",
           "missing": "",
           "replacedBy": []
@@ -29,8 +46,10 @@
       {
         "text": "subSeg list subSeg item failing to persist across reloads; non-root subSeg itme input langUnit cycle select is causing excess creation (initialization) of new subSeg items",
         "createdAt": "2026-07-12T23:49:27.954Z",
+        "applied": true,
+        "appliedAt": "2026-07-14T19:41:39.4404141+08:00",
         "functionalityStatus": {
-          "state": "unknown",
+          "state": "active",
           "remaining": "",
           "missing": "",
           "replacedBy": []
@@ -83,7 +102,7 @@
         "applied": true,
         "appliedAt": "2026-07-07T13:51:38.4254747+08:00",
         "functionalityStatus": {
-          "state": "unknown",
+          "state": "active",
           "remaining": "",
           "missing": "",
           "replacedBy": []
@@ -95,7 +114,7 @@
         "applied": true,
         "appliedAt": "2026-07-07T14:17:25.5831201+08:00",
         "functionalityStatus": {
-          "state": "unknown",
+          "state": "active",
           "remaining": "",
           "missing": "",
           "replacedBy": []
@@ -107,7 +126,7 @@
         "applied": true,
         "appliedAt": "2026-07-07T16:23:08.6985772+08:00",
         "functionalityStatus": {
-          "state": "unknown",
+          "state": "active",
           "remaining": "",
           "missing": "",
           "replacedBy": []
@@ -1092,7 +1111,7 @@
         "applied": true,
         "appliedAt": "2026-07-02T10:39:34.3053661+08:00",
         "functionalityStatus": {
-          "state": "unknown",
+          "state": "active",
           "remaining": "",
           "missing": "",
           "replacedBy": []

@@ -1,48 +1,50 @@
 [
   {
-    "_id": "b99da970-6d5f-4722-b784-7f989ac02769-0-0-0",
-    "text": "test",
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
+    "text": "one",
     "instances": [
       {
-        "audSegId": "b99da970-6d5f-4722-b784-7f989ac02769-0",
-        "subSegId": "b99da970-6d5f-4722-b784-7f989ac02769-0-0",
+        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
         "remote": false,
-        "start": 10,
-        "end": 14,
+        "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
+        "start": 18,
+        "end": 21,
         "context": {
-          "text": "this is a test line",
+          "text": "this is test line one again",
           "type": "engPhrase"
         }
       }
     ],
     "target": {
-      "text": "test",
+      "text": "one",
       "type": "engWord"
     },
-    "createdAt": "2026-07-13T02:58:12.424Z",
-    "updatedAt": "2026-07-13T02:58:12.427Z"
+    "createdAt": "2026-07-14T12:52:14.516Z",
+    "updatedAt": "2026-07-14T12:52:57.347Z"
   },
   {
-    "_id": "b99da970-6d5f-4722-b784-7f989ac02769-0-1-0",
-    "text": "sub",
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1",
+    "text": "two",
     "instances": [
       {
-        "audSegId": "b99da970-6d5f-4722-b784-7f989ac02769-0",
-        "subSegId": "b99da970-6d5f-4722-b784-7f989ac02769-0-1",
+        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
         "remote": false,
-        "start": 10,
-        "end": 13,
+        "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1",
+        "start": 46,
+        "end": 49,
         "context": {
-          "text": "this is a sub-line",
+          "text": "this is test line two again",
           "type": "engPhrase"
         }
       }
     ],
     "target": {
-      "text": "sub",
+      "text": "two",
       "type": "engWord"
     },
-    "createdAt": "2026-07-13T02:58:26.885Z",
-    "updatedAt": "2026-07-13T02:58:26.887Z"
+    "createdAt": "2026-07-14T12:52:34.588Z",
+    "updatedAt": "2026-07-14T12:52:57.347Z"
   }
 ]

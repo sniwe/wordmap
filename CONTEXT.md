@@ -27,10 +27,10 @@
 | `audSeg playback lock` | The entered-state mode where Enter on a targeted `audSeg` seeks audio to the segment start and keeps playback wrapped within that segment's time range. |
 | `shift-release cancel` | The auto-removal of a tentative `audSeg` draft when `Shift` is released without committing it with `Shift+Space`. |
 | `entered audSeg state` | The locked `audSeg` row mutation applied after Enter, distinct from the temporary targeted state used while cycling with arrows. |
-| `subSeg list` | The one-row list rendered under an entered `audSeg`'s time text, currently seeded with a single ethereal editor item. |
+| `subSeg list` | The list rendered under an entered `audSeg`'s time text, seeded with a root editor row and persisted non-root child rows when langUnit targets are initialized. |
 | `subSeg root row` | The persistent `subSeg` editor row with `isRoot: true` that owns the main text for an entered `audSeg`. |
-| `subSeg cycle row` | The non-root `subSeg` editor row with `isRoot: false` that appears when a `langUnit` target is active. |
-| `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and cycle rows each need their own `subSegId`. |
+| `subSeg cycle row` | A non-root `subSeg` editor row with `isRoot: false` and `linkTargetLangUnitId`, initialized from a committed `langUnit` target and kept visible after reload once saved. |
+| `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and non-root child rows each need their own `subSegId`. |
 | `subSeg derived id` | The chained `subSeg` id format `\`${audSegId}-${subSegOrdinal}\`` used by the new scheme. |
 | `subSeg editor` | The contenteditable host inside the seed `subSeg` item that accepts text, saves on debounce, and keeps Enter as a newline. |
 | `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
@@ -74,7 +74,7 @@
 | `chin disambiguation` | The Settings-controlled worker-backed flow that refines ambiguous Chinese instance `context.type` values in the background after save. |
 | `pinyin chinPhrase` | Pure ASCII pinyin-like context text, or mixed Chinese plus only valid pinyin syllables, that can be segmented into 2 or more valid pinyin syllables, so it is captured as `chinPhrase` instead of `chinFuzzWord` or `engPhrase`. |
 | `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
-| `subSeg enter guard` | `Enter` does nothing while a `subSeg` bubble target is active. |
+| `subSeg enter guard` | `Enter` while a bubble target is active opens or keeps the cycle row instead of inserting a newline. |
 | `subSeg illegal-action toast` | The short worker-toast message shown when an attempted subSeg action is blocked and turned into a no-op. |
 | `subSeg wrap at row width` | `subSeg` content wraps inside the row instead of widening the editor or its panel. |
 | `langUnit bubble persistence` | Saving and reloading the editor markup so a captured `langUnit bubble` reappears after refresh. |

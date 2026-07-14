@@ -594,12 +594,55 @@ function getRootSubSegItemForAudSeg(audSegId) {
   return getSubSegItemsForAudSeg(audSegId).find((item) => item?.isRoot !== false) ?? null;
 }
 
-function getCycleSubSegItemForAudSeg(audSegId) {
-  return getSubSegItemsForAudSeg(audSegId).find((item) => item?.isRoot === false) ?? null;
+function getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId) {
+  const targetId = String(linkTargetLangUnitId ?? '').trim();
+  return getSubSegItemsForAudSeg(audSegId).find(
+    (item) => item?.isRoot === false && String(item?.linkTargetLangUnitId ?? '') === targetId
+  ) ?? null;
+}
+
+function getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId) {
+  const prefix = `${String(audSegId ?? '').trim()}-0-`;
+  const targetId = String(linkTargetLangUnitId ?? '').trim();
+  if (!prefix.trim() || !targetId.startsWith(prefix)) {
+    return null;
+  }
+
+  const ordinal = Number(targetId.slice(prefix.length));
+  if (!Number.isInteger(ordinal)) {
+    return null;
+  }
+
+  const derived = getSubSegItemById(buildDerivedId(audSegId, ordinal + 1));
+  if (derived) {
+    return derived;
+  }
+
+  return getSubSegItemsForAudSeg(audSegId)
+    .filter((item) => item?.isRoot === false && !String(item?.linkTargetLangUnitId ?? '').trim())[ordinal] ?? null;
 }
 
 function getSubSegItemForAudSeg(audSegId) {
   return getRootSubSegItemForAudSeg(audSegId);
+}
+
+function getNextSubSegOrdinal(audSegId) {
+  const prefix = `${String(audSegId ?? '').trim()}-`;
+  let nextOrdinal = 0;
+
+  for (const item of getSubSegItemsForAudSeg(audSegId)) {
+    const itemId = String(item?._id ?? '');
+    if (!itemId.startsWith(prefix)) {
+      continue;
+    }
+
+    const ordinal = Number(itemId.slice(prefix.length));
+    if (Number.isInteger(ordinal) && ordinal >= nextOrdinal) {
+      nextOrdinal = ordinal + 1;
+    }
+  }
+
+  return nextOrdinal;
 }
 
 function ensureRootSubSegItem(audSegId) {
@@ -612,39 +655,6 @@ function ensureRootSubSegItem(audSegId) {
     _id: buildDerivedId(audSegId, 0),
     audSegId,
     isRoot: true,
-    content: [],
-    text: '',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-  state.subSegItems = sortSubSegItems([next, ...state.subSegItems]);
-  return next;
-}
-
-function ensureCycleSubSegItem(audSegId, linkTargetLangUnitId = '') {
-  const existing = getCycleSubSegItemForAudSeg(audSegId);
-  if (existing) {
-    if (linkTargetLangUnitId && String(existing.linkTargetLangUnitId ?? '') !== linkTargetLangUnitId) {
-      const next = {
-        ...existing,
-        linkTargetLangUnitId,
-        updatedAt: new Date().toISOString(),
-      };
-      state.subSegItems = sortSubSegItems([
-        next,
-        ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(existing._id ?? '')),
-      ]);
-      return next;
-    }
-
-    return existing;
-  }
-
-  const next = {
-    _id: buildDerivedId(audSegId, 1),
-    audSegId,
-    isRoot: false,
-    ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),
     content: [],
     text: '',
     createdAt: new Date().toISOString(),
@@ -1025,11 +1035,9 @@ function renderSubSegContentTokens(tokens, subSegId = '') {
 
 function renderSubSegList(audSegItem) {
   const audSegId = audSegItem?._id || '';
-  const subSegItems = getSubSegItemsForAudSeg(audSegId);
   const rootSubSegItem = ensureRootSubSegItem(audSegId);
-  const rootTargetIndex = getSubSegBubbleTargetIndexByKey(String(rootSubSegItem?._id ?? ''));
-  const cycleSubSegItem = getCycleSubSegItemForAudSeg(audSegId);
-  const cycleTargetIndex = getSubSegBubbleTargetIndexByKey(String(cycleSubSegItem?._id ?? ''));
+  const subSegItems = getSubSegItemsForAudSeg(audSegId);
+  const cycleSubSegItems = subSegItems.filter((item) => item?.isRoot === false);
   const valueBySubSegId = new Map(
     [...subSegDraftTextBySubSegId.entries()].filter(([key]) => subSegItems.some((item) => String(item?._id ?? '') === key))
   );
@@ -1062,9 +1070,7 @@ function renderSubSegList(audSegItem) {
   const items = [];
   items.push(renderEditor(rootSubSegItem));
 
-  if (cycleSubSegItem && (rootTargetIndex >= 0 || cycleTargetIndex >= 0)) {
-    items.push(renderEditor(cycleSubSegItem));
-  }
+  items.push(...cycleSubSegItems.map((item) => renderEditor(item)));
 
   return `
     <ul class="item__subsegs" aria-label="subSegs">
@@ -1689,7 +1695,7 @@ async function deleteSubSeg(subSegId) {
   return response.ok;
 }
 
-function syncCycleSubSegRow(editor) {
+function syncCycleSubSegRow(editor, createIfMissing = false) {
   if (!(editor instanceof HTMLElement)) {
     return false;
   }
@@ -1697,33 +1703,42 @@ function syncCycleSubSegRow(editor) {
   const audSegId = editor.dataset.subsegAudsegId || '';
   const subSegId = getSubSegEditorKey(editor);
   const targetIndex = getSubSegBubbleTargetIndex(editor);
-  const current = getCycleSubSegItemForAudSeg(audSegId);
   if (targetIndex >= 0) {
     const linkTargetLangUnitId = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId))[targetIndex] ?? '';
-    if (current) {
-      if (String(current.linkTargetLangUnitId ?? '') === linkTargetLangUnitId) {
-        return false;
-      }
+    if (!linkTargetLangUnitId) {
+      return false;
+    }
 
+    const current = getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId);
+    if (current) {
+      return false;
+    }
+
+    const derived = getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId);
+    if (derived?.isRoot === false) {
       const next = {
-        ...current,
-        ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),
+        ...derived,
+        linkTargetLangUnitId,
         updatedAt: new Date().toISOString(),
       };
       state.subSegItems = sortSubSegItems([
         next,
-        ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(current._id ?? '')),
+        ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(derived._id ?? '')),
       ]);
       void fetch('/api/subSegs/items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subSegId: String(current._id ?? ''), ...next }),
+        body: JSON.stringify({ subSegId: String(next._id ?? ''), ...next }),
       });
       return true;
     }
 
+    if (!createIfMissing) {
+      return false;
+    }
+
     const next = {
-      _id: buildDerivedId(audSegId, 1) || createItemId(),
+      _id: buildDerivedId(audSegId, getNextSubSegOrdinal(audSegId)) || createItemId(),
       audSegId,
       isRoot: false,
       ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),
@@ -1741,11 +1756,7 @@ function syncCycleSubSegRow(editor) {
     return true;
   }
 
-  if (!current) {
-    return false;
-  }
-
-  return true;
+  return false;
 }
 
 function focusCycleSubSegInput(editor) {
@@ -1758,13 +1769,20 @@ function focusCycleSubSegInput(editor) {
     return false;
   }
 
-  const changed = syncCycleSubSegRow(editor);
+  const subSegId = getSubSegEditorKey(editor);
+  const targetIndex = getSubSegBubbleTargetIndex(editor);
+  const linkTargetLangUnitId = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId))[targetIndex] ?? '';
+  if (!linkTargetLangUnitId) {
+    return false;
+  }
+
+  const changed = syncCycleSubSegRow(editor, true);
   if (changed) {
     renderAudEps(state.audEpItems);
   }
 
   requestAnimationFrame(() => {
-    const cycleEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-subseg-is-root="0"]`);
+    const cycleEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-link-target-langunit-id="${CSS.escape(String(linkTargetLangUnitId))}"]`);
     if (cycleEditor instanceof HTMLElement) {
       cycleEditor.focus({ preventScroll: true });
       setCaretToEnd(cycleEditor);
@@ -1792,7 +1810,7 @@ function cycleLangUnitBubbleTarget(editor, step) {
   setSubSegBubbleTargetIndex(editor, nextIndex);
   syncLangUnitBubbleTarget(editor, nextIndex === -1);
   const shouldRenderCycleRow = currentIndex < 0 && nextIndex >= 0;
-  const changed = syncCycleSubSegRow(editor);
+  const changed = syncCycleSubSegRow(editor, true);
   if (changed || shouldRenderCycleRow) {
     renderAudEps(state.audEpItems);
     requestAnimationFrame(() => {
