@@ -594,16 +594,22 @@ function getRootSubSegItemForAudSeg(audSegId) {
   return getSubSegItemsForAudSeg(audSegId).find((item) => item?.isRoot !== false) ?? null;
 }
 
-function getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId) {
+function getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId, excludeSubSegId = '') {
   const targetId = String(linkTargetLangUnitId ?? '').trim();
+  const excluded = String(excludeSubSegId ?? '').trim();
   return getSubSegItemsForAudSeg(audSegId).find(
-    (item) => item?.isRoot === false && String(item?.linkTargetLangUnitId ?? '') === targetId
+    (item) =>
+      item?.isRoot === false &&
+      String(item?._id ?? '') !== excluded &&
+      String(item?.linkTargetLangUnitId ?? '') === targetId
   ) ?? null;
 }
 
-function getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId) {
-  const prefix = `${String(audSegId ?? '').trim()}-0-`;
+function getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId, excludeSubSegId = '') {
+  const parentSubSegId = getSubSegIdForLangUnitId(linkTargetLangUnitId);
+  const prefix = `${parentSubSegId}-`;
   const targetId = String(linkTargetLangUnitId ?? '').trim();
+  const excluded = String(excludeSubSegId ?? '').trim();
   if (!prefix.trim() || !targetId.startsWith(prefix)) {
     return null;
   }
@@ -613,13 +619,31 @@ function getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId) {
     return null;
   }
 
-  const derived = getSubSegItemById(buildDerivedId(audSegId, ordinal + 1));
-  if (derived) {
-    return derived;
+  const parent = getSubSegItemById(parentSubSegId);
+  if (!parent) {
+    return null;
+  }
+
+  if (parent?.isRoot !== false) {
+    const derived = getSubSegItemById(buildDerivedId(audSegId, ordinal + 1));
+    if (derived && String(derived?._id ?? '') !== excluded) {
+      return derived;
+    }
   }
 
   return getSubSegItemsForAudSeg(audSegId)
-    .filter((item) => item?.isRoot === false && !String(item?.linkTargetLangUnitId ?? '').trim())[ordinal] ?? null;
+    .filter((item) => {
+      if (
+        item?.isRoot !== false ||
+        String(item?._id ?? '') === excluded ||
+        !String(item?._id ?? '').startsWith(`${parentSubSegId}-`) ||
+        String(item?.linkTargetLangUnitId ?? '').trim()
+      ) {
+        return false;
+      }
+
+      return String(item?._id ?? '') > parentSubSegId;
+    })[ordinal] ?? null;
 }
 
 function getSubSegItemForAudSeg(audSegId) {
@@ -643,6 +667,86 @@ function getNextSubSegOrdinal(audSegId) {
   }
 
   return nextOrdinal;
+}
+
+function getSubSegIdForLangUnitId(langUnitId) {
+  const id = String(langUnitId ?? '').trim();
+  const separator = id.lastIndexOf('-');
+  return separator > 0 ? id.slice(0, separator) : '';
+}
+
+function getSubSegLinkTargetLangUnitId(item) {
+  const explicit = String(item?.linkTargetLangUnitId ?? '').trim();
+  if (explicit || item?.isRoot !== false) {
+    return explicit;
+  }
+
+  const audSegId = String(item?.audSegId ?? '').trim();
+  const itemId = String(item?._id ?? '').trim();
+  const prefix = `${audSegId}-`;
+  if (!audSegId || !itemId.startsWith(prefix)) {
+    return '';
+  }
+
+  const ordinal = Number(itemId.slice(prefix.length));
+  if (!Number.isInteger(ordinal) || ordinal <= 0) {
+    return '';
+  }
+
+  const rootLangUnitId = buildLangUnitId(buildDerivedId(audSegId, 0), ordinal - 1);
+  return getLangUnitItem(rootLangUnitId) ? rootLangUnitId : '';
+}
+
+function getSubSegItemsInTreeOrder(audSegId) {
+  const items = getSubSegItemsForAudSeg(audSegId);
+  const root = items.find((item) => item?.isRoot !== false) ?? null;
+  if (!root) {
+    return items;
+  }
+
+  const itemById = new Map(items.map((item) => [String(item?._id ?? ''), item]));
+  const childrenByParentId = new Map();
+  for (const item of items) {
+    const itemId = String(item?._id ?? '');
+    if (!itemId || item?.isRoot !== false) {
+      continue;
+    }
+
+    const parentId = getSubSegIdForLangUnitId(getSubSegLinkTargetLangUnitId(item));
+    if (!parentId || !itemById.has(parentId)) {
+      continue;
+    }
+
+    childrenByParentId.set(parentId, [...(childrenByParentId.get(parentId) ?? []), item]);
+  }
+
+  const seen = new Set();
+  const ordered = [];
+  const pushSubtree = (item) => {
+    const itemId = String(item?._id ?? '');
+    if (!itemId || seen.has(itemId)) {
+      return;
+    }
+
+    seen.add(itemId);
+    ordered.push(item);
+    const childOrder = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, itemId));
+    const children = childrenByParentId.get(itemId) ?? [];
+    children.sort((a, b) => {
+      const indexA = childOrder.indexOf(getSubSegLinkTargetLangUnitId(a));
+      const indexB = childOrder.indexOf(getSubSegLinkTargetLangUnitId(b));
+      if (indexA !== indexB) {
+        return (indexA < 0 ? Number.MAX_SAFE_INTEGER : indexA) - (indexB < 0 ? Number.MAX_SAFE_INTEGER : indexB);
+      }
+
+      return sortSubSegItems([a, b])[0] === a ? -1 : 1;
+    });
+    children.forEach(pushSubtree);
+  };
+
+  pushSubtree(root);
+  items.filter((item) => !seen.has(String(item?._id ?? ''))).forEach(pushSubtree);
+  return ordered;
 }
 
 function ensureRootSubSegItem(audSegId) {
@@ -1035,14 +1139,14 @@ function renderSubSegContentTokens(tokens, subSegId = '') {
 
 function renderSubSegList(audSegItem) {
   const audSegId = audSegItem?._id || '';
-  const rootSubSegItem = ensureRootSubSegItem(audSegId);
-  const subSegItems = getSubSegItemsForAudSeg(audSegId);
-  const cycleSubSegItems = subSegItems.filter((item) => item?.isRoot === false);
+  ensureRootSubSegItem(audSegId);
+  const subSegItems = getSubSegItemsInTreeOrder(audSegId);
   const valueBySubSegId = new Map(
     [...subSegDraftTextBySubSegId.entries()].filter(([key]) => subSegItems.some((item) => String(item?._id ?? '') === key))
   );
   const renderEditor = (subSegItem, placeholderText = '') => {
     const subSegId = String(subSegItem?._id ?? '');
+    const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(subSegItem);
     const value = valueBySubSegId.get(subSegId);
     const renderedContent = subSegItem?.content ? renderSubSegContentTokens(subSegItem.content, subSegId) : '';
     const hasLangUnitRefs = Array.isArray(subSegItem?.content) && subSegItem.content.some((token) => token?.type === 'langUnitRef');
@@ -1060,7 +1164,7 @@ function renderSubSegList(audSegItem) {
           data-subseg-id="${escapeHtml(subSegId)}"
           data-subseg-audseg-id="${escapeHtml(audSegId)}"
           data-subseg-is-root="${subSegItem?.isRoot === false ? '0' : '1'}"
-          ${subSegItem?.linkTargetLangUnitId ? ` data-link-target-langunit-id="${escapeHtml(String(subSegItem.linkTargetLangUnitId))}"` : ''}
+          ${linkTargetLangUnitId ? ` data-link-target-langunit-id="${escapeHtml(linkTargetLangUnitId)}"` : ''}
           ${subSegItem?.isRoot === false ? ' data-placeholder="no subSeg yet.."' : ''}
         >${subSegItem?.isRoot === false && !content ? '' : content}</div>
       </li>
@@ -1068,9 +1172,7 @@ function renderSubSegList(audSegItem) {
   };
 
   const items = [];
-  items.push(renderEditor(rootSubSegItem));
-
-  items.push(...cycleSubSegItems.map((item) => renderEditor(item)));
+  items.push(...subSegItems.map((item) => renderEditor(item)));
 
   return `
     <ul class="item__subsegs" aria-label="subSegs">
@@ -1709,12 +1811,12 @@ function syncCycleSubSegRow(editor, createIfMissing = false) {
       return false;
     }
 
-    const current = getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId);
+    const current = getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId, subSegId);
     if (current) {
       return false;
     }
 
-    const derived = getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId);
+    const derived = getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId, subSegId);
     if (derived?.isRoot === false) {
       const next = {
         ...derived,
@@ -1782,7 +1884,8 @@ function focusCycleSubSegInput(editor) {
   }
 
   requestAnimationFrame(() => {
-    const cycleEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-link-target-langunit-id="${CSS.escape(String(linkTargetLangUnitId))}"]`);
+    const cycleEditor = [...audEpList.querySelectorAll(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-link-target-langunit-id="${CSS.escape(String(linkTargetLangUnitId))}"]`)]
+      .find((input) => input instanceof HTMLElement && String(input.dataset.subsegId ?? '') !== subSegId);
     if (cycleEditor instanceof HTMLElement) {
       cycleEditor.focus({ preventScroll: true });
       setCaretToEnd(cycleEditor);
@@ -1896,6 +1999,26 @@ function focusRootSubSegInput(audSegId, linkTargetLangUnitId = '') {
           setCaretToEnd(liveRootEditor);
         }
       });
+    }
+  });
+}
+
+function focusParentSubSegInput(editor) {
+  const subSegId = getSubSegEditorKey(editor);
+  const subSegItem = getSubSegItemById(subSegId);
+  const audSegId = editor?.dataset?.subsegAudsegId || String(subSegItem?.audSegId ?? '');
+  const parentSubSegId = getSubSegIdForLangUnitId(getSubSegLinkTargetLangUnitId(subSegItem));
+  if (!parentSubSegId) {
+    focusRootSubSegInput(audSegId);
+    return;
+  }
+
+  clearSubSegBubbleTarget(editor);
+  requestAnimationFrame(() => {
+    const parentEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(parentSubSegId)}"]`);
+    if (parentEditor instanceof HTMLElement) {
+      parentEditor.focus({ preventScroll: true });
+      setCaretToEnd(parentEditor);
     }
   });
 }
@@ -3236,7 +3359,7 @@ document.addEventListener('keydown', (event) => {
       event.preventDefault();
       const shouldReturnToRoot = editor?.dataset.subsegIsRoot === '0';
       if (shouldReturnToRoot) {
-        focusRootSubSegInput(audSegId);
+        focusParentSubSegInput(editor);
         return;
       }
       if (editor && resetLangUnitBubbleTarget(editor, true)) {

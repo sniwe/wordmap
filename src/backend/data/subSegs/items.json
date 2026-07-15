@@ -14,24 +14,16 @@
       },
       {
         "type": "text",
-        "text": " again"
-      },
-      {
-        "type": "text",
         "text": "\nthis is test line "
       },
       {
         "type": "langUnitRef",
         "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1"
-      },
-      {
-        "type": "text",
-        "text": " again"
       }
     ],
-    "text": "this is test line one again\nthis is test line two again",
-    "createdAt": "2026-07-14T12:51:59.402Z",
-    "updatedAt": "2026-07-14T12:52:57.337Z"
+    "text": "this is test line one\nthis is test line two",
+    "createdAt": "2026-07-15T00:05:17.632Z",
+    "updatedAt": "2026-07-15T00:05:30.252Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
@@ -40,13 +32,17 @@
     "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
     "content": [
       {
+        "type": "langUnitRef",
+        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0"
+      },
+      {
         "type": "text",
-        "text": "little guy one has spawned again"
+        "text": "-line one hee"
       }
     ],
-    "text": "little guy one has spawned again",
-    "createdAt": "2026-07-14T12:52:15.697Z",
-    "updatedAt": "2026-07-14T12:52:34.975Z"
+    "text": "sub-line one hee",
+    "createdAt": "2026-07-15T00:05:24.058Z",
+    "updatedAt": "2026-07-15T00:06:14.294Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2",
@@ -56,11 +52,21 @@
     "content": [
       {
         "type": "text",
-        "text": "little guy two has spawned... now the test comes"
+        "text": "sub-line two hee"
       }
     ],
-    "text": "little guy two has spawned... now the test comes",
-    "createdAt": "2026-07-14T12:52:36.841Z",
-    "updatedAt": "2026-07-14T12:53:00.295Z"
+    "text": "sub-line two hee",
+    "createdAt": "2026-07-15T00:05:30.605Z",
+    "updatedAt": "2026-07-15T00:06:14.853Z"
+  },
+  {
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3",
+    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+    "isRoot": false,
+    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-15T00:06:05.408Z",
+    "updatedAt": "2026-07-15T00:06:05.408Z"
   }
 ]
