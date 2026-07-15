@@ -33,6 +33,7 @@
 | `subSeg tree order` | The render order where a linked child subSeg appears immediately after the subSeg that owns its target langUnit bubble, recursively for arbitrary nesting depth. |
 | `subSeg parent link` | The required `linkTargetLangUnitId` edge on every non-root subSeg; it points to the langUnit bubble that owns that child row. |
 | `subSeg parent snapback` | `Ctrl+Backspace` from a non-root subSeg focuses the subSeg that owns its `linkTargetLangUnitId`, one parent step at a time. |
+| `subSeg descendant expansion` | A child subSeg subtree and all of its descendants are visible only while the ancestor langUnit bubble that owns the branch is cycle-targeted; sibling branches stay collapsed. |
 | `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and non-root child rows each need their own `subSegId`. |
 | `subSeg derived id` | The chained `subSeg` id format `\`${audSegId}-${subSegOrdinal}\`` used by the new scheme. |
 | `subSeg editor` | The contenteditable host inside the seed `subSeg` item that accepts text, saves on debounce, and keeps Enter as a newline. |

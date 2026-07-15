@@ -638,6 +638,15 @@ function getSubSegLinkTargetLangUnitId(item) {
   return String(item?.linkTargetLangUnitId ?? '').trim();
 }
 
+function getTargetedLangUnitIdForSubSeg(audSegId, subSegId) {
+  const targetIndex = getSubSegBubbleTargetIndexByKey(subSegId);
+  if (targetIndex < 0) {
+    return '';
+  }
+
+  return getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId))[targetIndex] ?? '';
+}
+
 function getSubSegItemsInTreeOrder(audSegId) {
   const items = getSubSegItemsForAudSeg(audSegId);
   const root = items.find((item) => item?.isRoot !== false) ?? null;
@@ -663,7 +672,7 @@ function getSubSegItemsInTreeOrder(audSegId) {
 
   const seen = new Set();
   const ordered = [];
-  const pushSubtree = (item) => {
+  const pushSubtree = (item, forceExpanded = false) => {
     const itemId = String(item?._id ?? '');
     if (!itemId || seen.has(itemId)) {
       return;
@@ -672,7 +681,9 @@ function getSubSegItemsInTreeOrder(audSegId) {
     seen.add(itemId);
     ordered.push(item);
     const childOrder = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, itemId));
-    const children = childrenByParentId.get(itemId) ?? [];
+    const targetedLangUnitId = getTargetedLangUnitIdForSubSeg(audSegId, itemId);
+    const children = (childrenByParentId.get(itemId) ?? [])
+      .filter((child) => forceExpanded || getSubSegLinkTargetLangUnitId(child) === targetedLangUnitId);
     children.sort((a, b) => {
       const indexA = childOrder.indexOf(getSubSegLinkTargetLangUnitId(a));
       const indexB = childOrder.indexOf(getSubSegLinkTargetLangUnitId(b));
@@ -682,11 +693,21 @@ function getSubSegItemsInTreeOrder(audSegId) {
 
       return sortSubSegItems([a, b])[0] === a ? -1 : 1;
     });
-    children.forEach(pushSubtree);
+    children.forEach((child) => pushSubtree(child, forceExpanded || getSubSegLinkTargetLangUnitId(child) === targetedLangUnitId));
   };
 
   pushSubtree(root);
-  items.filter((item) => !seen.has(String(item?._id ?? ''))).forEach(pushSubtree);
+  items
+    .filter((item) => {
+      const itemId = String(item?._id ?? '');
+      if (!itemId || seen.has(itemId) || item?.isRoot !== false) {
+        return false;
+      }
+
+      const parentId = getSubSegIdForLangUnitId(getSubSegLinkTargetLangUnitId(item));
+      return !parentId || !itemById.has(parentId);
+    })
+    .forEach(pushSubtree);
   return ordered;
 }
 
@@ -781,6 +802,19 @@ function getLangUnitBubbleIndex(audSegId, langUnitId) {
       ? subSegItem.content
       : [];
   return getOrderedLangUnitIds(tokens).indexOf(getLangUnitCycleTargetId(langUnitId));
+}
+
+function getLangUnitBubbleIndexForSubSeg(audSegId, subSegId, langUnitId) {
+  if (!audSegId || !subSegId || !langUnitId) {
+    return -1;
+  }
+
+  const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(String(subSegId))}"]`);
+  if (editor instanceof HTMLElement) {
+    return getLangUnitBubbleGroupIds(editor).indexOf(getLangUnitCycleTargetId(langUnitId));
+  }
+
+  return getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId)).indexOf(getLangUnitCycleTargetId(langUnitId));
 }
 
 function getLangUnitItem(langUnitId) {
@@ -1834,9 +1868,8 @@ function cycleLangUnitBubbleTarget(editor, step) {
 
   setSubSegBubbleTargetIndex(editor, nextIndex);
   syncLangUnitBubbleTarget(editor, nextIndex === -1);
-  const shouldRenderCycleRow = currentIndex < 0 && nextIndex >= 0;
   const changed = syncCycleSubSegRow(editor, true);
-  if (changed || shouldRenderCycleRow) {
+  if (changed || currentIndex !== nextIndex) {
     renderAudEps(state.audEpItems);
     requestAnimationFrame(() => {
       const liveEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(String(subSegId))}"]`);
@@ -1929,16 +1962,24 @@ function focusParentSubSegInput(editor) {
   const subSegId = getSubSegEditorKey(editor);
   const subSegItem = getSubSegItemById(subSegId);
   const audSegId = editor?.dataset?.subsegAudsegId || String(subSegItem?.audSegId ?? '');
-  const parentSubSegId = getSubSegIdForLangUnitId(getSubSegLinkTargetLangUnitId(subSegItem));
+  const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(subSegItem);
+  const parentSubSegId = getSubSegIdForLangUnitId(linkTargetLangUnitId);
   if (!parentSubSegId) {
     focusRootSubSegInput(audSegId);
     return;
   }
 
   clearSubSegBubbleTarget(editor);
+  const parentTargetIndex = getLangUnitBubbleIndexForSubSeg(audSegId, parentSubSegId, linkTargetLangUnitId);
+  if (parentTargetIndex >= 0) {
+    setSubSegBubbleTargetIndex(parentSubSegId, parentTargetIndex);
+  }
+
+  renderAudEps(state.audEpItems);
   requestAnimationFrame(() => {
     const parentEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(parentSubSegId)}"]`);
     if (parentEditor instanceof HTMLElement) {
+      syncLangUnitBubbleTarget(parentEditor, false);
       parentEditor.focus({ preventScroll: true });
       setCaretToEnd(parentEditor);
     }
