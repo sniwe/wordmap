@@ -5,25 +5,17 @@
     "isRoot": true,
     "content": [
       {
-        "type": "text",
-        "text": "this is line number "
-      },
-      {
         "type": "langUnitRef",
         "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0"
       },
       {
         "type": "text",
-        "text": "\nthis is line number "
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1"
+        "text": "两清"
       }
     ],
-    "text": "this is line number one\nthis is line number two",
-    "createdAt": "2026-07-15T00:15:14.483Z",
-    "updatedAt": "2026-07-15T00:15:16.142Z"
+    "text": "qianhou两清",
+    "createdAt": "2026-07-15T07:10:28.543Z",
+    "updatedAt": "2026-07-15T07:10:51.403Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
@@ -33,7 +25,7 @@
     "content": [
       {
         "type": "text",
-        "text": "child one of "
+        "text": "= 前"
       },
       {
         "type": "langUnitRef",
@@ -41,12 +33,20 @@
       },
       {
         "type": "text",
-        "text": " guy one"
+        "text": "\n= 钱"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-1"
+      },
+      {
+        "type": "text",
+        "text": "\n"
       }
     ],
-    "text": "child one of little guy one",
-    "createdAt": "2026-07-15T00:13:25.546Z",
-    "updatedAt": "2026-07-15T00:13:43.139Z"
+    "text": "= 前后\n= 钱货\n",
+    "createdAt": "2026-07-15T07:10:54.456Z",
+    "updatedAt": "2026-07-15T07:11:56.493Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2",
@@ -56,49 +56,54 @@
     "content": [
       {
         "type": "text",
-        "text": "hi at level three"
+        "text": "extra "
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2-0"
       }
     ],
-    "text": "hi at level three",
-    "createdAt": "2026-07-15T00:13:43.890Z",
-    "updatedAt": "2026-07-15T00:14:19.955Z"
+    "text": "extra descendants",
+    "createdAt": "2026-07-15T07:11:58.550Z",
+    "updatedAt": "2026-07-15T07:13:01.324Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3",
     "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
     "isRoot": false,
-    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1",
+    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-1",
     "content": [
       {
         "type": "text",
-        "text": "child one of little "
+        "text": "for this one and the "
       },
       {
         "type": "langUnitRef",
         "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3-0"
-      },
-      {
-        "type": "text",
-        "text": " two"
       }
     ],
-    "text": "child one of little guy two",
-    "createdAt": "2026-07-15T00:13:50.145Z",
-    "updatedAt": "2026-07-15T00:14:34.155Z"
+    "text": "for this one and the above",
+    "createdAt": "2026-07-15T07:12:00.710Z",
+    "updatedAt": "2026-07-15T07:13:12.911Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-4",
     "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
     "isRoot": false,
+    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-15T07:13:02.134Z",
+    "updatedAt": "2026-07-15T07:13:02.134Z"
+  },
+  {
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-5",
+    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+    "isRoot": false,
     "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3-0",
-    "content": [
-      {
-        "type": "text",
-        "text": "hi at level three under child two"
-      }
-    ],
-    "text": "hi at level three under child two",
-    "createdAt": "2026-07-15T00:14:34.588Z",
-    "updatedAt": "2026-07-15T00:15:05.263Z"
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-15T07:13:13.026Z",
+    "updatedAt": "2026-07-15T07:13:13.026Z"
   }
 ]

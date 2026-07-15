@@ -1,96 +1,117 @@
 [
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-    "text": "one",
+    "text": "qianhou",
     "instances": [
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
         "remote": false,
-        "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-        "start": 20,
-        "end": 23,
+        "start": 0,
+        "end": 7,
         "context": {
-          "text": "this is line number one",
-          "type": "engPhrase"
+          "text": "qianhou两清",
+          "type": "chinPhrase"
         }
       }
     ],
     "target": {
-      "text": "one",
-      "type": "engWord"
+      "text": "qianhou",
+      "type": "chinFuzz"
     },
-    "createdAt": "2026-07-15T00:13:13.279Z",
-    "updatedAt": "2026-07-15T00:15:16.152Z"
-  },
-  {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1",
-    "text": "two",
-    "instances": [
-      {
-        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
-        "remote": false,
-        "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1",
-        "start": 44,
-        "end": 47,
-        "context": {
-          "text": "this is line number two",
-          "type": "engPhrase"
-        }
-      }
-    ],
-    "target": {
-      "text": "two",
-      "type": "engWord"
-    },
-    "createdAt": "2026-07-15T00:13:16.906Z",
-    "updatedAt": "2026-07-15T00:15:16.152Z"
+    "createdAt": "2026-07-15T07:10:51.405Z",
+    "updatedAt": "2026-07-15T07:10:51.407Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
-    "text": "little",
+    "text": "后",
     "instances": [
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
         "remote": false,
-        "start": 13,
-        "end": 19,
+        "start": 3,
+        "end": 4,
         "context": {
-          "text": "child one of little guy one",
+          "text": "= 前后",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "后",
+      "type": "chinChar"
+    },
+    "createdAt": "2026-07-15T07:11:53.361Z",
+    "updatedAt": "2026-07-15T07:11:56.496Z"
+  },
+  {
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-1",
+    "text": "货",
+    "instances": [
+      {
+        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
+        "remote": false,
+        "start": 8,
+        "end": 9,
+        "context": {
+          "text": "= 钱货",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "货",
+      "type": "chinChar"
+    },
+    "createdAt": "2026-07-15T07:11:56.495Z",
+    "updatedAt": "2026-07-15T07:11:56.496Z"
+  },
+  {
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2-0",
+    "text": "descendants",
+    "instances": [
+      {
+        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2",
+        "remote": false,
+        "start": 6,
+        "end": 17,
+        "context": {
+          "text": "extra descendants",
           "type": "engPhrase"
         }
       }
     ],
     "target": {
-      "text": "little",
+      "text": "descendants",
       "type": "engWord"
     },
-    "createdAt": "2026-07-15T00:13:43.143Z",
-    "updatedAt": "2026-07-15T00:13:43.146Z"
+    "createdAt": "2026-07-15T07:13:01.326Z",
+    "updatedAt": "2026-07-15T07:13:01.328Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3-0",
-    "text": "guy",
+    "text": "above",
     "instances": [
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3",
         "remote": false,
-        "start": 20,
-        "end": 23,
+        "start": 21,
+        "end": 26,
         "context": {
-          "text": "child one of little guy two",
+          "text": "for this one and the above",
           "type": "engPhrase"
         }
       }
     ],
     "target": {
-      "text": "guy",
+      "text": "above",
       "type": "engWord"
     },
-    "createdAt": "2026-07-15T00:14:34.158Z",
-    "updatedAt": "2026-07-15T00:14:34.166Z"
+    "createdAt": "2026-07-15T07:13:12.913Z",
+    "updatedAt": "2026-07-15T07:13:12.915Z"
   }
 ]

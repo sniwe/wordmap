@@ -32,7 +32,7 @@
 | `subSeg cycle row` | A non-root `subSeg` editor row with `isRoot: false` and `linkTargetLangUnitId`, initialized from a committed `langUnit` target and kept visible after reload once saved. |
 | `subSeg tree order` | The render order where a linked child subSeg appears immediately after the subSeg that owns its target langUnit bubble, recursively for arbitrary nesting depth. |
 | `subSeg parent link` | The required `linkTargetLangUnitId` edge on every non-root subSeg; it points to the langUnit bubble that owns that child row. |
-| `subSeg parent snapback` | `Ctrl+Backspace` from a non-root subSeg focuses the subSeg that owns its `linkTargetLangUnitId`, one parent step at a time. |
+| `subSeg parent snapback` | `Ctrl+Backspace` from a non-root subSeg focuses only the direct parent subSeg that owns its `linkTargetLangUnitId`, one parent step at a time, with no fallback jump. |
 | `subSeg descendant expansion` | A child subSeg subtree and all of its descendants are visible only while the ancestor langUnit bubble that owns the branch is cycle-targeted; sibling branches stay collapsed. |
 | `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and non-root child rows each need their own `subSegId`. |
 | `subSeg derived id` | The chained `subSeg` id format `\`${audSegId}-${subSegOrdinal}\`` used by the new scheme. |
@@ -70,6 +70,7 @@
 | `langUnit target normalization` | The loader/save rule that stores the selected substring text, derives its target type from the substring plus `context.type` when needed, and keeps the normalized result on both the instance and the parent `langUnit`. |
 | `chinChar` | A single Chinese character selected as a target. |
 | `chinFuzz` | A target that is Chinese-plus-Latin or pinyin-shaped in a mixed context where the selection should stay tied to Chinese-style capture rules. |
+| `chinFuzz equals gloss` | Direct child `subSeg` lines starting with `=` instantly override only the corresponding parent `chinFuzz` `langUnit` bubble's displayed text with valid nonempty Chinese-only text whose character count matches the parent pinyin syllable count; multiple valid lines render joined by ` / `, and no valid lines snap back to stored `langUnit.text`. |
 | `chinFuzzPart` | A mixed or pinyin-shaped target captured while the surrounding context is `chinFuzzWord`. |
 | `engWordPart` | A short English-like target captured inside an `engPhrase` or `engWord` context when the selection is only part of a larger English word. |
 | `no-op` | A rejected or illegal target shape, usually blank or punctuation-only text that should not produce a meaningful capture classification. |
