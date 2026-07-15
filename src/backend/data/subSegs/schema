@@ -32,6 +32,12 @@
           },
           "additionalProperties": true
         }
+      },
+      "linkTargetLangUnitId": {
+        "type": "string"
+      },
+      "parentSubSegId": {
+        "type": "string"
       }
     },
     "additionalProperties": true

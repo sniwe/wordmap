@@ -64,11 +64,15 @@
                 "type": {
                   "type": "string",
                   "enum": [
+                    "chinChar",
                     "chinPhrase",
                     "chinWord",
-                    "chinFuzzWord",
+                    "chinFuzz",
+                    "chinFuzzPart",
+                    "engWordPart",
                     "engPhrase",
-                    "engWord"
+                    "engWord",
+                    "no-op"
                   ]
                 }
               },
@@ -88,6 +92,33 @@
           "additionalProperties": true
         }
       },
+      "target": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "chinChar",
+              "chinWord",
+              "chinPhrase",
+              "chinFuzz",
+              "chinFuzzPart",
+              "engWordPart",
+              "engWord",
+              "engPhrase",
+              "no-op"
+            ]
+          }
+        },
+        "required": [
+          "text",
+          "type"
+        ],
+        "additionalProperties": true
+      },
       "createdAt": {
         "type": "string"
       },
@@ -95,6 +126,11 @@
         "type": "string"
       }
     },
+    "required": [
+      "_id",
+      "text",
+      "target"
+    ],
     "additionalProperties": true
   }
 }

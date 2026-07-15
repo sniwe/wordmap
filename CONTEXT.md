@@ -31,7 +31,7 @@
 | `subSeg root row` | The persistent `subSeg` editor row with `isRoot: true` that owns the main text for an entered `audSeg`. |
 | `subSeg cycle row` | A non-root `subSeg` editor row with `isRoot: false` and `linkTargetLangUnitId`, initialized from a committed `langUnit` target and kept visible after reload once saved. |
 | `subSeg tree order` | The render order where a linked child subSeg appears immediately after the subSeg that owns its target langUnit bubble, recursively for arbitrary nesting depth. |
-| `subSeg parent link` | The required `linkTargetLangUnitId` edge on every non-root subSeg; it points to the langUnit bubble that owns that child row. |
+| `subSeg parent link` | The required `linkTargetLangUnitId` edge on every non-root subSeg; it points to the langUnit bubble that owns that child row, while `parentSubSegId` stores the owning subSeg row explicitly for canonical langUnit ids. |
 | `subSeg parent snapback` | `Ctrl+Backspace` from a non-root subSeg focuses only the direct parent subSeg that owns its `linkTargetLangUnitId`, one parent step at a time, with no fallback jump. |
 | `subSeg descendant expansion` | A child subSeg subtree and all of its descendants are visible only while the ancestor langUnit bubble that owns the branch is cycle-targeted; sibling branches stay collapsed. |
 | `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and non-root child rows each need their own `subSegId`. |
@@ -47,8 +47,8 @@
 | `langUnit ref` | Legacy shorthand for `langUnit instance`. |
 | `langUnit extension` | A new `langUnit` created from a selected substring while a cycle-target is active; its context instance stores the shared `cycleGroupId`. |
 | `langUnit cycle group` | The shared group identifier stored on context-bound instances so cycle targeting and dotted underline rendering treat linked langUnits as one group. |
-| `langUnit reuse by text` | The creation rule that reuses an existing `langUnit` record when the selected bubble text exactly matches an already stored `langUnit`. |
-| `langUnit text canonicalization` | The storage rule that collapses identical bubble text into one `langUnit` record and rewrites saved `subSeg` references to the canonical `langUnitId`. |
+| `langUnit reuse by target-text` | The creation rule that reuses an existing `langUnit` record when the selected bubble has the same normalized `target.type` and trimmed `target.text`. |
+| `langUnit target-text canonicalization` | The storage rule that collapses identical `target.type + target.text` pairs into one `langUnit` record and rewrites saved `subSeg` references to the canonical `langUnitId`. |
 | `langUnit add badge` | The tiny round count badge on a `langUnit bubble` that shows how many direct references belong to that `langUnit`. |
 | `langUnit add list` | The collapsible side list beside an active `langUnit bubble` that shows other reference locations for that `langUnit` and their context text. |
 | `langUnit add links` | The in-memory reverse-link list for a `langUnit` record that stores which `audSeg`/`subSeg` pairs contain its direct references; it is derived from subSeg content and not persisted. |

@@ -1,117 +1,125 @@
 [
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-    "text": "qianhou",
+    "text": "beeper",
     "instances": [
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
         "remote": false,
-        "start": 0,
-        "end": 7,
+        "start": 10,
+        "end": 16,
         "context": {
-          "text": "qianhou两清",
-          "type": "chinPhrase"
+          "text": "this is a beeper",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "beeper",
+          "type": "engWord"
         }
       }
     ],
     "target": {
-      "text": "qianhou",
-      "type": "chinFuzz"
+      "text": "beeper",
+      "type": "engWord"
     },
-    "createdAt": "2026-07-15T07:10:51.405Z",
-    "updatedAt": "2026-07-15T07:10:51.407Z"
+    "createdAt": "2026-07-15T08:54:03.463Z",
+    "updatedAt": "2026-07-15T08:54:03.463Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
-    "text": "后",
-    "instances": [
-      {
-        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
-        "remote": false,
-        "start": 3,
-        "end": 4,
-        "context": {
-          "text": "= 前后",
-          "type": "chinPhrase"
-        }
-      }
-    ],
-    "target": {
-      "text": "后",
-      "type": "chinChar"
-    },
-    "createdAt": "2026-07-15T07:11:53.361Z",
-    "updatedAt": "2026-07-15T07:11:56.496Z"
-  },
-  {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-1",
-    "text": "货",
+    "text": "creeper",
     "instances": [
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
         "remote": false,
         "start": 8,
-        "end": 9,
+        "end": 15,
         "context": {
-          "text": "= 钱货",
-          "type": "chinPhrase"
+          "text": "jeepers creeper",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "creeper",
+          "type": "engWord"
         }
       }
     ],
     "target": {
-      "text": "货",
-      "type": "chinChar"
+      "text": "creeper",
+      "type": "engWord"
     },
-    "createdAt": "2026-07-15T07:11:56.495Z",
-    "updatedAt": "2026-07-15T07:11:56.496Z"
+    "createdAt": "2026-07-15T08:54:20.184Z",
+    "updatedAt": "2026-07-15T08:54:22.207Z"
+  },
+  {
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-1",
+    "text": "jeepers",
+    "instances": [
+      {
+        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
+        "remote": false,
+        "start": 0,
+        "end": 7,
+        "context": {
+          "text": "jeepers creeper",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "jeepers",
+          "type": "engWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "jeepers",
+      "type": "engWord"
+    },
+    "createdAt": "2026-07-15T08:54:22.207Z",
+    "updatedAt": "2026-07-15T08:54:22.207Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2-0",
-    "text": "descendants",
+    "text": "bob",
     "instances": [
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2",
         "remote": false,
-        "start": 6,
-        "end": 17,
+        "start": 3,
+        "end": 6,
         "context": {
-          "text": "extra descendants",
+          "text": "hi bob",
           "type": "engPhrase"
+        },
+        "target": {
+          "text": "bob",
+          "type": "engWordPart"
         }
-      }
-    ],
-    "target": {
-      "text": "descendants",
-      "type": "engWord"
-    },
-    "createdAt": "2026-07-15T07:13:01.326Z",
-    "updatedAt": "2026-07-15T07:13:01.328Z"
-  },
-  {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3-0",
-    "text": "above",
-    "instances": [
+      },
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3",
         "remote": false,
-        "start": 21,
-        "end": 26,
+        "start": 5,
+        "end": 8,
         "context": {
-          "text": "for this one and the above",
-          "type": "engPhrase"
+          "text": "bob",
+          "type": "engWord"
+        },
+        "target": {
+          "text": "bob",
+          "type": "engWordPart"
         }
       }
     ],
     "target": {
-      "text": "above",
-      "type": "engWord"
+      "text": "bob",
+      "type": "engWordPart"
     },
-    "createdAt": "2026-07-15T07:13:12.913Z",
-    "updatedAt": "2026-07-15T07:13:12.915Z"
+    "createdAt": "2026-07-15T08:54:37.254Z",
+    "updatedAt": "2026-07-15T08:54:41.585Z"
   }
 ]

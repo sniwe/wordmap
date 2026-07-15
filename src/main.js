@@ -634,6 +634,15 @@ function getSubSegIdForLangUnitId(langUnitId) {
   return separator > 0 ? id.slice(0, separator) : '';
 }
 
+function getSubSegParentSubSegId(item) {
+  const explicitParentId = String(item?.parentSubSegId ?? '').trim();
+  if (explicitParentId) {
+    return explicitParentId;
+  }
+
+  return getSubSegIdForLangUnitId(getSubSegLinkTargetLangUnitId(item));
+}
+
 function getSubSegLinkTargetLangUnitId(item) {
   return String(item?.linkTargetLangUnitId ?? '').trim();
 }
@@ -661,50 +670,90 @@ function getTargetedLangUnitIdForSubSeg(audSegId, subSegId) {
   return getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId))[targetIndex] ?? '';
 }
 
-function getSubSegItemsInTreeOrder(audSegId) {
+function getSubSegEntriesInTreeOrder(audSegId) {
   const items = getSubSegItemsForAudSeg(audSegId);
   const root = items.find((item) => item?.isRoot !== false) ?? null;
   if (!root) {
-    return items;
+    return items.map((item) => ({ item, depth: 0 }));
   }
 
   const itemById = new Map(items.map((item) => [String(item?._id ?? ''), item]));
   const childrenByParentId = new Map();
   const parentIdByItemId = new Map();
+  const parentIdsByLangUnitId = new Map();
+  for (const item of items) {
+    const parentId = String(item?._id ?? '').trim();
+    if (!parentId) {
+      continue;
+    }
+
+    for (const langUnitId of getOrderedLangUnitIds(getSubSegContentTokens(audSegId, parentId))) {
+      parentIdsByLangUnitId.set(langUnitId, [...(parentIdsByLangUnitId.get(langUnitId) ?? []), parentId]);
+    }
+  }
+
+  const canonicalChildIdByLangUnitId = new Map();
   for (const item of items) {
     const itemId = String(item?._id ?? '');
     if (!itemId || item?.isRoot !== false) {
       continue;
     }
 
-    const parentId = getSubSegIdForLangUnitId(getSubSegLinkTargetLangUnitId(item));
-    if (!parentId || !itemById.has(parentId)) {
+    const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(item);
+    if (!linkTargetLangUnitId) {
       continue;
     }
 
-    parentIdByItemId.set(itemId, parentId);
-    childrenByParentId.set(parentId, [...(childrenByParentId.get(parentId) ?? []), item]);
+    if (canonicalChildIdByLangUnitId.has(linkTargetLangUnitId)) {
+      continue;
+    }
+
+    canonicalChildIdByLangUnitId.set(linkTargetLangUnitId, itemId);
+    const parentIds = parentIdsByLangUnitId.get(linkTargetLangUnitId) ?? [getSubSegParentSubSegId(item)].filter(Boolean);
+    for (const parentId of parentIds) {
+      if (!itemById.has(parentId)) {
+        continue;
+      }
+
+      parentIdByItemId.set(itemId, parentId);
+      childrenByParentId.set(parentId, [...(childrenByParentId.get(parentId) ?? []), item]);
+    }
   }
 
-  const focusedPathIds = new Set();
-  for (let itemId = getSubSegEditorKey(getFocusedSubSegEditor()); itemId; itemId = parentIdByItemId.get(itemId) ?? '') {
-    focusedPathIds.add(itemId);
+  const focusedPathEdges = new Set();
+  const focusedEditor = getFocusedSubSegEditor();
+  let focusedParentId = focusedEditor instanceof HTMLElement ? String(focusedEditor.dataset.parentSubsegId ?? '').trim() : '';
+  for (let itemId = getSubSegEditorKey(focusedEditor); itemId;) {
+    const parentId = focusedParentId || parentIdByItemId.get(itemId) || '';
+    if (!parentId) {
+      break;
+    }
+
+    focusedPathEdges.add(`${parentId}\u0000${itemId}`);
+    itemId = parentId;
+    focusedParentId = '';
   }
 
   const seen = new Set();
+  const seenItemIds = new Set();
   const ordered = [];
-  const pushSubtree = (item) => {
+  const pushSubtree = (item, depth = 0, renderParentId = '') => {
     const itemId = String(item?._id ?? '');
-    if (!itemId || seen.has(itemId)) {
+    const renderKey = `${renderParentId}\u0000${itemId}`;
+    if (!itemId || seen.has(renderKey)) {
       return;
     }
 
-    seen.add(itemId);
-    ordered.push(item);
+    seen.add(renderKey);
+    seenItemIds.add(itemId);
+    ordered.push({ item, depth, parentSubSegId: renderParentId });
     const childOrder = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, itemId));
     const targetedLangUnitId = getTargetedLangUnitIdForSubSeg(audSegId, itemId);
     const children = (childrenByParentId.get(itemId) ?? [])
-      .filter((child) => focusedPathIds.has(String(child?._id ?? '')) || subSegLinkMatchesLangUnitTarget(child, targetedLangUnitId));
+      .filter((child) => {
+        const childId = String(child?._id ?? '');
+        return focusedPathEdges.has(`${itemId}\u0000${childId}`) || subSegLinkMatchesLangUnitTarget(child, targetedLangUnitId);
+      });
     children.sort((a, b) => {
       const indexA = childOrder.indexOf(getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(a)));
       const indexB = childOrder.indexOf(getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(b)));
@@ -714,21 +763,21 @@ function getSubSegItemsInTreeOrder(audSegId) {
 
       return sortSubSegItems([a, b])[0] === a ? -1 : 1;
     });
-    children.forEach((child) => pushSubtree(child));
+    children.forEach((child) => pushSubtree(child, depth + 1, itemId));
   };
 
   pushSubtree(root);
   items
     .filter((item) => {
       const itemId = String(item?._id ?? '');
-      if (!itemId || seen.has(itemId) || item?.isRoot !== false) {
+      if (!itemId || seenItemIds.has(itemId) || item?.isRoot !== false) {
         return false;
       }
 
-      const parentId = getSubSegIdForLangUnitId(getSubSegLinkTargetLangUnitId(item));
+      const parentId = getSubSegParentSubSegId(item);
       return !parentId || !itemById.has(parentId);
     })
-    .forEach(pushSubtree);
+    .forEach((item) => pushSubtree(item));
   return ordered;
 }
 
@@ -904,7 +953,7 @@ function getLangUnitRenderText(langUnitId, fallbackText = '', parentSubSegId = '
     (item) =>
       item?.isRoot === false &&
       getSubSegLinkTargetLangUnitId(item) === String(langUnitId ?? '').trim() &&
-      getSubSegIdForLangUnitId(getSubSegLinkTargetLangUnitId(item)) === expectedParentSubSegId
+      getSubSegParentSubSegId(item) === expectedParentSubSegId
   );
   const equalsValues = getEqualsLineValues(getSubSegTextValue(child)).filter(
     (value) => isChineseOnlyText(value) && isMatchingPinyinGloss(getLangUnitText(langUnit), value)
@@ -935,6 +984,22 @@ function getLangUnitContextText(langUnit) {
 function getLangUnitItemByText(text) {
   const value = String(text ?? '').trim();
   return state.langUnitItems.find((item) => String(getLangUnitText(item) ?? '').trim() === value) ?? null;
+}
+
+function getLangUnitCanonicalKey(target, text = '') {
+  const normalizedTarget = normalizeLangUnitTarget(target ?? text);
+  const type = normalizeLangUnitTargetType(normalizedTarget.type);
+  const value = String(normalizedTarget.text || text || '').trim();
+  return type && value ? `${type}\u0000${value}` : '';
+}
+
+function getLangUnitItemByCanonicalTarget(target, text = '') {
+  const key = getLangUnitCanonicalKey(target, text);
+  if (!key) {
+    return null;
+  }
+
+  return state.langUnitItems.find((item) => getLangUnitCanonicalKey(item?.target, item?.text) === key) ?? null;
 }
 
 function getSubSegContentTokens(audSegId, subSegId = '') {
@@ -1192,21 +1257,22 @@ function renderSubSegContentTokens(tokens, subSegId = '') {
 function renderSubSegList(audSegItem) {
   const audSegId = audSegItem?._id || '';
   ensureRootSubSegItem(audSegId);
-  const subSegItems = getSubSegItemsInTreeOrder(audSegId);
+  const subSegEntries = getSubSegEntriesInTreeOrder(audSegId);
   const valueBySubSegId = new Map(
-    [...subSegDraftTextBySubSegId.entries()].filter(([key]) => subSegItems.some((item) => String(item?._id ?? '') === key))
+    [...subSegDraftTextBySubSegId.entries()].filter(([key]) => subSegEntries.some(({ item }) => String(item?._id ?? '') === key))
   );
-  const renderEditor = (subSegItem, placeholderText = '') => {
+  const renderEditor = ({ item: subSegItem, depth = 0, parentSubSegId: renderParentSubSegId = '' }) => {
     const subSegId = String(subSegItem?._id ?? '');
     const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(subSegItem);
+    const parentSubSegId = String(renderParentSubSegId || getSubSegParentSubSegId(subSegItem)).trim();
     const value = valueBySubSegId.get(subSegId);
     const renderedContent = subSegItem?.content ? renderSubSegContentTokens(subSegItem.content, subSegId) : '';
     const hasLangUnitRefs = Array.isArray(subSegItem?.content) && subSegItem.content.some((token) => token?.type === 'langUnitRef');
-    const content = normalizeSubSegEditorMarkup(
-      value ?? (hasLangUnitRefs ? renderedContent : sanitizeSubSegMarkup(subSegItem?.text ?? '') || renderedContent)
-    );
+    const content = value != null || hasLangUnitRefs
+      ? normalizeSubSegEditorMarkup(value ?? renderedContent)
+      : escapeHtml(normalizeSubSegLineBreaks(subSegItem?.text ?? '')).replaceAll('\n', '<br>') || renderedContent;
     return `
-      <li class="item__subseg${subSegItem?.isRoot === false ? ' item__subseg--cycle' : ' item__subseg--seed'}" data-subseg-id="${escapeHtml(subSegId)}" data-subseg-audseg-id="${escapeHtml(audSegId)}" data-subseg-is-root="${subSegItem?.isRoot === false ? '0' : '1'}">
+      <li class="item__subseg${subSegItem?.isRoot === false ? ' item__subseg--cycle' : ' item__subseg--seed'}" style="--subseg-depth: ${Math.max(0, Number(depth) || 0)};" data-subseg-id="${escapeHtml(subSegId)}" data-subseg-audseg-id="${escapeHtml(audSegId)}" data-subseg-is-root="${subSegItem?.isRoot === false ? '0' : '1'}">
         <div
           class="item__subseg-input${subSegItem?.isRoot === false && !content ? ' item__subseg-input--placeholder' : ''}"
           aria-label="subSeg input"
@@ -1217,6 +1283,7 @@ function renderSubSegList(audSegItem) {
           data-subseg-audseg-id="${escapeHtml(audSegId)}"
           data-subseg-is-root="${subSegItem?.isRoot === false ? '0' : '1'}"
           ${linkTargetLangUnitId ? ` data-link-target-langunit-id="${escapeHtml(linkTargetLangUnitId)}"` : ''}
+          ${parentSubSegId ? ` data-parent-subseg-id="${escapeHtml(parentSubSegId)}"` : ''}
           ${subSegItem?.isRoot === false ? ' data-placeholder="no subSeg yet.."' : ''}
         >${subSegItem?.isRoot === false && !content ? '' : content}</div>
       </li>
@@ -1224,7 +1291,7 @@ function renderSubSegList(audSegItem) {
   };
 
   const items = [];
-  items.push(...subSegItems.map((item) => renderEditor(item)));
+  items.push(...subSegEntries.map((entry) => renderEditor(entry)));
 
   return `
     <ul class="item__subsegs" aria-label="subSegs">
@@ -1545,6 +1612,7 @@ function extractSubSegEditorPayload(editor) {
   const subSegId = getSubSegEditorKey(editor);
   const isRoot = editor.dataset.subsegIsRoot !== '0';
   const linkTargetLangUnitId = getSubSegEditorLinkTargetLangUnitId(editor);
+  const parentSubSegId = String(editor.getAttribute('data-parent-subseg-id') ?? '').trim();
   const cycleTargetActive = getSubSegBubbleTargetIndex(editor) >= 0;
   const nextDerivedLangUnitOrdinal = { value: getNextLangUnitOrdinal(editor, subSegId) };
   let plainText = '';
@@ -1598,7 +1666,7 @@ function extractSubSegEditorPayload(editor) {
       let langUnitId = rawLangUnitId;
       if (langUnitId) {
         const prefix = `${subSegId}-`;
-        if (!langUnitId.startsWith(prefix)) {
+        if (!langUnitId.startsWith(prefix) && !getLangUnitItem(langUnitId)) {
           if (langUnitIdRemap.has(langUnitId)) {
             langUnitId = langUnitIdRemap.get(langUnitId);
           } else {
@@ -1628,6 +1696,7 @@ function extractSubSegEditorPayload(editor) {
       const instance = {
         ...(audSegId ? { audSegId } : {}),
         ...(subSegId ? { subSegId } : {}),
+        langUnitId,
         remote: cycleTargetActive && Boolean(existing),
         ...(cycleGroupId ? { cycleGroupId } : {}),
         start,
@@ -1664,6 +1733,11 @@ function extractSubSegEditorPayload(editor) {
       start: instance.start,
       end: instance.end,
     });
+    const langUnit = langUnitsById.get(instance.langUnitId);
+    if (langUnit && !langUnit.target) {
+      langUnit.target = instance.target;
+    }
+    delete instance.langUnitId;
   }
 
   const langUnits = [...langUnitsById.values()].map((langUnit) => {
@@ -1685,6 +1759,7 @@ function extractSubSegEditorPayload(editor) {
     audSegId,
     isRoot,
     ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),
+    ...(parentSubSegId ? { parentSubSegId } : {}),
     content,
     langUnits,
     text: getSubSegEditorText(editor),
@@ -1877,6 +1952,7 @@ function syncCycleSubSegRow(editor, createIfMissing = false) {
       audSegId,
       isRoot: false,
       ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),
+      parentSubSegId: subSegId,
       content: [],
       text: '',
       createdAt: new Date().toISOString(),
@@ -1912,12 +1988,13 @@ function focusCycleSubSegInput(editor) {
   }
 
   const changed = syncCycleSubSegRow(editor, true);
-  if (changed) {
+  const cycleEditorSelector = `.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-parent-subseg-id="${CSS.escape(String(subSegId))}"][data-link-target-langunit-id="${CSS.escape(String(linkTargetLangUnitId))}"]`;
+  if (changed || !audEpList.querySelector(cycleEditorSelector)) {
     renderAudEps(state.audEpItems);
   }
 
   requestAnimationFrame(() => {
-    const cycleEditor = [...audEpList.querySelectorAll(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-link-target-langunit-id="${CSS.escape(String(linkTargetLangUnitId))}"]`)]
+    const cycleEditor = [...audEpList.querySelectorAll(cycleEditorSelector)]
       .find((input) => input instanceof HTMLElement && String(input.dataset.subsegId ?? '') !== subSegId);
     if (cycleEditor instanceof HTMLElement) {
       cycleEditor.focus({ preventScroll: true });
@@ -2040,7 +2117,7 @@ function focusParentSubSegInput(editor) {
   const subSegItem = getSubSegItemById(subSegId);
   const audSegId = editor?.dataset?.subsegAudsegId || String(subSegItem?.audSegId ?? '');
   const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(subSegItem);
-  const parentSubSegId = getSubSegIdForLangUnitId(linkTargetLangUnitId);
+  const parentSubSegId = String(editor?.dataset?.parentSubsegId ?? '').trim() || getSubSegParentSubSegId(subSegItem);
   if (!parentSubSegId) {
     return false;
   }
@@ -2154,7 +2231,7 @@ function refreshLinkedParentLangUnitText(editor) {
   }
 
   const sourceText = getLangUnitText(langUnit);
-  const parentSubSegId = getSubSegIdForLangUnitId(langUnitId);
+  const parentSubSegId = getSubSegParentSubSegId(getSubSegItemById(getSubSegEditorKey(editor)));
   const nextText = getLangUnitRenderText(langUnitId, sourceText, parentSubSegId);
   const parentEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(parentSubSegId)}"]`);
   if (!(parentEditor instanceof HTMLElement)) {
@@ -2324,6 +2401,19 @@ function selectionTouchesLangUnitBubble(editor) {
   });
 }
 
+function getSubSegSelectionTarget(editor, range) {
+  const selectedText = normalizeSubSegLineBreaks(range.toString());
+  const fullRange = document.createRange();
+  fullRange.selectNodeContents(editor);
+  const beforeRange = fullRange.cloneRange();
+  beforeRange.setEnd(range.startContainer, range.startOffset);
+  const fullText = normalizeSubSegLineBreaks(fullRange.toString());
+  const start = normalizeSubSegLineBreaks(beforeRange.toString()).length;
+  const end = start + selectedText.length;
+  const context = createLangUnitContext(getLangUnitBubbleContext(fullText, start, end));
+  return createLangUnitTarget(selectedText, context.type, { text: fullText, start, end });
+}
+
 function wrapSelectedSubSegText(editor) {
   const selection = document.getSelection();
   if (!selection || !selection.rangeCount || selection.isCollapsed) {
@@ -2340,7 +2430,8 @@ function wrapSelectedSubSegText(editor) {
   const text = range.toString();
   const targetIndex = getSubSegBubbleTargetIndex(editor);
   const targetLangUnitId = getLangUnitBubbleGroupIds(editor)[targetIndex] ?? '';
-  const langUnit = targetLangUnitId ? null : getLangUnitItemByText(text);
+  const target = getSubSegSelectionTarget(editor, range);
+  const langUnit = targetLangUnitId ? null : getLangUnitItemByCanonicalTarget(target, text);
   const subSegId = getSubSegEditorKey(editor);
   const langUnitId = langUnit?._id || buildLangUnitId(subSegId, getNextLangUnitOrdinal(editor, subSegId)) || createItemId();
   bubble.dataset.langunitId = langUnitId;
@@ -2439,7 +2530,7 @@ function scheduleSubSegSave(subSegId) {
 }
 
 function flushSubSegSave(subSegId) {
-  const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(String(subSegId))}"]`);
+  const editor = getLiveSubSegEditor(subSegId);
   const payload = editor instanceof HTMLElement
     ? extractSubSegEditorPayload(editor)
     : subSegDraftPayloadBySubSegId.get(subSegId);
@@ -2476,6 +2567,31 @@ function mergeLangUnitItems(items) {
   state.langUnitItems = [...next.values()];
 }
 
+function getLiveSubSegEditor(subSegId) {
+  const id = String(subSegId ?? '');
+  const active = document.activeElement;
+  if (active instanceof HTMLElement && active.matches('.item__subseg-input') && String(active.dataset.subsegId ?? '') === id) {
+    return active;
+  }
+
+  return audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(id)}"]`);
+}
+
+function syncEditorLangUnitIdsFromContent(editor, content) {
+  if (!(editor instanceof HTMLElement) || !Array.isArray(content)) {
+    return;
+  }
+
+  const ids = content
+    .filter((token) => token?.type === 'langUnitRef' && String(token.langUnitId ?? '').trim())
+    .map((token) => String(token.langUnitId).trim());
+  getLangUnitBubbles(editor).forEach((bubble, index) => {
+    if (ids[index]) {
+      bubble.dataset.langunitId = ids[index];
+    }
+  });
+}
+
 async function saveSubSeg(subSegId) {
   const payload = subSegDraftPayloadBySubSegId.get(subSegId);
   if (!payload) {
@@ -2483,7 +2599,7 @@ async function saveSubSeg(subSegId) {
   }
 
   const knownLangUnitIds = new Set(state.langUnitItems.map((item) => item?._id).filter(Boolean));
-  const liveEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(String(subSegId))}"]`);
+  const liveEditor = getLiveSubSegEditor(subSegId);
   const nextPayload = liveEditor instanceof HTMLElement ? extractSubSegEditorPayload(liveEditor) : payload;
   const existingSubSeg = getSubSegItemById(subSegId);
   if (
@@ -2525,6 +2641,7 @@ async function saveSubSeg(subSegId) {
       : state.subSegItems.filter((item) => String(item?._id ?? '') !== String(subSegId))
   );
   if (liveEditor instanceof HTMLElement && document.activeElement === liveEditor) {
+    syncEditorLangUnitIdsFromContent(liveEditor, saved?.content);
     refreshLangUnitBubbleGroupStyles(liveEditor);
     refreshLangUnitConnectors(liveEditor);
   } else {

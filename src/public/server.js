@@ -426,6 +426,12 @@ function normalizeSubSegContentForStorage(content) {
   return [normalized, changed];
 }
 
+function getSubSegIdFromDerivedLangUnitId(langUnitId) {
+  const id = String(langUnitId ?? '').trim();
+  const separator = id.lastIndexOf('-');
+  return separator > 0 ? id.slice(0, separator) : '';
+}
+
 function rewriteSubSegContentWithoutLangUnits(content, langUnitsById = new Map()) {
   const nextContent = [];
   let changed = false;
@@ -541,6 +547,10 @@ function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
         start,
         end,
       };
+      const existingTarget = existingInstance?.target ?? langUnitsById.get(langUnitId)?.target ?? null;
+      if (existingTarget) {
+        instance.target = normalizeLangUnitTarget(existingTarget, existingInstance?.context?.type ?? '');
+      }
       instances.push(instance);
       pendingInstances.push(instance);
       instancesById.set(langUnitId, instances);
@@ -863,14 +873,9 @@ function remapSubSegLangUnitIds(items, idMap) {
       continue;
     }
 
-    const content = Array.isArray(item.content) ? item.content : null;
-    if (!content) {
-      normalized.push(item);
-      continue;
-    }
-
     let contentChanged = false;
-    const nextContent = content.map((token) => {
+    const content = Array.isArray(item.content) ? item.content : null;
+    const nextContent = content ? content.map((token) => {
       if (!token || typeof token !== 'object' || token.type !== 'langUnitRef') {
         return token;
       }
@@ -886,9 +891,15 @@ function remapSubSegLangUnitIds(items, idMap) {
         ...token,
         langUnitId: nextLangUnitId,
       };
-    });
+    }) : null;
+    const linkTargetLangUnitId = String(item.linkTargetLangUnitId ?? '').trim();
+    const nextLinkTargetLangUnitId = String(idMap.get(linkTargetLangUnitId) ?? linkTargetLangUnitId).trim();
+    const linkChanged = Boolean(linkTargetLangUnitId && nextLinkTargetLangUnitId && nextLinkTargetLangUnitId !== linkTargetLangUnitId);
+    const parentSubSegId = String(item.parentSubSegId ?? '').trim();
+    const derivedParentSubSegId = linkChanged ? getSubSegIdFromDerivedLangUnitId(linkTargetLangUnitId) : '';
+    const parentChanged = Boolean(!parentSubSegId && derivedParentSubSegId);
 
-    if (!contentChanged) {
+    if (!contentChanged && !linkChanged && !parentChanged) {
       normalized.push(item);
       continue;
     }
@@ -896,7 +907,9 @@ function remapSubSegLangUnitIds(items, idMap) {
     changed = true;
     normalized.push({
       ...item,
-      content: nextContent,
+      ...(nextContent ? { content: nextContent } : {}),
+      ...(linkChanged ? { linkTargetLangUnitId: nextLinkTargetLangUnitId } : {}),
+      ...(parentChanged ? { parentSubSegId: derivedParentSubSegId } : {}),
     });
   }
 
@@ -1236,6 +1249,70 @@ function sortLangUnitItems(items) {
   });
 }
 
+function getLangUnitCanonicalKey(item) {
+  const target = normalizeLangUnitTarget(item?.target ?? item?.text ?? '', item?.target?.type ?? '');
+  const type = normalizeLangUnitTargetType(target.type);
+  const text = String(target.text || item?.text || '').trim();
+  return type && text ? `${type}\u0000${text}` : '';
+}
+
+function canonicalizeLangUnitItems(items) {
+  const normalized = normalizeLangUnitItemsForStorage(flattenLangUnitItems(items))[0];
+  const canonicalByKey = new Map();
+  const idMap = new Map();
+  const nextById = new Map();
+  const now = new Date().toISOString();
+
+  for (const item of sortLangUnitItems(normalized)) {
+    const key = getLangUnitCanonicalKey(item);
+    if (!key || !canonicalByKey.has(key)) {
+      canonicalByKey.set(key || item._id, item._id);
+      nextById.set(item._id, item);
+      continue;
+    }
+
+    const canonicalId = canonicalByKey.get(key);
+    idMap.set(item._id, canonicalId);
+    const canonical = nextById.get(canonicalId);
+    const root = String(canonical?.root ?? item.root ?? '').trim();
+    nextById.set(canonicalId, {
+      ...canonical,
+      ...(root ? { root } : {}),
+      instances: normalizeLangUnitInstances([...(canonical?.instances ?? []), ...(item.instances ?? [])]),
+      updatedAt: now,
+    });
+  }
+
+  const next = sortLangUnitItems([...nextById.values()]);
+  return [next, idMap, JSON.stringify(next) !== JSON.stringify(normalized)];
+}
+
+function remapLangUnitInstanceIds(items, idMap) {
+  if (!(idMap instanceof Map) || !idMap.size) {
+    return [items, false];
+  }
+
+  let changed = false;
+  const next = items.map((item) => {
+    const instances = Array.isArray(item?.instances) ? item.instances : [];
+    let itemChanged = false;
+    const nextInstances = instances.map((instance) => {
+      const cycleGroupId = String(instance?.cycleGroupId ?? '').trim();
+      const nextCycleGroupId = String(idMap.get(cycleGroupId) ?? cycleGroupId).trim();
+      if (!cycleGroupId || nextCycleGroupId === cycleGroupId) {
+        return instance;
+      }
+
+      itemChanged = true;
+      changed = true;
+      return { ...instance, cycleGroupId: nextCycleGroupId };
+    });
+    return itemChanged ? { ...item, instances: nextInstances } : item;
+  });
+
+  return [next, changed];
+}
+
 function normalizeLangUnitItems(items, capturesById = new Map()) {
   const existingItemsByText = new Map(
     normalizeLangUnitItemsForStorage(flattenLangUnitItems(items))[0].map((item) => [String(item?.text ?? '').trim(), item])
@@ -1322,9 +1399,21 @@ async function rebuildLangUnitItems() {
   }
 
   const langUnitItems = await readLangUnitItems();
-  const instancesById = collectLangUnitInstancesById(nextSubSegItems, new Map(langUnitItems.map((item) => [String(item?._id ?? ''), item])));
-  const [items, changed] = syncLangUnitInstances(langUnitItems, instancesById);
-  if (changed) {
+  let [canonicalLangUnitItems, idMap, canonicalChanged] = canonicalizeLangUnitItems(langUnitItems);
+  if (idMap.size) {
+    const [remappedSubSegItems, remappedSubSegChanged] = remapSubSegLangUnitIds(nextSubSegItems, idMap);
+    if (remappedSubSegChanged) {
+      await writeSubSegItems(sortSubSegItems(remappedSubSegItems));
+    }
+    const [remappedLangUnitItems, remappedLangUnitChanged] = remapLangUnitInstanceIds(canonicalLangUnitItems, idMap);
+    canonicalLangUnitItems = remappedLangUnitItems;
+    canonicalChanged = canonicalChanged || remappedLangUnitChanged;
+  }
+
+  const latestSubSegItems = idMap.size ? await readSubSegItems() : nextSubSegItems;
+  const instancesById = collectLangUnitInstancesById(latestSubSegItems, new Map(canonicalLangUnitItems.map((item) => [String(item?._id ?? ''), item])));
+  const [items, changed] = syncLangUnitInstances(canonicalLangUnitItems, instancesById);
+  if (canonicalChanged || changed) {
     await writeLangUnitItems(items);
   }
 
@@ -2063,6 +2152,7 @@ async function handleSubSegApi(req, res, url) {
     const text = String(payload.text ?? '');
     const isRoot = payload.isRoot !== false;
     const linkTargetLangUnitId = String(payload.linkTargetLangUnitId ?? '').trim();
+    const parentSubSegId = String(payload.parentSubSegId ?? '').trim();
     const disambiguateChinContexts = payload.disambiguateChinContexts === true;
     if (!subSegId && !audSegId) {
       send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'subSegId or audSegId is required' }));
@@ -2089,6 +2179,8 @@ async function handleSubSegApi(req, res, url) {
 
     const existingLinkTargetLangUnitId = index >= 0 ? String(items[index]?.linkTargetLangUnitId ?? '').trim() : '';
     const savedLinkTargetLangUnitId = linkTargetLangUnitId || (isRoot === false ? existingLinkTargetLangUnitId : '');
+    const existingParentSubSegId = index >= 0 ? String(items[index]?.parentSubSegId ?? '').trim() : '';
+    const savedParentSubSegId = parentSubSegId || (isRoot === false ? existingParentSubSegId || getSubSegIdFromDerivedLangUnitId(savedLinkTargetLangUnitId) : '');
     if (isRoot === false && !savedLinkTargetLangUnitId) {
       send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'linkTargetLangUnitId is required for non-root subSeg' }));
       return true;
@@ -2099,6 +2191,7 @@ async function handleSubSegApi(req, res, url) {
       audSegId,
       isRoot,
       ...(savedLinkTargetLangUnitId ? { linkTargetLangUnitId: savedLinkTargetLangUnitId } : {}),
+      ...(savedParentSubSegId ? { parentSubSegId: savedParentSubSegId } : {}),
       ...(Array.isArray(normalizedContent) ? { content: normalizedContent } : {}),
       text,
       createdAt: index >= 0 ? items[index].createdAt : new Date().toISOString(),
