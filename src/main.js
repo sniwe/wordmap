@@ -605,47 +605,6 @@ function getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId, excludeSubS
   ) ?? null;
 }
 
-function getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId, excludeSubSegId = '') {
-  const parentSubSegId = getSubSegIdForLangUnitId(linkTargetLangUnitId);
-  const prefix = `${parentSubSegId}-`;
-  const targetId = String(linkTargetLangUnitId ?? '').trim();
-  const excluded = String(excludeSubSegId ?? '').trim();
-  if (!prefix.trim() || !targetId.startsWith(prefix)) {
-    return null;
-  }
-
-  const ordinal = Number(targetId.slice(prefix.length));
-  if (!Number.isInteger(ordinal)) {
-    return null;
-  }
-
-  const parent = getSubSegItemById(parentSubSegId);
-  if (!parent) {
-    return null;
-  }
-
-  if (parent?.isRoot !== false) {
-    const derived = getSubSegItemById(buildDerivedId(audSegId, ordinal + 1));
-    if (derived && String(derived?._id ?? '') !== excluded) {
-      return derived;
-    }
-  }
-
-  return getSubSegItemsForAudSeg(audSegId)
-    .filter((item) => {
-      if (
-        item?.isRoot !== false ||
-        String(item?._id ?? '') === excluded ||
-        !String(item?._id ?? '').startsWith(`${parentSubSegId}-`) ||
-        String(item?.linkTargetLangUnitId ?? '').trim()
-      ) {
-        return false;
-      }
-
-      return String(item?._id ?? '') > parentSubSegId;
-    })[ordinal] ?? null;
-}
-
 function getSubSegItemForAudSeg(audSegId) {
   return getRootSubSegItemForAudSeg(audSegId);
 }
@@ -676,25 +635,7 @@ function getSubSegIdForLangUnitId(langUnitId) {
 }
 
 function getSubSegLinkTargetLangUnitId(item) {
-  const explicit = String(item?.linkTargetLangUnitId ?? '').trim();
-  if (explicit || item?.isRoot !== false) {
-    return explicit;
-  }
-
-  const audSegId = String(item?.audSegId ?? '').trim();
-  const itemId = String(item?._id ?? '').trim();
-  const prefix = `${audSegId}-`;
-  if (!audSegId || !itemId.startsWith(prefix)) {
-    return '';
-  }
-
-  const ordinal = Number(itemId.slice(prefix.length));
-  if (!Number.isInteger(ordinal) || ordinal <= 0) {
-    return '';
-  }
-
-  const rootLangUnitId = buildLangUnitId(buildDerivedId(audSegId, 0), ordinal - 1);
-  return getLangUnitItem(rootLangUnitId) ? rootLangUnitId : '';
+  return String(item?.linkTargetLangUnitId ?? '').trim();
 }
 
 function getSubSegItemsInTreeOrder(audSegId) {
@@ -1816,25 +1757,6 @@ function syncCycleSubSegRow(editor, createIfMissing = false) {
       return false;
     }
 
-    const derived = getDerivedChildSubSegItemForTarget(audSegId, linkTargetLangUnitId, subSegId);
-    if (derived?.isRoot === false) {
-      const next = {
-        ...derived,
-        linkTargetLangUnitId,
-        updatedAt: new Date().toISOString(),
-      };
-      state.subSegItems = sortSubSegItems([
-        next,
-        ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(derived._id ?? '')),
-      ]);
-      void fetch('/api/subSegs/items', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subSegId: String(next._id ?? ''), ...next }),
-      });
-      return true;
-    }
-
     if (!createIfMissing) {
       return false;
     }
@@ -2413,6 +2335,14 @@ async function saveSubSeg(subSegId) {
   const knownLangUnitIds = new Set(state.langUnitItems.map((item) => item?._id).filter(Boolean));
   const liveEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(String(subSegId))}"]`);
   const nextPayload = liveEditor instanceof HTMLElement ? extractSubSegEditorPayload(liveEditor) : payload;
+  const existingSubSeg = getSubSegItemById(subSegId);
+  if (
+    nextPayload?.isRoot === false &&
+    !String(nextPayload.linkTargetLangUnitId ?? '').trim() &&
+    String(existingSubSeg?.linkTargetLangUnitId ?? '').trim()
+  ) {
+    nextPayload.linkTargetLangUnitId = String(existingSubSeg.linkTargetLangUnitId).trim();
+  }
 
   const response = await fetch('/api/subSegs/items', {
     method: 'POST',

@@ -2087,11 +2087,18 @@ async function handleSubSegApi(req, res, url) {
       return true;
     }
 
+    const existingLinkTargetLangUnitId = index >= 0 ? String(items[index]?.linkTargetLangUnitId ?? '').trim() : '';
+    const savedLinkTargetLangUnitId = linkTargetLangUnitId || (isRoot === false ? existingLinkTargetLangUnitId : '');
+    if (isRoot === false && !savedLinkTargetLangUnitId) {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'linkTargetLangUnitId is required for non-root subSeg' }));
+      return true;
+    }
+
     const saved = {
       _id: index >= 0 ? items[index]._id : nextSubSegId,
       audSegId,
       isRoot,
-      ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),
+      ...(savedLinkTargetLangUnitId ? { linkTargetLangUnitId: savedLinkTargetLangUnitId } : {}),
       ...(Array.isArray(normalizedContent) ? { content: normalizedContent } : {}),
       text,
       createdAt: index >= 0 ? items[index].createdAt : new Date().toISOString(),

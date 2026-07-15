@@ -30,8 +30,8 @@
 | `subSeg list` | The list rendered under an entered `audSeg`'s time text, seeded with a root editor row and persisted non-root child rows ordered directly under their linked parent subSeg. |
 | `subSeg root row` | The persistent `subSeg` editor row with `isRoot: true` that owns the main text for an entered `audSeg`. |
 | `subSeg cycle row` | A non-root `subSeg` editor row with `isRoot: false` and `linkTargetLangUnitId`, initialized from a committed `langUnit` target and kept visible after reload once saved. |
-| `subSeg tree order` | The render order where a linked child subSeg appears immediately after the subSeg that owns its target langUnit bubble, pushing sibling rows lower. |
-| `subSeg inferred parent link` | A compatibility fallback where an unlinked top-level child row like `audSegId-1` is treated as linked to root langUnit `audSegId-0-0` when that langUnit exists. |
+| `subSeg tree order` | The render order where a linked child subSeg appears immediately after the subSeg that owns its target langUnit bubble, recursively for arbitrary nesting depth. |
+| `subSeg parent link` | The required `linkTargetLangUnitId` edge on every non-root subSeg; it points to the langUnit bubble that owns that child row. |
 | `subSeg parent snapback` | `Ctrl+Backspace` from a non-root subSeg focuses the subSeg that owns its `linkTargetLangUnitId`, one parent step at a time. |
 | `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and non-root child rows each need their own `subSegId`. |
 | `subSeg derived id` | The chained `subSeg` id format `\`${audSegId}-${subSegOrdinal}\`` used by the new scheme. |

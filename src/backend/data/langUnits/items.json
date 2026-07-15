@@ -8,10 +8,10 @@
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
         "remote": false,
         "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-        "start": 18,
-        "end": 21,
+        "start": 20,
+        "end": 23,
         "context": {
-          "text": "this is test line one",
+          "text": "this is line number one",
           "type": "engPhrase"
         }
       }
@@ -20,8 +20,8 @@
       "text": "one",
       "type": "engWord"
     },
-    "createdAt": "2026-07-15T00:05:23.725Z",
-    "updatedAt": "2026-07-15T00:05:30.259Z"
+    "createdAt": "2026-07-15T00:13:13.279Z",
+    "updatedAt": "2026-07-15T00:15:16.152Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1",
@@ -31,10 +31,11 @@
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
         "remote": false,
-        "start": 40,
-        "end": 43,
+        "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-1",
+        "start": 44,
+        "end": 47,
         "context": {
-          "text": "this is test line two",
+          "text": "this is line number two",
           "type": "engPhrase"
         }
       }
@@ -43,30 +44,53 @@
       "text": "two",
       "type": "engWord"
     },
-    "createdAt": "2026-07-15T00:05:30.256Z",
-    "updatedAt": "2026-07-15T00:05:30.259Z"
+    "createdAt": "2026-07-15T00:13:16.906Z",
+    "updatedAt": "2026-07-15T00:15:16.152Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
-    "text": "sub",
+    "text": "little",
     "instances": [
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
         "remote": false,
-        "start": 0,
-        "end": 3,
+        "start": 13,
+        "end": 19,
         "context": {
-          "text": "sub-line one hee",
+          "text": "child one of little guy one",
           "type": "engPhrase"
         }
       }
     ],
     "target": {
-      "text": "sub",
+      "text": "little",
       "type": "engWord"
     },
-    "createdAt": "2026-07-15T00:06:04.438Z",
-    "updatedAt": "2026-07-15T00:06:04.442Z"
+    "createdAt": "2026-07-15T00:13:43.143Z",
+    "updatedAt": "2026-07-15T00:13:43.146Z"
+  },
+  {
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3-0",
+    "text": "guy",
+    "instances": [
+      {
+        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3",
+        "remote": false,
+        "start": 20,
+        "end": 23,
+        "context": {
+          "text": "child one of little guy two",
+          "type": "engPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "guy",
+      "type": "engWord"
+    },
+    "createdAt": "2026-07-15T00:14:34.158Z",
+    "updatedAt": "2026-07-15T00:14:34.166Z"
   }
 ]
