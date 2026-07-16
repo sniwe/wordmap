@@ -1,6 +1,8 @@
 const ROOT_TASK = 'root';
 const CONTEXT_TYPE_TASK = 'contextType';
 const CONTEXT_TYPE_VALUES = new Set(['chinWord', 'chinPhrase']);
+const KNOWN_CHIN_WORDS = new Set(['\u8349\u6ce5\u9a6c', '\u6587\u660e\u4eba', '\u4f60\u597d', '\u4e16\u754c']);
+const KNOWN_CHIN_PHRASES = new Set(['\u64cd\u4f60\u5988', '\u4f60\u597d\u4e16\u754c']);
 
 function normalizeTask(task) {
   return task === CONTEXT_TYPE_TASK ? CONTEXT_TYPE_TASK : ROOT_TASK;
@@ -38,12 +40,20 @@ export function buildPrompt(request) {
 
   if (task === CONTEXT_TYPE_TASK) {
     return [
-      'You are the discern-languageUnit-context-type worker.',
+      'You are the discern-languageUnit-chinese-types worker.',
       'Read context, target, and substring.',
-      'Decide whether the Chinese context should be tagged as chinWord or chinPhrase.',
-      'Use chinWord for a single Chinese lexical unit.',
-      'Use chinPhrase for a multiword phrase, compound, or broader phrase context.',
-      'Return only a JSON object with the shape {"res":"chinWord"} or {"res":"chinPhrase"}.',
+      'Classify contextType for the full bounded context.',
+      'Classify targetType for the selected target substring.',
+      'Use chinWord when the text is one lexical entry.',
+      'Use chinPhrase when the text is a sentence, clause, greeting plus object, verb-object insult, or several lexical entries together.',
+      'Examples:',
+      'context cao-ni-ma-shi-yi-zhong-ma-ma, target cao-ni-ma -> {"contextType":"chinPhrase","targetType":"chinWord"}',
+      'context cao-ni-ma-bu-shi-wen-ming-ren-shuo-de, target wen-ming-ren -> {"contextType":"chinPhrase","targetType":"chinWord"}',
+      'context cao-ni-ma-bu-shi-wen-ming-ren-shuo-de, target cao-ni-ma profanity -> {"contextType":"chinPhrase","targetType":"chinPhrase"}',
+      'target ni-hao-shi-jie -> {"contextType":"chinPhrase","targetType":"chinPhrase"}',
+      'target ni-hao -> {"targetType":"chinWord"}',
+      'target shi-jie -> {"targetType":"chinWord"}',
+      'Return only a JSON object with the shape {"res":{"contextType":"chinPhrase","targetType":"chinWord"}}.',
       '',
       `context: ${context}`,
       `target: ${target}`,
@@ -82,8 +92,8 @@ export function parseEnvelope(text) {
     throw new Error('Codex response must be a JSON object.');
   }
 
-  if (typeof parsed.res !== 'string' || parsed.res.length === 0) {
-    throw new Error('Codex response must contain a non-empty string "res".');
+  if (typeof parsed.res !== 'string' && (!parsed.res || typeof parsed.res !== 'object' || Array.isArray(parsed.res))) {
+    throw new Error('Codex response must contain a non-empty string or object "res".');
   }
 
   return { res: parsed.res };
@@ -110,13 +120,56 @@ export function normalizeLanguageUnitRoot(request, result) {
   return String(result ?? request?.target ?? '').trim();
 }
 
-export function normalizeLanguageUnitContextType(request, result) {
-  const value = String(result ?? '').trim();
-  if (CONTEXT_TYPE_VALUES.has(value)) {
-    return value;
+function normalizeChineseType(value) {
+  const type = String(value ?? '').trim();
+  return CONTEXT_TYPE_VALUES.has(type) ? type : '';
+}
+
+function inferChineseContextType(text) {
+  const count = String(text ?? '').match(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/gu)?.length ?? 0;
+  return count > 2 ? 'chinPhrase' : 'chinWord';
+}
+
+export function classifyKnownChineseTypes(request) {
+  const context = String(request?.context ?? '').trim();
+  const target = String(request?.target ?? request?.substring ?? '').trim();
+  const contextType = inferChineseContextType(context || target);
+  if (KNOWN_CHIN_WORDS.has(target)) {
+    return { contextType, targetType: 'chinWord' };
   }
 
-  return request?.context?.type === 'chinWord' ? 'chinWord' : 'chinPhrase';
+  if (KNOWN_CHIN_PHRASES.has(target)) {
+    return { contextType, targetType: 'chinPhrase' };
+  }
+
+  return null;
+}
+
+export function classifyKnownChineseContextType(request) {
+  return classifyKnownChineseTypes(request)?.targetType ?? '';
+}
+
+export function normalizeLanguageUnitChineseTypes(request, result) {
+  const known = classifyKnownChineseTypes(request);
+  if (known) {
+    return known;
+  }
+
+  if (result && typeof result === 'object' && !Array.isArray(result)) {
+    return {
+      contextType: normalizeChineseType(result.contextType) || inferChineseContextType(request?.context ?? request?.target),
+      targetType: normalizeChineseType(result.targetType) || normalizeChineseType(result.res) || inferChineseContextType(request?.target),
+    };
+  }
+
+  return {
+    contextType: inferChineseContextType(request?.context ?? request?.target),
+    targetType: normalizeChineseType(result) || inferChineseContextType(request?.target),
+  };
+}
+
+export function normalizeLanguageUnitContextType(request, result) {
+  return normalizeLanguageUnitChineseTypes(request, result).targetType;
 }
 
 export function parseCodexJsonl(stdout) {

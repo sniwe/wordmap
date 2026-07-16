@@ -77,7 +77,8 @@
 | `no-op` | A rejected or illegal target shape, usually blank or punctuation-only text that should not produce a meaningful capture classification. |
 | `chinWord` | A single Chinese lexical unit, used when the chin disambiguation flow decides a `langUnit` is narrower than a phrase. |
 | `chinFuzzWord` | An ASCII-only pinyin-like target that resolves to exactly 1 syllable; multi-syllable pinyin-like text is treated as `chinPhrase` instead. |
-| `chin disambiguation` | The Settings-controlled worker-backed flow that refines ambiguous Chinese instance `context.type` values in the background after save. |
+| `chin disambiguation` | The Settings-controlled worker-backed flow that refines ambiguous Chinese instance types after save by classifying the bounded context separately from the selected target substring. |
+| `instance-targeted chin disambiguation` | The save-time chin disambiguation flow that sends one ambiguous `langUnit instance` occurrence to the worker, persists `contextType` to the matched instance's `context.type`, and persists `targetType` to the matched instance's `target.type`. |
 | `pinyin chinPhrase` | Pure ASCII pinyin-like context text, or mixed Chinese plus only valid pinyin syllables, that can be segmented into 2 or more valid pinyin syllables, so it is captured as `chinPhrase` instead of `chinFuzzWord` or `engPhrase`. |
 | `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
 | `subSeg enter guard` | `Enter` while a bubble target is active opens or keeps the cycle row instead of inserting a newline. |

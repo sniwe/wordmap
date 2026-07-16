@@ -552,12 +552,16 @@ function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
         instance.target = normalizeLangUnitTarget(existingTarget, existingInstance?.context?.type ?? '');
       }
       instances.push(instance);
-      pendingInstances.push(instance);
+      pendingInstances.push({ instance, existingInstance });
       instancesById.set(langUnitId, instances);
     }
 
-    for (const instance of pendingInstances) {
-      instance.context = normalizeLangUnitContext(getLangUnitBubbleContext(plainText, instance.start, instance.end));
+    for (const { instance, existingInstance } of pendingInstances) {
+      const contextText = getLangUnitBubbleContext(plainText, instance.start, instance.end);
+      instance.context = normalizeLangUnitContext({
+        text: contextText,
+        type: String(existingInstance?.context?.text ?? '') === contextText ? existingInstance?.context?.type : '',
+      });
     }
   }
 
@@ -1233,8 +1237,32 @@ function isChineseDisambiguationCandidate(contextText, targetText, substringText
   return (
     hasChineseCharacters(contextText) &&
     hasChineseCharacters(targetText) &&
-    hasChineseCharacters(substringText)
+    hasChineseCharacters(substringText) &&
+    !isPunctuationOrSymbolOnly(targetText) &&
+    !isPunctuationOrSymbolOnly(substringText)
   );
+}
+
+function isSameLangUnitInstance(instance, match) {
+  if (!match || typeof match !== 'object') {
+    return false;
+  }
+
+  const keys = ['audSegId', 'subSegId', 'cycleGroupId'];
+  for (const key of keys) {
+    const value = String(match[key] ?? '').trim();
+    if (value && String(instance?.[key] ?? '').trim() !== value) {
+      return false;
+    }
+  }
+
+  for (const key of ['start', 'end']) {
+    if (Number.isFinite(match[key]) && instance?.[key] !== match[key]) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function sortLangUnitItems(items) {
@@ -1440,10 +1468,25 @@ async function requestCodexWorker(payload) {
   return worker.request(payload);
 }
 
-async function inferLangUnitContextType(langUnitId, payload) {
+function normalizeLangUnitChineseTypeResult(result, payload) {
+  const res = result?.res;
+  const contextType = res && typeof res === 'object' && !Array.isArray(res)
+    ? normalizeLangUnitContextType(res.contextType)
+    : '';
+  const targetType = res && typeof res === 'object' && !Array.isArray(res)
+    ? normalizeLangUnitContextType(res.targetType)
+    : normalizeLangUnitContextType(res);
+
+  return {
+    contextType: contextType || normalizeLangUnitContext(payload?.context ?? '').type,
+    targetType,
+  };
+}
+
+async function inferLangUnitChineseTypes(langUnitId, payload) {
   const result = await requestCodexWorker({ task: 'contextType', ...payload });
-  const type = normalizeLangUnitContextType(result?.res);
-  if (!type) {
+  const { contextType, targetType } = normalizeLangUnitChineseTypeResult(result, payload);
+  if (!contextType || !targetType) {
     return null;
   }
 
@@ -1455,41 +1498,59 @@ async function inferLangUnitContextType(langUnitId, payload) {
       return item;
     }
 
-    const context = getLangUnitContext(item);
-    if (context.type === type) {
+    const nextInstances = normalizeLangUnitInstances(item.instances ?? (item.context ? [{ context: item.context }] : []));
+    const matchedIndex = nextInstances.findIndex((instance) => isSameLangUnitInstance(instance, payload?.instance));
+    const targetIndex = matchedIndex >= 0 ? matchedIndex : 0;
+    const instance = nextInstances[targetIndex] ?? null;
+    const context = normalizeLangUnitContext(instance?.context ?? getLangUnitContext(item));
+    const currentTarget = normalizeLangUnitTarget(instance?.target ?? item.target ?? item.text, context.type, {
+      text: String(item.text ?? ''),
+      start: Number.isFinite(instance?.start) ? instance.start : null,
+      end: Number.isFinite(instance?.end) ? instance.end : null,
+    });
+    if (context.type === contextType && currentTarget.type === targetType) {
       return item;
     }
 
-    const nextInstances = normalizeLangUnitInstances(item.instances ?? (item.context ? [{ context: item.context }] : []));
-    const nextTarget = normalizeLangUnitTarget(item.target ?? item.text, type, {
-      text: String(item.text ?? ''),
-      start: Number.isFinite(nextInstances[0]?.start) ? nextInstances[0].start : null,
-      end: Number.isFinite(nextInstances[0]?.end) ? nextInstances[0].end : null,
-    });
+    const nextTarget = {
+      ...normalizeLangUnitTarget(currentTarget, contextType, {
+        text: String(item.text ?? ''),
+        start: Number.isFinite(instance?.start) ? instance.start : null,
+        end: Number.isFinite(instance?.end) ? instance.end : null,
+      }),
+      type: targetType,
+    };
     if (!nextInstances.length) {
       const nextItem = {
         ...item,
         target: nextTarget,
-        instances: [{ context: { ...context, type }, target: nextTarget }],
+        instances: [{ context: { ...context, type: contextType }, target: nextTarget }],
         updatedAt: now,
       };
       updated = nextItem;
       return nextItem;
     }
 
-    nextInstances[0] = {
-      ...nextInstances[0],
-      context: { ...context, type },
-      target: normalizeLangUnitTarget(nextInstances[0].target ?? item.text, type, {
-        text: String(item.text ?? ''),
-        start: Number.isFinite(nextInstances[0].start) ? nextInstances[0].start : null,
-        end: Number.isFinite(nextInstances[0].end) ? nextInstances[0].end : null,
-      }),
+    nextInstances[targetIndex] = {
+      ...nextInstances[targetIndex],
+      context: { ...context, type: contextType },
+      target: {
+        ...normalizeLangUnitTarget(nextInstances[targetIndex].target ?? item.text, contextType, {
+          text: String(item.text ?? ''),
+          start: Number.isFinite(nextInstances[targetIndex].start) ? nextInstances[targetIndex].start : null,
+          end: Number.isFinite(nextInstances[targetIndex].end) ? nextInstances[targetIndex].end : null,
+        }),
+        type: targetType,
+      },
     };
 
     updated = {
       ...item,
-      target: nextTarget,
+      target: normalizeLangUnitTarget(nextInstances[targetIndex].target, contextType, {
+        text: String(item.text ?? ''),
+        start: Number.isFinite(instance?.start) ? instance.start : null,
+        end: Number.isFinite(instance?.end) ? instance.end : null,
+      }),
       instances: nextInstances,
       updatedAt: now,
     };
@@ -1501,7 +1562,7 @@ async function inferLangUnitContextType(langUnitId, payload) {
   }
 
   await writeLangUnitItems(sortLangUnitItems(next));
-  return { langUnit: updated, res: type };
+  return { langUnit: updated, res: { contextType, targetType } };
 }
 
 async function maybeDisambiguateLangUnitContexts(langUnits, enabled) {
@@ -1518,25 +1579,40 @@ async function maybeDisambiguateLangUnitContexts(langUnits, enabled) {
       continue;
     }
 
-    const context = getLangUnitContext(langUnit);
-    const targetText = String(getLangUnitText(langUnit)).trim();
-    const substringText = targetText;
-    if (context.type !== 'chinPhrase' || !isChineseDisambiguationCandidate(context.text, targetText, substringText)) {
-      continue;
+    const instances = normalizeLangUnitInstances(langUnit.instances ?? []);
+    for (const instance of instances) {
+      const context = normalizeLangUnitContext(instance.context);
+      const instanceTarget = normalizeLangUnitTarget(instance.target ?? langUnit.target ?? getLangUnitText(langUnit), context.type, {
+        text: String(langUnit.text ?? ''),
+        start: Number.isFinite(instance.start) ? instance.start : null,
+        end: Number.isFinite(instance.end) ? instance.end : null,
+      });
+      const targetText = String(instanceTarget.text || getLangUnitText(langUnit)).trim();
+      const substringText = targetText;
+      if (!isChineseDisambiguationCandidate(context.text, targetText, substringText)) {
+        continue;
+      }
+
+      const result = await inferLangUnitChineseTypes(langUnit._id, {
+        context: context.text,
+        target: targetText,
+        substring: substringText,
+        instance: {
+          audSegId: instance.audSegId,
+          subSegId: instance.subSegId,
+          cycleGroupId: instance.cycleGroupId,
+          start: instance.start,
+          end: instance.end,
+        },
+      });
+
+      if (!result?.langUnit) {
+        continue;
+      }
+
+      next[index] = result.langUnit;
+      changed = true;
     }
-
-    const result = await inferLangUnitContextType(langUnit._id, {
-      context: context.text,
-      target: targetText,
-      substring: substringText,
-    });
-
-    if (!result?.langUnit) {
-      continue;
-    }
-
-    next[index] = result.langUnit;
-    changed = true;
   }
 
   return changed ? sortLangUnitItems(next) : langUnits;
@@ -2224,13 +2300,11 @@ async function handleSubSegApi(req, res, url) {
     if (Array.isArray(payload.langUnits) && payload.langUnits.length) {
       await writeLangUnitItems(mergeLangUnitItems(await readLangUnitItems(), payload.langUnits));
     }
-    const updatedLangUnits = await rebuildLangUnitItems();
+    let updatedLangUnits = await rebuildLangUnitItems();
     const refreshedSubSegItems = await readSubSegItems();
     const refreshedSubSeg = refreshedSubSegItems.find((item) => String(item?._id ?? '') === saved._id) ?? saved;
     if (disambiguateChinContexts) {
-      void maybeDisambiguateLangUnitContexts(updatedLangUnits, true).catch((error) => {
-        process.stderr.write(`[codex-worker] ${error.message}\n`);
-      });
+      updatedLangUnits = await maybeDisambiguateLangUnitContexts(updatedLangUnits, true);
     }
     send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSeg: refreshedSubSeg, subSegs: refreshedSubSegItems, langUnits: updatedLangUnits }));
     return true;

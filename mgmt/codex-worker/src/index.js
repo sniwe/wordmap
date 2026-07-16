@@ -3,7 +3,14 @@ import { createInterface } from 'node:readline';
 import { mkdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
-import { buildPrompt, normalizeLanguageUnitContextType, normalizeLanguageUnitRoot, normalizeRequest, parseEnvelope } from './core.js';
+import {
+  buildPrompt,
+  classifyKnownChineseTypes,
+  normalizeLanguageUnitChineseTypes,
+  normalizeLanguageUnitRoot,
+  normalizeRequest,
+  parseEnvelope,
+} from './core.js';
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const workerDir = resolve(moduleDir, '..');
@@ -378,7 +385,20 @@ async function runTurn(prompt, parseResult = true) {
         outputSchema: {
           type: 'object',
           properties: {
-            res: { type: 'string' },
+            res: {
+              anyOf: [
+                { type: 'string' },
+                {
+                  type: 'object',
+                  properties: {
+                    contextType: { type: 'string' },
+                    targetType: { type: 'string' },
+                  },
+                  required: ['contextType', 'targetType'],
+                  additionalProperties: false,
+                },
+              ],
+            },
           },
           required: ['res'],
           additionalProperties: false,
@@ -402,12 +422,17 @@ async function runStartupProbe() {
 
 async function resolveRequest(payload) {
   const request = normalizeRequest(payload);
+  const knownChineseTypes = request.task === 'contextType' ? classifyKnownChineseTypes(request) : null;
+  if (knownChineseTypes) {
+    return { res: knownChineseTypes };
+  }
+
   const prompt = buildPrompt(request);
   await ensureCodexServer();
 
   const envelope = await runTurn(prompt);
   return request.task === 'contextType'
-    ? { res: normalizeLanguageUnitContextType(request, envelope.res) }
+    ? { res: normalizeLanguageUnitChineseTypes(request, envelope.res) }
     : { res: normalizeLanguageUnitRoot(request, envelope.res) };
 }
 

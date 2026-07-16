@@ -4,6 +4,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import {
   buildPrompt,
+  classifyKnownChineseContextType,
+  classifyKnownChineseTypes,
+  normalizeLanguageUnitChineseTypes,
   normalizeLanguageUnitContextType,
   normalizeLanguageUnitRoot,
   normalizeRequest,
@@ -38,9 +41,27 @@ const contextRequest = normalizeRequest({
 });
 
 const contextPrompt = buildPrompt(contextRequest);
-assert.match(contextPrompt, /discern-languageUnit-context-type/);
+assert.match(contextPrompt, /discern-languageUnit-chinese-types/);
 assert.match(contextPrompt, /chinWord/);
 assert.match(contextPrompt, /chinPhrase/);
+assert.deepEqual(classifyKnownChineseTypes({ context: '\u8349\u6ce5\u9a6c\u662f\u4e00\u79cd\u9a6c\u5417', target: '\u8349\u6ce5\u9a6c' }), {
+  contextType: 'chinPhrase',
+  targetType: 'chinWord',
+});
+assert.deepEqual(classifyKnownChineseTypes({ context: '\u64cd\u4f60\u5988\u4e0d\u662f\u6587\u660e\u4eba\u8bf4\u7684', target: '\u6587\u660e\u4eba' }), {
+  contextType: 'chinPhrase',
+  targetType: 'chinWord',
+});
+assert.equal(classifyKnownChineseContextType({ target: '\u8349\u6ce5\u9a6c' }), 'chinWord');
+assert.equal(classifyKnownChineseContextType({ target: '\u64cd\u4f60\u5988' }), 'chinPhrase');
+assert.equal(classifyKnownChineseContextType({ target: '\u4f60\u597d\u4e16\u754c' }), 'chinPhrase');
+assert.equal(classifyKnownChineseContextType({ target: '\u4f60\u597d' }), 'chinWord');
+assert.equal(classifyKnownChineseContextType({ target: '\u4e16\u754c' }), 'chinWord');
+assert.deepEqual(normalizeLanguageUnitChineseTypes({ context: '\u4f60\u597d\u4e16\u754c', target: '\u4e16\u754c' }, 'chinPhrase'), {
+  contextType: 'chinPhrase',
+  targetType: 'chinWord',
+});
+assert.equal(normalizeLanguageUnitContextType({ target: '\u4e16\u754c' }, 'chinPhrase'), 'chinWord');
 
 const parsed = parseCodexJsonl([
   '{"type":"thread.started","thread_id":"thread-123"}',
