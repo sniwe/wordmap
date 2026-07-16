@@ -1314,11 +1314,11 @@ function remapLangUnitInstanceIds(items, idMap) {
 }
 
 function normalizeLangUnitItems(items, capturesById = new Map()) {
-  const existingItemsByText = new Map(
-    normalizeLangUnitItemsForStorage(flattenLangUnitItems(items))[0].map((item) => [String(item?.text ?? '').trim(), item])
+  const existingItemsByKey = new Map(
+    normalizeLangUnitItemsForStorage(flattenLangUnitItems(items))[0].map((item) => [getLangUnitCanonicalKey(item), item])
   );
-  const groupedByText = new Map();
-  const textOrder = [];
+  const groupedByKey = new Map();
+  const keyOrder = [];
 
   for (const [sourceId, captures] of capturesById.entries()) {
     const normalizedCaptures = normalizeLangUnitCaptures(captures);
@@ -1326,15 +1326,29 @@ function normalizeLangUnitItems(items, capturesById = new Map()) {
       continue;
     }
 
-    const text = String(normalizedCaptures[0]?.text ?? '').trim();
-    let group = groupedByText.get(text);
+    const primaryCapture = normalizedCaptures[0] ?? null;
+    const text = String(primaryCapture?.text ?? '').trim();
+    const target = normalizeLangUnitTarget(primaryCapture?.target ?? text, primaryCapture?.context?.type ?? '', {
+      text,
+      start: primaryCapture?.start,
+      end: primaryCapture?.end,
+    });
+    const key = getLangUnitCanonicalKey({ text, target });
+    if (!key) {
+      continue;
+    }
+
+    let group = groupedByKey.get(key);
     if (!group) {
       group = {
+        key,
+        text,
+        target,
         sourceIds: [],
         captures: [],
       };
-      groupedByText.set(text, group);
-      textOrder.push(text);
+      groupedByKey.set(key, group);
+      keyOrder.push(key);
     }
 
     group.sourceIds.push(sourceId);
@@ -1345,14 +1359,14 @@ function normalizeLangUnitItems(items, capturesById = new Map()) {
   const normalized = [];
   const idMap = new Map();
 
-  for (const text of textOrder) {
-    const group = groupedByText.get(text);
+  for (const key of keyOrder) {
+    const group = groupedByKey.get(key);
     const captures = normalizeLangUnitCaptures(group?.captures);
     if (!captures.length) {
       continue;
     }
 
-    const existingItem = existingItemsByText.get(text);
+    const existingItem = existingItemsByKey.get(key);
     const primaryCapture = captures[0] ?? null;
     const canonicalId = String(
       existingItem?._id
@@ -1370,7 +1384,7 @@ function normalizeLangUnitItems(items, capturesById = new Map()) {
     normalized.push({
       ...(existingItem ?? {}),
       _id: canonicalId,
-      text,
+      text: group.text,
       instances: normalizeLangUnitInstances(
         captures.map((capture) => ({
           ...(capture.audSegId ? { audSegId: capture.audSegId } : {}),
@@ -1382,6 +1396,7 @@ function normalizeLangUnitItems(items, capturesById = new Map()) {
           ...(capture.context ? { context: capture.context } : {}),
         }))
       ),
+      target: group.target,
       createdAt: existingItem?.createdAt || now,
       updatedAt: existingItem?.updatedAt || now,
     });
@@ -2181,6 +2196,7 @@ async function handleSubSegApi(req, res, url) {
     const savedLinkTargetLangUnitId = linkTargetLangUnitId || (isRoot === false ? existingLinkTargetLangUnitId : '');
     const existingParentSubSegId = index >= 0 ? String(items[index]?.parentSubSegId ?? '').trim() : '';
     const savedParentSubSegId = parentSubSegId || (isRoot === false ? existingParentSubSegId || getSubSegIdFromDerivedLangUnitId(savedLinkTargetLangUnitId) : '');
+    const savedAudSegId = index >= 0 && isRoot === false ? String(items[index]?.audSegId ?? audSegId) : audSegId;
     if (isRoot === false && !savedLinkTargetLangUnitId) {
       send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'linkTargetLangUnitId is required for non-root subSeg' }));
       return true;
@@ -2188,7 +2204,7 @@ async function handleSubSegApi(req, res, url) {
 
     const saved = {
       _id: index >= 0 ? items[index]._id : nextSubSegId,
-      audSegId,
+      audSegId: savedAudSegId,
       isRoot,
       ...(savedLinkTargetLangUnitId ? { linkTargetLangUnitId: savedLinkTargetLangUnitId } : {}),
       ...(savedParentSubSegId ? { parentSubSegId: savedParentSubSegId } : {}),
@@ -2216,7 +2232,7 @@ async function handleSubSegApi(req, res, url) {
         process.stderr.write(`[codex-worker] ${error.message}\n`);
       });
     }
-    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSeg: refreshedSubSeg, langUnits: updatedLangUnits }));
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSeg: refreshedSubSeg, subSegs: refreshedSubSegItems, langUnits: updatedLangUnits }));
     return true;
   }
 

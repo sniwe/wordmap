@@ -71,6 +71,8 @@ const state = {
   selectedAudSegIndex: -1,
   enteredAudSegIndex: -1,
   audSegDraftId: '',
+  audSegCaptureShiftHeld: false,
+  audSegDraftCommitPending: false,
   audSegPlaybackLock: null,
   deleteDialogIndex: -1,
   deleteDialogKind: 'audEp',
@@ -221,11 +223,19 @@ function clearSubSegBubbleTarget(editor) {
 }
 
 function clearSubSegBubbleTargetsForAudSeg(audSegId) {
+  const renderedIds = new Set(
+    getSubSegEntriesInTreeOrder(audSegId)
+      .map(({ item }) => String(item?._id ?? '').trim())
+      .filter(Boolean)
+  );
   for (const subSegItem of getSubSegItemsForAudSeg(audSegId)) {
     const subSegId = String(subSegItem?._id ?? '').trim();
     if (subSegId) {
-      langUnitBubbleTargetIndexByAudSegId.delete(subSegId);
+      renderedIds.add(subSegId);
     }
+  }
+  for (const subSegId of renderedIds) {
+    langUnitBubbleTargetIndexByAudSegId.delete(subSegId);
   }
 }
 
@@ -597,7 +607,7 @@ function getRootSubSegItemForAudSeg(audSegId) {
 function getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId, excludeSubSegId = '') {
   const targetId = String(linkTargetLangUnitId ?? '').trim();
   const excluded = String(excludeSubSegId ?? '').trim();
-  return getSubSegItemsForAudSeg(audSegId).find(
+  return sortSubSegItems(state.subSegItems).find(
     (item) =>
       item?.isRoot === false &&
       String(item?._id ?? '') !== excluded &&
@@ -672,6 +682,7 @@ function getTargetedLangUnitIdForSubSeg(audSegId, subSegId) {
 
 function getSubSegEntriesInTreeOrder(audSegId) {
   const items = getSubSegItemsForAudSeg(audSegId);
+  const allItems = sortSubSegItems(state.subSegItems);
   const root = items.find((item) => item?.isRoot !== false) ?? null;
   if (!root) {
     return items.map((item) => ({ item, depth: 0 }));
@@ -693,7 +704,7 @@ function getSubSegEntriesInTreeOrder(audSegId) {
   }
 
   const canonicalChildIdByLangUnitId = new Map();
-  for (const item of items) {
+  for (const item of allItems) {
     const itemId = String(item?._id ?? '');
     if (!itemId || item?.isRoot !== false) {
       continue;
@@ -775,7 +786,8 @@ function getSubSegEntriesInTreeOrder(audSegId) {
       }
 
       const parentId = getSubSegParentSubSegId(item);
-      return !parentId || !itemById.has(parentId);
+      const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(item);
+      return !linkTargetLangUnitId && (!parentId || !itemById.has(parentId));
     })
     .forEach((item) => pushSubtree(item));
   return ordered;
@@ -2635,11 +2647,13 @@ async function saveSubSeg(subSegId) {
       void inferLangUnitRoot(langUnit);
     }
   }
-  state.subSegItems = sortSubSegItems(
-    saved
-      ? [saved, ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(saved._id ?? ''))]
-      : state.subSegItems.filter((item) => String(item?._id ?? '') !== String(subSegId))
-  );
+  state.subSegItems = Array.isArray(result?.subSegs)
+    ? sortSubSegItems(result.subSegs)
+    : sortSubSegItems(
+      saved
+        ? [saved, ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(saved._id ?? ''))]
+        : state.subSegItems.filter((item) => String(item?._id ?? '') !== String(subSegId))
+    );
   if (liveEditor instanceof HTMLElement && document.activeElement === liveEditor) {
     syncEditorLangUnitIdsFromContent(liveEditor, saved?.content);
     refreshLangUnitBubbleGroupStyles(liveEditor);
@@ -2677,10 +2691,11 @@ function createAudSegDraft() {
 
 async function commitAudSegDraft() {
   const draft = state.audSegItems.find((item) => item?._id === state.audSegDraftId);
-  if (!draft) {
+  if (!draft || state.audSegDraftCommitPending) {
     return;
   }
 
+  state.audSegDraftCommitPending = true;
   const audio = getSelectedAudEpMediaPlayer();
   const payload = {
     audEpId: draft.audEpId,
@@ -2703,11 +2718,16 @@ async function commitAudSegDraft() {
     }
 
     const saved = await response.json();
-    state.audSegItems = state.audSegItems.map((item) => (item?._id === draft._id ? saved : item));
+    const draftStillVisible = state.audSegItems.some((item) => item?._id === draft._id);
+    state.audSegItems = draftStillVisible
+      ? state.audSegItems.map((item) => (item?._id === draft._id ? saved : item))
+      : [...state.audSegItems, saved];
   } catch {
     state.audSegItems = state.audSegItems.filter((item) => item?._id !== draft._id);
   } finally {
     state.audSegDraftId = '';
+    state.audSegCaptureShiftHeld = false;
+    state.audSegDraftCommitPending = false;
     state.selectedAudSegIndex = -1;
     state.enteredAudSegIndex = -1;
     renderAudEps(state.audEpItems);
@@ -2715,12 +2735,13 @@ async function commitAudSegDraft() {
 }
 
 function cancelAudSegDraft() {
-  if (!state.audSegDraftId) {
+  if (!state.audSegDraftId || state.audSegDraftCommitPending) {
     return;
   }
 
   state.audSegItems = state.audSegItems.filter((item) => item?._id !== state.audSegDraftId);
   state.audSegDraftId = '';
+  state.audSegCaptureShiftHeld = false;
   state.selectedAudSegIndex = -1;
   state.enteredAudSegIndex = -1;
   renderAudEps(state.audEpItems);
@@ -2915,7 +2936,7 @@ function closeEnteredAudSeg() {
     return;
   }
 
-  const audSegId = String(state.audSegItems[state.enteredAudSegIndex]?._id ?? '');
+  const audSegId = String(getAudSegItemsForAudEp(state.enteredAudEpIndex)[state.enteredAudSegIndex]?._id ?? '');
   if (audSegId) {
     for (const subSegItem of getSubSegItemsForAudSeg(audSegId)) {
       flushSubSegSave(String(subSegItem?._id ?? ''));
@@ -3783,6 +3804,7 @@ document.addEventListener('keydown', (event) => {
 
   if (state.enteredAudEpIndex >= 0 && event.key === 'Shift' && !event.repeat) {
     event.preventDefault();
+    state.audSegCaptureShiftHeld = true;
     createAudSegDraft();
     return;
   }
@@ -3793,7 +3815,12 @@ document.addEventListener('keydown', (event) => {
     return;
   }
 
-  if (state.enteredAudEpIndex >= 0 && state.audSegDraftId && isSpaceKey(event) && event.shiftKey) {
+  if (
+    state.enteredAudEpIndex >= 0 &&
+    state.audSegDraftId &&
+    isSpaceKey(event) &&
+    (event.shiftKey || state.audSegCaptureShiftHeld)
+  ) {
     event.preventDefault();
     void commitAudSegDraft();
     return;
@@ -3827,8 +3854,11 @@ document.addEventListener('keyup', (event) => {
     return;
   }
 
-  if (event.key === 'Shift' && state.enteredAudEpIndex >= 0 && state.audSegDraftId) {
-    cancelAudSegDraft();
+  if (event.key === 'Shift') {
+    if (state.enteredAudEpIndex >= 0 && state.audSegDraftId && !state.audSegDraftCommitPending) {
+      cancelAudSegDraft();
+    }
+    state.audSegCaptureShiftHeld = false;
   }
 });
 

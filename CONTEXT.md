@@ -49,6 +49,7 @@
 | `langUnit cycle group` | The shared group identifier stored on context-bound instances so cycle targeting and dotted underline rendering treat linked langUnits as one group. |
 | `langUnit reuse by target-text` | The creation rule that reuses an existing `langUnit` record when the selected bubble has the same normalized `target.type` and trimmed `target.text`. |
 | `langUnit target-text canonicalization` | The storage rule that collapses identical `target.type + target.text` pairs into one `langUnit` record and rewrites saved `subSeg` references to the canonical `langUnitId`. |
+| `cross-audSeg canonical child` | A non-root `subSeg` linked by `linkTargetLangUnitId` to a canonical `langUnit`; the same child row is projected under matching `langUnit` occurrences in any `audSeg`, with `parentSubSegId` used only as visible focus context. |
 | `langUnit add badge` | The tiny round count badge on a `langUnit bubble` that shows how many direct references belong to that `langUnit`. |
 | `langUnit add list` | The collapsible side list beside an active `langUnit bubble` that shows other reference locations for that `langUnit` and their context text. |
 | `langUnit add links` | The in-memory reverse-link list for a `langUnit` record that stores which `audSeg`/`subSeg` pairs contain its direct references; it is derived from subSeg content and not persisted. |

@@ -6,107 +6,53 @@
     "content": [
       {
         "type": "text",
-        "text": "this is a "
+        "text": "this is where "
       },
       {
         "type": "langUnitRef",
         "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0"
+      },
+      {
+        "type": "text",
+        "text": " lives"
       }
     ],
-    "text": "this is a beeper",
-    "createdAt": "2026-07-15T08:54:00.268Z",
-    "updatedAt": "2026-07-15T08:54:03.461Z"
+    "text": "this is where bob lives",
+    "createdAt": "2026-07-16T02:14:53.739Z",
+    "updatedAt": "2026-07-16T02:15:34.549Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
     "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
     "isRoot": false,
     "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-    "parentSubSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
+    "parentSubSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1-0",
     "content": [
       {
-        "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-1"
-      },
-      {
         "type": "text",
-        "text": " "
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0"
-      },
-      {
-        "type": "text",
-        "text": "\n"
+        "text": "hi i'm bob, buddy"
       }
     ],
-    "text": "jeepers creeper\n",
-    "createdAt": "2026-07-15T08:54:03.765Z",
-    "updatedAt": "2026-07-15T08:54:22.205Z"
+    "text": "hi i'm bob, buddy",
+    "createdAt": "2026-07-16T02:14:59.509Z",
+    "updatedAt": "2026-07-16T02:16:26.355Z"
   },
   {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2",
-    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-    "isRoot": false,
-    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-1",
-    "parentSubSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1-0",
+    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1",
+    "isRoot": true,
     "content": [
-      {
-        "type": "text",
-        "text": "hi "
-      },
       {
         "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2-0"
-      }
-    ],
-    "text": "hi bob",
-    "createdAt": "2026-07-15T08:54:23.070Z",
-    "updatedAt": "2026-07-15T08:54:37.252Z"
-  },
-  {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3",
-    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-    "isRoot": false,
-    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
-    "parentSubSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
-    "content": [
-      {
-        "type": "text",
-        "text": "hey "
+        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0"
       },
       {
         "type": "text",
-        "text": "\n"
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2-0"
-      },
-      {
-        "type": "text",
-        "text": "\n"
+        "text": " can also be found out around there parts"
       }
     ],
-    "text": "hey \nbob\n",
-    "createdAt": "2026-07-15T08:54:27.758Z",
-    "updatedAt": "2026-07-15T08:54:41.579Z"
-  },
-  {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-4",
-    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-    "isRoot": false,
-    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2-0",
-    "parentSubSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-3",
-    "content": [
-      {
-        "type": "text",
-        "text": "little chunker poopy"
-      }
-    ],
-    "text": "little chunker poopy",
-    "createdAt": "2026-07-15T08:54:42.525Z",
-    "updatedAt": "2026-07-15T09:00:45.268Z"
+    "text": "bob can also be found out around there parts",
+    "createdAt": "2026-07-16T02:15:11.973Z",
+    "updatedAt": "2026-07-16T02:35:53.298Z"
   }
 ]
