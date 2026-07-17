@@ -32,6 +32,7 @@
 | `subSeg cycle row` | A non-root `subSeg` editor row with `isRoot: false` and `linkTargetLangUnitId`, initialized from a committed `langUnit` target and kept visible after reload once saved. |
 | `subSeg tree order` | The render order where a linked child subSeg appears immediately after the subSeg that owns its target langUnit bubble, recursively for arbitrary nesting depth. |
 | `subSeg parent link` | The required `linkTargetLangUnitId` edge on every non-root subSeg; it points to the langUnit bubble that owns that child row, while `parentSubSegId` stores the owning subSeg row explicitly for canonical langUnit ids. |
+| `destination subSeg path` | The ordered parent-to-child target sequence needed after clicking a `langUnitRef` so the destination `audSeg` expands the ancestor subSeg rows before targeting the clicked nested `langUnit`. |
 | `subSeg parent snapback` | `Ctrl+Backspace` from a non-root subSeg focuses only the direct parent subSeg that owns its `linkTargetLangUnitId`, one parent step at a time, with no fallback jump. |
 | `subSeg descendant expansion` | A child subSeg subtree and all of its descendants are visible only while the ancestor langUnit bubble that owns the branch is cycle-targeted; sibling branches stay collapsed. |
 | `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and non-root child rows each need their own `subSegId`. |
@@ -40,6 +41,7 @@
 | `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
 | `langUnit bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
+| `auto-langUnitification` | The Space-key runtime action that auto-wraps a qualifying line-start Chinese character in a linked child `subSeg` as a `langUnit bubble` when that character belongs to the parent `chinWord`/`chinPhrase` target. |
 | `remote section` | A non-contiguous span that belongs to the same `langUnit bubble` group as an anchor bubble, rendered with bubble styling plus a dotted connector back to the anchor. |
 | `linked bubble group` | The set of contiguous and remote `langUnit` spans that share one cycle-target index and are treated as one logical capture unit. |
 | `dotted connector` | The subtle dotted underline used to visually link a remote section back to its anchor `langUnit bubble`. |
@@ -50,10 +52,15 @@
 | `langUnit reuse by target-text` | The creation rule that reuses an existing `langUnit` record when the selected bubble has the same normalized `target.type` and trimmed `target.text`. |
 | `langUnit target-text canonicalization` | The storage rule that collapses identical `target.type + target.text` pairs into one `langUnit` record and rewrites saved `subSeg` references to the canonical `langUnitId`. |
 | `cross-audSeg canonical child` | A non-root `subSeg` linked by `linkTargetLangUnitId` to a canonical `langUnit`; the same child row is projected under matching `langUnit` occurrences in any `audSeg`, with `parentSubSegId` used only as visible focus context. |
+| `cross-audEp projected subSeg chain` | A visible `subSeg` tree where a canonical linked child from one `audEp` is rendered under a matching `langUnit` occurrence in another `audEp`, and that projected child can itself render deeper linked descendants. |
 | `langUnit add badge` | The tiny round count badge on a `langUnit bubble` that shows how many direct references belong to that `langUnit`. |
 | `langUnit add list` | The collapsible side list beside an active `langUnit bubble` that shows other reference locations for that `langUnit` and their context text. |
 | `langUnit add links` | The in-memory reverse-link list for a `langUnit` record that stores which `audSeg`/`subSeg` pairs contain its direct references; it is derived from subSeg content and not persisted. |
+| `visible langUnitRef target` | The currently rendered occurrence that owns the ref list, keyed by visible `audSegId` plus canonical `subSegId`, so projected child rows do not suppress real stored destinations. |
 | `langUnit capture jump` | The click action on a `langUnit capture list` item that exits the current editor state and jumps to the referenced `audSeg` and bubble. |
+| `langUnitRef list traversal` | The planned keyboard mode where `Tab` from a cycle-targeted `langUnit` bubble moves focus into the side ref list and `Ctrl+ArrowUp/Down` cycle-targets ref rows. |
+| `entered langUnitRef item` | The planned expanded state of a targeted `langUnitRef` list row, opened with `Enter` and collapsed with `Ctrl+Backspace`. |
+| `langUnitRef graph panel` | The planned expanded ref-row canvas that shows collection relationships from origin to audEp, audSeg, subSeg, and langUnit contextual instance nodes. |
 | `subSeg bubble` | Deprecated previous name for the `langUnit bubble`. |
 | `subSeg ref content` | The saved `subSeg` payload model that stores text tokens plus `langUnit` references instead of persisting bubble HTML directly. |
 | `normalized langUnit model` | The target storage design where `langUnit` owns the lexical text and metadata while `subSeg` stores only lightweight occurrence pointers. |
