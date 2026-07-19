@@ -82,6 +82,9 @@ const state = {
   activeSelector: '',
   activeElement: null,
   historyOpenBySelector: {},
+  langUnitRefTargetIndex: -1,
+  enteredLangUnitRefIndex: -1,
+  langUnitRefSource: null,
 };
 
 const keyboardGuardSelector = '.note-sidebar, .selector-probe';
@@ -92,12 +95,30 @@ const pendingSeekByIndex = new Map();
 const pendingSeekFrameByIndex = new Map();
 const subSegDraftTextBySubSegId = new Map();
 const subSegDraftPayloadBySubSegId = new Map();
+const subSegDraftRevisionBySubSegId = new Map();
 const subSegSaveTimersBySubSegId = new Map();
 const langUnitBubbleEscapeState = new Map();
 const langUnitBubbleTargetIndexByAudSegId = new Map();
+const langUnitRefGraphViewByKey = new Map();
+const langUnitRefGraphDragByPointerId = new Map();
+const observedLangUnitRefGraphs = new WeakSet();
+const langUnitRefResizeObserver =
+  typeof ResizeObserver === 'function'
+    ? new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          entry.target.querySelector?.('.item__langunit-ref-canvas') && syncLangUnitRefGraphCanvases();
+        }
+      })
+    : null;
+let lastSubSegPlaybackShortcutAt = 0;
+let subSegPlaybackShortcutActive = false;
 let settingsOpen = false;
 let codexWordRootInferenceEnabled = localStorage.getItem('codex-word-root-inference-enabled') === '1';
-let chinDisambiguationEnabled = localStorage.getItem('chin-disambiguation-enabled') === '1';
+if (localStorage.getItem('chin-disambiguation-instance-targeted-enabled') !== '1') {
+  localStorage.setItem('chin-disambiguation-enabled', '1');
+  localStorage.setItem('chin-disambiguation-instance-targeted-enabled', '1');
+}
+let chinDisambiguationEnabled = localStorage.getItem('chin-disambiguation-enabled') !== '0';
 let workerToastTimer = null;
 if (import.meta.env.DEV) {
   createDevReloadTone();
@@ -441,6 +462,16 @@ function getAudSegItemById(audSegId) {
   return state.audSegItems.find((item) => item?._id === audSegId) ?? null;
 }
 
+function getAudEpIndexForAudSegItem(audSegItem) {
+  const audEpIndex = Number(audSegItem?.audEpIndex);
+  if (Number.isInteger(audEpIndex) && audEpIndex >= 0) {
+    return audEpIndex;
+  }
+
+  const audEpId = String(audSegItem?.audEpId ?? '').trim();
+  return audEpId ? state.audEpItems.findIndex((item) => String(item?._id ?? '').trim() === audEpId) : -1;
+}
+
 function getAudSegPlaybackLock(index) {
   const lock = state.audSegPlaybackLock;
   return lock && lock.audEpIndex === index ? lock : null;
@@ -465,35 +496,44 @@ function getSelectedAudSegItem() {
   return getAudSegItemsForAudEp(state.enteredAudEpIndex)[state.selectedAudSegIndex] ?? null;
 }
 
-function lockSelectedAudSegPlayback() {
-  const item = getSelectedAudSegItem();
-  if (!item) {
-    return;
-  }
-
-  const tcs = Number(item.tcs ?? 0);
-  const tce = Number(item.tce ?? 0);
-  if (!Number.isFinite(tcs) || !Number.isFinite(tce) || tce <= tcs) {
-    return;
-  }
-
-  state.audSegPlaybackLock = {
-    audEpIndex: state.enteredAudEpIndex,
-    tcs,
-    tce,
-  };
-  state.enteredAudSegIndex = state.selectedAudSegIndex;
+function renderEnteredAudSegAndFocus(item) {
   renderAudEps(state.audEpItems);
   requestAnimationFrame(() => {
     const input = audEpList.querySelector(
-      `.item__segment--entered .item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(item._id ?? ''))}"]`
+      `.item__segment--entered .item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(item?._id ?? ''))}"]`
     );
     if (input instanceof HTMLElement) {
       syncLangUnitBubbleTarget(input, false);
       input.focus({ preventScroll: true });
     }
   });
-  seekAudio(state.selectedAudEpIndex - 1, tcs - (getAudioForIndex(state.selectedAudEpIndex - 1)?.currentTime || 0));
+}
+
+function getAudSegPlaybackRange(item) {
+  const tcs = Number(item?.tcs ?? 0);
+  const tce = Number(item?.tce ?? 0);
+  return Number.isFinite(tcs) && Number.isFinite(tce) && tce > tcs ? { tcs, tce } : null;
+}
+
+function lockSelectedAudSegPlayback() {
+  const item = getSelectedAudSegItem();
+  if (!item) {
+    return;
+  }
+
+  const range = getAudSegPlaybackRange(item);
+  if (!range) {
+    return;
+  }
+
+  state.audSegPlaybackLock = {
+    audEpIndex: state.enteredAudEpIndex,
+    tcs: range.tcs,
+    tce: range.tce,
+  };
+  state.enteredAudSegIndex = state.selectedAudSegIndex;
+  renderEnteredAudSegAndFocus(item);
+  seekAudio(state.selectedAudEpIndex - 1, range.tcs - (getAudioForIndex(state.selectedAudEpIndex - 1)?.currentTime || 0));
 }
 
 function openLangUnitRef(ref) {
@@ -508,7 +548,7 @@ function openLangUnitRef(ref) {
     return;
   }
 
-  const audEpIndex = Number(audSegItem.audEpIndex);
+  const audEpIndex = getAudEpIndexForAudSegItem(audSegItem);
   if (!Number.isInteger(audEpIndex) || audEpIndex < 0) {
     return;
   }
@@ -522,11 +562,25 @@ function openLangUnitRef(ref) {
   state.selectedAudEpIndex = audEpIndex + 1;
   state.enteredAudEpIndex = audEpIndex;
   state.selectedAudSegIndex = selectedAudSegIndex;
-  const rootSubSegId = getRootSubSegItemForAudSeg(audSegId)?._id || '';
-  if (rootSubSegId) {
-    setSubSegBubbleTargetIndex(rootSubSegId, getLangUnitBubbleIndex(audSegId, langUnitId));
+  state.enteredAudSegIndex = selectedAudSegIndex;
+  const targetPath = getSubSegTargetPathForLangUnit(audSegId, langUnitId);
+  if (targetPath.length) {
+    for (const step of targetPath) {
+      setSubSegBubbleTargetIndex(step.subSegId, getLangUnitBubbleIndexForSubSeg(audSegId, step.subSegId, step.langUnitId));
+    }
+  } else {
+    const rootSubSegId = getRootSubSegItemForAudSeg(audSegId)?._id || '';
+    if (rootSubSegId) {
+      setSubSegBubbleTargetIndex(rootSubSegId, getLangUnitBubbleIndex(audSegId, langUnitId));
+    }
   }
-  lockSelectedAudSegPlayback();
+  if (getAudSegPlaybackRange(audSegItem)) {
+    lockSelectedAudSegPlayback();
+    return;
+  }
+
+  state.audSegPlaybackLock = null;
+  renderEnteredAudSegAndFocus(audSegItem);
 }
 
 function renderAudSegList(audEpIndex) {
@@ -680,62 +734,84 @@ function getTargetedLangUnitIdForSubSeg(audSegId, subSegId) {
   return getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId))[targetIndex] ?? '';
 }
 
+function subSegContentHasLangUnit(audSegId, item, langUnitId) {
+  const targetId = getLangUnitCycleTargetId(langUnitId);
+  return Boolean(targetId && getOrderedLangUnitIds(getSubSegContentTokens(audSegId, String(item?._id ?? ''))).includes(targetId));
+}
+
+function getChildSubSegItemsForRenderedParent(audSegId, parentSubSegId) {
+  const parentIds = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, parentSubSegId));
+  const parentGroups = new Set(parentIds.map((id) => getLangUnitCycleTargetId(id)));
+  const childByTargetId = new Map();
+  for (const item of sortSubSegItems(state.subSegItems)) {
+    if (item?.isRoot !== false) {
+      continue;
+    }
+
+    const targetId = getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(item));
+    if (!targetId || !parentGroups.has(targetId) || childByTargetId.has(targetId)) {
+      continue;
+    }
+
+    childByTargetId.set(targetId, item);
+  }
+
+  return [...childByTargetId.values()].sort((a, b) => {
+    const indexA = parentIds.indexOf(getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(a)));
+    const indexB = parentIds.indexOf(getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(b)));
+    if (indexA !== indexB) {
+      return (indexA < 0 ? Number.MAX_SAFE_INTEGER : indexA) - (indexB < 0 ? Number.MAX_SAFE_INTEGER : indexB);
+    }
+
+    return sortSubSegItems([a, b])[0] === a ? -1 : 1;
+  });
+}
+
+function getSubSegTargetPathForLangUnit(audSegId, langUnitId) {
+  const targetId = getLangUnitCycleTargetId(langUnitId);
+  const root = getRootSubSegItemForAudSeg(audSegId);
+  if (!targetId || !root) {
+    return [];
+  }
+
+  const findPath = (item, path = [], seen = new Set()) => {
+    const subSegId = String(item?._id ?? '').trim();
+    if (!subSegId || seen.has(subSegId)) {
+      return [];
+    }
+
+    const nextSeen = new Set(seen);
+    nextSeen.add(subSegId);
+    if (subSegContentHasLangUnit(audSegId, item, targetId)) {
+      return [...path, { subSegId, langUnitId: targetId }];
+    }
+
+    for (const child of getChildSubSegItemsForRenderedParent(audSegId, subSegId)) {
+      const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(child);
+      const childPath = findPath(child, [...path, { subSegId, langUnitId: linkTargetLangUnitId }], nextSeen);
+      if (childPath.length) {
+        return childPath;
+      }
+    }
+
+    return [];
+  };
+
+  return findPath(root).filter((step) => step.subSegId && step.langUnitId);
+}
+
 function getSubSegEntriesInTreeOrder(audSegId) {
   const items = getSubSegItemsForAudSeg(audSegId);
-  const allItems = sortSubSegItems(state.subSegItems);
   const root = items.find((item) => item?.isRoot !== false) ?? null;
   if (!root) {
     return items.map((item) => ({ item, depth: 0 }));
-  }
-
-  const itemById = new Map(items.map((item) => [String(item?._id ?? ''), item]));
-  const childrenByParentId = new Map();
-  const parentIdByItemId = new Map();
-  const parentIdsByLangUnitId = new Map();
-  for (const item of items) {
-    const parentId = String(item?._id ?? '').trim();
-    if (!parentId) {
-      continue;
-    }
-
-    for (const langUnitId of getOrderedLangUnitIds(getSubSegContentTokens(audSegId, parentId))) {
-      parentIdsByLangUnitId.set(langUnitId, [...(parentIdsByLangUnitId.get(langUnitId) ?? []), parentId]);
-    }
-  }
-
-  const canonicalChildIdByLangUnitId = new Map();
-  for (const item of allItems) {
-    const itemId = String(item?._id ?? '');
-    if (!itemId || item?.isRoot !== false) {
-      continue;
-    }
-
-    const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(item);
-    if (!linkTargetLangUnitId) {
-      continue;
-    }
-
-    if (canonicalChildIdByLangUnitId.has(linkTargetLangUnitId)) {
-      continue;
-    }
-
-    canonicalChildIdByLangUnitId.set(linkTargetLangUnitId, itemId);
-    const parentIds = parentIdsByLangUnitId.get(linkTargetLangUnitId) ?? [getSubSegParentSubSegId(item)].filter(Boolean);
-    for (const parentId of parentIds) {
-      if (!itemById.has(parentId)) {
-        continue;
-      }
-
-      parentIdByItemId.set(itemId, parentId);
-      childrenByParentId.set(parentId, [...(childrenByParentId.get(parentId) ?? []), item]);
-    }
   }
 
   const focusedPathEdges = new Set();
   const focusedEditor = getFocusedSubSegEditor();
   let focusedParentId = focusedEditor instanceof HTMLElement ? String(focusedEditor.dataset.parentSubsegId ?? '').trim() : '';
   for (let itemId = getSubSegEditorKey(focusedEditor); itemId;) {
-    const parentId = focusedParentId || parentIdByItemId.get(itemId) || '';
+    const parentId = focusedParentId || getSubSegParentSubSegId(getSubSegItemById(itemId)) || '';
     if (!parentId) {
       break;
     }
@@ -758,22 +834,12 @@ function getSubSegEntriesInTreeOrder(audSegId) {
     seen.add(renderKey);
     seenItemIds.add(itemId);
     ordered.push({ item, depth, parentSubSegId: renderParentId });
-    const childOrder = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, itemId));
     const targetedLangUnitId = getTargetedLangUnitIdForSubSeg(audSegId, itemId);
-    const children = (childrenByParentId.get(itemId) ?? [])
+    const children = getChildSubSegItemsForRenderedParent(audSegId, itemId)
       .filter((child) => {
         const childId = String(child?._id ?? '');
         return focusedPathEdges.has(`${itemId}\u0000${childId}`) || subSegLinkMatchesLangUnitTarget(child, targetedLangUnitId);
       });
-    children.sort((a, b) => {
-      const indexA = childOrder.indexOf(getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(a)));
-      const indexB = childOrder.indexOf(getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(b)));
-      if (indexA !== indexB) {
-        return (indexA < 0 ? Number.MAX_SAFE_INTEGER : indexA) - (indexB < 0 ? Number.MAX_SAFE_INTEGER : indexB);
-      }
-
-      return sortSubSegItems([a, b])[0] === a ? -1 : 1;
-    });
     children.forEach((child) => pushSubtree(child, depth + 1, itemId));
   };
 
@@ -787,7 +853,7 @@ function getSubSegEntriesInTreeOrder(audSegId) {
 
       const parentId = getSubSegParentSubSegId(item);
       const linkTargetLangUnitId = getSubSegLinkTargetLangUnitId(item);
-      return !linkTargetLangUnitId && (!parentId || !itemById.has(parentId));
+      return !linkTargetLangUnitId && !parentId;
     })
     .forEach((item) => pushSubtree(item));
   return ordered;
@@ -891,7 +957,7 @@ function getLangUnitBubbleIndexForSubSeg(audSegId, subSegId, langUnitId) {
     return -1;
   }
 
-  const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(String(subSegId))}"]`);
+  const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-subseg-id="${CSS.escape(String(subSegId))}"]`);
   if (editor instanceof HTMLElement) {
     return getLangUnitBubbleGroupIds(editor).indexOf(getLangUnitCycleTargetId(langUnitId));
   }
@@ -947,6 +1013,10 @@ function getEqualsLineValues(text) {
 
 function isChineseOnlyText(text) {
   return /^[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+$/u.test(String(text ?? '').trim());
+}
+
+function isChineseCharacter(value) {
+  return /^[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]$/u.test(String(value ?? ''));
 }
 
 function isMatchingPinyinGloss(pinyinText, chineseText) {
@@ -1314,17 +1384,50 @@ function renderSubSegList(audSegItem) {
 
 function renderLangUnitRefsList(audSegItem) {
   const audSegId = audSegItem?._id || '';
-  const subSegItem = getRootSubSegItemForAudSeg(audSegId);
-  const targetIndex = getSubSegBubbleTargetIndexByKey(String(subSegItem?._id ?? ''));
-  const payload = subSegDraftPayloadBySubSegId.get(String(subSegItem?._id ?? ''));
-  const tokens = Array.isArray(payload?.content) ? payload.content : Array.isArray(subSegItem?.content) ? subSegItem.content : [];
-  const langUnitId = getOrderedLangUnitIds(tokens)[targetIndex] ?? '';
+  const target = getLangUnitRefListTarget(audSegId);
+  const { langUnitId } = target;
+  const links = getLangUnitRefRows(audSegId, target);
 
+  if (!langUnitId || !links.length) {
+    clampLangUnitRefState(0);
+    return '<ul class="item__langunit-refs" hidden></ul>';
+  }
+
+  clampLangUnitRefState(links.length);
   const langUnit = getLangUnitItem(langUnitId);
-  const subSegId = subSegItem?._id || '';
+  const context = getLangUnitContextText(langUnit) || String(getLangUnitText(langUnit) ?? '').trim();
+  const items = links
+    .map(
+      (ref) => `
+        <li class="item__langunit-ref${ref.index === state.langUnitRefTargetIndex ? ' is-targeted' : ''}${ref.index === state.enteredLangUnitRefIndex ? ' is-entered' : ''}" tabindex="-1" data-ref-index="${ref.index}" data-ref-key="${escapeHtml(ref.key)}" data-subseg-id="${escapeHtml(String(ref?.subSegId ?? ''))}" data-audseg-id="${escapeHtml(String(ref?.audSegId ?? ''))}" data-langunit-id="${escapeHtml(langUnitId)}">
+      <span class="item__langunit-ref-badge">${escapeHtml(String(ref?.badge ?? ''))}</span>
+      ${ref.index === state.enteredLangUnitRefIndex ? `
+        <span class="item__langunit-ref-context">${escapeHtml(String(ref?.text || context)).replaceAll('\n', '<br>')}</span>
+        <span class="item__langunit-ref-graph" tabindex="0" data-ref-key="${escapeHtml(ref.key)}">
+          <canvas class="item__langunit-ref-canvas" data-ref-key="${escapeHtml(ref.key)}"></canvas>
+        </span>
+      ` : ''}
+        </li>
+      `
+    )
+    .join('');
+
+  return `
+    <ul class="item__langunit-refs">
+      ${items}
+    </ul>
+  `;
+}
+
+function getLangUnitRefRows(audSegId, target = getLangUnitRefListTarget(audSegId)) {
+  const langUnitId = String(target?.langUnitId ?? '').trim();
   const links = [];
   const seen = new Set();
-  for (const subSegItem of state.subSegItems) {
+  if (!langUnitId) {
+    return links;
+  }
+
+  for (const subSegItem of sortSubSegItems(state.subSegItems)) {
     const itemSubSegId = String(subSegItem?._id ?? '').trim();
     const itemAudSegId = String(subSegItem?.audSegId ?? '').trim();
     if (!itemSubSegId || !itemAudSegId) {
@@ -1336,34 +1439,519 @@ function renderLangUnitRefsList(audSegItem) {
       continue;
     }
 
-    if (itemSubSegId === subSegId || seen.has(itemSubSegId)) {
+    const ref = {
+      audSegId: itemAudSegId,
+      subSegId: itemSubSegId,
+      langUnitId,
+      text: String(subSegItem?.text ?? '').trim(),
+      badge: getLangUnitRefBadgeText(subSegItem),
+    };
+    const refKey = getLangUnitRefKey(ref);
+    if (isSameVisibleLangUnitRefTarget(ref, target) || seen.has(refKey)) {
       continue;
     }
 
-    seen.add(itemSubSegId);
-    links.push({ audSegId: itemAudSegId, subSegId: itemSubSegId });
+    seen.add(refKey);
+    links.push({ ...ref, key: refKey, index: links.length });
   }
 
-  if (!langUnitId) {
-    return '<ul class="item__langunit-refs" hidden></ul>';
+  return links;
+}
+
+function getLangUnitRefKey(ref) {
+  return [
+    String(ref?.audSegId ?? '').trim(),
+    String(ref?.subSegId ?? '').trim(),
+    String(ref?.langUnitId ?? '').trim(),
+  ].map(encodeURIComponent).join('|');
+}
+
+function clampLangUnitRefState(rowCount) {
+  if (rowCount <= 0) {
+    state.langUnitRefTargetIndex = -1;
+    state.enteredLangUnitRefIndex = -1;
+    return;
   }
 
-  const context = getLangUnitContextText(langUnit) || String(getLangUnitText(langUnit) ?? '').trim();
-  const items = links
-    .map(
-      (ref) => `
-        <li class="item__langunit-ref" data-subseg-id="${escapeHtml(String(ref?.subSegId ?? ''))}" data-audseg-id="${escapeHtml(String(ref?.audSegId ?? ''))}" data-langunit-id="${escapeHtml(langUnitId)}">
-      <span class="item__langunit-ref-context">${escapeHtml(getRootSubSegItemForAudSeg(String(ref?.audSegId ?? ''))?.text ?? context).replaceAll('\n', '<br>')}</span>
-        </li>
-      `
-    )
-    .join('');
+  if (state.langUnitRefTargetIndex >= rowCount) {
+    state.langUnitRefTargetIndex = rowCount - 1;
+  }
+  if (state.enteredLangUnitRefIndex >= rowCount) {
+    state.enteredLangUnitRefIndex = -1;
+  }
+}
 
-  return `
-    <ul class="item__langunit-refs">
-      ${items}
-    </ul>
-  `;
+function getLangUnitRefBadgeText(subSegItem) {
+  const audSegItem = getAudSegItemById(String(subSegItem?.audSegId ?? ''));
+  const audEpIndex = getAudEpIndexForAudSegItem(audSegItem);
+  const audSegIndex = getAudSegItemsForAudEp(audEpIndex).findIndex((item) => item?._id === audSegItem?._id);
+  const subSegKind = subSegItem?.isRoot === false ? 'child' : 'root';
+  return `A${audEpIndex + 1}:S${audSegIndex + 1}:${subSegKind}`;
+}
+
+function isSameVisibleLangUnitRefTarget(ref, target) {
+  const refAudSegId = String(ref?.audSegId ?? '').trim();
+  const refSubSegId = String(ref?.subSegId ?? '').trim();
+  const targetAudSegId = String(target?.audSegId ?? '').trim();
+  const targetSubSegId = String(target?.subSegId ?? '').trim();
+  return Boolean(refAudSegId && refSubSegId && refAudSegId === targetAudSegId && refSubSegId === targetSubSegId);
+}
+
+function getLangUnitRefListTarget(audSegId) {
+  let target = { audSegId, subSegId: '', parentSubSegId: '', langUnitId: '' };
+  for (const { item, parentSubSegId = '' } of getSubSegEntriesInTreeOrder(audSegId)) {
+    const subSegId = String(item?._id ?? '');
+    const langUnitId = getTargetedLangUnitIdForSubSeg(audSegId, subSegId);
+    if (langUnitId) {
+      target = { audSegId, subSegId, parentSubSegId, langUnitId };
+    }
+  }
+
+  return target;
+}
+
+function buildLangUnitRefGraph(ref) {
+  const targetAudSegId = String(ref?.audSegId ?? ref?.audsegId ?? '').trim();
+  const targetSubSegId = String(ref?.subSegId ?? ref?.subsegId ?? '').trim();
+  const targetLangUnitId = String(ref?.langUnitId ?? ref?.langunitId ?? '').trim();
+  const targetAudSeg = getAudSegItemById(targetAudSegId);
+  const targetAudEpId = String(targetAudSeg?.audEpId ?? '').trim();
+  const nodes = [];
+  const edges = [];
+  const nodeById = new Map();
+  const pathIds = new Set(['origin']);
+  let focusNodeId = '';
+  let nextY = 0;
+
+  const addNode = (node) => {
+    if (nodeById.has(node.id)) {
+      return nodeById.get(node.id);
+    }
+    nodeById.set(node.id, node);
+    nodes.push(node);
+    return node;
+  };
+  const addEdge = (from, to) => {
+    if (nodeById.has(from) && nodeById.has(to)) {
+      edges.push({ from, to, opacity: 0.15 });
+    }
+  };
+  const allocateY = () => {
+    const y = nextY;
+    nextY += 58;
+    return y;
+  };
+  const timeSpan = (audSeg) => {
+    const tcs = formatTime(Number(audSeg?.tcs ?? 0));
+    const tce = audSeg?.tce == null || audSeg?.tce === '' ? '  ' : formatTime(Number(audSeg.tce));
+    return `${tcs}-${tce}`;
+  };
+  const audEpTitle = (audEp, index) => String(audEp?.audioTitle ?? audEp?.label ?? audEp?.name ?? audEp?.text ?? audEp?.media?.[audEp.media.length - 1]?.originalName ?? `episode ${index + 1}`);
+  const addLangUnitInstances = (audSegId, subSegId, subNodeId, y, x) => {
+    let ordinal = 0;
+    for (const token of getSubSegContentTokens(audSegId, subSegId)) {
+      if (token?.type !== 'langUnitRef') {
+        continue;
+      }
+
+      const langUnitId = String(token.langUnitId ?? '').trim();
+      const langUnit = getLangUnitItem(langUnitId);
+      const instanceNodeId = `instance:${audSegId}:${subSegId}:${langUnitId}:${ordinal}`;
+      const isFocus = audSegId === targetAudSegId && subSegId === targetSubSegId && langUnitId === targetLangUnitId && !focusNodeId;
+      const sameLangUnit = langUnitId === targetLangUnitId;
+      addNode({
+        id: instanceNodeId,
+        kind: 'instance',
+        langUnitId,
+        label: getLangUnitText(langUnit) || langUnitId,
+        x,
+        y: y + ordinal * 30,
+        opacity: isFocus ? 1 : sameLangUnit ? 0.5 : 0.15,
+        target: isFocus,
+      });
+      addEdge(subNodeId, instanceNodeId);
+      if (isFocus) {
+        focusNodeId = instanceNodeId;
+        pathIds.add(instanceNodeId);
+        addDownstreamLangUnitRefGraph(instanceNodeId, audSegId, langUnitId, x + 180, y + 58, pathIds, addNode, addEdge);
+      }
+      ordinal += 1;
+    }
+    return ordinal;
+  };
+
+  addNode({ id: 'origin', kind: 'origin', label: '', x: 0, y: 0, opacity: 1, target: false });
+
+  state.audEpItems.forEach((audEp, epIndex) => {
+    const audEpId = String(audEp?._id ?? '').trim();
+    if (!audEpId) {
+      return;
+    }
+
+    const epNodeId = `audEp:${audEpId}`;
+    const epY = allocateY();
+    addNode({ id: epNodeId, kind: 'audEp', label: audEpTitle(audEp, epIndex), x: 160, y: epY, opacity: 0.15, target: audEpId === targetAudEpId });
+    addEdge('origin', epNodeId);
+    if (audEpId === targetAudEpId) {
+      pathIds.add(epNodeId);
+    }
+
+    getAudSegItemsForAudEp(epIndex).forEach((audSeg, segIndex) => {
+      const audSegId = String(audSeg?._id ?? '').trim();
+      if (!audSegId) {
+        return;
+      }
+
+      const segY = allocateY();
+      const segNodeId = `audSeg:${audSegId}`;
+      addNode({ id: segNodeId, kind: 'audSeg', label: timeSpan(audSeg), x: 320, y: segY, opacity: 0.15, target: audSegId === targetAudSegId });
+      addEdge(epNodeId, segNodeId);
+      if (audSegId === targetAudSegId) {
+        pathIds.add(segNodeId);
+      }
+
+      getSubSegItemsForAudSeg(audSegId).forEach((subSeg, subIndex) => {
+        const subSegId = String(subSeg?._id ?? '').trim();
+        if (!subSegId) {
+          return;
+        }
+
+        const subY = allocateY();
+        const subNodeId = `subSeg:${subSegId}`;
+        const label = String(subSeg?.text ?? '').trim() || (subSeg?.isRoot === false ? 'child' : 'root');
+        addNode({ id: subNodeId, kind: 'subSeg', label, parts: getSubSegGraphParts(audSegId, subSegId, label), x: 500, y: subY, opacity: 0.15, target: subSegId === targetSubSegId });
+        addEdge(segNodeId, subNodeId);
+        if (subSegId === targetSubSegId) {
+          pathIds.add(subNodeId);
+        }
+
+        const instanceCount = addLangUnitInstances(audSegId, subSegId, subNodeId, subY, 700);
+        nextY += Math.max(0, instanceCount - 1) * 30;
+      });
+    });
+  });
+
+  for (const node of nodes) {
+    if (pathIds.has(node.id)) {
+      node.opacity = 1;
+    }
+  }
+  for (const edge of edges) {
+    edge.opacity = pathIds.has(edge.from) && pathIds.has(edge.to) ? 1 : nodeById.get(edge.to)?.opacity ?? 0.15;
+  }
+  if (focusNodeId) {
+    for (const node of nodes) {
+      if (node.kind === 'instance' && node.id !== focusNodeId && node.langUnitId === targetLangUnitId) {
+        edges.push({ from: focusNodeId, to: node.id, opacity: 0.5, dashed: true });
+      }
+    }
+  }
+
+  return { nodes, edges, focusNodeId };
+}
+
+function addDownstreamLangUnitRefGraph(fromNodeId, audSegId, langUnitId, x, y, pathIds, addNode, addEdge, seen = new Set()) {
+  const targetId = getLangUnitCycleTargetId(langUnitId);
+  const seenKey = `${audSegId}\u0000${targetId}`;
+  if (!targetId || seen.has(seenKey)) {
+    return y;
+  }
+
+  seen.add(seenKey);
+  let cursorY = y;
+  const children = sortSubSegItems(state.subSegItems).filter(
+    (item) =>
+      item?.isRoot === false &&
+      getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(item)) === targetId
+  );
+
+  for (const child of children) {
+    const childSubSegId = String(child?._id ?? '').trim();
+    if (!childSubSegId) {
+      continue;
+    }
+    const childAudSegId = String(child?.audSegId ?? '').trim();
+
+    const subNodeId = `downSubSeg:${fromNodeId}:${childSubSegId}`;
+    const label = String(child?.text ?? '').trim() || 'child';
+    addNode({
+      id: subNodeId,
+      kind: 'subSeg',
+      label,
+      parts: getSubSegGraphParts(childAudSegId, childSubSegId, label),
+      x,
+      y: cursorY,
+      opacity: 1,
+      target: false,
+    });
+    pathIds.add(subNodeId);
+    addEdge(fromNodeId, subNodeId);
+
+    let ordinal = 0;
+    for (const token of getSubSegContentTokens(childAudSegId, childSubSegId)) {
+      if (token?.type !== 'langUnitRef') {
+        continue;
+      }
+
+      const childLangUnitId = String(token.langUnitId ?? '').trim();
+      const langUnit = getLangUnitItem(childLangUnitId);
+      const instanceNodeId = `downInstance:${subNodeId}:${childLangUnitId}:${ordinal}`;
+      addNode({
+        id: instanceNodeId,
+        kind: 'instance',
+        langUnitId: childLangUnitId,
+        label: getLangUnitText(langUnit) || childLangUnitId,
+        x: x + 180,
+        y: cursorY + ordinal * 30,
+        opacity: 1,
+        target: false,
+      });
+      pathIds.add(instanceNodeId);
+      addEdge(subNodeId, instanceNodeId);
+      cursorY = Math.max(cursorY, addDownstreamLangUnitRefGraph(instanceNodeId, childAudSegId, childLangUnitId, x + 360, cursorY + 58, pathIds, addNode, addEdge, seen));
+      ordinal += 1;
+    }
+
+    cursorY += Math.max(90, ordinal * 30 + 58);
+  }
+
+  return cursorY;
+}
+
+function getSubSegGraphParts(audSegId, subSegId, fallback = '') {
+  const parts = [];
+  for (const token of getSubSegContentTokens(audSegId, subSegId)) {
+    if (token?.type === 'text') {
+      parts.push({ type: 'text', text: String(token.text ?? '') });
+    } else if (token?.type === 'langUnitRef') {
+      const langUnitId = String(token.langUnitId ?? '').trim();
+      parts.push({ type: 'langUnit', text: getLangUnitText(getLangUnitItem(langUnitId)) || langUnitId });
+    }
+  }
+  return parts.length ? parts : [{ type: 'text', text: fallback }];
+}
+
+function getLangUnitRefGraphView(refKey, graph, canvas) {
+  const existing = langUnitRefGraphViewByKey.get(refKey);
+  if (existing) {
+    return existing;
+  }
+
+  const focus = graph.nodes.find((node) => node.id === graph.focusNodeId) ?? graph.nodes[0];
+  const view = {
+    scale: 1.35,
+    x: (canvas.clientWidth || 320) / 2 - (focus?.x ?? 0) * 1.35,
+    y: (canvas.clientHeight || 220) / 2 - (focus?.y ?? 0) * 1.35,
+  };
+  langUnitRefGraphViewByKey.set(refKey, view);
+  return view;
+}
+
+function drawLangUnitRefGraphCanvas(canvas) {
+  if (!(canvas instanceof HTMLCanvasElement)) {
+    return;
+  }
+
+  const row = canvas.closest('.item__langunit-ref');
+  const ref = row instanceof HTMLElement ? row.dataset : {};
+  const refKey = String(ref.refKey ?? '').trim();
+  const graph = buildLangUnitRefGraph(ref);
+  const view = getLangUnitRefGraphView(refKey, graph, canvas);
+  const dpr = window.devicePixelRatio || 1;
+  const width = Math.max(1, canvas.clientWidth || 320);
+  const height = Math.max(1, canvas.clientHeight || 220);
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    return;
+  }
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, width, height);
+  const sx = (x) => x * view.scale + view.x;
+  const sy = (y) => y * view.scale + view.y;
+  const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
+
+  ctx.lineWidth = 1.5;
+  for (const edge of graph.edges) {
+    const from = nodeById.get(edge.from);
+    const to = nodeById.get(edge.to);
+    if (!from || !to) {
+      continue;
+    }
+    ctx.globalAlpha = edge.opacity;
+    ctx.strokeStyle = '#495057';
+    ctx.setLineDash(edge.dashed ? [4, 4] : []);
+    ctx.beginPath();
+    ctx.moveTo(sx(from.x), sy(from.y));
+    ctx.lineTo(sx(to.x), sy(to.y));
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (const node of graph.nodes) {
+    const x = sx(node.x);
+    const y = sy(node.y);
+    ctx.globalAlpha = node.opacity;
+    if (node.kind === 'origin') {
+      ctx.fillStyle = '#0b63ce';
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fill();
+      continue;
+    }
+
+    if (node.kind === 'subSeg') {
+      drawSubSegGraphNode(ctx, node, x, y);
+      continue;
+    }
+
+    const label = String(node.label ?? '');
+    const fontSize = node.kind === 'instance' ? 10 : 9;
+    ctx.font = `${fontSize}px system-ui, sans-serif`;
+    const widthPx = Math.max(18, ctx.measureText(label).width + 8);
+    const heightPx = fontSize + 8;
+    ctx.fillStyle = node.kind === 'instance' ? '#fff7d6' : '#f1f3f5';
+    ctx.strokeStyle = node.target ? '#0b63ce' : '#222';
+    ctx.lineWidth = node.target ? 2 : 1;
+    roundRectPath(ctx, x - widthPx / 2, y - heightPx / 2, widthPx, heightPx, 8);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = '#111';
+    drawWrappedCanvasText(ctx, label, x, y, widthPx - 8, heightPx - 4, fontSize);
+  }
+  ctx.globalAlpha = 1;
+}
+
+function measureSubSegGraphNode(ctx, node) {
+  const fontSize = 9;
+  const gap = 2;
+  const padX = 5;
+  const parts = Array.isArray(node.parts) && node.parts.length ? node.parts : [{ type: 'text', text: node.label }];
+  ctx.font = `${fontSize}px system-ui, sans-serif`;
+  const contentWidth = parts.reduce((sum, part, index) => {
+    const text = String(part.text ?? '');
+    const width = part.type === 'langUnit' ? ctx.measureText(text).width + 8 : ctx.measureText(text).width;
+    return sum + width + (index ? gap : 0);
+  }, 0);
+  return { width: Math.max(18, contentWidth + padX * 2), height: fontSize + 10, fontSize, gap, padX };
+}
+
+function drawSubSegGraphNode(ctx, node, x, y) {
+  const box = measureSubSegGraphNode(ctx, node);
+  const parts = Array.isArray(node.parts) && node.parts.length ? node.parts : [{ type: 'text', text: node.label }];
+  const left = x - box.width / 2;
+  const top = y - box.height / 2;
+  ctx.fillStyle = '#fff';
+  ctx.strokeStyle = node.target ? '#0b63ce' : '#222';
+  ctx.lineWidth = node.target ? 2 : 1;
+  roundRectPath(ctx, left, top, box.width, box.height, 2);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.font = `${box.fontSize}px system-ui, sans-serif`;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  let cursorX = left + box.padX;
+  for (const part of parts) {
+    const text = String(part.text ?? '');
+    if (part.type === 'langUnit') {
+      const bubbleWidth = ctx.measureText(text).width + 8;
+      const bubbleHeight = box.fontSize + 6;
+      roundRectPath(ctx, cursorX, y - bubbleHeight / 2, bubbleWidth, bubbleHeight, 5);
+      ctx.fillStyle = '#eef3ff';
+      ctx.strokeStyle = '#222';
+      ctx.lineWidth = 1;
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#111';
+      ctx.fillText(text, cursorX + 4, y);
+      cursorX += bubbleWidth + box.gap;
+    } else {
+      ctx.fillStyle = '#111';
+      ctx.fillText(text, cursorX, y);
+      cursorX += ctx.measureText(text).width + box.gap;
+    }
+  }
+  ctx.textAlign = 'center';
+}
+
+function drawWrappedCanvasText(ctx, text, x, y, maxWidth, maxHeight, fontSize) {
+  ctx.font = `${fontSize}px system-ui, sans-serif`;
+  const lineHeight = fontSize + 2;
+  const maxLines = Math.max(1, Math.floor(maxHeight / lineHeight));
+  const words = String(text ?? '').trim().split(/\s+/).filter(Boolean);
+  const lines = [];
+  let line = '';
+
+  const pushBrokenWord = (word) => {
+    let chunk = '';
+    for (const char of word) {
+      if (ctx.measureText(chunk + char).width > maxWidth && chunk) {
+        lines.push(chunk);
+        chunk = char;
+      } else {
+        chunk += char;
+      }
+    }
+    if (chunk) {
+      lines.push(chunk);
+    }
+  };
+
+  for (const word of words.length ? words : ['']) {
+    const next = line ? `${line} ${word}` : word;
+    if (ctx.measureText(next).width <= maxWidth) {
+      line = next;
+      continue;
+    }
+    if (line) {
+      lines.push(line);
+      line = '';
+    }
+    if (ctx.measureText(word).width > maxWidth) {
+      pushBrokenWord(word);
+    } else {
+      line = word;
+    }
+  }
+  if (line) {
+    lines.push(line);
+  }
+
+  const visible = lines.slice(0, maxLines);
+  if (lines.length > maxLines && visible.length) {
+    visible[visible.length - 1] = `${visible[visible.length - 1].slice(0, Math.max(1, visible[visible.length - 1].length - 3))}...`;
+  }
+
+  const startY = y - ((visible.length - 1) * lineHeight) / 2;
+  visible.forEach((lineText, index) => ctx.fillText(lineText, x, startY + index * lineHeight));
+}
+
+function roundRectPath(ctx, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + width, y, x + width, y + height, r);
+  ctx.arcTo(x + width, y + height, x, y + height, r);
+  ctx.arcTo(x, y + height, x, y, r);
+  ctx.arcTo(x, y, x + width, y, r);
+  ctx.closePath();
+}
+
+function syncLangUnitRefGraphCanvases() {
+  audEpList.querySelectorAll('.item__langunit-ref-canvas').forEach((canvas) => {
+    const graph = canvas.closest('.item__langunit-ref-graph');
+    if (graph instanceof HTMLElement && langUnitRefResizeObserver && !observedLangUnitRefGraphs.has(graph)) {
+      observedLangUnitRefGraphs.add(graph);
+      langUnitRefResizeObserver.observe(graph);
+    }
+    requestAnimationFrame(() => drawLangUnitRefGraphCanvas(canvas));
+  });
 }
 
 const LANG_UNIT_CONTEXT_BOUNDARIES = new Set(['\r', '\n', '\u2028', '\u2029', '.', '。', '．', '｡']);
@@ -1877,6 +2465,162 @@ function setCaretToEnd(editor) {
   selection.addRange(range);
 }
 
+function getSubSegCaretTextOffset(editor) {
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || !selection.isCollapsed || !editor.contains(selection.anchorNode)) {
+    return null;
+  }
+
+  const range = document.createRange();
+  range.selectNodeContents(editor);
+  range.setEnd(selection.anchorNode, selection.anchorOffset);
+  return normalizeSubSegLineBreaks(range.toString()).length;
+}
+
+function getSubSegTextRange(editor, start, end) {
+  if (!(editor instanceof HTMLElement) || !Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end <= start) {
+    return null;
+  }
+
+  const range = document.createRange();
+  let offset = 0;
+  let started = false;
+
+  const walk = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const length = normalizeSubSegLineBreaks(node.textContent ?? '').length;
+      if (!started && start <= offset + length) {
+        range.setStart(node, Math.max(0, start - offset));
+        started = true;
+      }
+      if (started && end <= offset + length) {
+        range.setEnd(node, Math.max(0, end - offset));
+        return true;
+      }
+      offset += length;
+      return false;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return false;
+    }
+
+    if (node.tagName === 'BR') {
+      offset += 1;
+      return false;
+    }
+
+    for (const child of node.childNodes) {
+      if (walk(child)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  return walk(editor) && started ? range : null;
+}
+
+function getSubSegTextBeforeRange(editor, range) {
+  if (!(editor instanceof HTMLElement) || !(range instanceof Range) || !editor.contains(range.startContainer)) {
+    return '';
+  }
+
+  let text = '';
+  let done = false;
+
+  const walk = (node) => {
+    if (done) {
+      return;
+    }
+
+    if (node === range.startContainer) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        text += normalizeSubSegLineBreaks(String(node.textContent ?? '').slice(0, range.startOffset));
+      }
+      done = true;
+      return;
+    }
+
+    if (node.nodeType === Node.TEXT_NODE) {
+      text += normalizeSubSegLineBreaks(node.textContent ?? '');
+      return;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return;
+    }
+
+    if (node.tagName === 'BR') {
+      text += '\n';
+      return;
+    }
+
+    for (const child of node.childNodes) {
+      walk(child);
+    }
+  };
+
+  walk(editor);
+  return text;
+}
+
+function setSubSegCaretByTextOffset(editor, textOffset) {
+  if (!(editor instanceof HTMLElement) || !Number.isInteger(textOffset)) {
+    return false;
+  }
+
+  const selection = document.getSelection();
+  if (!selection) {
+    return false;
+  }
+
+  const range = document.createRange();
+  let offset = 0;
+
+  const walk = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const length = normalizeSubSegLineBreaks(node.textContent ?? '').length;
+      if (textOffset <= offset + length) {
+        range.setStart(node, Math.max(0, textOffset - offset));
+        range.collapse(true);
+        return true;
+      }
+      offset += length;
+      return false;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      return false;
+    }
+
+    if (node.tagName === 'BR') {
+      if (textOffset <= offset + 1) {
+        range.setStartAfter(node);
+        range.collapse(true);
+        return true;
+      }
+      offset += 1;
+      return false;
+    }
+
+    for (const child of node.childNodes) {
+      if (walk(child)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  if (!walk(editor)) {
+    return false;
+  }
+
+  selection.removeAllRanges();
+  selection.addRange(range);
+  return true;
+}
+
 function syncLangUnitBubbleTarget(editor, restoreCaret = false) {
   if (!(editor instanceof HTMLElement)) {
     return;
@@ -2022,26 +2766,37 @@ function cycleLangUnitBubbleTarget(editor, step) {
     return false;
   }
 
+  const audSegId = editor.dataset.subsegAudsegId || '';
   const subSegId = getSubSegEditorKey(editor);
+  const parentSubSegId = String(editor.dataset.parentSubsegId ?? '').trim();
+  const caretOffset = getSubSegCaretTextOffset(editor);
   const groups = getLangUnitBubbleGroupIds(editor);
   if (!groups.length) {
     return false;
   }
 
   const currentIndex = getSubSegBubbleTargetIndex(editor);
+  const currentLangUnitId = groups[currentIndex] ?? '';
   const slots = groups.length + 1;
   const nextIndex = ((currentIndex + 1 + step + slots) % slots) - 1;
+  const nextLangUnitId = groups[nextIndex] ?? '';
+  const hadVisibleChild = Boolean(currentLangUnitId && getCycleSubSegItemForTarget(audSegId, currentLangUnitId, subSegId));
+  const hasNextChild = Boolean(nextLangUnitId && getCycleSubSegItemForTarget(audSegId, nextLangUnitId, subSegId));
 
   setSubSegBubbleTargetIndex(editor, nextIndex);
-  syncLangUnitBubbleTarget(editor, nextIndex === -1);
+  syncLangUnitBubbleTarget(editor, false);
   const changed = syncCycleSubSegRow(editor, true);
-  if (changed || currentIndex !== nextIndex) {
+  if (changed || hadVisibleChild || hasNextChild) {
     renderAudEps(state.audEpItems);
     requestAnimationFrame(() => {
-      const liveEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(String(subSegId))}"]`);
+      const parentSelector = parentSubSegId ? `[data-parent-subseg-id="${CSS.escape(parentSubSegId)}"]` : '';
+      const liveEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-subseg-id="${CSS.escape(String(subSegId))}"]${parentSelector}`);
       if (liveEditor instanceof HTMLElement) {
         syncLangUnitBubbleTarget(liveEditor, false);
         liveEditor.focus({ preventScroll: true });
+        if (!setSubSegCaretByTextOffset(liveEditor, caretOffset)) {
+          setCaretToEnd(liveEditor);
+        }
       }
     });
   }
@@ -2134,6 +2889,7 @@ function focusParentSubSegInput(editor) {
     return false;
   }
 
+  syncSubSegEditorDraft(editor);
   clearSubSegBubbleTarget(editor);
   const parentTargetIndex = getLangUnitBubbleIndexForSubSeg(audSegId, parentSubSegId, linkTargetLangUnitId);
   if (parentTargetIndex >= 0) {
@@ -2142,7 +2898,7 @@ function focusParentSubSegInput(editor) {
 
   renderAudEps(state.audEpItems);
   requestAnimationFrame(() => {
-    const parentEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(parentSubSegId)}"]`);
+    const parentEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-subseg-id="${CSS.escape(parentSubSegId)}"]`);
     if (parentEditor instanceof HTMLElement) {
       syncLangUnitBubbleTarget(parentEditor, false);
       parentEditor.focus({ preventScroll: true });
@@ -2245,7 +3001,8 @@ function refreshLinkedParentLangUnitText(editor) {
   const sourceText = getLangUnitText(langUnit);
   const parentSubSegId = getSubSegParentSubSegId(getSubSegItemById(getSubSegEditorKey(editor)));
   const nextText = getLangUnitRenderText(langUnitId, sourceText, parentSubSegId);
-  const parentEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-id="${CSS.escape(parentSubSegId)}"]`);
+  const audSegId = editor.dataset.subsegAudsegId || '';
+  const parentEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-subseg-id="${CSS.escape(parentSubSegId)}"]`);
   if (!(parentEditor instanceof HTMLElement)) {
     return;
   }
@@ -2279,6 +3036,7 @@ function syncSubSegEditorDraft(editor) {
   const payload = extractSubSegEditorPayload(editor);
   subSegDraftTextBySubSegId.set(subSegId, markup);
   subSegDraftPayloadBySubSegId.set(subSegId, payload);
+  subSegDraftRevisionBySubSegId.set(subSegId, (subSegDraftRevisionBySubSegId.get(subSegId) ?? 0) + 1);
   autosizeSubSegInput(editor);
   scheduleSubSegSave(subSegId);
   refreshLinkedParentLangUnitText(editor);
@@ -2299,6 +3057,107 @@ function syncLangUnitRefsLists() {
 
     container.outerHTML = renderLangUnitRefsList({ _id: audSegId });
   });
+  syncLangUnitRefGraphCanvases();
+}
+
+function focusTargetedLangUnitRefRow() {
+  const rows = [...audEpList.querySelectorAll('.item__langunit-ref')];
+  const row = rows[state.langUnitRefTargetIndex];
+  if (row instanceof HTMLElement) {
+    row.focus({ preventScroll: true });
+  }
+}
+
+function focusLangUnitRefSource() {
+  const source = state.langUnitRefSource;
+  state.langUnitRefTargetIndex = -1;
+  state.enteredLangUnitRefIndex = -1;
+  state.langUnitRefSource = null;
+  renderAudEps(state.audEpItems);
+  if (!source) {
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(source.audSegId)}"][data-subseg-id="${CSS.escape(source.subSegId)}"]`);
+    if (editor instanceof HTMLElement) {
+      editor.focus({ preventScroll: true });
+      syncLangUnitBubbleTarget(editor, false);
+    }
+  });
+}
+
+function enterLangUnitRefTraversal(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return false;
+  }
+
+  const audSegId = String(editor.dataset.subsegAudsegId ?? '').trim();
+  const subSegId = getSubSegEditorKey(editor);
+  const rows = getLangUnitRefRows(audSegId);
+  if (!rows.length || !getLangUnitRefListTarget(audSegId).langUnitId) {
+    return false;
+  }
+
+  state.langUnitRefSource = { audSegId, subSegId };
+  state.langUnitRefTargetIndex = 0;
+  state.enteredLangUnitRefIndex = -1;
+  renderAudEps(state.audEpItems);
+  requestAnimationFrame(focusTargetedLangUnitRefRow);
+  return true;
+}
+
+function cycleLangUnitRefTarget(step) {
+  const rows = [...audEpList.querySelectorAll('.item__langunit-ref')];
+  if (!rows.length || state.enteredLangUnitRefIndex >= 0) {
+    return false;
+  }
+
+  state.langUnitRefTargetIndex = state.langUnitRefTargetIndex < 0
+    ? 0
+    : (state.langUnitRefTargetIndex + step + rows.length) % rows.length;
+  renderAudEps(state.audEpItems);
+  requestAnimationFrame(focusTargetedLangUnitRefRow);
+  return true;
+}
+
+function handleLangUnitRefKeyboard(event) {
+  if (!state.langUnitRefSource) {
+    return false;
+  }
+
+  if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
+    event.preventDefault();
+    if (state.enteredLangUnitRefIndex >= 0) {
+      state.enteredLangUnitRefIndex = -1;
+      renderAudEps(state.audEpItems);
+      requestAnimationFrame(focusTargetedLangUnitRefRow);
+    } else {
+      focusLangUnitRefSource();
+    }
+    return true;
+  }
+
+  if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
+    event.preventDefault();
+    if (state.enteredLangUnitRefIndex >= 0) {
+      return true;
+    }
+    return cycleLangUnitRefTarget(event.key === 'ArrowDown' ? 1 : -1);
+  }
+
+  if (event.key === 'Enter' && state.langUnitRefTargetIndex >= 0 && state.enteredLangUnitRefIndex < 0) {
+    event.preventDefault();
+    state.enteredLangUnitRefIndex = state.langUnitRefTargetIndex;
+    renderAudEps(state.audEpItems);
+    requestAnimationFrame(() => {
+      focusTargetedLangUnitRefRow();
+      syncLangUnitRefGraphCanvases();
+    });
+    return true;
+  }
+
+  return false;
 }
 
 function setCaretAfterNode(node) {
@@ -2466,6 +3325,74 @@ function wrapSelectedSubSegText(editor) {
   return true;
 }
 
+function getLinkedSubSegLineStartAutoLangUnitRange(editor) {
+  if (!(editor instanceof HTMLElement) || editor.dataset.subsegIsRoot !== '0') {
+    return null;
+  }
+
+  const linkTargetLangUnitId = getSubSegEditorLinkTargetLangUnitId(editor);
+  const parentLangUnit = getLangUnitItem(linkTargetLangUnitId) ?? getLangUnitItem(getLangUnitCycleTargetId(linkTargetLangUnitId));
+  const parentTargetType = String(parentLangUnit?.target?.type ?? '').trim();
+  const parentTargetText = String(parentLangUnit?.target?.text || getLangUnitText(parentLangUnit) || '');
+  if (!['chinWord', 'chinPhrase'].includes(parentTargetType) || !parentTargetText) {
+    return null;
+  }
+
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || !selection.isCollapsed || !editor.contains(selection.anchorNode)) {
+    return null;
+  }
+
+  const range = selection.getRangeAt(0);
+  if (!editor.contains(range.startContainer)) {
+    return null;
+  }
+
+  const beforeText = getSubSegTextBeforeRange(editor, range);
+  const char = beforeText.slice(-1);
+  if (!isChineseCharacter(char) || !parentTargetText.includes(char)) {
+    return null;
+  }
+
+  if (!/(^|\n)[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]$/u.test(beforeText)) {
+    return null;
+  }
+
+  const autoRange = getSubSegTextRange(editor, beforeText.length - 1, beforeText.length);
+  if (!autoRange) {
+    return null;
+  }
+
+  return { range: autoRange, text: char };
+}
+
+function autoLangUnitifyLinkedSubSegLineStart(editor) {
+  const match = getLinkedSubSegLineStartAutoLangUnitRange(editor);
+  if (!match) {
+    return false;
+  }
+
+  const { range, text } = match;
+  const target = getSubSegSelectionTarget(editor, range);
+  const langUnit = getLangUnitItemByCanonicalTarget(target, text);
+  const subSegId = getSubSegEditorKey(editor);
+  const langUnitId = langUnit?._id || buildLangUnitId(subSegId, getNextLangUnitOrdinal(editor, subSegId)) || createItemId();
+  const bubble = document.createElement('span');
+  bubble.className = 'langunit-bubble';
+  bubble.dataset.langunitId = langUnitId;
+  bubble.dataset.langunitCount = String(Math.max(1, getLangUnitReferenceCount(langUnitId) + 1));
+  bubble.append(range.extractContents());
+  range.insertNode(bubble);
+
+  const mergedBubble = mergeAdjacentLangUnitBubbleRuns(editor, bubble);
+  const spaceNode = document.createTextNode(' ');
+  mergedBubble.parentNode?.insertBefore(spaceNode, mergedBubble.nextSibling);
+  refreshLangUnitBubbleGroupStyles(editor);
+  setCaretAfterNode(spaceNode);
+  syncSubSegEditorDraft(editor);
+  return true;
+}
+
 function insertSubSegLineBreak(editor) {
   const selection = document.getSelection();
   if (!selection || !selection.rangeCount || !editor.contains(selection.anchorNode)) {
@@ -2610,6 +3537,7 @@ async function saveSubSeg(subSegId) {
     return;
   }
 
+  const saveRevision = subSegDraftRevisionBySubSegId.get(subSegId) ?? 0;
   const knownLangUnitIds = new Set(state.langUnitItems.map((item) => item?._id).filter(Boolean));
   const liveEditor = getLiveSubSegEditor(subSegId);
   const nextPayload = liveEditor instanceof HTMLElement ? extractSubSegEditorPayload(liveEditor) : payload;
@@ -2633,9 +3561,17 @@ async function saveSubSeg(subSegId) {
   }
 
   const result = await response.json();
+  if ((subSegDraftRevisionBySubSegId.get(subSegId) ?? 0) !== saveRevision) {
+    if (subSegDraftPayloadBySubSegId.has(subSegId) && !subSegSaveTimersBySubSegId.has(subSegId)) {
+      scheduleSubSegSave(subSegId);
+    }
+    return;
+  }
+
   const saved = result?.subSeg ?? result;
   subSegDraftTextBySubSegId.delete(subSegId);
   subSegDraftPayloadBySubSegId.delete(subSegId);
+  subSegDraftRevisionBySubSegId.delete(subSegId);
   if (Array.isArray(result?.langUnits)) {
     mergeLangUnitItems(result.langUnits);
   } else if (nextPayload.langUnits?.length) {
@@ -2654,10 +3590,12 @@ async function saveSubSeg(subSegId) {
         ? [saved, ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(saved._id ?? ''))]
         : state.subSegItems.filter((item) => String(item?._id ?? '') !== String(subSegId))
     );
-  if (liveEditor instanceof HTMLElement && document.activeElement === liveEditor) {
-    syncEditorLangUnitIdsFromContent(liveEditor, saved?.content);
-    refreshLangUnitBubbleGroupStyles(liveEditor);
-    refreshLangUnitConnectors(liveEditor);
+  if (getFocusedSubSegEditor()) {
+    if (liveEditor instanceof HTMLElement && liveEditor.isConnected) {
+      syncEditorLangUnitIdsFromContent(liveEditor, saved?.content);
+      refreshLangUnitBubbleGroupStyles(liveEditor);
+      refreshLangUnitConnectors(liveEditor);
+    }
   } else {
     renderAudEps(state.audEpItems);
   }
@@ -2770,31 +3708,9 @@ function getAudioForIndex(index) {
   audio.addEventListener('play', () => handleAudioPlay(index));
   audio.addEventListener('pause', () => handleAudioStop(index));
   audio.addEventListener('ended', () => handleAudioStop(index));
+  audio.src = src;
   audioPlayers.set(index, audio);
-
-  audio._readyPromise = (async () => {
-    try {
-      const response = await fetch(src);
-      if (!response.ok) {
-        throw new Error('audio fetch failed');
-      }
-
-      const objectUrl = URL.createObjectURL(await response.blob());
-      if (audioPlayers.get(index) !== audio) {
-        URL.revokeObjectURL(objectUrl);
-        return;
-      }
-
-      audio._objectUrl = objectUrl;
-      audio.src = objectUrl;
-      audio.load();
-    } catch {
-      if (audioPlayers.get(index) === audio) {
-        audio.src = src;
-        audio.load();
-      }
-    }
-  })();
+  audio.load();
 
   return audio;
 }
@@ -2899,13 +3815,25 @@ function seekAudio(index, deltaSeconds) {
 
   const duration = Number.isFinite(audio.duration) ? audio.duration : Number.POSITIVE_INFINITY;
   const nextTime = Math.max(0, Math.min((audio.currentTime || 0) + deltaSeconds, duration));
-  if (audio.networkState !== HTMLMediaElement.NETWORK_IDLE || audio.readyState < HTMLMediaElement.HAVE_ENOUGH_DATA) {
+  if (audio.readyState < HTMLMediaElement.HAVE_METADATA) {
     pendingSeekByIndex.set(index, nextTime);
-    audio.load();
   } else {
     applyAudioSeek(index, audio, nextTime);
   }
   syncAudEpPlaybackLabel(index);
+}
+
+function seekSelectedAudEpPlayback(deltaSeconds) {
+  const index = getSelectedAudEpDataIndex();
+  if (index < 0) {
+    return;
+  }
+
+  if (state.audSegPlaybackLock?.audEpIndex === index) {
+    state.audSegPlaybackLock = null;
+    state.enteredAudSegIndex = -1;
+  }
+  seekAudio(index, deltaSeconds);
 }
 
 function enterSelectedAudEp() {
@@ -2974,22 +3902,36 @@ function resetAudioPlayers() {
   pendingSeekFrameByIndex.clear();
 }
 
-async function toggleSelectedAudEpPlayback() {
-  if (state.selectedAudEpIndex < 0) {
+async function toggleAudEpPlaybackByIndex(audEpIndex) {
+  if (!Number.isInteger(audEpIndex) || audEpIndex < 0) {
     return;
   }
 
-  const audio = state.selectedAudEpIndex === 0 ? null : getAudioForIndex(state.selectedAudEpIndex - 1);
+  const audio = getAudioForIndex(audEpIndex);
   if (!audio) {
     return;
   }
 
   if (audio.paused) {
-    pauseOtherAudio(state.selectedAudEpIndex - 1);
-    await audio.play();
+    pauseOtherAudio(audEpIndex);
+    try {
+      await audio.play();
+    } catch {
+      showWorkerToast('audio play blocked', 1200);
+    }
   } else {
     audio.pause();
   }
+}
+
+async function toggleSelectedAudEpPlayback() {
+  await toggleAudEpPlaybackByIndex(getSelectedAudEpDataIndex());
+}
+
+async function toggleSubSegAudEpPlayback(editor) {
+  const audSegId = editor instanceof HTMLElement ? String(editor.dataset.subsegAudsegId ?? '').trim() : '';
+  const audEpIndex = getAudEpIndexForAudSegItem(getAudSegItemById(audSegId));
+  await toggleAudEpPlaybackByIndex(audEpIndex);
 }
 
 function cycleAudEpSelection(step) {
@@ -3424,6 +4366,7 @@ function clearSubSegDraftState() {
   subSegSaveTimersBySubSegId.clear();
   subSegDraftTextBySubSegId.clear();
   subSegDraftPayloadBySubSegId.clear();
+  subSegDraftRevisionBySubSegId.clear();
 }
 
 async function clearAllLangUnits() {
@@ -3548,6 +4491,43 @@ function isCtrlPlaybackToggle(event) {
   return isCtrlSpacePlaybackToggle(event) || key === 'p' || event.code === 'KeyP';
 }
 
+function handleSubSegPlaybackShortcut(event) {
+  if ((event.type === 'keydown' && event.repeat) || !isCtrlPlaybackToggle(event)) {
+    return false;
+  }
+
+  const target = event.target instanceof Element ? event.target : null;
+  if (target?.closest(keyboardGuardSelector)) {
+    return false;
+  }
+
+  const editor = target?.closest(subSegInputSelector) ?? getFocusedSubSegEditor();
+  if (!(editor instanceof HTMLElement)) {
+    return false;
+  }
+
+  if (event.type === 'keyup' && subSegPlaybackShortcutActive) {
+    subSegPlaybackShortcutActive = false;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return true;
+  }
+
+  const now = Date.now();
+  if (now - lastSubSegPlaybackShortcutAt < 250) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return true;
+  }
+
+  lastSubSegPlaybackShortcutAt = now;
+  subSegPlaybackShortcutActive = event.type === 'keydown';
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  void toggleSubSegAudEpPlayback(editor);
+  return true;
+}
+
 document.addEventListener('mousemove', (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (!event.ctrlKey || !target || target.closest(pointerGuardSelector)) {
@@ -3558,18 +4538,31 @@ document.addEventListener('mousemove', (event) => {
   showProbe(buildSelectorChain(target), event.clientX, event.clientY);
 });
 
+document.addEventListener('keydown', handleSubSegPlaybackShortcut, true);
+document.addEventListener('keyup', handleSubSegPlaybackShortcut, true);
+
 document.addEventListener('keydown', (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (target?.closest(keyboardGuardSelector)) {
     return;
   }
 
+  if (handleLangUnitRefKeyboard(event)) {
+    return;
+  }
+
   if (isFocusedSubSegInput()) {
     const editor = getFocusedSubSegEditor();
-    const audSegId = editor?.dataset.subsegAudsegId || '';
+    if (event.key === 'Tab' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      if (enterLangUnitRefTraversal(editor)) {
+        event.preventDefault();
+        return;
+      }
+    }
+
     if (isCtrlPlaybackToggle(event)) {
       event.preventDefault();
-      toggleSelectedAudEpPlayback();
+      void toggleSubSegAudEpPlayback(editor);
       return;
     }
 
@@ -3620,6 +4613,10 @@ document.addEventListener('keydown', (event) => {
     }
 
     if (isSpaceKey(event) && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
+      if (editor && autoLangUnitifyLinkedSubSegLineStart(editor)) {
+        event.preventDefault();
+        return;
+      }
       if (editor && handleLangUnitBubbleSpace(editor)) {
         event.preventDefault();
         return;
@@ -3829,7 +4826,7 @@ document.addEventListener('keydown', (event) => {
   if (state.enteredAudEpIndex >= 0 && event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
-      seekAudio(state.selectedAudEpIndex - 1, event.key === 'ArrowRight' ? 5 : -5);
+      seekSelectedAudEpPlayback(event.key === 'ArrowRight' ? 5 : -5);
       return;
     }
   }
@@ -3837,7 +4834,7 @@ document.addEventListener('keydown', (event) => {
   if (!event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && state.selectedAudEpIndex > 0) {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
-      seekAudio(state.selectedAudEpIndex - 1, event.key === 'ArrowRight' ? 5 : -5);
+      seekSelectedAudEpPlayback(event.key === 'ArrowRight' ? 5 : -5);
       return;
     }
   }
@@ -3863,6 +4860,11 @@ document.addEventListener('keyup', (event) => {
 });
 
 audEpList.addEventListener('click', (event) => {
+  if (event.target instanceof Element && event.target.closest('.item__langunit-ref-graph')) {
+    event.stopPropagation();
+    return;
+  }
+
   const langUnitRef = event.target instanceof Element ? event.target.closest('.item__langunit-ref') : null;
   if (langUnitRef instanceof HTMLElement) {
     event.preventDefault();
@@ -3899,6 +4901,78 @@ audEpList.addEventListener('click', (event) => {
   filePicker.value = '';
   filePicker.click();
 });
+
+audEpList.addEventListener('pointerdown', (event) => {
+  const canvas = event.target instanceof Element ? event.target.closest('.item__langunit-ref-canvas') : null;
+  if (!(canvas instanceof HTMLCanvasElement)) {
+    return;
+  }
+
+  event.preventDefault();
+  canvas.closest('.item__langunit-ref-graph')?.focus?.({ preventScroll: true });
+  canvas.setPointerCapture(event.pointerId);
+  langUnitRefGraphDragByPointerId.set(event.pointerId, {
+    canvas,
+    x: event.clientX,
+    y: event.clientY,
+  });
+});
+
+audEpList.addEventListener('pointermove', (event) => {
+  const drag = langUnitRefGraphDragByPointerId.get(event.pointerId);
+  if (!drag) {
+    return;
+  }
+
+  const refKey = String(drag.canvas.dataset.refKey ?? '').trim();
+  const view = langUnitRefGraphViewByKey.get(refKey);
+  if (!view) {
+    return;
+  }
+
+  view.x += event.clientX - drag.x;
+  view.y += event.clientY - drag.y;
+  drag.x = event.clientX;
+  drag.y = event.clientY;
+  drawLangUnitRefGraphCanvas(drag.canvas);
+});
+
+audEpList.addEventListener('pointerup', (event) => {
+  langUnitRefGraphDragByPointerId.delete(event.pointerId);
+});
+
+audEpList.addEventListener('pointercancel', (event) => {
+  langUnitRefGraphDragByPointerId.delete(event.pointerId);
+});
+
+audEpList.addEventListener('wheel', (event) => {
+  if (!event.ctrlKey) {
+    return;
+  }
+
+  const canvas = event.target instanceof Element ? event.target.closest('.item__langunit-ref-canvas') : null;
+  if (!(canvas instanceof HTMLCanvasElement)) {
+    return;
+  }
+
+  const refKey = String(canvas.dataset.refKey ?? '').trim();
+  const view = langUnitRefGraphViewByKey.get(refKey);
+  if (!view) {
+    return;
+  }
+
+  event.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const px = event.clientX - rect.left;
+  const py = event.clientY - rect.top;
+  const nextScale = Math.max(0.35, Math.min(4, view.scale * (event.deltaY < 0 ? 1.1 : 0.9)));
+  const graphX = (px - view.x) / view.scale;
+  const graphY = (py - view.y) / view.scale;
+  view.scale = nextScale;
+  view.x = px - graphX * nextScale;
+  view.y = py - graphY * nextScale;
+  drawLangUnitRefGraphCanvas(canvas);
+}, { passive: false });
 
 audEpList.addEventListener('input', (event) => {
   const input = event.target instanceof Element ? event.target.closest('.item__subseg-input') : null;

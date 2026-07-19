@@ -1,20 +1,64 @@
 [
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-    "text": "bob",
+    "text": "communist",
     "instances": [
       {
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
         "remote": false,
-        "start": 14,
-        "end": 17,
+        "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
+        "start": 10,
+        "end": 19,
         "context": {
-          "text": "this is where bob lives",
+          "text": "this is a communist test",
           "type": "engPhrase"
         },
         "target": {
-          "text": "bob",
+          "text": "communist",
+          "type": "engWord"
+        }
+      },
+      {
+        "audSegId": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0",
+        "subSegId": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0-0",
+        "remote": false,
+        "start": 21,
+        "end": 30,
+        "context": {
+          "text": "oh my god is there a communist here too?",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "communist",
+          "type": "engWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "communist",
+      "type": "engWord"
+    },
+    "createdAt": "2026-07-17T02:56:31.698Z",
+    "updatedAt": "2026-07-19T05:12:10.806Z",
+    "root": "commun"
+  },
+  {
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
+    "text": "commune",
+    "instances": [
+      {
+        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
+        "remote": false,
+        "start": 0,
+        "end": 7,
+        "context": {
+          "text": "commune in the river",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "commune",
           "type": "engWord"
         }
       },
@@ -22,24 +66,52 @@
         "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1",
         "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1-0",
         "remote": false,
-        "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
         "start": 0,
-        "end": 3,
+        "end": 7,
         "context": {
-          "text": "bob can also be found out around there parts",
-          "type": "engPhrase"
+          "text": "commune",
+          "type": "engWord"
         },
         "target": {
-          "text": "bob",
+          "text": "commune",
           "type": "engWord"
         }
       }
     ],
     "target": {
-      "text": "bob",
+      "text": "commune",
       "type": "engWord"
     },
-    "createdAt": "2026-07-16T02:14:59.542Z",
-    "updatedAt": "2026-07-16T02:35:53.305Z"
+    "createdAt": "2026-07-17T02:56:35.723Z",
+    "updatedAt": "2026-07-19T04:46:39.016Z",
+    "root": "commune"
+  },
+  {
+    "_id": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0-0",
+    "text": "quanhuo",
+    "instances": [
+      {
+        "audSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0",
+        "subSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0",
+        "remote": false,
+        "start": 0,
+        "end": 7,
+        "context": {
+          "text": "quanhuo两清",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "quanhuo",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "quanhuo",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-19T05:21:15.718Z",
+    "updatedAt": "2026-07-19T05:22:18.004Z",
+    "root": "quanhuo"
   }
 ]

@@ -6,7 +6,7 @@
     "content": [
       {
         "type": "text",
-        "text": "this is where "
+        "text": "this is a "
       },
       {
         "type": "langUnitRef",
@@ -14,28 +14,48 @@
       },
       {
         "type": "text",
-        "text": " lives"
+        "text": " test"
       }
     ],
-    "text": "this is where bob lives",
-    "createdAt": "2026-07-16T02:14:53.739Z",
-    "updatedAt": "2026-07-16T02:15:34.549Z"
+    "text": "this is a communist test",
+    "createdAt": "2026-07-17T02:56:23.601Z",
+    "updatedAt": "2026-07-19T05:12:10.798Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
     "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
     "isRoot": false,
     "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-    "parentSubSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1-0",
+    "parentSubSegId": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0"
+      },
+      {
+        "type": "text",
+        "text": " in the river"
+      }
+    ],
+    "text": "commune in the river",
+    "createdAt": "2026-07-17T02:56:31.729Z",
+    "updatedAt": "2026-07-19T04:46:39.011Z"
+  },
+  {
+    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2",
+    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+    "isRoot": false,
+    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
+    "parentSubSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
     "content": [
       {
         "type": "text",
-        "text": "hi i'm bob, buddy"
+        "text": "friends in teh motherland"
       }
     ],
-    "text": "hi i'm bob, buddy",
-    "createdAt": "2026-07-16T02:14:59.509Z",
-    "updatedAt": "2026-07-16T02:16:26.355Z"
+    "text": "friends in teh motherland",
+    "createdAt": "2026-07-17T02:56:36.097Z",
+    "updatedAt": "2026-07-17T09:00:04.230Z"
   },
   {
     "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1-0",
@@ -44,15 +64,71 @@
     "content": [
       {
         "type": "langUnitRef",
+        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0"
+      }
+    ],
+    "text": "commune",
+    "createdAt": "2026-07-17T02:56:51.630Z",
+    "updatedAt": "2026-07-17T08:59:40.498Z"
+  },
+  {
+    "_id": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0-0",
+    "audSegId": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "oh my god is there a "
+      },
+      {
+        "type": "langUnitRef",
         "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0"
       },
       {
         "type": "text",
-        "text": " can also be found out around there parts"
+        "text": " here too?"
       }
     ],
-    "text": "bob can also be found out around there parts",
-    "createdAt": "2026-07-16T02:15:11.973Z",
-    "updatedAt": "2026-07-16T02:35:53.298Z"
+    "text": "oh my god is there a communist here too?",
+    "createdAt": "2026-07-17T03:14:14.929Z",
+    "updatedAt": "2026-07-19T05:12:04.059Z"
+  },
+  {
+    "_id": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0",
+    "audSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0-0"
+      },
+      {
+        "type": "text",
+        "text": "两清"
+      }
+    ],
+    "text": "quanhuo两清",
+    "createdAt": "2026-07-19T05:21:06.507Z",
+    "updatedAt": "2026-07-19T05:21:15.714Z"
+  },
+  {
+    "_id": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-1",
+    "audSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0",
+    "isRoot": false,
+    "linkTargetLangUnitId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0-0",
+    "parentSubSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "=钱货"
+      },
+      {
+        "type": "text",
+        "text": "\n=前后"
+      }
+    ],
+    "text": "=钱货\n=前后",
+    "createdAt": "2026-07-19T05:21:16.026Z",
+    "updatedAt": "2026-07-19T05:23:49.156Z"
   }
 ]

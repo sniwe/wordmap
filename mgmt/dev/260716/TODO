@@ -1,0 +1,1 @@
+if langUnit-linked subSeg line start content is chinese character and part of target.type chinWord/chinPhrase langUnit on parent subSeg , then auto-create langUnit from it (updating dynamically in-place on the subSeg input after a space press keypress fired). 

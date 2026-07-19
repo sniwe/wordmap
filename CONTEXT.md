@@ -10,6 +10,7 @@
 | `settings popover` | The empty dropdown panel anchored to the settings button and currently showing `no options yet..`. |
 | `ethereal seed item` | A non-data-driven placeholder list item shown when the list needs a starter entry. |
 | `cycle targeting` | Keyboard-driven selection movement through list items. |
+| `cycle-targeted audEp seek` | Plain Left/Right arrows seek the currently cycle-targeted `audEp` backward/forward by 5 seconds; in entered `audEp` state, Shift+Left/Right does the same for the entered target. |
 | `entered state lock` | The expanded inline panel state on a targeted `audEp` after pressing `Enter`. |
 | `audSegs` | The empty segment list rendered inside an entered `audEp`, currently shown with placeholder text. |
 | `audSegs collection` | The backend data collection scaffold in `src/backend/data/audSegs`. |
@@ -58,9 +59,9 @@
 | `langUnit add links` | The in-memory reverse-link list for a `langUnit` record that stores which `audSeg`/`subSeg` pairs contain its direct references; it is derived from subSeg content and not persisted. |
 | `visible langUnitRef target` | The currently rendered occurrence that owns the ref list, keyed by visible `audSegId` plus canonical `subSegId`, so projected child rows do not suppress real stored destinations. |
 | `langUnit capture jump` | The click action on a `langUnit capture list` item that exits the current editor state and jumps to the referenced `audSeg` and bubble. |
-| `langUnitRef list traversal` | The planned keyboard mode where `Tab` from a cycle-targeted `langUnit` bubble moves focus into the side ref list and `Ctrl+ArrowUp/Down` cycle-targets ref rows. |
-| `entered langUnitRef item` | The planned expanded state of a targeted `langUnitRef` list row, opened with `Enter` and collapsed with `Ctrl+Backspace`. |
-| `langUnitRef graph panel` | The planned expanded ref-row canvas that shows collection relationships from origin to audEp, audSeg, subSeg, and langUnit contextual instance nodes. |
+| `langUnitRef list traversal` | The keyboard mode where `Tab` from a cycle-targeted `langUnit` bubble moves focus into the side ref list and `Ctrl+ArrowUp/Down` cycle-targets ref rows. |
+| `entered langUnitRef item` | The expanded state of a targeted `langUnitRef` list row, opened with `Enter` and collapsed with `Ctrl+Backspace`. |
+| `langUnitRef graph panel` | The expanded ref-row canvas that shows collection relationships from origin to audEp, audSeg, subSeg, and langUnit contextual instance nodes. |
 | `subSeg bubble` | Deprecated previous name for the `langUnit bubble`. |
 | `subSeg ref content` | The saved `subSeg` payload model that stores text tokens plus `langUnit` references instead of persisting bubble HTML directly. |
 | `normalized langUnit model` | The target storage design where `langUnit` owns the lexical text and metadata while `subSeg` stores only lightweight occurrence pointers. |
