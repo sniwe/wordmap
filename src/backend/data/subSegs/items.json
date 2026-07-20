@@ -1,134 +1,76 @@
 [
   {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
-    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-    "isRoot": true,
-    "content": [
-      {
-        "type": "text",
-        "text": "this is a "
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0"
-      },
-      {
-        "type": "text",
-        "text": " test"
-      }
-    ],
-    "text": "this is a communist test",
-    "createdAt": "2026-07-17T02:56:23.601Z",
-    "updatedAt": "2026-07-19T05:12:10.798Z"
-  },
-  {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
-    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+    "_id": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-2",
+    "audSegId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0",
     "isRoot": false,
-    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-    "parentSubSegId": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0-0",
+    "linkTargetLangUnitId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1-0",
+    "parentSubSegId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1",
     "content": [
       {
-        "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0"
-      },
-      {
         "type": "text",
-        "text": " in the river"
+        "text": "testing here"
       }
     ],
-    "text": "commune in the river",
-    "createdAt": "2026-07-17T02:56:31.729Z",
-    "updatedAt": "2026-07-19T04:46:39.011Z"
+    "text": "testing here",
+    "createdAt": "2026-07-20T08:50:09.484Z",
+    "updatedAt": "2026-07-20T08:50:09.484Z"
   },
   {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-2",
-    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
+    "_id": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1",
+    "audSegId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0",
     "isRoot": false,
-    "linkTargetLangUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
-    "parentSubSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
+    "linkTargetLangUnitId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-0-0",
+    "parentSubSegId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-0",
     "content": [
       {
         "type": "text",
-        "text": "friends in teh motherland"
+        "text": "=前"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1-0"
       }
     ],
-    "text": "friends in teh motherland",
-    "createdAt": "2026-07-17T02:56:36.097Z",
-    "updatedAt": "2026-07-17T09:00:04.230Z"
+    "text": "=前后",
+    "createdAt": "2026-07-20T08:50:09.785Z",
+    "updatedAt": "2026-07-20T08:50:09.962Z"
   },
   {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1-0",
-    "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1",
+    "_id": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0",
+    "audSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0",
     "isRoot": true,
     "content": [
       {
         "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0"
-      }
-    ],
-    "text": "commune",
-    "createdAt": "2026-07-17T02:56:51.630Z",
-    "updatedAt": "2026-07-17T08:59:40.498Z"
-  },
-  {
-    "_id": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0-0",
-    "audSegId": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0",
-    "isRoot": true,
-    "content": [
-      {
-        "type": "text",
-        "text": "oh my god is there a "
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0"
+        "langUnitId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0-0"
       },
       {
         "type": "text",
-        "text": " here too?"
+        "text": " door betty?"
       }
     ],
-    "text": "oh my god is there a communist here too?",
-    "createdAt": "2026-07-17T03:14:14.929Z",
-    "updatedAt": "2026-07-19T05:12:04.059Z"
+    "text": "back door betty?",
+    "createdAt": "2026-07-20T08:50:03.457Z",
+    "updatedAt": "2026-07-20T08:50:03.457Z"
   },
   {
-    "_id": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0",
-    "audSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0",
-    "isRoot": true,
-    "content": [
-      {
-        "type": "langUnitRef",
-        "langUnitId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0-0"
-      },
-      {
-        "type": "text",
-        "text": "两清"
-      }
-    ],
-    "text": "quanhuo两清",
-    "createdAt": "2026-07-19T05:21:06.507Z",
-    "updatedAt": "2026-07-19T05:21:15.714Z"
-  },
-  {
-    "_id": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-1",
-    "audSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0",
+    "_id": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-1",
+    "audSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0",
     "isRoot": false,
-    "linkTargetLangUnitId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0-0",
-    "parentSubSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0",
+    "linkTargetLangUnitId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0-0",
+    "parentSubSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0",
     "content": [
       {
-        "type": "text",
-        "text": "=钱货"
+        "type": "langUnitRef",
+        "langUnitId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1-0"
       },
       {
         "type": "text",
-        "text": "\n=前后"
+        "text": "门"
       }
     ],
-    "text": "=钱货\n=前后",
-    "createdAt": "2026-07-19T05:21:16.026Z",
-    "updatedAt": "2026-07-19T05:23:49.156Z"
+    "text": "后门",
+    "createdAt": "2026-07-20T08:48:57.546Z",
+    "updatedAt": "2026-07-20T08:48:57.546Z"
   }
 ]

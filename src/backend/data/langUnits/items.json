@@ -1,117 +1,86 @@
 [
   {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-    "text": "communist",
-    "instances": [
-      {
-        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0",
-        "remote": false,
-        "cycleGroupId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-0-0",
-        "start": 10,
-        "end": 19,
-        "context": {
-          "text": "this is a communist test",
-          "type": "engPhrase"
-        },
-        "target": {
-          "text": "communist",
-          "type": "engWord"
-        }
-      },
-      {
-        "audSegId": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0",
-        "subSegId": "5c517c44-a5d8-45b2-9d5f-e68bb5bcbeaf-0-0",
-        "remote": false,
-        "start": 21,
-        "end": 30,
-        "context": {
-          "text": "oh my god is there a communist here too?",
-          "type": "engPhrase"
-        },
-        "target": {
-          "text": "communist",
-          "type": "engWord"
-        }
-      }
-    ],
+    "_id": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-0-0",
+    "text": "qianhou",
+    "instances": [],
     "target": {
-      "text": "communist",
-      "type": "engWord"
+      "text": "qianhou",
+      "type": "chinFuzz"
     },
-    "createdAt": "2026-07-17T02:56:31.698Z",
-    "updatedAt": "2026-07-19T05:12:10.806Z",
-    "root": "commun"
+    "createdAt": "2026-07-20T08:14:41.286Z",
+    "updatedAt": "2026-07-20T08:48:57.580Z",
+    "root": "qianhou"
   },
   {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1-0",
-    "text": "commune",
+    "_id": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1-0",
+    "text": "后",
     "instances": [
       {
-        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0-1",
+        "audSegId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0",
+        "subSegId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1",
         "remote": false,
-        "start": 0,
-        "end": 7,
+        "cycleGroupId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1-0",
+        "start": 2,
+        "end": 3,
         "context": {
-          "text": "commune in the river",
-          "type": "engPhrase"
-        },
-        "target": {
-          "text": "commune",
-          "type": "engWord"
-        }
-      },
-      {
-        "audSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1",
-        "subSegId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1-0",
-        "remote": false,
-        "start": 0,
-        "end": 7,
-        "context": {
-          "text": "commune",
-          "type": "engWord"
-        },
-        "target": {
-          "text": "commune",
-          "type": "engWord"
-        }
-      }
-    ],
-    "target": {
-      "text": "commune",
-      "type": "engWord"
-    },
-    "createdAt": "2026-07-17T02:56:35.723Z",
-    "updatedAt": "2026-07-19T04:46:39.016Z",
-    "root": "commune"
-  },
-  {
-    "_id": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0-0",
-    "text": "quanhuo",
-    "instances": [
-      {
-        "audSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0",
-        "subSegId": "5e315e33-ee8a-4d3b-935c-da79da19d333-0-0",
-        "remote": false,
-        "start": 0,
-        "end": 7,
-        "context": {
-          "text": "quanhuo两清",
+          "text": "=前后",
           "type": "chinPhrase"
         },
         "target": {
-          "text": "quanhuo",
-          "type": "chinFuzz"
+          "text": "后",
+          "type": "chinChar"
+        }
+      },
+      {
+        "audSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0",
+        "subSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-1",
+        "remote": false,
+        "start": 0,
+        "end": 1,
+        "context": {
+          "text": "后门",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "后",
+          "type": "chinChar"
         }
       }
     ],
     "target": {
-      "text": "quanhuo",
-      "type": "chinFuzz"
+      "text": "后",
+      "type": "chinChar"
     },
-    "createdAt": "2026-07-19T05:21:15.718Z",
-    "updatedAt": "2026-07-19T05:22:18.004Z",
-    "root": "quanhuo"
+    "createdAt": "2026-07-20T08:14:51.125Z",
+    "updatedAt": "2026-07-20T08:50:09.972Z"
+  },
+  {
+    "_id": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0-0",
+    "text": "back",
+    "instances": [
+      {
+        "audSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0",
+        "subSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0",
+        "remote": false,
+        "cycleGroupId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0-0",
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "back door betty?",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "back",
+          "type": "engWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "back",
+      "type": "engWord"
+    },
+    "createdAt": "2026-07-20T08:15:26.076Z",
+    "updatedAt": "2026-07-20T08:50:03.460Z",
+    "root": "back"
   }
 ]

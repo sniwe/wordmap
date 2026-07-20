@@ -658,15 +658,57 @@ function getRootSubSegItemForAudSeg(audSegId) {
   return getSubSegItemsForAudSeg(audSegId).find((item) => item?.isRoot !== false) ?? null;
 }
 
-function getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId, excludeSubSegId = '') {
+function getLangUnitRecallKey(langUnitId) {
+  const cycleTargetId = getLangUnitCycleTargetId(langUnitId);
+  const item = getLangUnitItem(cycleTargetId) ?? getLangUnitItem(langUnitId);
+  return getLangUnitCanonicalKey(item?.target, item?.text) || cycleTargetId;
+}
+
+function getSubSegLinkRecallKey(item) {
+  return getLangUnitRecallKey(getSubSegLinkTargetLangUnitId(item));
+}
+
+function getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId, parentSubSegId = '', excludeSubSegId = '') {
   const targetId = String(linkTargetLangUnitId ?? '').trim();
+  const parentId = String(parentSubSegId ?? '').trim();
   const excluded = String(excludeSubSegId ?? '').trim();
   return sortSubSegItems(state.subSegItems).find(
     (item) =>
       item?.isRoot === false &&
       String(item?._id ?? '') !== excluded &&
+      (!parentId || getSubSegParentSubSegId(item) === parentId) &&
       String(item?.linkTargetLangUnitId ?? '') === targetId
   ) ?? null;
+}
+
+function getRecallSubSegItemForTarget(audSegId, linkTargetLangUnitId, parentSubSegId = '', excludeSubSegId = '', preferParent = false) {
+  const targetKey = getLangUnitRecallKey(linkTargetLangUnitId);
+  const parentId = String(parentSubSegId ?? '').trim();
+  const excluded = String(excludeSubSegId ?? '').trim();
+  const candidates = sortSubSegItems(state.subSegItems).filter((item) => (
+    item?.isRoot === false &&
+    String(item?._id ?? '') !== excluded &&
+    targetKey &&
+    getSubSegLinkRecallKey(item) === targetKey
+  ));
+
+  return candidates.sort((a, b) => {
+    const sameParentA = parentId && getSubSegParentSubSegId(a) === parentId ? 0 : 1;
+    const sameParentB = parentId && getSubSegParentSubSegId(b) === parentId ? 0 : 1;
+    const hasContentA = Array.isArray(a?.content) && a.content.length ? 0 : String(a?.text ?? '').trim() ? 0 : 1;
+    const hasContentB = Array.isArray(b?.content) && b.content.length ? 0 : String(b?.text ?? '').trim() ? 0 : 1;
+    if (preferParent && sameParentA !== sameParentB) {
+      return sameParentA - sameParentB;
+    }
+    if (hasContentA !== hasContentB) {
+      return hasContentA - hasContentB;
+    }
+    if (!preferParent && sameParentA !== sameParentB) {
+      return sameParentA - sameParentB;
+    }
+
+    return hasContentA - hasContentB;
+  })[0] ?? null;
 }
 
 function getSubSegItemForAudSeg(audSegId) {
@@ -721,7 +763,7 @@ function subSegLinkMatchesLangUnitTarget(item, targetLangUnitId) {
   return Boolean(
     linkTargetLangUnitId &&
     targetId &&
-    getLangUnitCycleTargetId(linkTargetLangUnitId) === targetId
+    getLangUnitRecallKey(linkTargetLangUnitId) === getLangUnitRecallKey(targetId)
   );
 }
 
@@ -731,34 +773,48 @@ function getTargetedLangUnitIdForSubSeg(audSegId, subSegId) {
     return '';
   }
 
-  return getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId))[targetIndex] ?? '';
+  return getOrderedLangUnitIdsForSubSeg(audSegId, subSegId)[targetIndex] ?? '';
 }
 
 function subSegContentHasLangUnit(audSegId, item, langUnitId) {
-  const targetId = getLangUnitCycleTargetId(langUnitId);
-  return Boolean(targetId && getOrderedLangUnitIds(getSubSegContentTokens(audSegId, String(item?._id ?? ''))).includes(targetId));
+  const targetKey = getLangUnitRecallKey(langUnitId);
+  return Boolean(targetKey && getOrderedLangUnitIds(getSubSegContentTokens(audSegId, String(item?._id ?? ''))).some((id) => getLangUnitRecallKey(id) === targetKey));
 }
 
 function getChildSubSegItemsForRenderedParent(audSegId, parentSubSegId) {
-  const parentIds = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, parentSubSegId));
-  const parentGroups = new Set(parentIds.map((id) => getLangUnitCycleTargetId(id)));
+  const parentIds = getOrderedLangUnitIdsForSubSeg(audSegId, parentSubSegId);
+  const parentGroups = new Set(parentIds.map((id) => getLangUnitRecallKey(id)));
   const childByTargetId = new Map();
+  const getChildRank = (item) => [
+    Array.isArray(item?.content) && item.content.length ? 0 : String(item?.text ?? '').trim() ? 0 : 1,
+    getSubSegParentSubSegId(item) === String(parentSubSegId ?? '').trim() ? 0 : 1,
+  ];
   for (const item of sortSubSegItems(state.subSegItems)) {
     if (item?.isRoot !== false) {
       continue;
     }
 
-    const targetId = getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(item));
-    if (!targetId || !parentGroups.has(targetId) || childByTargetId.has(targetId)) {
+    const targetId = getSubSegLinkRecallKey(item);
+    if (!targetId || !parentGroups.has(targetId)) {
       continue;
     }
 
-    childByTargetId.set(targetId, item);
+    const existing = childByTargetId.get(targetId);
+    if (!existing) {
+      childByTargetId.set(targetId, item);
+      continue;
+    }
+
+    const [contentRank, parentRank] = getChildRank(item);
+    const [existingContentRank, existingParentRank] = getChildRank(existing);
+    if (contentRank < existingContentRank || (contentRank === existingContentRank && parentRank < existingParentRank)) {
+      childByTargetId.set(targetId, item);
+    }
   }
 
   return [...childByTargetId.values()].sort((a, b) => {
-    const indexA = parentIds.indexOf(getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(a)));
-    const indexB = parentIds.indexOf(getLangUnitCycleTargetId(getSubSegLinkTargetLangUnitId(b)));
+    const indexA = parentIds.findIndex((id) => getLangUnitRecallKey(id) === getSubSegLinkRecallKey(a));
+    const indexB = parentIds.findIndex((id) => getLangUnitRecallKey(id) === getSubSegLinkRecallKey(b));
     if (indexA !== indexB) {
       return (indexA < 0 ? Number.MAX_SAFE_INTEGER : indexA) - (indexB < 0 ? Number.MAX_SAFE_INTEGER : indexB);
     }
@@ -932,6 +988,13 @@ function getOrderedLangUnitIds(tokens) {
   return ids;
 }
 
+function getOrderedLangUnitIdsForSubSeg(audSegId, subSegId) {
+  const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-subseg-id="${CSS.escape(String(subSegId))}"]`);
+  return editor instanceof HTMLElement
+    ? getLangUnitBubbleGroupIds(editor)
+    : getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId));
+}
+
 function getLangUnitBubbleIndex(audSegId, langUnitId) {
   if (!audSegId || !langUnitId) {
     return -1;
@@ -957,12 +1020,7 @@ function getLangUnitBubbleIndexForSubSeg(audSegId, subSegId, langUnitId) {
     return -1;
   }
 
-  const editor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-subseg-id="${CSS.escape(String(subSegId))}"]`);
-  if (editor instanceof HTMLElement) {
-    return getLangUnitBubbleGroupIds(editor).indexOf(getLangUnitCycleTargetId(langUnitId));
-  }
-
-  return getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId)).indexOf(getLangUnitCycleTargetId(langUnitId));
+  return getOrderedLangUnitIdsForSubSeg(audSegId, subSegId).indexOf(getLangUnitCycleTargetId(langUnitId));
 }
 
 function getLangUnitItem(langUnitId) {
@@ -2448,6 +2506,16 @@ function getLangUnitBubbleGroupIds(editor) {
   return ids;
 }
 
+function setTargetedLangUnitBubblesAwaiting(editor, awaiting) {
+  if (!(editor instanceof HTMLElement)) {
+    return;
+  }
+
+  getLangUnitBubbles(editor)
+    .filter((bubble) => bubble.classList.contains('is-targeted'))
+    .forEach((bubble) => bubble.classList.toggle('is-awaiting', awaiting));
+}
+
 function setCaretToEnd(editor) {
   if (!(editor instanceof HTMLElement)) {
     return;
@@ -2632,7 +2700,7 @@ function syncLangUnitBubbleTarget(editor, restoreCaret = false) {
   const targetIndex = getSubSegBubbleTargetIndex(editor);
   const targetLangUnitId = groupIds[targetIndex] ?? '';
 
-  bubbles.forEach((bubble) => bubble.classList.remove('is-targeted'));
+  bubbles.forEach((bubble) => bubble.classList.remove('is-targeted', 'is-awaiting'));
   if (!bubbles.length) {
     if (targetKey) {
       langUnitBubbleTargetIndexByAudSegId.set(targetKey, -1);
@@ -2689,13 +2757,31 @@ function syncCycleSubSegRow(editor, createIfMissing = false) {
   const subSegId = getSubSegEditorKey(editor);
   const targetIndex = getSubSegBubbleTargetIndex(editor);
   if (targetIndex >= 0) {
-    const linkTargetLangUnitId = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId))[targetIndex] ?? '';
+    const linkTargetLangUnitId = getOrderedLangUnitIdsForSubSeg(audSegId, subSegId)[targetIndex] ?? '';
     if (!linkTargetLangUnitId) {
       return false;
     }
 
-    const current = getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId, subSegId);
+    const current = getCycleSubSegItemForTarget(audSegId, linkTargetLangUnitId, subSegId, subSegId);
     if (current) {
+      const recalled = getRecallSubSegItemForTarget(audSegId, linkTargetLangUnitId, subSegId, current._id);
+      const currentHasContent = Array.isArray(current?.content) && current.content.length || String(current?.text ?? '').trim();
+      const recalledHasContent = Array.isArray(recalled?.content) && recalled.content.length || String(recalled?.text ?? '').trim();
+      if (createIfMissing && !currentHasContent && recalledHasContent) {
+        const next = {
+          ...current,
+          content: Array.isArray(recalled.content) ? recalled.content : [],
+          text: String(recalled.text ?? ''),
+          updatedAt: new Date().toISOString(),
+        };
+        state.subSegItems = sortSubSegItems([next, ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(next._id ?? ''))]);
+        void fetch('/api/subSegs/items', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subSegId: String(next._id ?? ''), ...next }),
+        });
+        return true;
+      }
       return false;
     }
 
@@ -2703,18 +2789,22 @@ function syncCycleSubSegRow(editor, createIfMissing = false) {
       return false;
     }
 
+    const recalled = getRecallSubSegItemForTarget(audSegId, linkTargetLangUnitId, subSegId, subSegId);
+    const localProjection = getRecallSubSegItemForTarget(audSegId, linkTargetLangUnitId, subSegId, subSegId, true);
     const next = {
-      _id: buildDerivedId(audSegId, getNextSubSegOrdinal(audSegId)) || createItemId(),
+      _id: localProjection && getSubSegParentSubSegId(localProjection) === subSegId
+        ? localProjection._id
+        : buildDerivedId(audSegId, getNextSubSegOrdinal(audSegId)) || createItemId(),
       audSegId,
       isRoot: false,
       ...(linkTargetLangUnitId ? { linkTargetLangUnitId } : {}),
       parentSubSegId: subSegId,
-      content: [],
-      text: '',
-      createdAt: new Date().toISOString(),
+      content: Array.isArray(recalled?.content) ? recalled.content : [],
+      text: String(recalled?.text ?? ''),
+      createdAt: localProjection?.createdAt || recalled?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    state.subSegItems = sortSubSegItems([next, ...state.subSegItems]);
+    state.subSegItems = sortSubSegItems([next, ...state.subSegItems.filter((item) => String(item?._id ?? '') !== String(next._id ?? ''))]);
     void fetch('/api/subSegs/items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -2726,7 +2816,7 @@ function syncCycleSubSegRow(editor, createIfMissing = false) {
   return false;
 }
 
-function focusCycleSubSegInput(editor) {
+async function focusCycleSubSegInput(editor) {
   if (!(editor instanceof HTMLElement)) {
     return false;
   }
@@ -2737,8 +2827,27 @@ function focusCycleSubSegInput(editor) {
   }
 
   const subSegId = getSubSegEditorKey(editor);
+  if (subSegDraftPayloadBySubSegId.has(subSegId)) {
+    const timer = subSegSaveTimersBySubSegId.get(subSegId);
+    if (timer) {
+      clearTimeout(timer);
+      subSegSaveTimersBySubSegId.delete(subSegId);
+    }
+    setTargetedLangUnitBubblesAwaiting(editor, true);
+    try {
+      await saveSubSeg(subSegId);
+    } finally {
+      setTargetedLangUnitBubblesAwaiting(editor, false);
+    }
+  }
+
+  const liveEditor = getLiveSubSegEditor(subSegId);
+  if (liveEditor instanceof HTMLElement) {
+    editor = liveEditor;
+  }
+
   const targetIndex = getSubSegBubbleTargetIndex(editor);
-  const linkTargetLangUnitId = getOrderedLangUnitIds(getSubSegContentTokens(audSegId, subSegId))[targetIndex] ?? '';
+  const linkTargetLangUnitId = getOrderedLangUnitIdsForSubSeg(audSegId, subSegId)[targetIndex] ?? '';
   if (!linkTargetLangUnitId) {
     return false;
   }
@@ -3534,7 +3643,7 @@ function syncEditorLangUnitIdsFromContent(editor, content) {
 async function saveSubSeg(subSegId) {
   const payload = subSegDraftPayloadBySubSegId.get(subSegId);
   if (!payload) {
-    return;
+    return null;
   }
 
   const saveRevision = subSegDraftRevisionBySubSegId.get(subSegId) ?? 0;
@@ -3557,7 +3666,7 @@ async function saveSubSeg(subSegId) {
   });
 
   if (!response.ok) {
-    return;
+    return null;
   }
 
   const result = await response.json();
@@ -3565,7 +3674,7 @@ async function saveSubSeg(subSegId) {
     if (subSegDraftPayloadBySubSegId.has(subSegId) && !subSegSaveTimersBySubSegId.has(subSegId)) {
       scheduleSubSegSave(subSegId);
     }
-    return;
+    return result;
   }
 
   const saved = result?.subSeg ?? result;
@@ -3600,6 +3709,7 @@ async function saveSubSeg(subSegId) {
     renderAudEps(state.audEpItems);
   }
   syncLangUnitRefsLists();
+  return result;
 }
 
 function createAudSegDraft() {
@@ -3702,8 +3812,11 @@ function getAudioForIndex(index) {
 
   const audio = new Audio();
   audio.preload = 'auto';
+  audio.addEventListener('loadedmetadata', () => handleAudioReady(index));
   audio.addEventListener('loadeddata', () => handleAudioReady(index));
   audio.addEventListener('canplay', () => handleAudioReady(index));
+  audio.addEventListener('durationchange', () => handleAudioReady(index));
+  audio.addEventListener('progress', () => handleAudioReady(index));
   audio.addEventListener('timeupdate', () => syncAudEpPlaybackLabel(index));
   audio.addEventListener('play', () => handleAudioPlay(index));
   audio.addEventListener('pause', () => handleAudioStop(index));
@@ -3723,7 +3836,6 @@ function handleAudioReady(index) {
 
   const pendingSeek = pendingSeekByIndex.get(index);
   if (Number.isFinite(pendingSeek)) {
-    pendingSeekByIndex.delete(index);
     const existingFrame = pendingSeekFrameByIndex.get(index);
     if (existingFrame) {
       cancelAnimationFrame(existingFrame);
@@ -3734,7 +3846,7 @@ function handleAudioReady(index) {
         return;
       }
 
-      applyAudioSeek(index, audio, pendingSeek);
+      applyPendingAudioSeek(index, audio, pendingSeek);
       syncAudEpPlaybackLabel(index);
       pendingSeekFrameByIndex.delete(index);
     });
@@ -3805,6 +3917,17 @@ function applyAudioSeek(index, audio, nextTime) {
     nextTime = Math.max(lock.tcs, Math.min(nextTime, lock.tce));
   }
   audio.currentTime = nextTime;
+  return nextTime;
+}
+
+function applyPendingAudioSeek(index, audio, nextTime) {
+  const targetTime = applyAudioSeek(index, audio, nextTime);
+  if (Math.abs((audio.currentTime || 0) - targetTime) > 0.25) {
+    pendingSeekByIndex.set(index, targetTime);
+    return;
+  }
+
+  pendingSeekByIndex.delete(index);
 }
 
 function seekAudio(index, deltaSeconds) {
@@ -3813,12 +3936,14 @@ function seekAudio(index, deltaSeconds) {
     return;
   }
 
-  const duration = Number.isFinite(audio.duration) ? audio.duration : Number.POSITIVE_INFINITY;
-  const nextTime = Math.max(0, Math.min((audio.currentTime || 0) + deltaSeconds, duration));
+  const duration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : Number.POSITIVE_INFINITY;
+  const pendingSeek = pendingSeekByIndex.get(index);
+  const baseTime = Number.isFinite(pendingSeek) ? pendingSeek : audio.currentTime || 0;
+  const nextTime = Math.max(0, Math.min(baseTime + deltaSeconds, duration));
   if (audio.readyState < HTMLMediaElement.HAVE_METADATA) {
     pendingSeekByIndex.set(index, nextTime);
   } else {
-    applyAudioSeek(index, audio, nextTime);
+    applyPendingAudioSeek(index, audio, nextTime);
   }
   syncAudEpPlaybackLabel(index);
 }
@@ -4591,8 +4716,9 @@ document.addEventListener('keydown', (event) => {
     }
 
     if (event.key === 'Enter') {
-      if (editor && focusCycleSubSegInput(editor)) {
+      if (editor && getSubSegBubbleTargetIndex(editor) >= 0) {
         event.preventDefault();
+        void focusCycleSubSegInput(editor);
         return;
       }
       if (editor && selectionTouchesLangUnitBubble(editor)) {

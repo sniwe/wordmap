@@ -1,34 +1,18 @@
 [
   {
-    "_id": "5e315e33-ee8a-4d3b-935c-da79da19d333-0",
-    "audEpId": "5e315e33-ee8a-4d3b-935c-da79da19d333",
+    "_id": "e7c441e7-b8e1-4641-8348-75e238b5c348-0",
+    "audEpId": "e7c441e7-b8e1-4641-8348-75e238b5c348",
     "audEpIndex": 0,
-    "tcs": 0.977554,
-    "tce": 11.807061,
+    "tcs": 0.102833,
+    "tce": 15.464738,
     "ssHead": ""
   },
   {
-    "_id": "5e315e33-ee8a-4d3b-935c-da79da19d333-1",
-    "audEpId": "5e315e33-ee8a-4d3b-935c-da79da19d333",
-    "audEpIndex": 0,
-    "tcs": 19.481097,
-    "tce": 30.122412,
-    "ssHead": ""
-  },
-  {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-0",
-    "audEpId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a",
+    "_id": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0",
+    "audEpId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac",
     "audEpIndex": 1,
-    "tcs": 0.160463,
-    "tce": 11.658943,
-    "ssHead": ""
-  },
-  {
-    "_id": "08639bd2-41d9-4d84-9cb9-5fae7e61500a-1",
-    "audEpId": "08639bd2-41d9-4d84-9cb9-5fae7e61500a",
-    "audEpIndex": 1,
-    "tcs": 16.223121,
-    "tce": 26.736499,
+    "tcs": 5.487861,
+    "tce": 20.487859,
     "ssHead": ""
   }
 ]

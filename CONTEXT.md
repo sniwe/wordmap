@@ -50,6 +50,7 @@
 | `langUnit ref` | Legacy shorthand for `langUnit instance`. |
 | `langUnit extension` | A new `langUnit` created from a selected substring while a cycle-target is active; its context instance stores the shared `cycleGroupId`. |
 | `langUnit cycle group` | The shared group identifier stored on context-bound instances so cycle targeting and dotted underline rendering treat linked langUnits as one group. |
+| `langUnit linked subSeg canonical recall` | The rule that same final `target.type + target.text` reuses one canonical `langUnitId`, appends the new witnessed context to `instances`, and makes linked child subSeg recall by that canonical id; different final target types keep different langUnits even when text matches. |
 | `langUnit reuse by target-text` | The creation rule that reuses an existing `langUnit` record when the selected bubble has the same normalized `target.type` and trimmed `target.text`. |
 | `langUnit target-text canonicalization` | The storage rule that collapses identical `target.type + target.text` pairs into one `langUnit` record and rewrites saved `subSeg` references to the canonical `langUnitId`. |
 | `cross-audSeg canonical child` | A non-root `subSeg` linked by `linkTargetLangUnitId` to a canonical `langUnit`; the same child row is projected under matching `langUnit` occurrences in any `audSeg`, with `parentSubSegId` used only as visible focus context. |
@@ -86,6 +87,7 @@
 | `chinWord` | A single Chinese lexical unit, used when the chin disambiguation flow decides a `langUnit` is narrower than a phrase. |
 | `chinFuzzWord` | An ASCII-only pinyin-like target that resolves to exactly 1 syllable; multi-syllable pinyin-like text is treated as `chinPhrase` instead. |
 | `chin disambiguation` | The Settings-controlled worker-backed flow that refines ambiguous Chinese instance types after save by classifying the bounded context separately from the selected target substring. |
+| `chin disambiguation candidate` | A Chinese-bearing `langUnit instance` whose selected substring has at least two Chinese characters, making it potentially ambiguous between `chinWord` and `chinPhrase` and worth sending to the worker. |
 | `instance-targeted chin disambiguation` | The save-time chin disambiguation flow that sends one ambiguous `langUnit instance` occurrence to the worker, persists `contextType` to the matched instance's `context.type`, and persists `targetType` to the matched instance's `target.type`. |
 | `pinyin chinPhrase` | Pure ASCII pinyin-like context text, or mixed Chinese plus only valid pinyin syllables, that can be segmented into 2 or more valid pinyin syllables, so it is captured as `chinPhrase` instead of `chinFuzzWord` or `engPhrase`. |
 | `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
@@ -96,6 +98,7 @@
 | `entered panel width lock` | The entered `audEp` panel stays width-constrained instead of growing to match subSeg content. |
 | `audSeg list balance` | The `audSeg` list keeps equal horizontal padding on both sides in dev. |
 | `langUnit bubble no target` | The `-1` cycle state that means no bubble is currently targeted. |
+| `langUnit bubble awaiting pulse` | The orange/yellow pulsing outline on the cycle-targeted `langUnit bubble` while Enter is waiting for async save/canonicalization before opening the linked child `subSeg`. |
 | `capture subSeg` | The Enter-key action that wraps a highlighted substring in a `langUnit bubble`. |
 | `bubble edge escape` | The double-space escape that moves the caret out of a `langUnit bubble` and keeps only one outside space. |
 | `subSegs collection` | The backend scaffold under `src/backend/data/subSegs` for sub-segment records tied to an `audSeg`. |

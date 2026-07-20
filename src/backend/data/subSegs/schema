@@ -16,6 +16,7 @@
         "type": "string"
       },
       "content": {
+        "description": "Text tokens plus langUnitRef tokens; langUnitRef.langUnitId stores the canonical langUnit _id for target.type + target.text.",
         "type": "array",
         "items": {
           "type": "object",
@@ -34,6 +35,7 @@
         }
       },
       "linkTargetLangUnitId": {
+        "description": "Canonical langUnit _id that owns this non-root child subSeg.",
         "type": "string"
       },
       "parentSubSegId": {

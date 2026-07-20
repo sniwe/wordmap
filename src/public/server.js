@@ -32,6 +32,8 @@ const subSegSchemaFile = path.join(subSegDir, 'schema');
 const mediaDir = path.join(root, 'src', 'backend', 'data', 'media');
 const port = Number(process.env.PORT || 3000);
 const isDev = process.argv.includes('--dev');
+let langUnitWriteQueue = Promise.resolve();
+let lastGoodLangUnitItems = null;
 
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -44,6 +46,7 @@ const contentTypes = {
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
+  '.mp3': 'audio/mpeg',
 };
 
 async function readNotes() {
@@ -205,15 +208,6 @@ async function serveFile(req, res, filePath) {
         return;
       }
 
-      if (start === 0 && end === stat.size - 1) {
-        const body = await fs.readFile(filePath);
-        send(res, 200, {
-          'Content-Type': contentType,
-          'Accept-Ranges': 'bytes',
-        }, body);
-        return;
-      }
-
       res.writeHead(206, {
         'Content-Type': contentType,
         'Content-Length': end - start + 1,
@@ -294,6 +288,28 @@ async function writeAudSegItems(items) {
   await fs.writeFile(audSegItemsFile, JSON.stringify(items, null, 2));
 }
 
+async function atomicWriteJsonFile(dir, file, value) {
+  await fs.mkdir(dir, { recursive: true });
+  const tmpFile = `${file}.${process.pid}.${Date.now()}.${randomUUID()}.tmp`;
+  await fs.writeFile(tmpFile, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+  try {
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        await fs.rename(tmpFile, file);
+        return;
+      } catch (error) {
+        if (attempt >= 2 || !['EBUSY', 'EPERM'].includes(error?.code)) {
+          throw error;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 25));
+      }
+    }
+  } catch (error) {
+    await fs.unlink(tmpFile).catch(() => {});
+    throw error;
+  }
+}
+
 async function readLangUnitItems() {
   try {
     const items = JSON.parse(await fs.readFile(langUnitItemsFile, 'utf8'));
@@ -303,16 +319,31 @@ async function readLangUnitItems() {
       await writeLangUnitItems(normalized);
     }
 
+    lastGoodLangUnitItems = normalized;
     return normalized;
-  } catch {
-    return [];
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      lastGoodLangUnitItems = [];
+      return [];
+    }
+
+    console.error(`Failed to read ${langUnitItemsFile}:`, error);
+    if (lastGoodLangUnitItems) {
+      return lastGoodLangUnitItems;
+    }
+
+    throw error;
   }
 }
 
 async function writeLangUnitItems(items) {
-  await fs.mkdir(langUnitDir, { recursive: true });
-  const [normalized] = normalizeLangUnitItemsForStorage(Array.isArray(items) ? items : []);
-  await fs.writeFile(langUnitItemsFile, JSON.stringify(normalized, null, 2));
+  langUnitWriteQueue = langUnitWriteQueue.catch(() => {}).then(async () => {
+    const [normalized] = normalizeLangUnitItemsForStorage(Array.isArray(items) ? items : []);
+    await atomicWriteJsonFile(langUnitDir, langUnitItemsFile, normalized);
+    lastGoodLangUnitItems = normalized;
+    return normalized;
+  });
+  return langUnitWriteQueue;
 }
 
 function normalizeLangUnitItem(item, now = new Date().toISOString()) {
@@ -1237,7 +1268,7 @@ function isChineseDisambiguationCandidate(contextText, targetText, substringText
   return (
     hasChineseCharacters(contextText) &&
     hasChineseCharacters(targetText) &&
-    hasChineseCharacters(substringText) &&
+    countChineseCharacters(substringText) >= 2 &&
     !isPunctuationOrSymbolOnly(targetText) &&
     !isPunctuationOrSymbolOnly(substringText)
   );
@@ -1282,6 +1313,53 @@ function getLangUnitCanonicalKey(item) {
   const type = normalizeLangUnitTargetType(target.type);
   const text = String(target.text || item?.text || '').trim();
   return type && text ? `${type}\u0000${text}` : '';
+}
+
+function subSegHasRecallContent(item) {
+  return Boolean((Array.isArray(item?.content) && item.content.length) || String(item?.text ?? '').trim());
+}
+
+function hydrateEmptyLinkedSubSegs(items, langUnitItems) {
+  const langUnitsById = new Map((Array.isArray(langUnitItems) ? langUnitItems : []).map((item) => [String(item?._id ?? ''), item]));
+  const getLinkKey = (item) => {
+    const id = String(item?.linkTargetLangUnitId ?? '').trim();
+    return getLangUnitCanonicalKey(langUnitsById.get(id)) || id;
+  };
+  const sourceByKey = new Map();
+
+  for (const item of sortSubSegItems(Array.isArray(items) ? items : [])) {
+    if (item?.isRoot !== false || !subSegHasRecallContent(item)) {
+      continue;
+    }
+
+    const key = getLinkKey(item);
+    if (key && !sourceByKey.has(key)) {
+      sourceByKey.set(key, item);
+    }
+  }
+
+  let changed = false;
+  const now = new Date().toISOString();
+  const next = (Array.isArray(items) ? items : []).map((item) => {
+    if (item?.isRoot !== false || subSegHasRecallContent(item)) {
+      return item;
+    }
+
+    const source = sourceByKey.get(getLinkKey(item));
+    if (!source || String(source?._id ?? '') === String(item?._id ?? '')) {
+      return item;
+    }
+
+    changed = true;
+    return {
+      ...item,
+      content: Array.isArray(source.content) ? source.content : [],
+      text: String(source.text ?? ''),
+      updatedAt: now,
+    };
+  });
+
+  return [next, changed];
 }
 
 function canonicalizeLangUnitItems(items) {
@@ -2301,11 +2379,17 @@ async function handleSubSegApi(req, res, url) {
       await writeLangUnitItems(mergeLangUnitItems(await readLangUnitItems(), payload.langUnits));
     }
     let updatedLangUnits = await rebuildLangUnitItems();
-    const refreshedSubSegItems = await readSubSegItems();
-    const refreshedSubSeg = refreshedSubSegItems.find((item) => String(item?._id ?? '') === saved._id) ?? saved;
     if (disambiguateChinContexts) {
       updatedLangUnits = await maybeDisambiguateLangUnitContexts(updatedLangUnits, true);
+      updatedLangUnits = await rebuildLangUnitItems();
     }
+    const [hydratedSubSegItems, hydratedSubSegChanged] = hydrateEmptyLinkedSubSegs(await readSubSegItems(), updatedLangUnits);
+    if (hydratedSubSegChanged) {
+      await writeSubSegItems(sortSubSegItems(hydratedSubSegItems));
+      updatedLangUnits = await rebuildLangUnitItems();
+    }
+    const refreshedSubSegItems = await readSubSegItems();
+    const refreshedSubSeg = refreshedSubSegItems.find((item) => String(item?._id ?? '') === saved._id) ?? saved;
     send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSeg: refreshedSubSeg, subSegs: refreshedSubSegItems, langUnits: updatedLangUnits }));
     return true;
   }

@@ -150,6 +150,20 @@ body {
   outline-color: #c31919;
 }
 
+.langunit-bubble.is-targeted.is-awaiting {
+  animation: langunit-awaiting-pulse 0.65s ease-in-out infinite alternate;
+}
+
+@keyframes langunit-awaiting-pulse {
+  from {
+    outline-color: #ff8a00;
+  }
+
+  to {
+    outline-color: #ffd400;
+  }
+}
+
 .item {
   position: relative;
 }
