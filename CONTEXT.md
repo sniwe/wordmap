@@ -28,6 +28,7 @@
 | `audSeg playback lock` | The entered-state mode where Enter on a targeted `audSeg` seeks audio to the segment start and keeps playback wrapped within that segment's time range. |
 | `shift-release cancel` | The auto-removal of a tentative `audSeg` draft when `Shift` is released without committing it with `Shift+Space`. |
 | `entered audSeg state` | The locked `audSeg` row mutation applied after Enter, distinct from the temporary targeted state used while cycling with arrows. |
+| `entered audSeg focus memory` | Session-scoped runtime memory that stores the last focused element for the currently entered `audSeg` and restores it when the browser window regains focus. |
 | `subSeg list` | The list rendered under an entered `audSeg`'s time text, seeded with a root editor row and persisted non-root child rows ordered directly under their linked parent subSeg. |
 | `subSeg root row` | The persistent `subSeg` editor row with `isRoot: true` that owns the main text for an entered `audSeg`. |
 | `subSeg cycle row` | A non-root `subSeg` editor row with `isRoot: false` and `linkTargetLangUnitId`, initialized from a committed `langUnit` target and kept visible after reload once saved. |
@@ -42,6 +43,7 @@
 | `subSeg editor height` | The editor grows with its content instead of staying collapsed to a fixed line box. |
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
 | `langUnit bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
+| `langUnit bubble clear` | `Ctrl+Delete` while a `langUnit bubble` is cycle-targeted in a focused `subSeg` editor unwraps that bubble back into normal editable text. |
 | `auto-langUnitification` | The Space-key runtime action that auto-wraps a qualifying line-start Chinese character in a linked child `subSeg` as a `langUnit bubble` when that character belongs to the parent `chinWord`/`chinPhrase` target. |
 | `remote section` | A non-contiguous span that belongs to the same `langUnit bubble` group as an anchor bubble, rendered with bubble styling plus a dotted connector back to the anchor. |
 | `linked bubble group` | The set of contiguous and remote `langUnit` spans that share one cycle-target index and are treated as one logical capture unit. |
@@ -49,6 +51,7 @@
 | `langUnit instance` | One persisted reverse-link record inside a `langUnit.instances` array; it carries `audSegId`, `subSegId`, `start`, `end`, `remote`, `context`, `target`, and any extra occurrence metadata needed. |
 | `langUnit ref` | Legacy shorthand for `langUnit instance`. |
 | `langUnit extension` | A new `langUnit` created from a selected substring while a cycle-target is active; its context instance stores the shared `cycleGroupId`. |
+| `nested chin substring capture` | Enter on a substring selected inside a `chinWord` or `chinPhrase` `langUnit bubble` appends that substring into the bubble's linked child `subSeg`, wraps it there as a new `langUnit bubble`, cycle-targets it, and opens its linked child `subSeg`. |
 | `langUnit cycle group` | The shared group identifier stored on context-bound instances so cycle targeting and dotted underline rendering treat linked langUnits as one group. |
 | `langUnit linked subSeg canonical recall` | The rule that same final `target.type + target.text` reuses one canonical `langUnitId`, appends the new witnessed context to `instances`, and makes linked child subSeg recall by that canonical id; different final target types keep different langUnits even when text matches. |
 | `langUnit reuse by target-text` | The creation rule that reuses an existing `langUnit` record when the selected bubble has the same normalized `target.type` and trimmed `target.text`. |
@@ -80,7 +83,7 @@
 | `langUnit target normalization` | The loader/save rule that stores the selected substring text, derives its target type from the substring plus `context.type` when needed, and keeps the normalized result on both the instance and the parent `langUnit`. |
 | `chinChar` | A single Chinese character selected as a target. |
 | `chinFuzz` | A target that is Chinese-plus-Latin or pinyin-shaped in a mixed context where the selection should stay tied to Chinese-style capture rules. |
-| `chinFuzz equals gloss` | Direct child `subSeg` lines starting with `=` instantly override only the corresponding parent `chinFuzz` `langUnit` bubble's displayed text with valid nonempty Chinese-only text whose character count matches the parent pinyin syllable count; multiple valid lines render joined by ` / `, and no valid lines snap back to stored `langUnit.text`. |
+| `chinFuzz gloss` | Direct child `subSeg` line-initial content instantly overrides only the corresponding parent `chinFuzz` `langUnit` bubble's displayed text when the first whitespace-delimited chunk is valid nonempty Chinese-only text whose character count matches the parent pinyin syllable count; multiple valid lines render joined by ` / `, and no valid lines snap back to stored `langUnit.text`. |
 | `chinFuzzPart` | A mixed or pinyin-shaped target captured while the surrounding context is `chinFuzzWord`. |
 | `engWordPart` | A short English-like target captured inside an `engPhrase` or `engWord` context when the selection is only part of a larger English word. |
 | `no-op` | A rejected or illegal target shape, usually blank or punctuation-only text that should not produce a meaningful capture classification. |
@@ -88,6 +91,8 @@
 | `chinFuzzWord` | An ASCII-only pinyin-like target that resolves to exactly 1 syllable; multi-syllable pinyin-like text is treated as `chinPhrase` instead. |
 | `chin disambiguation` | The Settings-controlled worker-backed flow that refines ambiguous Chinese instance types after save by classifying the bounded context separately from the selected target substring. |
 | `chin disambiguation candidate` | A Chinese-bearing `langUnit instance` whose selected substring has at least two Chinese characters, making it potentially ambiguous between `chinWord` and `chinPhrase` and worth sending to the worker. |
+| `chinFuzz on chinPhrase` | A `chinFuzz` target inside a `chinPhrase` context; this is treated as already resolved enough and should not trigger a worker disambiguation call. |
+| `chinPhrase line length skip` | A save-time chin disambiguation shortcut where `chinPhrase` context text longer than 7 characters is accepted as phrase-shaped and not sent to the worker. |
 | `instance-targeted chin disambiguation` | The save-time chin disambiguation flow that sends one ambiguous `langUnit instance` occurrence to the worker, persists `contextType` to the matched instance's `context.type`, and persists `targetType` to the matched instance's `target.type`. |
 | `pinyin chinPhrase` | Pure ASCII pinyin-like context text, or mixed Chinese plus only valid pinyin syllables, that can be segmented into 2 or more valid pinyin syllables, so it is captured as `chinPhrase` instead of `chinFuzzWord` or `engPhrase`. |
 | `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
@@ -105,6 +110,7 @@
 | `subSeg save debounce` | The 500ms delayed save that persists `subSeg` input text to the `subSegs` collection for the selected `audSeg`. |
 | `subSeg save no rerender` | Successful debounced `subSeg` saves update persistence and in-memory state without rerendering the entered `audEp` subtree, so focus stays on the input. |
 | `subSeg line break persistence` | The rule that newline characters in a saved `subSeg` editor value are preserved and rerendered as visible line breaks instead of being trimmed away. |
+| `subSeg entity decode` | The render/save boundary behavior where common HTML entities such as `&#39;`, `&quot;`, `&amp;`, `&lt;`, `&gt;`, and numeric entities are decoded back to user-facing characters before the subSeg editor escapes display HTML. |
 | `subSeg bulk clear` | The settings action that deletes every persisted `subSeg` record and refreshes the entered `audEp` view. |
 | `subSeg draft reset` | The settings action that clears unsaved in-memory `subSeg` draft state and cancels pending saves. |
 | `langUnit bulk clear` | The settings action that clears all persisted `langUnit` records and rewrites `subSeg` content back to plain text. |

@@ -1,86 +1,193 @@
 [
   {
-    "_id": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-0-0",
-    "text": "qianhou",
-    "instances": [],
-    "target": {
-      "text": "qianhou",
-      "type": "chinFuzz"
-    },
-    "createdAt": "2026-07-20T08:14:41.286Z",
-    "updatedAt": "2026-07-20T08:48:57.580Z",
-    "root": "qianhou"
-  },
-  {
-    "_id": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1-0",
-    "text": "后",
+    "_id": "1fb97438-478a-4006-9535-82233626ba98-0-0-0",
+    "text": "e'erninuo",
     "instances": [
       {
-        "audSegId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0",
-        "subSegId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1",
+        "audSegId": "1fb97438-478a-4006-9535-82233626ba98-0",
+        "subSegId": "1fb97438-478a-4006-9535-82233626ba98-0-0",
         "remote": false,
-        "cycleGroupId": "0ceeb4a5-b273-4be2-bcf6-38e34b1289ac-0-1-0",
-        "start": 2,
-        "end": 3,
+        "cycleGroupId": "1fb97438-478a-4006-9535-82233626ba98-0-0-0",
+        "start": 10,
+        "end": 19,
         "context": {
-          "text": "=前后",
+          "text": "从一条预警说起，关于e'erninuo ",
           "type": "chinPhrase"
         },
         "target": {
-          "text": "后",
-          "type": "chinChar"
+          "text": "e'erninuo",
+          "type": "chinFuzz"
         }
-      },
+      }
+    ],
+    "target": {
+      "text": "e'erninuo",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-21T05:46:42.849Z",
+    "updatedAt": "2026-07-21T08:24:05.931Z"
+  },
+  {
+    "_id": "1fb97438-478a-4006-9535-82233626ba98-0-1-0",
+    "text": "厄尔尼诺",
+    "instances": [
       {
-        "audSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0",
-        "subSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-1",
+        "audSegId": "1fb97438-478a-4006-9535-82233626ba98-0",
+        "subSegId": "1fb97438-478a-4006-9535-82233626ba98-0-1",
+        "remote": false,
+        "cycleGroupId": "1fb97438-478a-4006-9535-82233626ba98-0-1-0",
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "厄尔尼诺",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "厄尔尼诺",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "厄尔尼诺",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-21T05:46:53.046Z",
+    "updatedAt": "2026-07-21T08:24:08.761Z"
+  },
+  {
+    "_id": "1fb97438-478a-4006-9535-82233626ba98-1-0-0",
+    "text": "一轮厄尔尼诺",
+    "instances": [
+      {
+        "audSegId": "1fb97438-478a-4006-9535-82233626ba98-1",
+        "subSegId": "1fb97438-478a-4006-9535-82233626ba98-1-0",
+        "remote": false,
+        "start": 10,
+        "end": 16,
+        "context": {
+          "text": "今年秋冬季可能会发生一轮厄尔尼诺",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "一轮厄尔尼诺",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "一轮厄尔尼诺",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-21T06:54:35.760Z",
+    "updatedAt": "2026-07-21T06:57:03.826Z"
+  },
+  {
+    "_id": "1fb97438-478a-4006-9535-82233626ba98-1-0-1",
+    "text": "今年秋冬季",
+    "instances": [
+      {
+        "audSegId": "1fb97438-478a-4006-9535-82233626ba98-1",
+        "subSegId": "1fb97438-478a-4006-9535-82233626ba98-1-0",
+        "remote": false,
+        "start": 0,
+        "end": 5,
+        "context": {
+          "text": "今年秋冬季可能会发生一轮厄尔尼诺",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "今年秋冬季",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "今年秋冬季",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-21T06:54:44.298Z",
+    "updatedAt": "2026-07-21T06:57:03.826Z"
+  },
+  {
+    "_id": "1fb97438-478a-4006-9535-82233626ba98-1-0-2",
+    "text": "消息",
+    "instances": [
+      {
+        "audSegId": "1fb97438-478a-4006-9535-82233626ba98-1",
+        "subSegId": "1fb97438-478a-4006-9535-82233626ba98-1-0",
+        "remote": false,
+        "start": 19,
+        "end": 21,
+        "context": {
+          "text": "这个消息又被进一步升级了",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "消息",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "消息",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-21T06:54:49.359Z",
+    "updatedAt": "2026-07-21T06:57:03.826Z"
+  },
+  {
+    "_id": "1fb97438-478a-4006-9535-82233626ba98-0-2-0",
+    "text": "厄",
+    "instances": [
+      {
+        "audSegId": "1fb97438-478a-4006-9535-82233626ba98-0",
+        "subSegId": "1fb97438-478a-4006-9535-82233626ba98-0-2",
         "remote": false,
         "start": 0,
         "end": 1,
         "context": {
-          "text": "后门",
+          "text": "厄",
           "type": "chinPhrase"
         },
         "target": {
-          "text": "后",
+          "text": "厄",
           "type": "chinChar"
         }
       }
     ],
     "target": {
-      "text": "后",
+      "text": "厄",
       "type": "chinChar"
     },
-    "createdAt": "2026-07-20T08:14:51.125Z",
-    "updatedAt": "2026-07-20T08:50:09.972Z"
+    "createdAt": "2026-07-21T07:34:13.587Z",
+    "updatedAt": "2026-07-21T07:34:13.587Z"
   },
   {
-    "_id": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0-0",
-    "text": "back",
+    "_id": "1fb97438-478a-4006-9535-82233626ba98-0-0-1",
+    "text": "预警",
     "instances": [
       {
-        "audSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0",
-        "subSegId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0",
+        "audSegId": "1fb97438-478a-4006-9535-82233626ba98-0",
+        "subSegId": "1fb97438-478a-4006-9535-82233626ba98-0-0",
         "remote": false,
-        "cycleGroupId": "e7c441e7-b8e1-4641-8348-75e238b5c348-0-0-0",
-        "start": 0,
-        "end": 4,
+        "start": 3,
+        "end": 5,
         "context": {
-          "text": "back door betty?",
-          "type": "engPhrase"
+          "text": "从一条预警说起，关于e'erninuo ",
+          "type": "chinPhrase"
         },
         "target": {
-          "text": "back",
-          "type": "engWord"
+          "text": "预警",
+          "type": "chinWord"
         }
       }
     ],
     "target": {
-      "text": "back",
-      "type": "engWord"
+      "text": "预警",
+      "type": "chinWord"
     },
-    "createdAt": "2026-07-20T08:15:26.076Z",
-    "updatedAt": "2026-07-20T08:50:03.460Z",
-    "root": "back"
+    "createdAt": "2026-07-21T08:24:05.931Z",
+    "updatedAt": "2026-07-21T08:24:05.931Z"
   }
 ]

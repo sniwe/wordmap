@@ -1665,14 +1665,22 @@ async function maybeDisambiguateLangUnitContexts(langUnits, enabled) {
         start: Number.isFinite(instance.start) ? instance.start : null,
         end: Number.isFinite(instance.end) ? instance.end : null,
       });
+      const contextText = String(context.text ?? '').trim();
+      const contextType = String(context.type ?? '').trim();
+      const targetType = String(instanceTarget.type ?? '').trim();
       const targetText = String(instanceTarget.text || getLangUnitText(langUnit)).trim();
       const substringText = targetText;
-      if (!isChineseDisambiguationCandidate(context.text, targetText, substringText)) {
+      if (
+        targetType === 'chinChar' ||
+        (targetType === 'chinFuzz' && contextType === 'chinPhrase') ||
+        (contextType === 'chinPhrase' && Array.from(contextText).length > 7) ||
+        !isChineseDisambiguationCandidate(contextText, targetText, substringText)
+      ) {
         continue;
       }
 
       const result = await inferLangUnitChineseTypes(langUnit._id, {
-        context: context.text,
+        context: contextText,
         target: targetText,
         substring: substringText,
         instance: {

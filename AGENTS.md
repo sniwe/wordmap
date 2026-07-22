@@ -11,3 +11,4 @@ bootstrap command ::gacp = "git add commit push". when sent perform those action
 after any edits touching subSeg input, verify that lnew line and line break rendering on subSeg input remains intact and patch if needed
 
 note that this is a safe dev environment so all collection data is disposable and for testing purposes only. pay no heed to backwards compatability.
+even though collection data is disposable, do not clear, replace, or otherwise dispose collection data unless it is necessary for the requested work or explicitly requested.

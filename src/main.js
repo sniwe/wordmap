@@ -48,6 +48,7 @@ const settingsPopoverChinDisambiguationCheckbox = settingsPopover?.querySelector
 const settingsPopoverClearSubSegsButton = settingsPopover?.querySelector('[data-settings-action="clear-subsegs"]');
 const settingsPopoverClearLangUnitsButton = settingsPopover?.querySelector('[data-settings-action="clear-langunits"]');
 const workerToast = document.querySelector('#worker-toast');
+const canvas = document.querySelector('#canvas');
 const audEpList = document.querySelector('#audep-list');
 const noteSelector = document.querySelector('#note-selector');
 const noteInput = document.querySelector('#note-input');
@@ -59,6 +60,7 @@ filePicker.type = 'file';
 filePicker.accept = 'audio/*';
 filePicker.hidden = true;
 document.body.appendChild(filePicker);
+canvas.tabIndex = -1;
 
 const state = {
   audEpItems: [],
@@ -90,6 +92,7 @@ const state = {
 const keyboardGuardSelector = '.note-sidebar, .selector-probe';
 const pointerGuardSelector = '.selector-probe, .note-sidebar__selector';
 const subSegInputSelector = '.item__subseg-input';
+const enteredAudSegFocusStorageKey = 'entered-audseg-focus-memory';
 const audioPlayers = new Map();
 const pendingSeekByIndex = new Map();
 const pendingSeekFrameByIndex = new Map();
@@ -112,6 +115,8 @@ const langUnitRefResizeObserver =
     : null;
 let lastSubSegPlaybackShortcutAt = 0;
 let subSegPlaybackShortcutActive = false;
+let enteredAudSegFocusContextId = '';
+let restoringEnteredAudSegFocus = false;
 let settingsOpen = false;
 let codexWordRootInferenceEnabled = localStorage.getItem('codex-word-root-inference-enabled') === '1';
 if (localStorage.getItem('chin-disambiguation-instance-targeted-enabled') !== '1') {
@@ -393,6 +398,7 @@ function renderAudEps(items) {
   lockEnteredAudSegWidths();
   syncSubSegTextareaHeights();
   syncLangUnitRefsLists();
+  syncEnteredAudSegFocusContext();
 }
 
 function getAudEpItems() {
@@ -494,6 +500,129 @@ function getSelectedAudSegItem() {
   }
 
   return getAudSegItemsForAudEp(state.enteredAudEpIndex)[state.selectedAudSegIndex] ?? null;
+}
+
+function getEnteredAudSegId() {
+  if (state.enteredAudEpIndex < 0 || state.enteredAudSegIndex < 0) {
+    return '';
+  }
+
+  return String(getAudSegItemsForAudEp(state.enteredAudEpIndex)[state.enteredAudSegIndex]?._id ?? '').trim();
+}
+
+function clearEnteredAudSegFocusMemory() {
+  try {
+    sessionStorage.removeItem(enteredAudSegFocusStorageKey);
+  } catch {}
+}
+
+function syncEnteredAudSegFocusContext() {
+  const audSegId = getEnteredAudSegId();
+  if (audSegId === enteredAudSegFocusContextId) {
+    return audSegId;
+  }
+
+  enteredAudSegFocusContextId = audSegId;
+  clearEnteredAudSegFocusMemory();
+  return audSegId;
+}
+
+function getEnteredAudSegFocusSelector(element) {
+  if (!(element instanceof HTMLElement)) {
+    return '';
+  }
+
+  if (element.matches(subSegInputSelector)) {
+    const audSegId = String(element.dataset.subsegAudsegId ?? '').trim();
+    const subSegId = String(element.dataset.subsegId ?? '').trim();
+    const parentSubSegId = String(element.dataset.parentSubsegId ?? '').trim();
+    if (!audSegId || !subSegId) {
+      return '';
+    }
+
+    return [
+      `.item__subseg-input[data-subseg-audseg-id="${CSS.escape(audSegId)}"]`,
+      `[data-subseg-id="${CSS.escape(subSegId)}"]`,
+      parentSubSegId ? `[data-parent-subseg-id="${CSS.escape(parentSubSegId)}"]` : '',
+    ].join('');
+  }
+
+  if (element.matches('.item__langunit-ref')) {
+    const refKey = String(element.dataset.refKey ?? '').trim();
+    return refKey ? `.item__langunit-ref[data-ref-key="${CSS.escape(refKey)}"]` : '';
+  }
+
+  return element.id ? `#${CSS.escape(element.id)}` : '';
+}
+
+function rememberEnteredAudSegFocus(element) {
+  if (restoringEnteredAudSegFocus) {
+    return;
+  }
+
+  const audSegId = syncEnteredAudSegFocusContext();
+  if (!audSegId || !(element instanceof HTMLElement)) {
+    return;
+  }
+
+  const enteredSegment = element.closest('.item__segment--entered');
+  if (!enteredSegment) {
+    return;
+  }
+
+  const selector = getEnteredAudSegFocusSelector(element);
+  if (!selector) {
+    return;
+  }
+
+  try {
+    sessionStorage.setItem(enteredAudSegFocusStorageKey, JSON.stringify({ audSegId, selector }));
+  } catch {}
+}
+
+function scheduleEnteredAudSegFocusRestore() {
+  requestAnimationFrame(() => {
+    restoreEnteredAudSegFocus();
+    setTimeout(restoreEnteredAudSegFocus, 80);
+  });
+}
+
+function restoreEnteredAudSegFocus() {
+  if (document.hidden) {
+    return false;
+  }
+
+  const audSegId = syncEnteredAudSegFocusContext();
+  if (!audSegId) {
+    return false;
+  }
+
+  let memory = null;
+  try {
+    memory = JSON.parse(sessionStorage.getItem(enteredAudSegFocusStorageKey) || 'null');
+  } catch {
+    memory = null;
+  }
+
+  if (String(memory?.audSegId ?? '') !== audSegId || !memory?.selector) {
+    return false;
+  }
+
+  const target = document.querySelector(memory.selector);
+  if (!(target instanceof HTMLElement)) {
+    return false;
+  }
+
+  restoringEnteredAudSegFocus = true;
+  try {
+    target.focus({ preventScroll: true });
+    if (target.matches(subSegInputSelector)) {
+      syncLangUnitBubbleTarget(target, false);
+    }
+  } finally {
+    restoringEnteredAudSegFocus = false;
+  }
+  return true;
 }
 
 function renderEnteredAudSegAndFocus(item) {
@@ -1061,11 +1190,11 @@ function getSubSegTextValue(item) {
   return String(item?.text ?? '');
 }
 
-function getEqualsLineValues(text) {
+function getChinFuzzGlossLineValues(text) {
   return String(text ?? '')
     .split('\n')
-    .filter((value) => value.startsWith('='))
-    .map((value) => value.slice(1).trim())
+    .map((value) => value.trim())
+    .map((value) => value.split(/\s+/)[0] ?? '')
     .filter(Boolean);
 }
 
@@ -1095,11 +1224,11 @@ function getLangUnitRenderText(langUnitId, fallbackText = '', parentSubSegId = '
       getSubSegLinkTargetLangUnitId(item) === String(langUnitId ?? '').trim() &&
       getSubSegParentSubSegId(item) === expectedParentSubSegId
   );
-  const equalsValues = getEqualsLineValues(getSubSegTextValue(child)).filter(
+  const glossValues = getChinFuzzGlossLineValues(getSubSegTextValue(child)).filter(
     (value) => isChineseOnlyText(value) && isMatchingPinyinGloss(getLangUnitText(langUnit), value)
   );
-  return equalsValues.length
-    ? equalsValues.join(' / ')
+  return glossValues.length
+    ? glossValues.join(' / ')
     : String(fallbackText ?? '');
 }
 
@@ -1185,7 +1314,7 @@ function sanitizeSubSegMarkup(value) {
 
   value = normalizeSubSegLineBreaks(value);
   if (!value.includes('<')) {
-    return escapeHtml(value).replaceAll('\n', '<br>');
+    return escapeHtml(decodeHtmlEntities(value)).replaceAll('\n', '<br>');
   }
 
   const template = document.createElement('template');
@@ -1212,7 +1341,7 @@ function sanitizeSubSegMarkup(value) {
 
   const serializeNode = (node) => {
     if (node.nodeType === Node.TEXT_NODE) {
-      return escapeHtml(normalizeSubSegLineBreaks(node.textContent ?? '')).replaceAll('\n', '<br>');
+      return escapeHtml(decodeHtmlEntities(normalizeSubSegLineBreaks(node.textContent ?? ''))).replaceAll('\n', '<br>');
     }
 
     if (node.nodeType !== Node.ELEMENT_NODE) {
@@ -1227,7 +1356,7 @@ function sanitizeSubSegMarkup(value) {
       const bubbleContent = serializeChildren(node.childNodes);
       const langUnitId = node.getAttribute('data-langunit-id');
       const langUnitRemote = node.getAttribute('data-langunit-remote');
-      const langUnitSourceText = node.getAttribute('data-langunit-source-text');
+      const langUnitSourceText = decodeHtmlEntities(node.getAttribute('data-langunit-source-text') ?? '');
       const langUnitCycleGroupId = node.getAttribute('data-langunit-cycle-group-id');
       const dataAttr = langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : '';
       const remoteAttr = langUnitRemote ? ' data-langunit-remote="1"' : '';
@@ -1257,6 +1386,17 @@ function sanitizeSubSegMarkup(value) {
 
 function normalizeSubSegLineBreaks(value) {
   return String(value ?? '').replace(/\r\n?/g, '\n');
+}
+
+function decodeHtmlEntities(value) {
+  const text = String(value ?? '');
+  if (!text.includes('&')) {
+    return text;
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  return textarea.value;
 }
 
 function isBreakPlaceholderBlock(node) {
@@ -1304,7 +1444,7 @@ function renderSubSegContentTokens(tokens, subSegId = '') {
 
     if (token.type === 'text') {
       flushBubble();
-      segments.push({ type: 'text', text: String(token.text ?? '') });
+      segments.push({ type: 'text', text: decodeHtmlEntities(token.text ?? '') });
       continue;
     }
 
@@ -1324,8 +1464,8 @@ function renderSubSegContentTokens(tokens, subSegId = '') {
       ? langUnit.instances.filter((instance) => String(instance?.subSegId ?? '') === String(subSegId ?? ''))
       : [];
     const cycleGroupId = getLangUnitCycleTargetId(langUnitId);
-    const sourceText = String(getLangUnitText(langUnit) || token.text || '');
-    const text = getLangUnitRenderText(langUnitId, sourceText, subSegId);
+    const sourceText = decodeHtmlEntities(getLangUnitText(langUnit) || token.text || '');
+    const text = decodeHtmlEntities(getLangUnitRenderText(langUnitId, sourceText, subSegId));
     const remote = token.remote === true || cycleGroupId !== langUnitId;
     if (
       currentBubble &&
@@ -1407,10 +1547,11 @@ function renderSubSegList(audSegItem) {
     const parentSubSegId = String(renderParentSubSegId || getSubSegParentSubSegId(subSegItem)).trim();
     const value = valueBySubSegId.get(subSegId);
     const renderedContent = subSegItem?.content ? renderSubSegContentTokens(subSegItem.content, subSegId) : '';
-    const hasLangUnitRefs = Array.isArray(subSegItem?.content) && subSegItem.content.some((token) => token?.type === 'langUnitRef');
-    const content = value != null || hasLangUnitRefs
-      ? normalizeSubSegEditorMarkup(value ?? renderedContent)
-      : escapeHtml(normalizeSubSegLineBreaks(subSegItem?.text ?? '')).replaceAll('\n', '<br>') || renderedContent;
+    const content = value != null
+      ? value
+      : renderedContent
+        ? normalizeSubSegEditorMarkup(renderedContent)
+      : escapeHtml(decodeHtmlEntities(normalizeSubSegLineBreaks(subSegItem?.text ?? ''))).replaceAll('\n', '<br>') || renderedContent;
     return `
       <li class="item__subseg${subSegItem?.isRoot === false ? ' item__subseg--cycle' : ' item__subseg--seed'}" style="--subseg-depth: ${Math.max(0, Number(depth) || 0)};" data-subseg-id="${escapeHtml(subSegId)}" data-subseg-audseg-id="${escapeHtml(audSegId)}" data-subseg-is-root="${subSegItem?.isRoot === false ? '0' : '1'}">
         <div
@@ -2129,6 +2270,21 @@ function isPunctuationOrSymbolOnly(value) {
   return Boolean(text) && /^[\p{P}\p{S}\s]+$/u.test(text) && !/[A-Za-z0-9\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/u.test(text);
 }
 
+function isLangUnitChineseDisambiguationCandidate(langUnit) {
+  const instances = Array.isArray(langUnit?.instances) ? langUnit.instances : [];
+  return instances.some((instance) => {
+    const contextText = String(instance?.context?.text ?? '').trim();
+    const target = normalizeLangUnitTarget(instance?.target ?? langUnit?.target ?? getLangUnitText(langUnit), instance?.context?.type ?? '');
+    const targetText = String(target.text || getLangUnitText(langUnit)).trim();
+    return (
+      target.type !== 'chinChar' &&
+      countChineseCharacters(targetText) >= 2 &&
+      countChineseCharacters(contextText) > 0 &&
+      !isPunctuationOrSymbolOnly(targetText)
+    );
+  });
+}
+
 function normalizeLangUnitTargetType(type) {
   const value = String(type ?? '').trim();
   if (value === 'engPart') {
@@ -2296,7 +2452,7 @@ function extractSubSegEditorPayload(editor) {
 
   const walk = (node) => {
     if (node.nodeType === Node.TEXT_NODE) {
-      const text = normalizeSubSegLineBreaks(node.textContent);
+      const text = decodeHtmlEntities(normalizeSubSegLineBreaks(node.textContent));
       plainText += text;
       appendContentText(text);
       return;
@@ -2319,7 +2475,7 @@ function extractSubSegEditorPayload(editor) {
     }
 
     if (node.tagName === 'SPAN' && node.classList.contains('langunit-bubble')) {
-      const bubbleText = String(node.getAttribute('data-langunit-source-text') ?? node.textContent ?? '').trim();
+      const bubbleText = decodeHtmlEntities(node.getAttribute('data-langunit-source-text') ?? node.textContent ?? '').trim();
       const rawLangUnitId = String(node.getAttribute('data-langunit-id') ?? '').trim();
       let langUnitId = rawLangUnitId;
       if (langUnitId) {
@@ -2465,7 +2621,7 @@ function getSubSegEditorText(editor) {
     return '';
   }
 
-  return normalizeSubSegLineBreaks(editor.innerText).replace(/\u00a0/g, ' ');
+  return decodeHtmlEntities(normalizeSubSegLineBreaks(editor.innerText)).replace(/\u00a0/g, ' ');
 }
 
 function getSubSegEditorMarkup(editor) {
@@ -2998,7 +3154,9 @@ function focusParentSubSegInput(editor) {
     return false;
   }
 
-  syncSubSegEditorDraft(editor);
+  if (subSegEditorHasUnsavedChanges(editor)) {
+    syncSubSegEditorDraft(editor);
+  }
   clearSubSegBubbleTarget(editor);
   const parentTargetIndex = getLangUnitBubbleIndexForSubSeg(audSegId, parentSubSegId, linkTargetLangUnitId);
   if (parentTargetIndex >= 0) {
@@ -3150,6 +3308,37 @@ function syncSubSegEditorDraft(editor) {
   scheduleSubSegSave(subSegId);
   refreshLinkedParentLangUnitText(editor);
   syncLangUnitBubbleTarget(editor, false);
+}
+
+function subSegEditorHasUnsavedChanges(editor) {
+  if (!(editor instanceof HTMLElement)) {
+    return false;
+  }
+
+  const item = getSubSegItemById(getSubSegEditorKey(editor));
+  if (!item) {
+    return true;
+  }
+
+  const payload = extractSubSegEditorPayload(editor);
+  return (
+    normalizeSubSegLineBreaks(payload.text) !== normalizeSubSegLineBreaks(item.text) ||
+    JSON.stringify(getSubSegContentDraftShape(payload.content)) !== JSON.stringify(getSubSegContentDraftShape(item.content))
+  );
+}
+
+function getSubSegContentDraftShape(content) {
+  return (Array.isArray(content) ? content : []).map((token) => {
+    if (token?.type === 'text') {
+      return { type: 'text', text: normalizeSubSegLineBreaks(token.text) };
+    }
+
+    if (token?.type === 'langUnitRef') {
+      return { type: 'langUnitRef', langUnitId: String(token.langUnitId ?? '').trim() };
+    }
+
+    return token;
+  });
 }
 
 function syncLangUnitRefsLists() {
@@ -3381,6 +3570,33 @@ function selectionTouchesLangUnitBubble(editor) {
   });
 }
 
+function getSelectedLangUnitBubbleRange(editor) {
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || selection.isCollapsed || !(editor instanceof HTMLElement)) {
+    return null;
+  }
+
+  const range = selection.getRangeAt(0);
+  if (!editor.contains(range.startContainer) || !editor.contains(range.endContainer)) {
+    return null;
+  }
+
+  const startBubble = range.startContainer.nodeType === Node.ELEMENT_NODE
+    ? range.startContainer.closest?.('.langunit-bubble')
+    : range.startContainer.parentElement?.closest('.langunit-bubble');
+  const endBubble = range.endContainer.nodeType === Node.ELEMENT_NODE
+    ? range.endContainer.closest?.('.langunit-bubble')
+    : range.endContainer.parentElement?.closest('.langunit-bubble');
+  if (!(startBubble instanceof HTMLElement) || startBubble !== endBubble || !editor.contains(startBubble)) {
+    return null;
+  }
+
+  const text = normalizeSubSegLineBreaks(range.toString()).trim();
+  const langUnitId = String(startBubble.dataset.langunitId ?? '').trim();
+  const groupId = String(startBubble.dataset.langunitCycleGroupId ?? '').trim() || langUnitId;
+  return text && langUnitId ? { range, text, bubble: startBubble, langUnitId, groupId } : null;
+}
+
 function getSubSegSelectionTarget(editor, range) {
   const selectedText = normalizeSubSegLineBreaks(range.toString());
   const fullRange = document.createRange();
@@ -3431,6 +3647,123 @@ function wrapSelectedSubSegText(editor) {
   selection.removeAllRanges();
   selection.addRange(caret);
   syncSubSegEditorDraft(editor);
+  return true;
+}
+
+function appendSelectedTextToSubSegEditor(editor, text) {
+  if (!(editor instanceof HTMLElement)) {
+    return false;
+  }
+
+  const value = String(text ?? '').trim();
+  if (!value) {
+    return false;
+  }
+
+  editor.classList.remove('item__subseg-input--placeholder');
+  const hasContent = Boolean(getSubSegEditorText(editor).trim() || getLangUnitBubbles(editor).length);
+  if (!hasContent) {
+    editor.replaceChildren();
+  } else {
+    editor.append(document.createElement('br'));
+  }
+
+  const textNode = document.createTextNode(value);
+  editor.append(textNode);
+
+  const selection = document.getSelection();
+  if (!selection) {
+    return false;
+  }
+
+  const range = document.createRange();
+  range.setStart(textNode, 0);
+  range.setEnd(textNode, value.length);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  return true;
+}
+
+function getSubSegItemPlainText(item) {
+  const text = getSubSegTextValue(item);
+  if (text) {
+    return normalizeSubSegLineBreaks(text);
+  }
+
+  return (Array.isArray(item?.content) ? item.content : []).map((token) => {
+    if (token?.type === 'text') {
+      return String(token.text ?? '');
+    }
+
+    if (token?.type === 'langUnitRef') {
+      return getLangUnitText(getLangUnitItem(token.langUnitId));
+    }
+
+    return '';
+  }).join('');
+}
+
+function subSegItemHasSubstring(item, text) {
+  const value = normalizeSubSegLineBreaks(text).trim();
+  return Boolean(value && getSubSegItemPlainText(item).includes(value));
+}
+
+function nextAnimationFrame() {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
+async function captureChinSubstringIntoLinkedSubSeg(editor) {
+  const selected = getSelectedLangUnitBubbleRange(editor);
+  if (!selected) {
+    return false;
+  }
+
+  const langUnit = getLangUnitItem(selected.langUnitId) ?? getLangUnitItem(getLangUnitCycleTargetId(selected.langUnitId));
+  if (!['chinWord', 'chinPhrase'].includes(String(langUnit?.target?.type ?? '').trim())) {
+    return false;
+  }
+
+  const groupIndex = getLangUnitBubbleGroupIds(editor).findIndex((id) => id === selected.groupId);
+  if (groupIndex < 0) {
+    return false;
+  }
+
+  const parentSubSegId = getSubSegEditorKey(editor);
+  const audSegId = String(editor.dataset.subsegAudsegId ?? '').trim();
+  const childItem = getCycleSubSegItemForTarget(audSegId, selected.groupId, parentSubSegId, parentSubSegId)
+    ?? getRecallSubSegItemForTarget(audSegId, selected.groupId, parentSubSegId, parentSubSegId);
+  if (subSegItemHasSubstring(childItem, selected.text)) {
+    return false;
+  }
+
+  setSubSegBubbleTargetIndex(editor, groupIndex);
+  syncLangUnitBubbleTarget(editor, false);
+  await focusCycleSubSegInput(editor);
+  await nextAnimationFrame();
+
+  const childEditor = getFocusedSubSegEditor();
+  if (
+    !(childEditor instanceof HTMLElement) ||
+    childEditor.dataset.subsegIsRoot !== '0' ||
+    String(childEditor.dataset.parentSubsegId ?? '').trim() !== parentSubSegId
+  ) {
+    return false;
+  }
+
+  setSubSegBubbleTargetIndex(childEditor, -1);
+  if (!appendSelectedTextToSubSegEditor(childEditor, selected.text) || !wrapSelectedSubSegText(childEditor)) {
+    return false;
+  }
+
+  const bubbles = getLangUnitBubbles(childEditor);
+  const lastBubble = bubbles[bubbles.length - 1];
+  const targetGroupId = String(lastBubble?.dataset?.langunitCycleGroupId ?? '').trim() || String(lastBubble?.dataset?.langunitId ?? '').trim();
+  const targetIndex = getLangUnitBubbleGroupIds(childEditor).findIndex((id) => id === targetGroupId);
+  setSubSegBubbleTargetIndex(childEditor, targetIndex);
+  syncLangUnitBubbleTarget(childEditor, false);
+  if (!(await focusCycleSubSegInput(childEditor))) {
+    childEditor.focus({ preventScroll: true });
+  }
   return true;
 }
 
@@ -3662,7 +3995,11 @@ async function saveSubSeg(subSegId) {
   const response = await fetch('/api/subSegs/items', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ subSegId, disambiguateChinContexts: chinDisambiguationEnabled, ...nextPayload }),
+    body: JSON.stringify({
+      subSegId,
+      disambiguateChinContexts: chinDisambiguationEnabled && (nextPayload.langUnits ?? []).some(isLangUnitChineseDisambiguationCandidate),
+      ...nextPayload,
+    }),
   });
 
   if (!response.ok) {
@@ -4616,6 +4953,16 @@ function isCtrlPlaybackToggle(event) {
   return isCtrlSpacePlaybackToggle(event) || key === 'p' || event.code === 'KeyP';
 }
 
+function openAudEpPicker(button) {
+  state.pendingUploadIndex = Number(button.dataset.audepIndex || 0);
+  filePicker.value = '';
+  filePicker.click();
+}
+
+function focusPageForAudEpCycle() {
+  canvas.focus({ preventScroll: true });
+}
+
 function handleSubSegPlaybackShortcut(event) {
   if ((event.type === 'keydown' && event.repeat) || !isCtrlPlaybackToggle(event)) {
     return false;
@@ -4665,10 +5012,28 @@ document.addEventListener('mousemove', (event) => {
 
 document.addEventListener('keydown', handleSubSegPlaybackShortcut, true);
 document.addEventListener('keyup', handleSubSegPlaybackShortcut, true);
+document.addEventListener('focusin', (event) => {
+  rememberEnteredAudSegFocus(event.target);
+});
+window.addEventListener('focus', () => {
+  scheduleEnteredAudSegFocusRestore();
+});
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    scheduleEnteredAudSegFocusRestore();
+  }
+});
 
 document.addEventListener('keydown', (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (target?.closest(keyboardGuardSelector)) {
+    return;
+  }
+
+  const addAudEpButton = target?.closest('.addAudEp-button');
+  if (addAudEpButton instanceof HTMLElement && (event.key === 'Enter' || isSpaceKey(event))) {
+    event.preventDefault();
+    openAudEpPicker(addAudEpButton);
     return;
   }
 
@@ -4689,6 +5054,13 @@ document.addEventListener('keydown', (event) => {
       event.preventDefault();
       void toggleSubSegAudEpPlayback(editor);
       return;
+    }
+
+    if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Delete') {
+      if (editor && unwrapLangUnitBubbleTarget(editor)) {
+        event.preventDefault();
+        return;
+      }
     }
 
     if (isCtrlModifierActive(event) && !event.metaKey && !event.altKey && !event.shiftKey && event.key === 'Backspace') {
@@ -4716,14 +5088,18 @@ document.addEventListener('keydown', (event) => {
     }
 
     if (event.key === 'Enter') {
+      if (editor && selectionTouchesLangUnitBubble(editor)) {
+        event.preventDefault();
+        void captureChinSubstringIntoLinkedSubSeg(editor).then((handled) => {
+          if (!handled) {
+            showWorkerToast('not allowed', 1200);
+          }
+        });
+        return;
+      }
       if (editor && getSubSegBubbleTargetIndex(editor) >= 0) {
         event.preventDefault();
         void focusCycleSubSegInput(editor);
-        return;
-      }
-      if (editor && selectionTouchesLangUnitBubble(editor)) {
-        event.preventDefault();
-        showWorkerToast('not allowed', 1200);
         return;
       }
       if (editor && wrapSelectedSubSegText(editor)) {
@@ -5023,9 +5399,7 @@ audEpList.addEventListener('click', (event) => {
     return;
   }
 
-  state.pendingUploadIndex = Number(button.dataset.audepIndex || 0);
-  filePicker.value = '';
-  filePicker.click();
+  openAudEpPicker(button);
 });
 
 audEpList.addEventListener('pointerdown', (event) => {
@@ -5136,6 +5510,7 @@ filePicker.addEventListener('change', async () => {
   }
 
   await reloadAudData();
+  focusPageForAudEpCycle();
 });
 
 document.addEventListener(
