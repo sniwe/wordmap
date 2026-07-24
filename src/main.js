@@ -1634,7 +1634,7 @@ function getLangUnitRefRows(audSegId, target = getLangUnitRefListTarget(audSegId
     }
 
     const tokens = getSubSegContentTokens(itemAudSegId, itemSubSegId);
-    if (!tokens.some((token) => token?.type === 'langUnitRef' && String(token.langUnitId ?? '') === langUnitId)) {
+    if (!tokens.some((token) => token?.type === 'langUnitRef' && getLangUnitCycleTargetId(token.langUnitId) === langUnitId)) {
       continue;
     }
 
@@ -2662,6 +2662,11 @@ function getLangUnitBubbleGroupIds(editor) {
   return ids;
 }
 
+function getLangUnitBubbleGroupId(bubble) {
+  const langUnitId = String(bubble?.dataset?.langunitId ?? '').trim();
+  return String(bubble?.dataset?.langunitCycleGroupId ?? '').trim() || getLangUnitCycleTargetId(langUnitId);
+}
+
 function setTargetedLangUnitBubblesAwaiting(editor, awaiting) {
   if (!(editor instanceof HTMLElement)) {
     return;
@@ -2885,7 +2890,7 @@ function syncLangUnitBubbleTarget(editor, restoreCaret = false) {
   }
 
   bubbles
-    .filter((bubble) => getLangUnitCycleTargetId(bubble?.dataset?.langunitId) === targetLangUnitId)
+    .filter((bubble) => getLangUnitBubbleGroupId(bubble) === targetLangUnitId)
     .forEach((bubble) => bubble.classList.add('is-targeted'));
   syncLangUnitRefsLists();
 }
@@ -3082,7 +3087,7 @@ function unwrapLangUnitBubbleTarget(editor) {
   }
 
   const bubbles = getLangUnitBubbles(editor).filter(
-    (bubble) => getLangUnitCycleTargetId(bubble?.dataset?.langunitId) === targetLangUnitId
+    (bubble) => getLangUnitBubbleGroupId(bubble) === targetLangUnitId
   );
   if (!bubbles.length) {
     return false;
@@ -5097,13 +5102,13 @@ document.addEventListener('keydown', (event) => {
         });
         return;
       }
+      if (editor && wrapSelectedSubSegText(editor)) {
+        event.preventDefault();
+        return;
+      }
       if (editor && getSubSegBubbleTargetIndex(editor) >= 0) {
         event.preventDefault();
         void focusCycleSubSegInput(editor);
-        return;
-      }
-      if (editor && wrapSelectedSubSegText(editor)) {
-        event.preventDefault();
         return;
       }
       if (editor && insertSubSegLineBreak(editor)) {
