@@ -2,145 +2,61 @@
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
     "text": "一条预警",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
-        "start": 3,
-        "end": 7,
-        "context": {
-          "text": "我们从一条预警说起，关于e'er'ni'nuo",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "一条预警",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "一条预警",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T08:25:32.170Z",
-    "updatedAt": "2026-07-24T10:28:11.497Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-1-0",
     "text": "预警",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-1",
-        "remote": false,
-        "start": 0,
-        "end": 2,
-        "context": {
-          "text": "预警",
-          "type": "chinWord"
-        },
-        "target": {
-          "text": "预警",
-          "type": "chinWord"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "预警",
       "type": "chinWord"
     },
     "createdAt": "2026-07-24T08:27:35.519Z",
-    "updatedAt": "2026-07-24T08:27:39.465Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-1",
     "text": "e'er'ni'nuo",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-1",
-        "start": 12,
-        "end": 23,
-        "context": {
-          "text": "我们从一条预警说起，关于e'er'ni'nuo",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "e'er'ni'nuo",
-          "type": "chinFuzz"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "e'er'ni'nuo",
       "type": "chinFuzz"
     },
     "createdAt": "2026-07-24T08:27:58.997Z",
-    "updatedAt": "2026-07-24T10:28:11.497Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-3-0",
     "text": "厄尔尼诺",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-3",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-3-0",
-        "start": 0,
-        "end": 4,
-        "context": {
-          "text": "厄尔尼诺",
-          "type": "chinWord"
-        },
-        "target": {
-          "text": "厄尔尼诺",
-          "type": "chinWord"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "厄尔尼诺",
       "type": "chinWord"
     },
     "createdAt": "2026-07-24T10:08:48.817Z",
-    "updatedAt": "2026-07-24T10:10:14.638Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-0",
     "text": "发生一轮厄尔尼诺",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-0",
-        "start": 6,
-        "end": 14,
-        "context": {
-          "text": "秋冬季可能会发生一轮厄尔尼诺",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "发生一轮厄尔尼诺",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "发生一轮厄尔尼诺",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:10:08.643Z",
-    "updatedAt": "2026-07-24T10:12:36.787Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
@@ -158,44 +74,7 @@
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-2",
     "text": "消息~升级了",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-2",
-        "compositionId": "59926090-45fb-440c-b7ef-6f5c63195543",
-        "partId": "59926090-45fb-440c-b7ef-6f5c63195543-part-0",
-        "start": 17,
-        "end": 19,
-        "context": {
-          "text": "这个消息又被进一步升级了",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "消息~升级了",
-          "type": "chinColl"
-        }
-      },
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
-        "remote": true,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-2",
-        "compositionId": "59926090-45fb-440c-b7ef-6f5c63195543",
-        "partId": "59926090-45fb-440c-b7ef-6f5c63195543-addition",
-        "start": 24,
-        "end": 27,
-        "context": {
-          "text": "这个消息又被进一步升级了",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "消息~升级了",
-          "type": "chinColl"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "消息~升级了",
       "type": "chinColl"
@@ -243,64 +122,30 @@
       }
     ],
     "createdAt": "2026-07-24T10:10:28.750Z",
-    "updatedAt": "2026-07-24T10:12:36.800Z"
+    "updatedAt": "2026-07-24T13:01:17.231Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-0",
     "text": "海洋和da'ji管理局",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-0",
-        "start": 0,
-        "end": 11,
-        "context": {
-          "text": "海洋和da'ji管理局这个是发布",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "海洋和da'ji管理局",
-          "type": "chinFuzz"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "海洋和da'ji管理局",
       "type": "chinFuzz"
     },
     "createdAt": "2026-07-24T10:14:49.286Z",
-    "updatedAt": "2026-07-24T10:20:05.625Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-1",
     "text": "有记录以来",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-1",
-        "start": 19,
-        "end": 24,
-        "context": {
-          "text": "达到有记录以来的最强级别",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "有记录以来",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "有记录以来",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:15:11.268Z",
-    "updatedAt": "2026-07-24T10:20:05.625Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
@@ -318,150 +163,82 @@
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-0",
     "text": "中国国家海洋环境预报中心",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-0",
-        "start": 0,
-        "end": 12,
-        "context": {
-          "text": "中国国家海洋环境预报中心也同步发布了确认",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "中国国家海洋环境预报中心",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "中国国家海洋环境预报中心",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:29:31.835Z",
-    "updatedAt": "2026-07-24T10:35:56.973Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-1",
     "text": "同步发布了确认",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-1",
-        "start": 13,
-        "end": 20,
-        "context": {
-          "text": "中国国家海洋环境预报中心也同步发布了确认",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "同步发布了确认",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "同步发布了确认",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:29:41.068Z",
-    "updatedAt": "2026-07-24T10:35:56.973Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-0",
     "text": "史上最强记录",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-0",
-        "start": 14,
-        "end": 20,
-        "context": {
-          "text": "可能会超过97-8年的那一轮史上最强记录",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "史上最强记录",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "史上最强记录",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:31:20.918Z",
-    "updatedAt": "2026-07-24T12:12:46.172Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-0",
     "text": "你大概率上不陌生",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-0",
-        "start": 12,
-        "end": 20,
-        "context": {
-          "text": "什么是eerninuo，你大概率上不陌生",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "你大概率上不陌生",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "你大概率上不陌生",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:33:49.062Z",
-    "updatedAt": "2026-07-24T12:12:48.689Z",
+    "updatedAt": "2026-07-24T13:01:17.231Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0-0",
-    "text": "把厄尔尼诺分成4dang",
+    "text": "把厄尔尼诺分成4dang的",
     "instances": [
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0",
         "remote": false,
         "start": 3,
-        "end": 15,
+        "end": 16,
         "context": {
-          "text": "机构是把厄尔尼诺分成4dang的，分别是弱，中，强，超强",
+          "text": "机构是把厄尔尼诺分成4dang的",
           "type": "chinPhrase"
         },
         "target": {
-          "text": "把厄尔尼诺分成4dang",
+          "text": "把厄尔尼诺分成4dang的",
           "type": "chinFuzz"
         }
       }
     ],
     "target": {
-      "text": "把厄尔尼诺分成4dang",
+      "text": "把厄尔尼诺分成4dang的",
       "type": "chinFuzz"
     },
     "createdAt": "2026-07-24T10:39:29.156Z",
-    "updatedAt": "2026-07-24T10:39:30.867Z",
+    "updatedAt": "2026-07-24T13:03:14.469Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-0",
-    "text": "挡",
+    "text": "档",
     "instances": [
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
@@ -471,21 +248,21 @@
         "start": 0,
         "end": 1,
         "context": {
-          "text": "挡 ",
+          "text": "档 ",
           "type": "chinPhrase"
         },
         "target": {
-          "text": "挡",
+          "text": "档",
           "type": "chinChar"
         }
       }
     ],
     "target": {
-      "text": "挡",
+      "text": "档",
       "type": "chinChar"
     },
     "createdAt": "2026-07-24T10:57:56.757Z",
-    "updatedAt": "2026-07-24T12:51:01.581Z",
+    "updatedAt": "2026-07-24T13:08:06.372Z",
     "compositions": []
   },
   {
@@ -500,8 +277,8 @@
         "start": 3,
         "end": 4,
         "context": {
-          "text": "等 ",
-          "type": "chinPhrase"
+          "text": "等 success！",
+          "type": "engPhrase"
         },
         "target": {
           "text": "等",
@@ -514,48 +291,55 @@
       "type": "chinChar"
     },
     "createdAt": "2026-07-24T10:59:31.528Z",
-    "updatedAt": "2026-07-24T12:51:01.581Z",
-    "compositions": []
-  },
-  {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
-    "text": "当",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
-        "start": 6,
-        "end": 7,
-        "context": {
-          "text": "当",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "当",
-          "type": "chinChar"
-        }
-      }
-    ],
-    "target": {
-      "text": "当",
-      "type": "chinChar"
-    },
-    "createdAt": "2026-07-24T11:20:43.335Z",
-    "updatedAt": "2026-07-24T12:51:01.581Z",
+    "updatedAt": "2026-07-24T13:08:06.372Z",
     "compositions": []
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-3",
-    "text": "档",
+    "text": "党",
     "instances": [],
     "target": {
-      "text": "档",
+      "text": "党",
       "type": "chinChar"
     },
     "createdAt": "2026-07-24T12:41:01.122Z",
-    "updatedAt": "2026-07-24T12:41:40.522Z",
+    "updatedAt": "2026-07-24T13:01:26.281Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
+    "text": "汤",
+    "instances": [],
+    "target": {
+      "text": "汤",
+      "type": "chinChar"
+    },
+    "createdAt": "2026-07-24T12:57:40.987Z",
+    "updatedAt": "2026-07-24T13:07:48.548Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-4",
+    "text": "",
+    "instances": [],
+    "target": {
+      "text": "",
+      "type": "no-op"
+    },
+    "createdAt": "2026-07-24T12:58:27.178Z",
+    "updatedAt": "2026-07-24T13:01:26.281Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-5",
+    "text": "糖",
+    "instances": [],
+    "target": {
+      "text": "糖",
+      "type": "chinChar"
+    },
+    "createdAt": "2026-07-24T12:58:27.178Z",
+    "updatedAt": "2026-07-24T13:01:26.281Z",
     "compositions": []
   }
 ]

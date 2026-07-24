@@ -388,6 +388,7 @@ body {
   word-break: break-word;
   line-break: anywhere;
   outline: none;
+  caret-color: #0b63ce;
   text-align: left;
 }
 

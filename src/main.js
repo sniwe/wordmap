@@ -3650,11 +3650,7 @@ function getLangUnitBubbleBoundary(editor) {
     ? anchorNode.closest('.langunit-bubble')
     : anchorNode.parentElement?.closest('.langunit-bubble');
 
-  if (!(bubble instanceof HTMLElement) || !editor.contains(bubble)) {
-    return null;
-  }
-
-  if (anchorNode.nodeType === Node.TEXT_NODE) {
+  if (bubble instanceof HTMLElement && editor.contains(bubble) && anchorNode.nodeType === Node.TEXT_NODE) {
     const text = anchorNode.textContent ?? '';
     if (selection.anchorOffset === 0) {
       return { bubble, edge: 'start' };
@@ -3665,13 +3661,41 @@ function getLangUnitBubbleBoundary(editor) {
     }
   }
 
-  if (anchorNode.nodeType === Node.ELEMENT_NODE) {
+  if (bubble instanceof HTMLElement && editor.contains(bubble) && anchorNode.nodeType === Node.ELEMENT_NODE) {
     if (selection.anchorOffset === 0) {
       return { bubble, edge: 'start' };
     }
 
     if (selection.anchorOffset === anchorNode.childNodes.length) {
       return { bubble, edge: 'end' };
+    }
+  }
+
+  if (anchorNode.nodeType === Node.ELEMENT_NODE) {
+    const previous = anchorNode.childNodes[selection.anchorOffset - 1];
+    const next = anchorNode.childNodes[selection.anchorOffset];
+    if (previous instanceof HTMLElement && previous.classList.contains('langunit-bubble')) {
+      return { bubble: previous, edge: 'end' };
+    }
+    if (next instanceof HTMLElement && next.classList.contains('langunit-bubble')) {
+      return { bubble: next, edge: 'start' };
+    }
+  }
+
+  if (anchorNode.nodeType === Node.TEXT_NODE) {
+    if (
+      selection.anchorOffset === 0 &&
+      anchorNode.previousSibling instanceof HTMLElement &&
+      anchorNode.previousSibling.classList.contains('langunit-bubble')
+    ) {
+      return { bubble: anchorNode.previousSibling, edge: 'end' };
+    }
+    if (
+      selection.anchorOffset === (anchorNode.textContent ?? '').length &&
+      anchorNode.nextSibling instanceof HTMLElement &&
+      anchorNode.nextSibling.classList.contains('langunit-bubble')
+    ) {
+      return { bubble: anchorNode.nextSibling, edge: 'start' };
     }
   }
 
@@ -4101,7 +4125,16 @@ function getLinkedSubSegLineStartAutoLangUnitRange(editor) {
   // Keep the optional "=" marker outside the langUnit range.
   const optionStart = beforeText.length - text.length;
   const autoRange = getSubSegTextRange(editor, optionStart, beforeText.length);
-  if (!autoRange) {
+  if (
+    !autoRange ||
+    getLangUnitBubbles(editor).some((bubble) => {
+      try {
+        return autoRange.intersectsNode(bubble);
+      } catch {
+        return false;
+      }
+    })
+  ) {
     return null;
   }
 
@@ -4131,7 +4164,11 @@ function autoLangUnitifyLinkedSubSegLineStart(editor) {
   mergedBubble.parentNode?.insertBefore(spaceNode, mergedBubble.nextSibling);
   refreshLangUnitBubbleGroupStyles(editor);
   setCaretAfterNode(spaceNode);
-  langUnitBubbleEscapeState.set(getSubSegBubbleTargetKey(editor), { edge: 'end', at: Date.now() });
+  langUnitBubbleEscapeState.set(getSubSegBubbleTargetKey(editor), {
+    edge: 'end',
+    at: Date.now(),
+    spaceNode,
+  });
   syncSubSegEditorDraft(editor);
   return true;
 }
@@ -4225,6 +4262,9 @@ function handleLangUnitBubbleSpace(editor) {
       setSubSegBubbleTargetIndex(editor, -1);
       syncLangUnitBubbleTarget(editor, true);
     }
+    if (pending.spaceNode?.isConnected && editor.contains(pending.spaceNode)) {
+      setCaretAfterNode(pending.spaceNode);
+    }
     return true;
   }
 
@@ -4245,7 +4285,7 @@ function handleLangUnitBubbleSpace(editor) {
   }
 
   setCaretAfterNode(spaceNode);
-  langUnitBubbleEscapeState.set(targetKey, { edge: boundary.edge, at: now });
+  langUnitBubbleEscapeState.set(targetKey, { edge: boundary.edge, at: now, spaceNode });
   syncSubSegEditorDraft(editor);
   return true;
 }
