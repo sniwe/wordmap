@@ -101,6 +101,8 @@ const subSegDraftPayloadBySubSegId = new Map();
 const subSegDraftRevisionBySubSegId = new Map();
 const subSegSaveTimersBySubSegId = new Map();
 const langUnitBubbleEscapeState = new Map();
+const lastSubSegSelectionByEditor = new WeakMap();
+let lastSubSegSelection = null;
 const langUnitBubbleTargetIndexByAudSegId = new Map();
 const langUnitRefGraphViewByKey = new Map();
 const langUnitRefGraphDragByPointerId = new Map();
@@ -226,6 +228,11 @@ function getSubSegBubbleTargetIndexByKey(key) {
 
   const targetIndex = langUnitBubbleTargetIndexByAudSegId.get(normalizedKey);
   return Number.isInteger(targetIndex) ? targetIndex : -1;
+}
+
+function hasActiveSubSegBubbleTarget(editor) {
+  return getSubSegBubbleTargetIndex(editor) >= 0
+    || Boolean(editor?.querySelector('.langunit-bubble.is-targeted'));
 }
 
 function setSubSegBubbleTargetIndex(editorOrKey, targetIndex) {
@@ -1211,12 +1218,31 @@ function isMatchingPinyinGloss(pinyinText, chineseText) {
   return syllables > 0 && countChineseCharacters(chineseText) === syllables;
 }
 
-function getLangUnitRenderText(langUnitId, fallbackText = '', parentSubSegId = '') {
-  const langUnit = getLangUnitItem(langUnitId);
-  if (String(langUnit?.target?.type ?? '') !== 'chinFuzz') {
-    return String(fallbackText ?? '');
+function getMatchingPinyinSpan(text, chineseText) {
+  const chineseLength = countChineseCharacters(chineseText);
+  if (!chineseLength) {
+    return null;
   }
 
+  for (const match of String(text ?? '').matchAll(/[A-Za-z][A-Za-z1-5]*(?:['’][A-Za-z][A-Za-z1-5]*)*/g)) {
+    const syllables = match[0]
+      .split(/['’]/)
+      .map(countPinyinSyllables);
+    if (syllables.every(Boolean) && syllables.reduce((sum, count) => sum + count, 0) === chineseLength) {
+      return { start: match.index, end: match.index + match[0].length };
+    }
+  }
+
+  return null;
+}
+
+function getLangUnitRenderView(langUnitId, fallbackText = '', parentSubSegId = '') {
+  const langUnit = getLangUnitItem(langUnitId);
+  if (!['chinFuzz', 'chinPhrase'].includes(String(langUnit?.target?.type ?? ''))) {
+    return { text: String(fallbackText ?? ''), optionRanges: [] };
+  }
+
+  const sourceText = getLangUnitText(langUnit);
   const expectedParentSubSegId = String(parentSubSegId || getSubSegIdForLangUnitId(langUnitId)).trim();
   const child = state.subSegItems.find(
     (item) =>
@@ -1224,12 +1250,51 @@ function getLangUnitRenderText(langUnitId, fallbackText = '', parentSubSegId = '
       getSubSegLinkTargetLangUnitId(item) === String(langUnitId ?? '').trim() &&
       getSubSegParentSubSegId(item) === expectedParentSubSegId
   );
-  const glossValues = getChinFuzzGlossLineValues(getSubSegTextValue(child)).filter(
-    (value) => isChineseOnlyText(value) && isMatchingPinyinGloss(getLangUnitText(langUnit), value)
-  );
-  return glossValues.length
-    ? glossValues.join(' / ')
-    : String(fallbackText ?? '');
+  const replacements = getChinFuzzGlossLineValues(getSubSegTextValue(child))
+    .map((rawValue) => ({
+      exclusive: rawValue.startsWith('='),
+      value: rawValue.replace(/^=+/, ''),
+    }))
+    .filter(({ value }) => isChineseOnlyText(value))
+    .map((option) => ({ ...option, span: getMatchingPinyinSpan(sourceText, option.value) }))
+    .filter(({ span }) => span);
+  const first = replacements[0];
+  if (first) {
+    const exclusive = replacements.find((option) => option.exclusive);
+    const visible = exclusive
+      ? [exclusive]
+      : replacements.filter(({ span }) => span.start === first.span.start && span.end === first.span.end);
+    const primary = visible[0];
+    let text = `${sourceText.slice(0, primary.span.start)}${primary.value}${sourceText.slice(primary.span.end)}`;
+    const optionRanges = [{ start: primary.span.start, end: primary.span.start + primary.value.length }];
+    for (const { value } of visible.slice(1)) {
+      text += ' / ';
+      optionRanges.push({ start: text.length, end: text.length + value.length });
+      text += value;
+    }
+    return { text, optionRanges };
+  }
+
+  const matchingGlosses = getChinFuzzGlossLineValues(getSubSegTextValue(child))
+    .map((value) => value.replace(/^=+/, ''))
+    .filter((value) => isChineseOnlyText(value) && isMatchingPinyinGloss(sourceText, value));
+  const text = matchingGlosses.length ? matchingGlosses.join(' / ') : String(fallbackText ?? '');
+  return { text, optionRanges: [] };
+}
+
+function getLangUnitRenderText(langUnitId, fallbackText = '', parentSubSegId = '') {
+  return getLangUnitRenderView(langUnitId, fallbackText, parentSubSegId).text;
+}
+
+function renderLangUnitViewMarkup(view) {
+  let html = '';
+  let offset = 0;
+  for (const range of view.optionRanges) {
+    html += escapeHtml(view.text.slice(offset, range.start));
+    html += `<span class="langunit-pseudo">${escapeHtml(view.text.slice(range.start, range.end))}</span>`;
+    offset = range.end;
+  }
+  return html + escapeHtml(view.text.slice(offset));
 }
 
 function getLangUnitContextText(langUnit) {
@@ -1352,17 +1417,35 @@ function sanitizeSubSegMarkup(value) {
       return '<br>';
     }
 
+    if (node.tagName === 'SPAN' && node.classList.contains('langunit-pseudo')) {
+      return `<span class="langunit-pseudo">${serializeChildren(node.childNodes)}</span>`;
+    }
+
     if (node.tagName === 'SPAN' && node.classList.contains('langunit-bubble')) {
       const bubbleContent = serializeChildren(node.childNodes);
       const langUnitId = node.getAttribute('data-langunit-id');
       const langUnitRemote = node.getAttribute('data-langunit-remote');
       const langUnitSourceText = decodeHtmlEntities(node.getAttribute('data-langunit-source-text') ?? '');
       const langUnitCycleGroupId = node.getAttribute('data-langunit-cycle-group-id');
+      const compositionId = node.getAttribute('data-langunit-composition-id');
+      const partId = node.getAttribute('data-langunit-part-id');
+      const targetText = node.getAttribute('data-langunit-target-text');
+      const targetType = node.getAttribute('data-langunit-target-type');
+      const partRole = node.getAttribute('data-langunit-part-role');
+      const partTargetType = node.getAttribute('data-langunit-part-target-type');
+      const partSourceId = node.getAttribute('data-langunit-part-source-id');
       const dataAttr = langUnitId ? ` data-langunit-id="${escapeHtml(langUnitId)}"` : '';
       const remoteAttr = langUnitRemote ? ' data-langunit-remote="1"' : '';
       const sourceTextAttr = langUnitSourceText ? ` data-langunit-source-text="${escapeHtml(langUnitSourceText)}"` : '';
       const cycleGroupAttr = langUnitCycleGroupId ? ` data-langunit-cycle-group-id="${escapeHtml(langUnitCycleGroupId)}"` : '';
-      return `<span class="langunit-bubble"${dataAttr}${remoteAttr}${sourceTextAttr}${cycleGroupAttr}>${bubbleContent}</span>`;
+      const compositionAttr = compositionId ? ` data-langunit-composition-id="${escapeHtml(compositionId)}"` : '';
+      const partAttr = partId ? ` data-langunit-part-id="${escapeHtml(partId)}"` : '';
+      const targetTextAttr = targetText ? ` data-langunit-target-text="${escapeHtml(targetText)}"` : '';
+      const targetTypeAttr = targetType ? ` data-langunit-target-type="${escapeHtml(targetType)}"` : '';
+      const roleAttr = partRole ? ` data-langunit-part-role="${escapeHtml(partRole)}"` : '';
+      const partTypeAttr = partTargetType ? ` data-langunit-part-target-type="${escapeHtml(partTargetType)}"` : '';
+      const sourceIdAttr = partSourceId ? ` data-langunit-part-source-id="${escapeHtml(partSourceId)}"` : '';
+      return `<span class="langunit-bubble"${dataAttr}${remoteAttr}${sourceTextAttr}${cycleGroupAttr}${compositionAttr}${partAttr}${targetTextAttr}${targetTypeAttr}${roleAttr}${partTypeAttr}${sourceIdAttr}>${bubbleContent}</span>`;
     }
 
     if (node.tagName === 'SPAN' && node.classList.contains('langunit-connector')) {
@@ -1458,22 +1541,36 @@ function renderSubSegContentTokens(tokens, subSegId = '') {
     }
 
     const langUnit = getLangUnitItem(langUnitId);
+    const compositionId = String(token.compositionId ?? '').trim();
+    const partId = String(token.partId ?? '').trim();
+    const part = langUnit?.compositions?.find((composition) => String(composition?.compositionId ?? '') === compositionId)
+      ?.parts?.find((candidate) => String(candidate?.partId ?? '') === partId);
     const occurrenceIndex = Number.isInteger(seen.get(langUnitId)) ? seen.get(langUnitId) : 0;
     seen.set(langUnitId, occurrenceIndex + 1);
     const instancesForSubSeg = Array.isArray(langUnit?.instances)
       ? langUnit.instances.filter((instance) => String(instance?.subSegId ?? '') === String(subSegId ?? ''))
       : [];
     const cycleGroupId = getLangUnitCycleTargetId(langUnitId);
-    const sourceText = decodeHtmlEntities(getLangUnitText(langUnit) || token.text || '');
-    const text = decodeHtmlEntities(getLangUnitRenderText(langUnitId, sourceText, subSegId));
+    const sourceText = decodeHtmlEntities(compositionId ? (token.text || '') : (getLangUnitText(langUnit) || token.text || ''));
+    const view = compositionId
+      ? { text: token.text || '', optionRanges: [] }
+      : getLangUnitRenderView(langUnitId, sourceText, subSegId);
+    const text = decodeHtmlEntities(view.text);
     const remote = token.remote === true || cycleGroupId !== langUnitId;
     if (
       currentBubble &&
       currentBubble.langUnitId === langUnitId &&
-      currentBubble.cycleGroupId === cycleGroupId
+      currentBubble.cycleGroupId === cycleGroupId &&
+      String(currentBubble.compositionId ?? '') === String(token.compositionId ?? '') &&
+      String(currentBubble.partId ?? '') === String(token.partId ?? '')
     ) {
+      const offset = currentBubble.text.length;
       currentBubble.text += text;
       currentBubble.sourceText += sourceText;
+      currentBubble.optionRanges.push(...view.optionRanges.map((range) => ({
+        start: range.start + offset,
+        end: range.end + offset,
+      })));
       continue;
     }
 
@@ -1482,9 +1579,17 @@ function renderSubSegContentTokens(tokens, subSegId = '') {
       type: 'bubble',
       langUnitId,
       text,
+      optionRanges: view.optionRanges,
       sourceText,
       remote,
       cycleGroupId,
+      compositionId,
+      partId,
+      partRole: String(part?.role ?? token.partRole ?? '').trim(),
+      partTargetType: String(part?.target?.type ?? token.partTargetType ?? '').trim(),
+      partSourceId: String(part?.sourceLangUnitId ?? token.partSourceId ?? '').trim(),
+      targetText: String(langUnit?.target?.text ?? '').trim(),
+      targetType: String(langUnit?.target?.type ?? '').trim(),
     };
   }
 
@@ -1526,7 +1631,14 @@ function renderSubSegContentTokens(tokens, subSegId = '') {
         const cycleGroupAttr = segment.cycleGroupId
           ? ` data-langunit-cycle-group-id="${escapeHtml(segment.cycleGroupId)}"`
           : '';
-        return `<span class="langunit-bubble" data-langunit-id="${escapeHtml(segment.langUnitId)}"${remoteAttr}${countAttr}${sourceTextAttr}${cycleGroupAttr}>${escapeHtml(segment.text)}</span>`;
+        const compositionAttr = segment.compositionId ? ` data-langunit-composition-id="${escapeHtml(segment.compositionId)}"` : '';
+        const partAttr = segment.partId ? ` data-langunit-part-id="${escapeHtml(segment.partId)}"` : '';
+        const targetTextAttr = segment.compositionId && segment.targetText ? ` data-langunit-target-text="${escapeHtml(segment.targetText)}"` : '';
+        const targetTypeAttr = segment.compositionId && segment.targetType ? ` data-langunit-target-type="${escapeHtml(segment.targetType)}"` : '';
+        const roleAttr = segment.partRole ? ` data-langunit-part-role="${escapeHtml(segment.partRole)}"` : '';
+        const partTypeAttr = segment.partTargetType ? ` data-langunit-part-target-type="${escapeHtml(segment.partTargetType)}"` : '';
+        const sourceIdAttr = segment.partSourceId ? ` data-langunit-part-source-id="${escapeHtml(segment.partSourceId)}"` : '';
+        return `<span class="langunit-bubble" data-langunit-id="${escapeHtml(segment.langUnitId)}"${remoteAttr}${countAttr}${sourceTextAttr}${cycleGroupAttr}${compositionAttr}${partAttr}${targetTextAttr}${targetTypeAttr}${roleAttr}${partTypeAttr}${sourceIdAttr}>${renderLangUnitViewMarkup(segment)}</span>`;
       }
 
       return '';
@@ -2299,6 +2411,8 @@ function normalizeLangUnitTargetType(type) {
     value === 'engWordPart' ||
     value === 'engWord' ||
     value === 'engPhrase' ||
+    value === 'chinColl' ||
+    value === 'engColl' ||
     value === 'no-op'
     ? value
     : '';
@@ -2500,10 +2614,17 @@ function extractSubSegEditorPayload(editor) {
       plainText += bubbleText;
       const existing = langUnitsById.get(langUnitId);
       const cycleGroupId = String(node.getAttribute('data-langunit-cycle-group-id') ?? '').trim();
+      const compositionId = String(node.getAttribute('data-langunit-composition-id') ?? '').trim();
+      const partId = String(node.getAttribute('data-langunit-part-id') ?? '').trim();
+      const aggregateText = decodeHtmlEntities(node.getAttribute('data-langunit-target-text') ?? '').trim();
+      const aggregateType = String(node.getAttribute('data-langunit-target-type') ?? '').trim();
+      const partRole = String(node.getAttribute('data-langunit-part-role') ?? '').trim();
+      const partTargetType = String(node.getAttribute('data-langunit-part-target-type') ?? '').trim();
+      const partSourceId = String(node.getAttribute('data-langunit-part-source-id') ?? '').trim();
       if (!existing) {
         langUnitsById.set(langUnitId, {
           _id: langUnitId,
-          text: bubbleText,
+          text: aggregateText || bubbleText,
           instances: [],
         });
       }
@@ -2516,10 +2637,26 @@ function extractSubSegEditorPayload(editor) {
         start,
         end: plainText.length,
         text: bubbleText,
+        ...(compositionId ? { compositionId } : {}),
+        ...(partId ? { partId } : {}),
+        ...(partRole ? { partRole } : {}),
+        ...(partTargetType ? { partTargetType } : {}),
+        ...(partSourceId ? { partSourceId } : {}),
+        ...(aggregateText && aggregateType ? { aggregateTarget: { text: aggregateText, type: aggregateType } } : {}),
       };
       langUnitsById.get(langUnitId).instances.push(instance);
       pendingInstances.push(instance);
-      content.push({ type: 'langUnitRef', langUnitId, remote: cycleTargetActive && Boolean(existing) });
+      content.push({
+        type: 'langUnitRef',
+        langUnitId,
+        text: bubbleText,
+        remote: cycleTargetActive && Boolean(existing),
+        ...(compositionId ? { compositionId } : {}),
+        ...(partId ? { partId } : {}),
+        ...(partRole ? { partRole } : {}),
+        ...(partTargetType ? { partTargetType } : {}),
+        ...(partSourceId ? { partSourceId } : {}),
+      });
       return;
     }
 
@@ -2547,16 +2684,32 @@ function extractSubSegEditorPayload(editor) {
       start: instance.start,
       end: instance.end,
     });
+    if (instance.aggregateTarget?.text && instance.aggregateTarget?.type) {
+      instance.target = normalizeLangUnitTarget(instance.aggregateTarget);
+    }
     const langUnit = langUnitsById.get(instance.langUnitId);
     if (langUnit && !langUnit.target) {
       langUnit.target = instance.target;
     }
     delete instance.langUnitId;
+    delete instance.aggregateTarget;
   }
 
   const langUnits = [...langUnitsById.values()].map((langUnit) => {
     const instances = Array.isArray(langUnit.instances) ? langUnit.instances : [];
     const primaryInstance = instances[0] ?? null;
+    const compositionId = instances.find((instance) => instance.compositionId)?.compositionId;
+    const parts = instances
+      .filter((instance) => instance.compositionId === compositionId && instance.partId)
+      .map((instance) => ({
+        partId: instance.partId,
+        sourceLangUnitId: instance.partSourceId || null,
+        text: instance.text,
+        role: instance.partRole || 'addition',
+        start: instance.start,
+        end: instance.end,
+        target: { text: instance.text, type: instance.partTargetType || instance.target?.type || '' },
+      }));
     return {
       ...langUnit,
       target: normalizeLangUnitTarget(primaryInstance?.target ?? langUnit.text ?? '', primaryInstance?.context?.type ?? '', {
@@ -2565,6 +2718,16 @@ function extractSubSegEditorPayload(editor) {
         end: primaryInstance?.end,
       }),
       instances,
+      ...(compositionId ? {
+        compositions: [{
+          compositionId,
+          seedLangUnitId: parts.find((part) => part.role === 'seed')?.sourceLangUnitId || null,
+          scope: { audSegId, subSegId, cycleGroupId: instances.find((instance) => instance.cycleGroupId)?.cycleGroupId || langUnitId },
+          text: langUnit.text,
+          target: normalizeLangUnitTarget(primaryInstance?.target ?? langUnit.text),
+          parts,
+        }],
+      } : langUnit.compositions),
     };
   });
 
@@ -2983,7 +3146,7 @@ async function focusCycleSubSegInput(editor) {
   }
 
   const audSegId = editor.dataset.subsegAudsegId || '';
-  if (getSubSegBubbleTargetIndex(editor) < 0) {
+  if (!hasActiveSubSegBubbleTarget(editor)) {
     return false;
   }
 
@@ -3266,13 +3429,13 @@ function refreshLinkedParentLangUnitText(editor) {
 
   const langUnitId = getSubSegEditorLinkTargetLangUnitId(editor);
   const langUnit = getLangUnitItem(langUnitId);
-  if (!langUnitId || String(langUnit?.target?.type ?? '') !== 'chinFuzz') {
+  if (!langUnitId || !['chinFuzz', 'chinPhrase'].includes(String(langUnit?.target?.type ?? ''))) {
     return;
   }
 
   const sourceText = getLangUnitText(langUnit);
   const parentSubSegId = getSubSegParentSubSegId(getSubSegItemById(getSubSegEditorKey(editor)));
-  const nextText = getLangUnitRenderText(langUnitId, sourceText, parentSubSegId);
+  const view = getLangUnitRenderView(langUnitId, sourceText, parentSubSegId);
   const audSegId = editor.dataset.subsegAudsegId || '';
   const parentEditor = audEpList.querySelector(`.item__subseg-input[data-subseg-audseg-id="${CSS.escape(String(audSegId))}"][data-subseg-id="${CSS.escape(parentSubSegId)}"]`);
   if (!(parentEditor instanceof HTMLElement)) {
@@ -3282,12 +3445,12 @@ function refreshLinkedParentLangUnitText(editor) {
   parentEditor
     .querySelectorAll(`.langunit-bubble[data-langunit-id="${CSS.escape(langUnitId)}"]`)
     .forEach((bubble) => {
-      if (nextText !== sourceText) {
+      if (view.text !== sourceText) {
         bubble.setAttribute('data-langunit-source-text', sourceText);
       } else {
         bubble.removeAttribute('data-langunit-source-text');
       }
-      bubble.textContent = nextText;
+      bubble.innerHTML = renderLangUnitViewMarkup(view);
     });
 }
 
@@ -3615,6 +3778,134 @@ function getSubSegSelectionTarget(editor, range) {
   return createLangUnitTarget(selectedText, context.type, { text: fullText, start, end });
 }
 
+function getCompositeLangUnitTarget(seedText, additionText, editor) {
+  const fullText = getSubSegEditorText(editor);
+  const aggregateText = `${String(seedText ?? '').trim()}~${String(additionText ?? '').trim()}`;
+  const hasChinese = countChineseCharacters(fullText) > 0 && countChineseCharacters(aggregateText) > 0;
+  const hasEnglish = /[A-Za-z]/.test(fullText) && /[A-Za-z]/.test(aggregateText);
+  return {
+    text: aggregateText,
+    type: hasChinese ? 'chinColl' : hasEnglish ? 'engColl' : '',
+  };
+}
+
+function setCompositeBubbleMetadata(bubble, metadata) {
+  if (!(bubble instanceof HTMLElement)) {
+    return;
+  }
+
+  bubble.dataset.langunitId = metadata.langUnitId;
+  bubble.dataset.langunitCompositionId = metadata.compositionId;
+  bubble.dataset.langunitPartId = metadata.partId;
+  bubble.dataset.langunitTargetText = metadata.target.text;
+  bubble.dataset.langunitTargetType = metadata.target.type;
+  bubble.dataset.langunitPartRole = metadata.role;
+  bubble.dataset.langunitPartTargetType = metadata.partTargetType;
+  if (metadata.sourceLangUnitId) {
+    bubble.dataset.langunitPartSourceId = metadata.sourceLangUnitId;
+  }
+  bubble.dataset.langunitCycleGroupId = metadata.langUnitId;
+}
+
+function reprocessCycleTargetedSelection(editor, selectedRange = null) {
+  const fail = (reason) => {
+    return false;
+  };
+  if (!(editor instanceof HTMLElement)) {
+    return fail('editor');
+  }
+
+  const selection = document.getSelection();
+  if (!selection || (!selectedRange && (!selection.rangeCount || selection.isCollapsed))) {
+    return fail('selection');
+  }
+
+  const targetIndex = getSubSegBubbleTargetIndex(editor);
+  const groupIds = getLangUnitBubbleGroupIds(editor);
+  const targetedBubble = getLangUnitBubbles(editor).find((bubble) => bubble.classList.contains('is-targeted'));
+  const targetGroupId = targetedBubble ? getLangUnitBubbleGroupId(targetedBubble) : (groupIds[targetIndex] ?? '');
+  const seedBubble = getLangUnitBubbles(editor).find((bubble) => getLangUnitBubbleGroupId(bubble) === targetGroupId);
+  if (!(seedBubble instanceof HTMLElement) || !targetGroupId) {
+    return fail('target');
+  }
+
+  const range = selectedRange ?? selection.getRangeAt(0);
+  if (range.collapsed) {
+    return fail('range-collapsed');
+  }
+  if (!editor.contains(range.startContainer) || !editor.contains(range.endContainer)) {
+    return fail('range-editor');
+  }
+
+  const startInSeed = seedBubble.contains(range.startContainer);
+  const endInSeed = seedBubble.contains(range.endContainer);
+  if (startInSeed && endInSeed) {
+    return fail('inside-seed');
+  }
+
+  const additionText = normalizeSubSegLineBreaks(range.toString()).trim();
+  const seedId = String(seedBubble.dataset.langunitId ?? '').trim();
+  const seedItem = getLangUnitItem(seedId);
+  const currentCompositionId = String(seedBubble.dataset.langunitCompositionId ?? '').trim();
+  const currentComposition = seedItem?.compositions?.find(
+    (composition) => String(composition?.compositionId ?? '') === currentCompositionId
+  );
+  const currentParts = Array.isArray(currentComposition?.parts) ? currentComposition.parts : [];
+  const currentAggregateText = String(
+    seedItem?.target?.text || currentComposition?.text || seedItem?.text || seedBubble.textContent || ''
+  ).trim();
+  const target = getCompositeLangUnitTarget(currentAggregateText || seedBubble.textContent, additionText, editor);
+  if (!additionText || !target.type) {
+    return fail(`classification:${additionText}:${target.type}`);
+  }
+
+  const aggregate = getLangUnitItemByCanonicalTarget(target, target.text);
+  const subSegId = getSubSegEditorKey(editor);
+  const langUnitId = String(aggregate?._id ?? buildLangUnitId(subSegId, getNextLangUnitOrdinal(editor, subSegId)) ?? createItemId()).trim();
+  const compositionId = createItemId();
+  const additionTarget = getSubSegSelectionTarget(editor, range);
+  const existingGroupBubbles = getLangUnitBubbles(editor)
+    .filter((bubble) => getLangUnitBubbleGroupId(bubble) === targetGroupId);
+  const existingParts = existingGroupBubbles.map((bubble, index) => {
+    const partId = String(bubble.dataset.langunitPartId ?? '').trim();
+    const storedPart = currentParts.find((part) => String(part?.partId ?? '') === partId);
+    return {
+      langUnitId,
+      compositionId,
+      partId: partId || `${compositionId}-part-${index}`,
+      role: storedPart?.role || (index === 0 ? 'seed' : 'addition'),
+      partTargetType: String(storedPart?.target?.type ?? bubble.dataset.langunitPartTargetType ?? '').trim(),
+      sourceLangUnitId: String(storedPart?.sourceLangUnitId ?? bubble.dataset.langunitPartSourceId ?? (index === 0 ? seedId : '')).trim(),
+      target,
+    };
+  });
+  const additionPart = {
+    langUnitId,
+    compositionId,
+    partId: `${compositionId}-addition`,
+    role: 'addition',
+    partTargetType: String(additionTarget.type ?? '').trim(),
+    sourceLangUnitId: '',
+    target,
+  };
+
+  existingGroupBubbles.forEach((bubble, index) => setCompositeBubbleMetadata(bubble, existingParts[index]));
+  const additionBubble = document.createElement('span');
+  additionBubble.className = 'langunit-bubble';
+  additionBubble.append(range.extractContents());
+  range.insertNode(additionBubble);
+  setCompositeBubbleMetadata(additionBubble, additionPart);
+  refreshLangUnitBubbleGroupStyles(editor);
+
+  const caret = document.createRange();
+  caret.setStartAfter(additionBubble);
+  caret.collapse(true);
+  selection.removeAllRanges();
+  selection.addRange(caret);
+  syncSubSegEditorDraft(editor);
+  return true;
+}
+
 function wrapSelectedSubSegText(editor) {
   const selection = document.getSelection();
   if (!selection || !selection.rangeCount || selection.isCollapsed) {
@@ -3724,7 +4015,7 @@ async function captureChinSubstringIntoLinkedSubSeg(editor) {
   }
 
   const langUnit = getLangUnitItem(selected.langUnitId) ?? getLangUnitItem(getLangUnitCycleTargetId(selected.langUnitId));
-  if (!['chinWord', 'chinPhrase'].includes(String(langUnit?.target?.type ?? '').trim())) {
+  if (!['chinWord', 'chinPhrase', 'chinFuzz'].includes(String(langUnit?.target?.type ?? '').trim())) {
     return false;
   }
 
@@ -3781,7 +4072,7 @@ function getLinkedSubSegLineStartAutoLangUnitRange(editor) {
   const parentLangUnit = getLangUnitItem(linkTargetLangUnitId) ?? getLangUnitItem(getLangUnitCycleTargetId(linkTargetLangUnitId));
   const parentTargetType = String(parentLangUnit?.target?.type ?? '').trim();
   const parentTargetText = String(parentLangUnit?.target?.text || getLangUnitText(parentLangUnit) || '');
-  if (!['chinWord', 'chinPhrase'].includes(parentTargetType) || !parentTargetText) {
+  if (!['chinWord', 'chinPhrase', 'chinFuzz'].includes(parentTargetType) || !parentTargetText) {
     return null;
   }
 
@@ -3796,21 +4087,25 @@ function getLinkedSubSegLineStartAutoLangUnitRange(editor) {
   }
 
   const beforeText = getSubSegTextBeforeRange(editor, range);
-  const char = beforeText.slice(-1);
-  if (!isChineseCharacter(char) || !parentTargetText.includes(char)) {
+  const lineStartMatch = beforeText.match(/(?:^|\n)(=*)([\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+)$/u);
+  const lineStart = lineStartMatch?.[2] ?? '';
+  const text = parentTargetText.includes(lineStart) && lineStart.length === 1
+    ? lineStart
+    : getMatchingPinyinSpan(parentTargetText, lineStart)
+      ? lineStart
+      : '';
+  if (!text) {
     return null;
   }
 
-  if (!/(^|\n)[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]$/u.test(beforeText)) {
-    return null;
-  }
-
-  const autoRange = getSubSegTextRange(editor, beforeText.length - 1, beforeText.length);
+  // Keep the optional "=" marker outside the langUnit range.
+  const optionStart = beforeText.length - text.length;
+  const autoRange = getSubSegTextRange(editor, optionStart, beforeText.length);
   if (!autoRange) {
     return null;
   }
 
-  return { range: autoRange, text: char };
+  return { range: autoRange, text };
 }
 
 function autoLangUnitifyLinkedSubSegLineStart(editor) {
@@ -3836,6 +4131,69 @@ function autoLangUnitifyLinkedSubSegLineStart(editor) {
   mergedBubble.parentNode?.insertBefore(spaceNode, mergedBubble.nextSibling);
   refreshLangUnitBubbleGroupStyles(editor);
   setCaretAfterNode(spaceNode);
+  langUnitBubbleEscapeState.set(getSubSegBubbleTargetKey(editor), { edge: 'end', at: Date.now() });
+  syncSubSegEditorDraft(editor);
+  return true;
+}
+
+function getLangUnitBubbleAtCaretStart(editor) {
+  if (!(editor instanceof HTMLElement) || editor.dataset.subsegIsRoot !== '0') {
+    return null;
+  }
+
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || !selection.isCollapsed || !editor.contains(selection.anchorNode)) {
+    return null;
+  }
+
+  const range = selection.getRangeAt(0);
+  const boundary = getLangUnitBubbleBoundary(editor);
+  const nextNode = range.startContainer.nodeType === Node.ELEMENT_NODE
+    ? range.startContainer.childNodes[range.startOffset]
+    : null;
+  const bubble = boundary?.edge === 'start'
+    ? boundary.bubble
+    : nextNode instanceof HTMLElement && nextNode.classList.contains('langunit-bubble')
+      ? nextNode
+      : null;
+  return bubble instanceof HTMLElement
+    ? { bubble, beforeText: getSubSegTextBeforeRange(editor, range) }
+    : null;
+}
+
+function insertLangUnitOptionEquals(editor) {
+  const match = getLangUnitBubbleAtCaretStart(editor);
+  if (!match || !/(^|\n)=*$/.test(match.beforeText)) {
+    return false;
+  }
+
+  const { bubble, beforeText } = match;
+
+  const existingMarkers = beforeText.match(/=+$/)?.[0] ?? '';
+  const previous = bubble.previousSibling;
+  if (existingMarkers && previous?.nodeType === Node.TEXT_NODE) {
+    previous.textContent = `${previous.textContent.slice(0, -existingMarkers.length)}=`;
+    setCaretAfterNode(previous);
+    syncSubSegEditorDraft(editor);
+    return true;
+  }
+
+  const marker = document.createTextNode('=');
+  bubble.parentNode?.insertBefore(marker, bubble);
+  setCaretAfterNode(marker);
+  syncSubSegEditorDraft(editor);
+  return true;
+}
+
+function insertLineBreakBeforeLineInitialLangUnit(editor) {
+  const match = getLangUnitBubbleAtCaretStart(editor);
+  if (!match || !/(^|\n)$/.test(match.beforeText)) {
+    return false;
+  }
+
+  const lineBreak = document.createElement('br');
+  match.bubble.parentNode?.insertBefore(lineBreak, match.bubble);
+  setCaretAfterNode(lineBreak);
   syncSubSegEditorDraft(editor);
   return true;
 }
@@ -3851,12 +4209,7 @@ function insertSubSegLineBreak(editor) {
     return false;
   }
 
-  range.deleteContents();
-  const br = document.createElement('br');
-  range.insertNode(br);
-  setCaretAfterNode(br);
-  syncSubSegEditorDraft(editor);
-  return true;
+  return document.execCommand('insertLineBreak');
 }
 
 function handleLangUnitBubbleSpace(editor) {
@@ -4937,6 +5290,10 @@ function isSpaceKey(event) {
   );
 }
 
+function isImeCompositionKey(event) {
+  return event.isComposing || (event.code === 'Enter' && (event.key === 'Process' || event.keyCode === 229));
+}
+
 function isCtrlModifierActive(event) {
   return Boolean(event.ctrlKey || event.getModifierState?.('Control'));
 }
@@ -5029,9 +5386,101 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
+document.addEventListener('selectionchange', () => {
+  const selection = document.getSelection();
+  if (!selection || !selection.rangeCount || selection.isCollapsed) {
+    return;
+  }
+
+  const anchor = selection.anchorNode;
+  const editor = anchor instanceof Element
+    ? anchor.closest(subSegInputSelector)
+    : anchor?.parentElement?.closest(subSegInputSelector);
+  if (editor instanceof HTMLElement) {
+    const range = selection.getRangeAt(0).cloneRange();
+    lastSubSegSelectionByEditor.set(editor, range);
+    lastSubSegSelection = { editor, range };
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  const isEnter = event.key === 'Enter' || event.code === 'Enter' || event.keyCode === 13;
+  if (!isEnter || isImeCompositionKey(event)) {
+    return;
+  }
+
+  const target = event.target instanceof Element ? event.target : null;
+  const selection = document.getSelection();
+  const anchor = selection?.anchorNode;
+  const selectionEditor = anchor instanceof Element
+    ? anchor.closest(subSegInputSelector)
+    : anchor?.parentElement?.closest(subSegInputSelector);
+  const editor = target?.closest(subSegInputSelector) ?? getFocusedSubSegEditor() ?? selectionEditor;
+  const selectedRange = selection?.rangeCount && !selection.isCollapsed
+    ? selection.getRangeAt(0).cloneRange()
+    : lastSubSegSelectionByEditor.get(editor) ?? (lastSubSegSelection?.editor === editor ? lastSubSegSelection.range : null);
+  if (!(editor instanceof HTMLElement) || !selectedRange) {
+    return;
+  }
+  if (selection?.isCollapsed && getLangUnitBubbleAtCaretStart(editor)) {
+    return;
+  }
+
+  const hasVisibleTarget = hasActiveSubSegBubbleTarget(editor);
+  if (!hasVisibleTarget) {
+    return;
+  }
+
+  try {
+    if (!reprocessCycleTargetedSelection(editor, selectedRange)) {
+      return;
+    }
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  } catch (error) {
+    console.error('composite cycle-target capture failed', error);
+  }
+}, true);
+
+document.addEventListener('beforeinput', (event) => {
+  if (event.inputType !== 'insertParagraph' && event.inputType !== 'insertLineBreak') {
+    return;
+  }
+
+  const target = event.target instanceof Element ? event.target : null;
+  const selection = document.getSelection();
+  const anchor = selection?.anchorNode;
+  const selectionEditor = anchor instanceof Element
+    ? anchor.closest(subSegInputSelector)
+    : anchor?.parentElement?.closest(subSegInputSelector);
+  const editor = target?.closest(subSegInputSelector) ?? getFocusedSubSegEditor() ?? selectionEditor;
+  const selectedRange = selection?.rangeCount && !selection.isCollapsed
+    ? selection.getRangeAt(0).cloneRange()
+    : lastSubSegSelectionByEditor.get(editor) ?? (lastSubSegSelection?.editor === editor ? lastSubSegSelection.range : null);
+  if (!(editor instanceof HTMLElement) || !selectedRange) {
+    return;
+  }
+
+  const hasVisibleTarget = hasActiveSubSegBubbleTarget(editor);
+  if (!hasVisibleTarget) {
+    return;
+  }
+
+  try {
+    if (reprocessCycleTargetedSelection(editor, selectedRange)) {
+      event.preventDefault();
+    }
+  } catch (error) {
+    console.error('composite cycle-target beforeinput capture failed', error);
+  }
+}, true);
+
 document.addEventListener('keydown', (event) => {
   const target = event.target instanceof Element ? event.target : null;
   if (target?.closest(keyboardGuardSelector)) {
+    return;
+  }
+  if (isImeCompositionKey(event) && target?.closest(subSegInputSelector)) {
     return;
   }
 
@@ -5046,8 +5495,10 @@ document.addEventListener('keydown', (event) => {
     return;
   }
 
-  if (isFocusedSubSegInput()) {
-    const editor = getFocusedSubSegEditor();
+  const eventEditor = target?.closest(subSegInputSelector);
+  const focusedEditor = getFocusedSubSegEditor();
+  const editor = focusedEditor ?? (eventEditor instanceof HTMLElement ? eventEditor : null);
+  if (editor instanceof HTMLElement) {
     if (event.key === 'Tab' && !event.ctrlKey && !event.metaKey && !event.altKey) {
       if (enterLangUnitRefTraversal(editor)) {
         event.preventDefault();
@@ -5092,21 +5543,37 @@ document.addEventListener('keydown', (event) => {
       }
     }
 
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' || event.code === 'Enter' || event.keyCode === 13) {
+      if (editor && insertLineBreakBeforeLineInitialLangUnit(editor)) {
+        event.preventDefault();
+        return;
+      }
+      // Resolve selection from the event target as well as activeElement: mouse selections can leave focus on the document.
+      if (getSubSegBubbleTargetIndex(editor) >= 0 && !document.getSelection()?.isCollapsed && reprocessCycleTargetedSelection(editor)) {
+        event.preventDefault();
+        return;
+      }
       if (editor && selectionTouchesLangUnitBubble(editor)) {
         event.preventDefault();
         void captureChinSubstringIntoLinkedSubSeg(editor).then((handled) => {
+          if (handled || reprocessCycleTargetedSelection(editor)) {
+            return;
+          }
           if (!handled) {
             showWorkerToast('not allowed', 1200);
           }
         });
         return;
       }
+      if (editor && reprocessCycleTargetedSelection(editor)) {
+        event.preventDefault();
+        return;
+      }
       if (editor && wrapSelectedSubSegText(editor)) {
         event.preventDefault();
         return;
       }
-      if (editor && getSubSegBubbleTargetIndex(editor) >= 0) {
+      if (editor && hasActiveSubSegBubbleTarget(editor)) {
         event.preventDefault();
         void focusCycleSubSegInput(editor);
         return;
@@ -5115,6 +5582,18 @@ document.addEventListener('keydown', (event) => {
         event.preventDefault();
         return;
       }
+      event.preventDefault();
+      return;
+    }
+
+    if (
+      event.key === '=' &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey &&
+      !event.shiftKey &&
+      insertLangUnitOptionEquals(editor)
+    ) {
       event.preventDefault();
       return;
     }

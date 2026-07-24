@@ -1,0 +1,325 @@
+﻿{
+  "generatedAt": "2026-07-24T08:37:21.214Z",
+  "cli": "codex-cli 0.145.0",
+  "effort": "medium",
+  "payloads": [
+    {
+      "task": "contextType",
+      "context": "消息被传播后，大家都知道了",
+      "target": "消息",
+      "substring": "消息"
+    },
+    {
+      "task": "contextType",
+      "context": "他不是文明人说的那样",
+      "target": "文明人",
+      "substring": "文明人"
+    },
+    {
+      "task": "contextType",
+      "context": "你好吗世界",
+      "target": "你好",
+      "substring": "你好"
+    },
+    {
+      "task": "contextType",
+      "context": "操你妈是什么意思",
+      "target": "操你妈",
+      "substring": "操你妈"
+    },
+    {
+      "task": "contextType",
+      "context": "这个办法很有效",
+      "target": "办法",
+      "substring": "办法"
+    },
+    {
+      "task": "contextType",
+      "context": "我们明天再讨论这个问题",
+      "target": "讨论",
+      "substring": "讨论"
+    }
+  ],
+  "results": [
+    {
+      "trial": 1,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5517.5691,
+      "requests": []
+    },
+    {
+      "trial": 2,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5340.755899999999,
+      "requests": []
+    },
+    {
+      "trial": 3,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5353.203099999999,
+      "requests": []
+    },
+    {
+      "trial": 1,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5361.607599999999,
+      "requests": [
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "消息被传播后，大家都知道了",
+            "target": "消息",
+            "substring": "消息"
+          },
+          "ms": 2124.955099999999
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他不是文明人说的那样",
+            "target": "文明人",
+            "substring": "文明人"
+          },
+          "ms": 2944.2721999999994
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "你好吗世界",
+            "target": "你好",
+            "substring": "你好"
+          },
+          "ms": 2327.8661999999968
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "操你妈是什么意思",
+            "target": "操你妈",
+            "substring": "操你妈"
+          },
+          "ms": 4678.568400000004
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这个办法很有效",
+            "target": "办法",
+            "substring": "办法"
+          },
+          "ms": 1932.7027000000016
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们明天再讨论这个问题",
+            "target": "讨论",
+            "substring": "讨论"
+          },
+          "ms": 2807.0348000000013
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5386.226699999999,
+      "requests": [
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "消息被传播后，大家都知道了",
+            "target": "消息",
+            "substring": "消息"
+          },
+          "ms": 2081.523699999998
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他不是文明人说的那样",
+            "target": "文明人",
+            "substring": "文明人"
+          },
+          "ms": 3008.699099999998
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "你好吗世界",
+            "target": "你好",
+            "substring": "你好"
+          },
+          "ms": 3472.295100000003
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "操你妈是什么意思",
+            "target": "操你妈",
+            "substring": "操你妈"
+          },
+          "ms": 3669.7301000000007
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这个办法很有效",
+            "target": "办法",
+            "substring": "办法"
+          },
+          "ms": 2155.4602000000014
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们明天再讨论这个问题",
+            "target": "讨论",
+            "substring": "讨论"
+          },
+          "ms": 5887.323299999989
+        }
+      ]
+    },
+    {
+      "trial": 1,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5331.687600000005,
+      "requests": []
+    },
+    {
+      "trial": 2,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5353.419200000004,
+      "requests": []
+    },
+    {
+      "trial": 3,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5362.3994999999995,
+      "requests": []
+    },
+    {
+      "trial": 1,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5365.700100000002,
+      "requests": [
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "消息被传播后，大家都知道了",
+            "target": "消息",
+            "substring": "消息"
+          },
+          "ms": 3330.5222000000067
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他不是文明人说的那样",
+            "target": "文明人",
+            "substring": "文明人"
+          },
+          "ms": 1548.4949999999953
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "你好吗世界",
+            "target": "你好",
+            "substring": "你好"
+          },
+          "ms": 1951.768499999991
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "操你妈是什么意思",
+            "target": "操你妈",
+            "substring": "操你妈"
+          },
+          "ms": 1934.7693
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这个办法很有效",
+            "target": "办法",
+            "substring": "办法"
+          },
+          "ms": 1767.7908000000025
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们明天再讨论这个问题",
+            "target": "讨论",
+            "substring": "讨论"
+          },
+          "ms": 1723.6160999999993
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5350.257899999997,
+      "requests": [
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "消息被传播后，大家都知道了",
+            "target": "消息",
+            "substring": "消息"
+          },
+          "ms": 4850.396999999997
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他不是文明人说的那样",
+            "target": "文明人",
+            "substring": "文明人"
+          },
+          "ms": 2692.8804999999993
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "你好吗世界",
+            "target": "你好",
+            "substring": "你好"
+          },
+          "ms": 2793.7158000000054
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "操你妈是什么意思",
+            "target": "操你妈",
+            "substring": "操你妈"
+          },
+          "ms": 2080.730500000005
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这个办法很有效",
+            "target": "办法",
+            "substring": "办法"
+          },
+          "ms": 1849.3175000000047
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们明天再讨论这个问题",
+            "target": "讨论",
+            "substring": "讨论"
+          },
+          "ms": 1670.9745000000112
+        }
+      ]
+    }
+  ]
+}

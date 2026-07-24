@@ -1,0 +1,436 @@
+﻿{
+  "generatedAt": "2026-07-24T08:54:12.563Z",
+  "cli": "codex-cli 0.145.0",
+  "effort": "low",
+  "payloads": [
+    {
+      "task": "contextType",
+      "context": "消息被传播后，大家都知道了",
+      "target": "消息",
+      "substring": "消息"
+    },
+    {
+      "task": "contextType",
+      "context": "他不是文明人说的那样",
+      "target": "文明人",
+      "substring": "文明人"
+    },
+    {
+      "task": "contextType",
+      "context": "你好吗世界",
+      "target": "你好",
+      "substring": "你好"
+    },
+    {
+      "task": "contextType",
+      "context": "操你妈是什么意思",
+      "target": "操你妈",
+      "substring": "操你妈"
+    },
+    {
+      "task": "contextType",
+      "context": "这个办法很有效",
+      "target": "办法",
+      "substring": "办法"
+    },
+    {
+      "task": "contextType",
+      "context": "我们明天再讨论这个问题",
+      "target": "讨论",
+      "substring": "讨论"
+    },
+    {
+      "task": "contextType",
+      "context": "天气预报说明天会下雨",
+      "target": "天气预报",
+      "substring": "天气预报"
+    },
+    {
+      "task": "contextType",
+      "context": "请把门打开让我进去",
+      "target": "打开",
+      "substring": "打开"
+    },
+    {
+      "task": "contextType",
+      "context": "这本书的内容非常有趣",
+      "target": "内容",
+      "substring": "内容"
+    },
+    {
+      "task": "contextType",
+      "context": "她正在学习新的语言",
+      "target": "学习",
+      "substring": "学习"
+    },
+    {
+      "task": "contextType",
+      "context": "我们需要解决这个困难",
+      "target": "解决",
+      "substring": "解决"
+    },
+    {
+      "task": "contextType",
+      "context": "孩子们在公园里玩耍",
+      "target": "孩子们",
+      "substring": "孩子们"
+    },
+    {
+      "task": "contextType",
+      "context": "这家餐厅的服务很好",
+      "target": "餐厅",
+      "substring": "餐厅"
+    },
+    {
+      "task": "contextType",
+      "context": "他昨天买了一部手机",
+      "target": "手机",
+      "substring": "手机"
+    },
+    {
+      "task": "contextType",
+      "context": "请不要忘记关灯",
+      "target": "忘记",
+      "substring": "忘记"
+    },
+    {
+      "task": "contextType",
+      "context": "他们已经完成了工作",
+      "target": "完成",
+      "substring": "完成"
+    },
+    {
+      "task": "contextType",
+      "context": "我想知道你的想法",
+      "target": "想法",
+      "substring": "想法"
+    },
+    {
+      "task": "contextType",
+      "context": "这个城市有很多历史建筑",
+      "target": "历史建筑",
+      "substring": "历史建筑"
+    },
+    {
+      "task": "contextType",
+      "context": "我们一起去看电影吧",
+      "target": "看电影",
+      "substring": "看电影"
+    },
+    {
+      "task": "contextType",
+      "context": "她把问题解释得很清楚",
+      "target": "解释",
+      "substring": "解释"
+    }
+  ],
+  "results": [
+    {
+      "trial": 1,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5351.315500000001,
+      "requests": []
+    },
+    {
+      "trial": 2,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5389.923199999999,
+      "requests": []
+    },
+    {
+      "trial": 3,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5339.316500000001,
+      "requests": []
+    },
+    {
+      "trial": 4,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5363.715899999999,
+      "requests": []
+    },
+    {
+      "trial": 5,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5365.3771000000015,
+      "requests": []
+    },
+    {
+      "trial": 6,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5375.990399999999,
+      "requests": []
+    },
+    {
+      "trial": 7,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5368.834300000002,
+      "requests": []
+    },
+    {
+      "trial": 8,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5371.279699999999,
+      "requests": []
+    },
+    {
+      "trial": 9,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5362.932399999998,
+      "requests": []
+    },
+    {
+      "trial": 10,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5348.401300000005,
+      "requests": []
+    },
+    {
+      "trial": 11,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5360.2341000000015,
+      "requests": []
+    },
+    {
+      "trial": 12,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5335.318600000006,
+      "requests": []
+    },
+    {
+      "trial": 13,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5342.206300000005,
+      "requests": []
+    },
+    {
+      "trial": 14,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5354.079700000002,
+      "requests": []
+    },
+    {
+      "trial": 15,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5353.624399999986,
+      "requests": []
+    },
+    {
+      "trial": 16,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5360.046900000001,
+      "requests": []
+    },
+    {
+      "trial": 17,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5317.9663,
+      "requests": []
+    },
+    {
+      "trial": 18,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5400.3986,
+      "requests": []
+    },
+    {
+      "trial": 19,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5316.420800000007,
+      "requests": []
+    },
+    {
+      "trial": 20,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5334.7590000000055,
+      "requests": []
+    },
+    {
+      "trial": 1,
+      "model": "gpt-5.6-luna",
+      "readyMs": 5341.088099999994,
+      "requests": [
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "消息被传播后，大家都知道了",
+            "target": "消息",
+            "substring": "消息"
+          },
+          "ms": 3845.6719999999914
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他不是文明人说的那样",
+            "target": "文明人",
+            "substring": "文明人"
+          },
+          "ms": 1406.7562000000034
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "你好吗世界",
+            "target": "你好",
+            "substring": "你好"
+          },
+          "ms": 2606.4514999999956
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "操你妈是什么意思",
+            "target": "操你妈",
+            "substring": "操你妈"
+          },
+          "ms": 2626.7720999999874
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这个办法很有效",
+            "target": "办法",
+            "substring": "办法"
+          },
+          "ms": 1240.164299999975
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们明天再讨论这个问题",
+            "target": "讨论",
+            "substring": "讨论"
+          },
+          "ms": 2124.7087000000174
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "天气预报说明天会下雨",
+            "target": "天气预报",
+            "substring": "天气预报"
+          },
+          "ms": 1995.7382999999973
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "请把门打开让我进去",
+            "target": "打开",
+            "substring": "打开"
+          },
+          "ms": 99889.83249999999
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这本书的内容非常有趣",
+            "target": "内容",
+            "substring": "内容"
+          },
+          "ms": 17591.502599999978
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "她正在学习新的语言",
+            "target": "学习",
+            "substring": "学习"
+          },
+          "ms": 1211.1686999999802
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们需要解决这个困难",
+            "target": "解决",
+            "substring": "解决"
+          },
+          "ms": 1610.4343999999983
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "孩子们在公园里玩耍",
+            "target": "孩子们",
+            "substring": "孩子们"
+          },
+          "ms": 2048.771700000012
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这家餐厅的服务很好",
+            "target": "餐厅",
+            "substring": "餐厅"
+          },
+          "ms": 1529.5402999999933
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他昨天买了一部手机",
+            "target": "手机",
+            "substring": "手机"
+          },
+          "ms": 1740.7880000000296
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "请不要忘记关灯",
+            "target": "忘记",
+            "substring": "忘记"
+          },
+          "ms": 3416.6765000000014
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他们已经完成了工作",
+            "target": "完成",
+            "substring": "完成"
+          },
+          "ms": 1406.787799999991
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我想知道你的想法",
+            "target": "想法",
+            "substring": "想法"
+          },
+          "ms": 1252.4184000000241
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这个城市有很多历史建筑",
+            "target": "历史建筑",
+            "substring": "历史建筑"
+          },
+          "ms": 1321.1396999999997
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们一起去看电影吧",
+            "target": "看电影",
+            "substring": "看电影"
+          },
+          "ms": 1790.5207999999984
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "她把问题解释得很清楚",
+            "target": "解释",
+            "substring": "解释"
+          },
+          "ms": 1569.3061999999918
+        }
+      ]
+    }
+  ]
+}

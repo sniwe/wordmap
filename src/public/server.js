@@ -369,6 +369,7 @@ function normalizeLangUnitItem(item, now = new Date().toISOString()) {
     text: String(item.text ?? '').trim(),
     instances,
     target,
+    ...(Array.isArray(item.compositions) ? { compositions: item.compositions } : {}),
     createdAt: item.createdAt || now,
     updatedAt: item.updatedAt || now,
   };
@@ -412,6 +413,10 @@ function mergeLangUnitItems(existingItems, incomingItems) {
       ...normalized,
       text: String(normalized.text ?? previous?.text ?? ''),
       instances: normalizeLangUnitInstances(normalized.instances.length ? normalized.instances : previous?.instances ?? []),
+      compositions: [...new Map([
+        ...(Array.isArray(previous?.compositions) ? previous.compositions : []),
+        ...(Array.isArray(normalized.compositions) ? normalized.compositions : []),
+      ].map((composition) => [String(composition?.compositionId ?? ''), composition])).values()].filter((composition) => String(composition?.compositionId ?? '').trim()),
       createdAt: previous?.createdAt || normalized.createdAt,
       updatedAt: normalized.updatedAt || previous?.updatedAt || now,
     });
@@ -445,10 +450,19 @@ function normalizeSubSegContentForStorage(content) {
       type: 'langUnitRef',
       langUnitId,
     };
+    if (typeof token.text === 'string') {
+      nextToken.text = token.text;
+    }
     if (token.remote === true) {
       nextToken.remote = true;
     }
-    if (token.remote === true || Object.prototype.hasOwnProperty.call(token, 'text') || Object.keys(token).length !== Object.keys(nextToken).length) {
+    for (const key of ['compositionId', 'partId', 'partRole', 'partTargetType', 'partSourceId']) {
+      const value = String(token[key] ?? '').trim();
+      if (value) {
+        nextToken[key] = value;
+      }
+    }
+    if (JSON.stringify(token) !== JSON.stringify(nextToken)) {
       changed = true;
     }
     normalized.push(nextToken);
@@ -555,7 +569,7 @@ function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
         continue;
       }
 
-      const langUnitText = String(langUnitsById.get(langUnitId)?.text ?? '');
+      const langUnitText = String(token.text ?? langUnitsById.get(langUnitId)?.text ?? '');
       const start = plainText.length;
       plainText += langUnitText;
       const end = plainText.length;
@@ -574,6 +588,8 @@ function collectLangUnitInstancesById(subSegItems, langUnitsById = new Map()) {
         audSegId,
         subSegId,
         remote: token.remote === true,
+        ...(String(token.compositionId ?? '').trim() ? { compositionId: String(token.compositionId).trim() } : {}),
+        ...(String(token.partId ?? '').trim() ? { partId: String(token.partId).trim() } : {}),
         ...(String(existingInstance?.cycleGroupId ?? '').trim() ? { cycleGroupId: String(existingInstance.cycleGroupId).trim() } : {}),
         start,
         end,
@@ -677,6 +693,8 @@ function normalizeLangUnitInstance(instance) {
     ...(String(instance.subSegId ?? '').trim() ? { subSegId: String(instance.subSegId).trim() } : {}),
     remote: instance.remote === true,
     ...(String(instance.cycleGroupId ?? '').trim() ? { cycleGroupId: String(instance.cycleGroupId).trim() } : {}),
+    ...(String(instance.compositionId ?? '').trim() ? { compositionId: String(instance.compositionId).trim() } : {}),
+    ...(String(instance.partId ?? '').trim() ? { partId: String(instance.partId).trim() } : {}),
     ...(Number.isFinite(instance.start) && instance.start >= 0 ? { start: instance.start } : {}),
     ...(Number.isFinite(instance.end) && instance.end >= 0 ? { end: instance.end } : {}),
     context,
@@ -1107,6 +1125,8 @@ function normalizeLangUnitTargetType(type) {
     value === 'engWordPart' ||
     value === 'engWord' ||
     value === 'engPhrase' ||
+    value === 'chinColl' ||
+    value === 'engColl' ||
     value === 'no-op'
     ? value
     : '';
@@ -1385,6 +1405,10 @@ function canonicalizeLangUnitItems(items) {
       ...canonical,
       ...(root ? { root } : {}),
       instances: normalizeLangUnitInstances([...(canonical?.instances ?? []), ...(item.instances ?? [])]),
+      compositions: [...new Map([
+        ...(Array.isArray(canonical?.compositions) ? canonical.compositions : []),
+        ...(Array.isArray(item?.compositions) ? item.compositions : []),
+      ].map((composition) => [String(composition?.compositionId ?? ''), composition])).values()].filter((composition) => String(composition?.compositionId ?? '').trim()),
       updatedAt: now,
     });
   }

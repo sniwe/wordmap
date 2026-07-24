@@ -23,7 +23,7 @@
 | `audSeg target indicator` | The blue outline used to show the currently targeted `audSeg` card. |
 | `audSeg row jump` | `Ctrl+ArrowUp/Down` moves `audSeg` targeting by whole visual rows of 3 cards inside entered `audEp` state. |
 | `lol overlay` | The centered faded `lol` text rendered on the page background. |
-| `audSeg capture flow` | Shift creates a tentative `audSeg`; Shift+Space commits its end time and saves it. |
+| `audSeg capture flow` | Shift captures an unrounded `audio.currentTime` start into a tentative `audSeg`; Shift+Space captures and saves its unrounded end, while audSeg timing labels display `MM:SS` only. |
 | `audSeg add action` | The wired capture/save flow that creates an `audSeg`, stores its parent reference, and rerenders the parent `audEp`. |
 | `audSeg playback lock` | The entered-state mode where Enter on a targeted `audSeg` seeks audio to the segment start and keeps playback wrapped within that segment's time range. |
 | `shift-release cancel` | The auto-removal of a tentative `audSeg` draft when `Shift` is released without committing it with `Shift+Space`. |
@@ -44,14 +44,15 @@
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
 | `langUnit bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
 | `langUnit bubble clear` | `Ctrl+Delete` while a `langUnit bubble` is cycle-targeted in a focused `subSeg` editor unwraps that bubble back into normal editable text. |
-| `auto-langUnitification` | The Space-key runtime action that auto-wraps a qualifying line-start Chinese character in a linked child `subSeg` as a `langUnit bubble` when that character belongs to the parent `chinWord`/`chinPhrase` target. |
+| `auto-langUnitification` | The Space-key runtime action that auto-wraps qualifying line-start Chinese text in a linked child `subSeg` as a `langUnit bubble` when it matches the parent `chinWord`/`chinPhrase` text or a `chinPhrase`/`chinFuzz` pinyin span. |
+| `auto-langUnit double-space escape` | A rapid second Space after line-start auto-langUnitification is consumed as the bubble-boundary escape, leaving the caret after the single external space rather than inside the new `langUnit bubble`. |
 | `remote section` | A non-contiguous span that belongs to the same `langUnit bubble` group as an anchor bubble, rendered with bubble styling plus a dotted connector back to the anchor. |
 | `linked bubble group` | The set of contiguous and remote `langUnit` spans that share one cycle-target index and are treated as one logical capture unit. |
 | `dotted connector` | The subtle dotted underline used to visually link a remote section back to its anchor `langUnit bubble`. |
 | `langUnit instance` | One persisted reverse-link record inside a `langUnit.instances` array; it carries `audSegId`, `subSegId`, `start`, `end`, `remote`, `context`, `target`, and any extra occurrence metadata needed. |
 | `langUnit ref` | Legacy shorthand for `langUnit instance`. |
 | `langUnit extension` | A new `langUnit` created from a selected substring while a cycle-target is active; its context instance stores the shared `cycleGroupId`. |
-| `nested chin substring capture` | Enter on a substring selected inside a `chinWord` or `chinPhrase` `langUnit bubble` appends that substring into the bubble's linked child `subSeg`, wraps it there as a new `langUnit bubble`, cycle-targets it, and opens its linked child `subSeg`. |
+| `nested chin substring capture` | Enter on a substring selected inside a `chinWord`, `chinPhrase`, or `chinFuzz` `langUnit bubble` puts it at the first line start of the bubble's linked child `subSeg` (using the empty first line or appending a new line), wraps it as a new `langUnit bubble`, cycle-targets it, and opens its linked child `subSeg`. |
 | `langUnit cycle group` | The shared group identifier stored on context-bound instances so cycle targeting and dotted underline rendering treat linked langUnits as one group. |
 | `langUnit linked subSeg canonical recall` | The rule that same final `target.type + target.text` reuses one canonical `langUnitId`, appends the new witnessed context to `instances`, and makes linked child subSeg recall by that canonical id; different final target types keep different langUnits even when text matches. |
 | `langUnit reuse by target-text` | The creation rule that reuses an existing `langUnit` record when the selected bubble has the same normalized `target.type` and trimmed `target.text`. |
@@ -83,7 +84,12 @@
 | `langUnit target normalization` | The loader/save rule that stores the selected substring text, derives its target type from the substring plus `context.type` when needed, and keeps the normalized result on both the instance and the parent `langUnit`. |
 | `chinChar` | A single Chinese character selected as a target. |
 | `chinFuzz` | A target that is Chinese-plus-Latin or pinyin-shaped in a mixed context where the selection should stay tied to Chinese-style capture rules. |
-| `chinFuzz gloss` | Direct child `subSeg` line-initial content instantly overrides only the corresponding parent `chinFuzz` `langUnit` bubble's displayed text when the first whitespace-delimited chunk is valid nonempty Chinese-only text whose character count matches the parent pinyin syllable count; multiple valid lines render joined by ` / `, and no valid lines snap back to stored `langUnit.text`. |
+| `chinFuzz gloss` | Direct child `subSeg` line-initial content instantly overrides only the corresponding parent `chinFuzz` `langUnit` bubble when its first whitespace-delimited chunk is Chinese-only and matches a parent pinyin span's syllable count; the first option replaces that span, later matching options append after ` / `, and no valid option restores stored `langUnit.text`. |
+| `pinyin syllable replacement options` | Space after a linked child `subSeg` line-initial Chinese value auto-langUnitifies it when its character count matches a pinyin span in a `chinPhrase` or `chinFuzz` parent; the first option replaces that span in the full parent text and later same-length line options append without repeating the parent prefix, e.g. `把厄尔尼诺分成4档 / 当`. |
+| `pinyin option pseudo-langUnit` | Each derived replacement option is decorated inside the real parent bubble with a non-semantic `langunit-pseudo` span, giving it langUnit-like visual distinction without IDs, persistence meaning, or capture behavior. |
+| `pinyin option equals selector` | A leading `=` on a linked child line marks that option as the sole parent replacement; the `=` stays outside the auto-wrapped child langUnit and is not displayed in the parent bubble. |
+| `equals bubble-boundary insertion` | An unmodified `=` keypress at the visual start of a line-initial child langUnit is inserted as a plain-text sibling before the bubble, even when the browser reports the caret inside the span boundary. |
+| `Enter bubble-boundary line break` | Enter at the visual start of a line-initial child langUnit inserts a sibling `<br>` before the bubble and leaves the caret outside, even when the browser reports the caret inside the span boundary. |
 | `chinFuzzPart` | A mixed or pinyin-shaped target captured while the surrounding context is `chinFuzzWord`. |
 | `engWordPart` | A short English-like target captured inside an `engPhrase` or `engWord` context when the selection is only part of a larger English word. |
 | `no-op` | A rejected or illegal target shape, usually blank or punctuation-only text that should not produce a meaningful capture classification. |
@@ -110,6 +116,7 @@
 | `subSeg save debounce` | The 500ms delayed save that persists `subSeg` input text to the `subSegs` collection for the selected `audSeg`. |
 | `subSeg save no rerender` | Successful debounced `subSeg` saves update persistence and in-memory state without rerendering the entered `audEp` subtree, so focus stays on the input. |
 | `subSeg line break persistence` | The rule that newline characters in a saved `subSeg` editor value are preserved and rerendered as visible line breaks instead of being trimmed away. |
+| `subSeg IME Enter commit` | Enter used to accept an active IME composition (such as pinyin) stays native to the input method and must not also run the subSeg newline or capture action. |
 | `subSeg entity decode` | The render/save boundary behavior where common HTML entities such as `&#39;`, `&quot;`, `&amp;`, `&lt;`, `&gt;`, and numeric entities are decoded back to user-facing characters before the subSeg editor escapes display HTML. |
 | `subSeg bulk clear` | The settings action that deletes every persisted `subSeg` record and refreshes the entered `audEp` view. |
 | `subSeg draft reset` | The settings action that clears unsaved in-memory `subSeg` draft state and cancels pending saves. |

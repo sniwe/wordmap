@@ -1,0 +1,6 @@
+{
+  "task": "contextType",
+  "context": "请把门打开让我进去",
+  "target": "打开",
+  "substring": "打开"
+}

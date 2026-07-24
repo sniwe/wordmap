@@ -447,6 +447,13 @@ body {
   text-underline-offset: 0.18em;
 }
 
+.langunit-pseudo {
+  padding: 0 0.08em;
+  border: 1px solid #0b63ce;
+  border-radius: 4px;
+  background: #fff;
+}
+
 .langunit-connector {
   text-decoration-line: underline;
   text-decoration-style: dotted;

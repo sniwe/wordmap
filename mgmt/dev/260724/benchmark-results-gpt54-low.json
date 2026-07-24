@@ -1,0 +1,185 @@
+﻿{
+  "generatedAt": "2026-07-24T08:39:01.722Z",
+  "cli": "codex-cli 0.145.0",
+  "effort": "low",
+  "payloads": [
+    {
+      "task": "contextType",
+      "context": "消息被传播后，大家都知道了",
+      "target": "消息",
+      "substring": "消息"
+    },
+    {
+      "task": "contextType",
+      "context": "他不是文明人说的那样",
+      "target": "文明人",
+      "substring": "文明人"
+    },
+    {
+      "task": "contextType",
+      "context": "你好吗世界",
+      "target": "你好",
+      "substring": "你好"
+    },
+    {
+      "task": "contextType",
+      "context": "操你妈是什么意思",
+      "target": "操你妈",
+      "substring": "操你妈"
+    },
+    {
+      "task": "contextType",
+      "context": "这个办法很有效",
+      "target": "办法",
+      "substring": "办法"
+    },
+    {
+      "task": "contextType",
+      "context": "我们明天再讨论这个问题",
+      "target": "讨论",
+      "substring": "讨论"
+    }
+  ],
+  "results": [
+    {
+      "trial": 1,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5402.7141,
+      "requests": []
+    },
+    {
+      "trial": 2,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5343.891600000001,
+      "requests": []
+    },
+    {
+      "trial": 3,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5337.2564999999995,
+      "requests": []
+    },
+    {
+      "trial": 1,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5351.4833,
+      "requests": [
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "消息被传播后，大家都知道了",
+            "target": "消息",
+            "substring": "消息"
+          },
+          "ms": 2007.8035999999993
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他不是文明人说的那样",
+            "target": "文明人",
+            "substring": "文明人"
+          },
+          "ms": 2160.9362
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "你好吗世界",
+            "target": "你好",
+            "substring": "你好"
+          },
+          "ms": 2705.138700000003
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "操你妈是什么意思",
+            "target": "操你妈",
+            "substring": "操你妈"
+          },
+          "ms": 2134.5573000000004
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这个办法很有效",
+            "target": "办法",
+            "substring": "办法"
+          },
+          "ms": 2097.764599999995
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们明天再讨论这个问题",
+            "target": "讨论",
+            "substring": "讨论"
+          },
+          "ms": 1743.301400000004
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "model": "gpt-5.4-mini",
+      "readyMs": 5345.696100000001,
+      "requests": [
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "消息被传播后，大家都知道了",
+            "target": "消息",
+            "substring": "消息"
+          },
+          "ms": 1900.8608999999997
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "他不是文明人说的那样",
+            "target": "文明人",
+            "substring": "文明人"
+          },
+          "ms": 1783.8882000000012
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "你好吗世界",
+            "target": "你好",
+            "substring": "你好"
+          },
+          "ms": 1736.5789000000004
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "操你妈是什么意思",
+            "target": "操你妈",
+            "substring": "操你妈"
+          },
+          "ms": 2221.496299999999
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "这个办法很有效",
+            "target": "办法",
+            "substring": "办法"
+          },
+          "ms": 1770.410100000001
+        },
+        {
+          "payload": {
+            "task": "contextType",
+            "context": "我们明天再讨论这个问题",
+            "target": "讨论",
+            "substring": "讨论"
+          },
+          "ms": 1527.9879
+        }
+      ]
+    }
+  ]
+}

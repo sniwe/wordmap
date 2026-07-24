@@ -71,6 +71,8 @@
                     "chinFuzzPart",
                     "engWordPart",
                     "engPhrase",
+                    "chinColl",
+                    "engColl",
                     "engWord",
                     "no-op"
                   ]
@@ -92,6 +94,22 @@
           "additionalProperties": true
         }
       },
+      "compositions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "compositionId": { "type": "string" },
+            "seedLangUnitId": { "type": "string" },
+            "scope": { "type": "object", "additionalProperties": true },
+            "text": { "type": "string" },
+            "target": { "type": "object", "additionalProperties": true },
+            "parts": { "type": "array", "items": { "type": "object", "additionalProperties": true } }
+          },
+          "required": ["compositionId", "parts"],
+          "additionalProperties": true
+        }
+      },
       "target": {
         "type": "object",
         "properties": {
@@ -109,6 +127,8 @@
               "engWordPart",
               "engWord",
               "engPhrase",
+              "chinColl",
+              "engColl",
               "no-op"
             ]
           }

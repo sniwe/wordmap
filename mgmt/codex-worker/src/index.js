@@ -16,7 +16,7 @@ const moduleDir = dirname(fileURLToPath(import.meta.url));
 const workerDir = resolve(moduleDir, '..');
 const codexWorkspaceDir = join(process.env.TEMP || process.env.TMP || workerDir, 'codex-worker-runtime');
 const requestTimeoutMs = Number(process.env.CODEX_WORKER_REQUEST_TIMEOUT_MS || 240000);
-const codexModel = 'gpt-5.4-mini';
+const codexModel = 'gpt-5.6-luna';
 const codexEffort = 'low';
 const startupProbe = 'test';
 const streamedMode = process.env.CODEX_WORKER_STREAMED === '1';

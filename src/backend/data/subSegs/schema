@@ -29,6 +29,15 @@
             },
             "langUnitId": {
               "type": "string"
+            },
+            "remote": {
+              "type": "boolean"
+            },
+            "compositionId": {
+              "type": "string"
+            },
+            "partId": {
+              "type": "string"
             }
           },
           "additionalProperties": true
