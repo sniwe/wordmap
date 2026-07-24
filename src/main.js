@@ -1265,13 +1265,15 @@ function getLangUnitRenderView(langUnitId, fallbackText = '', parentSubSegId = '
       ? [exclusive]
       : replacements.filter(({ span }) => span.start === first.span.start && span.end === first.span.end);
     const primary = visible[0];
-    let text = `${sourceText.slice(0, primary.span.start)}${primary.value}${sourceText.slice(primary.span.end)}`;
+    const suffix = sourceText.slice(primary.span.end);
+    let text = `${sourceText.slice(0, primary.span.start)}${primary.value}`;
     const optionRanges = [{ start: primary.span.start, end: primary.span.start + primary.value.length }];
     for (const { value } of visible.slice(1)) {
       text += ' / ';
       optionRanges.push({ start: text.length, end: text.length + value.length });
       text += value;
     }
+    text += suffix;
     return { text, optionRanges };
   }
 

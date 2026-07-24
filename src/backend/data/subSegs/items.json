@@ -32,7 +32,7 @@
       },
       {
         "type": "text",
-        "text": " "
+        "text": " love it"
       },
       {
         "type": "text",
@@ -46,11 +46,24 @@
       {
         "type": "text",
         "text": " success！"
+      },
+      {
+        "type": "text",
+        "text": "\n="
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
+        "text": "当"
+      },
+      {
+        "type": "text",
+        "text": " "
       }
     ],
-    "text": "档 \n等 success！",
+    "text": "档 love it\n等 success！\n=当 ",
     "createdAt": "2026-07-24T13:01:23.460Z",
-    "updatedAt": "2026-07-24T13:08:06.369Z"
+    "updatedAt": "2026-07-24T13:16:42.650Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2",

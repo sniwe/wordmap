@@ -248,8 +248,8 @@
         "start": 0,
         "end": 1,
         "context": {
-          "text": "档 ",
-          "type": "chinPhrase"
+          "text": "档 love it",
+          "type": "engPhrase"
         },
         "target": {
           "text": "档",
@@ -262,7 +262,7 @@
       "type": "chinChar"
     },
     "createdAt": "2026-07-24T10:57:56.757Z",
-    "updatedAt": "2026-07-24T13:08:06.372Z",
+    "updatedAt": "2026-07-24T13:16:42.653Z",
     "compositions": []
   },
   {
@@ -274,8 +274,8 @@
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
         "remote": false,
         "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-1",
-        "start": 3,
-        "end": 4,
+        "start": 10,
+        "end": 11,
         "context": {
           "text": "等 success！",
           "type": "engPhrase"
@@ -291,7 +291,7 @@
       "type": "chinChar"
     },
     "createdAt": "2026-07-24T10:59:31.528Z",
-    "updatedAt": "2026-07-24T13:08:06.372Z",
+    "updatedAt": "2026-07-24T13:16:42.653Z",
     "compositions": []
   },
   {
@@ -308,14 +308,30 @@
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
-    "text": "汤",
-    "instances": [],
+    "text": "当",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
+        "remote": false,
+        "start": 22,
+        "end": 23,
+        "context": {
+          "text": "=当 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "当",
+          "type": "chinChar"
+        }
+      }
+    ],
     "target": {
-      "text": "汤",
+      "text": "当",
       "type": "chinChar"
     },
     "createdAt": "2026-07-24T12:57:40.987Z",
-    "updatedAt": "2026-07-24T13:07:48.548Z",
+    "updatedAt": "2026-07-24T13:16:42.653Z",
     "compositions": []
   },
   {
