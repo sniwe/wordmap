@@ -44,7 +44,7 @@
 | `subSeg autosize` | The editor height is recalculated from its content on render and input so it grows and shrinks without an internal scrollbar. |
 | `langUnit bubble` | The inline pill span used to wrap captured text inside the subSeg editor. |
 | `langUnit bubble clear` | `Ctrl+Delete` while a `langUnit bubble` is cycle-targeted in a focused `subSeg` editor unwraps that bubble back into normal editable text. |
-| `auto-langUnitification` | The Space-key runtime action that auto-wraps qualifying line-start Chinese text in a linked child `subSeg` as a `langUnit bubble` when it matches the parent `chinWord`/`chinPhrase` text or a `chinPhrase`/`chinFuzz` pinyin span. |
+| `auto-langUnitification` | The Space-key runtime action that auto-wraps qualifying line-start Chinese text in a linked child `subSeg` as a `langUnit bubble`; `chinChar` parents also accept any multi-character Chinese line-start candidate, while other parents require a matching character or pinyin span. |
 | `auto-langUnit double-space escape` | A rapid second Space after line-start auto-langUnitification is consumed as the bubble-boundary escape, leaving the caret after the single external space rather than inside the new `langUnit bubble`. |
 | `remote section` | A non-contiguous span that belongs to the same `langUnit bubble` group as an anchor bubble, rendered with bubble styling plus a dotted connector back to the anchor. |
 | `linked bubble group` | The set of contiguous and remote `langUnit` spans that share one cycle-target index and are treated as one logical capture unit. |

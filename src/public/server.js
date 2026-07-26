@@ -1610,6 +1610,19 @@ async function inferLangUnitChineseTypes(langUnitId, payload) {
       start: Number.isFinite(instance?.start) ? instance.start : null,
       end: Number.isFinite(instance?.end) ? instance.end : null,
     });
+    if (
+      payload?.requireInstanceMatch &&
+      (
+        matchedIndex < 0 ||
+        String(context.text ?? '').trim() !== String(payload.expectedContextText ?? '').trim() ||
+        String(context.type ?? '').trim() !== String(payload.expectedContextType ?? '').trim() ||
+        String(currentTarget.text ?? '').trim() !== String(payload.expectedTargetText ?? '').trim() ||
+        String(currentTarget.type ?? '').trim() !== String(payload.expectedTargetType ?? '').trim()
+      )
+    ) {
+      return item;
+    }
+
     if (context.type === contextType && currentTarget.type === targetType) {
       return item;
     }
@@ -1667,16 +1680,13 @@ async function inferLangUnitChineseTypes(langUnitId, payload) {
   return { langUnit: updated, res: { contextType, targetType } };
 }
 
-async function maybeDisambiguateLangUnitContexts(langUnits, enabled) {
+function collectChinDisambiguationJobs(langUnits, enabled) {
   if (!enabled) {
-    return langUnits;
+    return [];
   }
 
-  const next = [...(Array.isArray(langUnits) ? langUnits : [])];
-  let changed = false;
-
-  for (let index = 0; index < next.length; index += 1) {
-    const langUnit = next[index];
+  const jobs = [];
+  for (const langUnit of Array.isArray(langUnits) ? langUnits : []) {
     if (!langUnit || typeof langUnit !== 'object') {
       continue;
     }
@@ -1703,7 +1713,9 @@ async function maybeDisambiguateLangUnitContexts(langUnits, enabled) {
         continue;
       }
 
-      const result = await inferLangUnitChineseTypes(langUnit._id, {
+      jobs.push({
+        jobId: randomUUID(),
+        langUnitId: langUnit._id,
         context: contextText,
         target: targetText,
         substring: substringText,
@@ -1714,18 +1726,76 @@ async function maybeDisambiguateLangUnitContexts(langUnits, enabled) {
           start: instance.start,
           end: instance.end,
         },
+        expectedContextText: contextText,
+        expectedContextType: contextType,
+        expectedTargetText: targetText,
+        expectedTargetType: targetType,
+        enqueuedAt: new Date().toISOString(),
       });
-
-      if (!result?.langUnit) {
-        continue;
-      }
-
-      next[index] = result.langUnit;
-      changed = true;
     }
   }
 
-  return changed ? sortLangUnitItems(next) : langUnits;
+  return jobs;
+}
+
+const chinDisambiguationQueue = [];
+let chinDisambiguationDrainActive = false;
+let chinDisambiguationRevision = 0;
+let chinDisambiguationLastError = '';
+
+function getChinDisambiguationStatus() {
+  return {
+    pending: chinDisambiguationQueue.length,
+    active: chinDisambiguationDrainActive,
+    revision: chinDisambiguationRevision,
+    lastError: chinDisambiguationLastError,
+  };
+}
+
+async function drainChinDisambiguationQueue() {
+  if (chinDisambiguationDrainActive) {
+    return;
+  }
+
+  chinDisambiguationDrainActive = true;
+  try {
+    while (chinDisambiguationQueue.length) {
+      const job = chinDisambiguationQueue.shift();
+      if (!job) {
+        continue;
+      }
+
+      try {
+        const result = await inferLangUnitChineseTypes(job.langUnitId, {
+          ...job,
+          requireInstanceMatch: true,
+        });
+        if (result?.langUnit) {
+          await rebuildLangUnitItems();
+        }
+        chinDisambiguationLastError = '';
+      } catch (error) {
+        chinDisambiguationLastError = String(error?.message ?? error ?? 'chin disambiguation failed');
+        console.error(`[chin-disambiguation] ${chinDisambiguationLastError}`);
+      } finally {
+        chinDisambiguationRevision += 1;
+      }
+    }
+  } finally {
+    chinDisambiguationDrainActive = false;
+  }
+}
+
+function enqueueChinDisambiguationJobs(jobs) {
+  const queuedJobs = Array.isArray(jobs) ? jobs : [];
+  if (!queuedJobs.length) {
+    return { queued: 0, queueId: '' };
+  }
+
+  const queueId = randomUUID();
+  chinDisambiguationQueue.push(...queuedJobs.map((job) => ({ ...job, queueId })));
+  setImmediate(() => void drainChinDisambiguationQueue());
+  return { queued: queuedJobs.length, queueId };
 }
 
 let codexWorkerClient = null;
@@ -2221,6 +2291,11 @@ async function handleAudSegApi(req, res, url) {
 }
 
 async function handleLangUnitApi(req, res, url) {
+  if (req.method === 'GET' && url.pathname === '/api/langUnits/disambiguation-status') {
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(getChinDisambiguationStatus()));
+    return true;
+  }
+
   if (req.method === 'GET' && url.pathname === '/api/langUnits/items') {
     send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(await rebuildLangUnitItems()));
     return true;
@@ -2411,18 +2486,22 @@ async function handleSubSegApi(req, res, url) {
       await writeLangUnitItems(mergeLangUnitItems(await readLangUnitItems(), payload.langUnits));
     }
     let updatedLangUnits = await rebuildLangUnitItems();
-    if (disambiguateChinContexts) {
-      updatedLangUnits = await maybeDisambiguateLangUnitContexts(updatedLangUnits, true);
-      updatedLangUnits = await rebuildLangUnitItems();
-    }
     const [hydratedSubSegItems, hydratedSubSegChanged] = hydrateEmptyLinkedSubSegs(await readSubSegItems(), updatedLangUnits);
     if (hydratedSubSegChanged) {
       await writeSubSegItems(sortSubSegItems(hydratedSubSegItems));
       updatedLangUnits = await rebuildLangUnitItems();
     }
+    const chinDisambiguation = disambiguateChinContexts
+      ? enqueueChinDisambiguationJobs(collectChinDisambiguationJobs(updatedLangUnits, true))
+      : null;
     const refreshedSubSegItems = await readSubSegItems();
     const refreshedSubSeg = refreshedSubSegItems.find((item) => String(item?._id ?? '') === saved._id) ?? saved;
-    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ subSeg: refreshedSubSeg, subSegs: refreshedSubSegItems, langUnits: updatedLangUnits }));
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({
+      subSeg: refreshedSubSeg,
+      subSegs: refreshedSubSegItems,
+      langUnits: updatedLangUnits,
+      ...(chinDisambiguation ? { chinDisambiguation } : {}),
+    }));
     return true;
   }
 

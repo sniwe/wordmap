@@ -1,5 +1,275 @@
 [
   {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-0",
+        "text": "海洋和daji管理局"
+      },
+      {
+        "type": "text",
+        "text": "正式发布，说这一轮厄尔尼诺有81%的概率达到"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-1",
+        "text": "有记录以来的最强级别"
+      }
+    ],
+    "text": "海洋和daji管理局正式发布，说这一轮厄尔尼诺有81%的概率达到有记录以来的最强级别",
+    "createdAt": "2026-07-25T07:27:10.604Z",
+    "updatedAt": "2026-07-25T07:28:27.894Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-25T07:28:33.160Z",
+    "updatedAt": "2026-07-25T07:29:43.551Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "“in recorded history\""
+      }
+    ],
+    "text": "“in recorded history\"",
+    "createdAt": "2026-07-25T07:29:11.359Z",
+    "updatedAt": "2026-07-25T07:29:25.646Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-0",
+        "text": "中国国家海洋环境预报中心"
+      },
+      {
+        "type": "text",
+        "text": "也"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-1",
+        "text": "同步发布了确认"
+      }
+    ],
+    "text": "中国国家海洋环境预报中心也同步发布了确认",
+    "createdAt": "2026-07-25T07:29:51.100Z",
+    "updatedAt": "2026-07-25T07:30:50.415Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "org name in english?"
+      }
+    ],
+    "text": "org name in english?",
+    "createdAt": "2026-07-25T07:30:31.620Z",
+    "updatedAt": "2026-07-25T07:34:31.244Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2-0",
+        "text": "同步发布"
+      }
+    ],
+    "text": "同步发布",
+    "createdAt": "2026-07-25T07:34:20.830Z",
+    "updatedAt": "2026-07-25T07:36:22.846Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2",
+    "content": [
+      {
+        "type": "text",
+        "text": "in response?"
+      },
+      {
+        "type": "text",
+        "text": "\nprompted by another, also~"
+      }
+    ],
+    "text": "in response?\nprompted by another, also~",
+    "createdAt": "2026-07-25T07:35:26.690Z",
+    "updatedAt": "2026-07-25T07:36:20.456Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "可能会"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1",
+        "text": "超过",
+        "compositionId": "f3702686-3efd-4624-9ebe-349bea31074a",
+        "partId": "f3702686-3efd-4624-9ebe-349bea31074a-part-0",
+        "partRole": "seed",
+        "partSourceId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-0"
+      },
+      {
+        "type": "text",
+        "text": "97-8年的那一轮"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1",
+        "text": "史上最强记录",
+        "remote": true,
+        "compositionId": "f3702686-3efd-4624-9ebe-349bea31074a",
+        "partId": "f3702686-3efd-4624-9ebe-349bea31074a-addition",
+        "partRole": "addition",
+        "partTargetType": "chinPhrase"
+      }
+    ],
+    "text": "可能会超过97-8年的那一轮史上最强记录",
+    "createdAt": "2026-07-25T07:36:25.011Z",
+    "updatedAt": "2026-07-25T07:37:31.661Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-25T07:37:08.486Z",
+    "updatedAt": "2026-07-25T07:37:08.486Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "overtake"
+      },
+      {
+        "type": "text",
+        "text": "\nsurpass ~ as"
+      }
+    ],
+    "text": "overtake\nsurpass ~ as",
+    "createdAt": "2026-07-25T07:37:17.765Z",
+    "updatedAt": "2026-07-25T07:38:20.331Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
+        "text": "什么是",
+        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
+        "partId": "ee2de915-055d-4f30-ae3c-050f494cad35-part-0",
+        "partRole": "seed",
+        "partSourceId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-0"
+      },
+      {
+        "type": "text",
+        "text": "厄尔尼诺，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
+        "text": "你",
+        "remote": true,
+        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
+        "partId": "ee2de915-055d-4f30-ae3c-050f494cad35-addition",
+        "partRole": "addition",
+        "partTargetType": "chinChar"
+      },
+      {
+        "type": "text",
+        "text": "大概率上"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
+        "text": "不陌生",
+        "remote": true,
+        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
+        "partId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13-addition",
+        "partRole": "addition",
+        "partTargetType": "chinPhrase"
+      }
+    ],
+    "text": "什么是厄尔尼诺，你大概率上不陌生",
+    "createdAt": "2026-07-25T07:38:31.423Z",
+    "updatedAt": "2026-07-25T07:39:51.331Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-25T07:38:59.404Z",
+    "updatedAt": "2026-07-25T07:38:59.404Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "you're most likely familiar with ~"
+      }
+    ],
+    "text": "you're most likely familiar with ~",
+    "createdAt": "2026-07-25T07:40:15.145Z",
+    "updatedAt": "2026-07-25T07:42:46.935Z"
+  },
+  {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0",
     "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
     "isRoot": true,
@@ -11,12 +281,16 @@
       {
         "type": "langUnitRef",
         "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0-0",
-        "text": "把厄尔尼诺分成4dang的"
+        "text": "把厄尔尼诺分成4dang"
+      },
+      {
+        "type": "text",
+        "text": "的，分别是：弱，中，强，超强"
       }
     ],
-    "text": "机构是把厄尔尼诺分成4dang的",
-    "createdAt": "2026-07-24T13:02:43.613Z",
-    "updatedAt": "2026-07-24T13:03:14.466Z"
+    "text": "机构是把厄尔尼诺分成4挡的，分别是：弱，中，强，超强",
+    "createdAt": "2026-07-25T07:43:12.605Z",
+    "updatedAt": "2026-07-26T07:23:50.104Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
@@ -26,44 +300,22 @@
     "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0",
     "content": [
       {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-0",
-        "text": "档"
-      },
-      {
         "type": "text",
-        "text": " love it"
-      },
-      {
-        "type": "text",
-        "text": "\n"
+        "text": "="
       },
       {
         "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-1",
-        "text": "等"
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-0",
+        "text": "挡"
       },
       {
         "type": "text",
-        "text": " success！"
-      },
-      {
-        "type": "text",
-        "text": "\n="
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
-        "text": "当"
-      },
-      {
-        "type": "text",
-        "text": " "
+        "text": "\n等"
       }
     ],
-    "text": "档 love it\n等 success！\n=当 ",
-    "createdAt": "2026-07-24T13:01:23.460Z",
-    "updatedAt": "2026-07-24T13:16:42.650Z"
+    "text": "=挡\n等",
+    "createdAt": "2026-07-25T07:44:13.885Z",
+    "updatedAt": "2026-07-26T07:48:00.753Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2",
@@ -71,20 +323,174 @@
     "isRoot": false,
     "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-0",
     "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
-    "content": [],
-    "text": "",
-    "createdAt": "2026-07-24T13:03:49.002Z",
-    "updatedAt": "2026-07-24T13:03:49.002Z"
+    "content": [
+      {
+        "type": "text",
+        "text": "i only know this as \"gears\": "
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2-0",
+        "text": "一档"
+      },
+      {
+        "type": "text",
+        "text": " first gear "
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2-1",
+        "text": "挂挡"
+      },
+      {
+        "type": "text",
+        "text": " put in gear?"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "text",
+        "text": "\n= \"category\" as in \"category 4 storm\""
+      }
+    ],
+    "text": "i only know this as \"gears\": \n一档 first gear \n挂挡 put in gear?\n\n= \"category\" as in \"category 4 storm\"",
+    "createdAt": "2026-07-25T07:45:19.146Z",
+    "updatedAt": "2026-07-26T07:47:47.097Z"
   },
   {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-3",
-    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "整个厄尔尼诺的全部"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-0",
+        "text": "chuannaolian"
+      },
+      {
+        "type": "text",
+        "text": "会被彻底激活"
+      },
+      {
+        "type": "text",
+        "text": "\n说白了就是，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-1",
+        "text": "能产生的影响它都会产生"
+      },
+      {
+        "type": "text",
+        "text": "， 包括 农业，矿业，航运，医药 同时可能都会遭到冲击"
+      }
+    ],
+    "text": "整个厄尔尼诺的全部传闹连会被彻底激活\n说白了就是，能产生的影响它都会产生， 包括 农业，矿业，航运，医药 同时可能都会遭到冲击",
+    "createdAt": "2026-07-25T07:45:54.088Z",
+    "updatedAt": "2026-07-25T07:57:40.293Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
     "isRoot": false,
-    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-1",
-    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
-    "content": [],
-    "text": "",
-    "createdAt": "2026-07-24T13:03:49.233Z",
-    "updatedAt": "2026-07-24T13:03:49.233Z"
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1-0",
+        "text": "传闹连"
+      },
+      {
+        "type": "text",
+        "text": " transfer chaos chain?"
+      }
+    ],
+    "text": "传闹连 transfer chaos chain?",
+    "createdAt": "2026-07-25T07:48:11.889Z",
+    "updatedAt": "2026-07-25T07:54:41.890Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-2-0",
+        "text": "产生影响"
+      },
+      {
+        "type": "text",
+        "text": " produce an effect"
+      }
+    ],
+    "text": "产生影响 produce an effect",
+    "createdAt": "2026-07-25T07:52:21.550Z",
+    "updatedAt": "2026-07-25T08:03:14.895Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "估计还会夸大州地"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-0",
+        "text": "liandong"
+      }
+    ],
+    "text": "估计还会夸大州地联动 / 连动",
+    "createdAt": "2026-07-25T07:57:51.017Z",
+    "updatedAt": "2026-07-25T08:05:36.755Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "联动"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-1-0",
+        "text": "连动"
+      },
+      {
+        "type": "text",
+        "text": " chain reaction?"
+      }
+    ],
+    "text": "联动\n连动 chain reaction?",
+    "createdAt": "2026-07-25T07:58:15.371Z",
+    "updatedAt": "2026-07-25T08:05:36.773Z"
   }
 ]

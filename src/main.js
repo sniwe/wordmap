@@ -127,6 +127,8 @@ if (localStorage.getItem('chin-disambiguation-instance-targeted-enabled') !== '1
 }
 let chinDisambiguationEnabled = localStorage.getItem('chin-disambiguation-enabled') !== '0';
 let workerToastTimer = null;
+let chinDisambiguationRefreshTimer = null;
+let chinDisambiguationRefreshActive = false;
 if (import.meta.env.DEV) {
   createDevReloadTone();
 }
@@ -4098,7 +4100,7 @@ function getLinkedSubSegLineStartAutoLangUnitRange(editor) {
   const parentLangUnit = getLangUnitItem(linkTargetLangUnitId) ?? getLangUnitItem(getLangUnitCycleTargetId(linkTargetLangUnitId));
   const parentTargetType = String(parentLangUnit?.target?.type ?? '').trim();
   const parentTargetText = String(parentLangUnit?.target?.text || getLangUnitText(parentLangUnit) || '');
-  if (!['chinWord', 'chinPhrase', 'chinFuzz'].includes(parentTargetType) || !parentTargetText) {
+  if (!['chinChar', 'chinWord', 'chinPhrase', 'chinFuzz'].includes(parentTargetType) || !parentTargetText) {
     return null;
   }
 
@@ -4115,11 +4117,13 @@ function getLinkedSubSegLineStartAutoLangUnitRange(editor) {
   const beforeText = getSubSegTextBeforeRange(editor, range);
   const lineStartMatch = beforeText.match(/(?:^|\n)(=*)([\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+)$/u);
   const lineStart = lineStartMatch?.[2] ?? '';
-  const text = parentTargetText.includes(lineStart) && lineStart.length === 1
+  const text = parentTargetType === 'chinChar' && lineStart.length > 1
     ? lineStart
-    : getMatchingPinyinSpan(parentTargetText, lineStart)
+    : parentTargetText.includes(lineStart) && lineStart.length === 1
       ? lineStart
-      : '';
+      : getMatchingPinyinSpan(parentTargetText, lineStart)
+        ? lineStart
+        : '';
   if (!text) {
     return null;
   }
@@ -4407,6 +4411,9 @@ async function saveSubSeg(subSegId) {
   }
 
   const result = await response.json();
+  if (result?.chinDisambiguation?.queued > 0) {
+    scheduleChinDisambiguationRefresh();
+  }
   if ((subSegDraftRevisionBySubSegId.get(subSegId) ?? 0) !== saveRevision) {
     if (subSegDraftPayloadBySubSegId.has(subSegId) && !subSegSaveTimersBySubSegId.has(subSegId)) {
       scheduleSubSegSave(subSegId);
@@ -4848,6 +4855,79 @@ async function loadLangUnits() {
   if (state.enteredAudEpIndex >= 0) {
     renderAudEps(state.audEpItems);
   }
+}
+
+function refreshLangUnitViewsInPlace() {
+  audEpList.querySelectorAll('.item__subseg-input').forEach((editor) => {
+    if (!(editor instanceof HTMLElement)) {
+      return;
+    }
+
+    const subSegId = getSubSegEditorKey(editor);
+    editor.querySelectorAll('.langunit-bubble').forEach((bubble) => {
+      if (!(bubble instanceof HTMLElement) || bubble.dataset.langunitCompositionId) {
+        return;
+      }
+
+      const langUnitId = String(bubble.dataset.langunitId ?? '').trim();
+      const langUnit = getLangUnitItem(langUnitId);
+      if (!langUnitId || !langUnit) {
+        return;
+      }
+
+      const sourceText = bubble.dataset.langunitSourceText || getLangUnitText(langUnit) || bubble.textContent || '';
+      const markup = renderLangUnitViewMarkup(getLangUnitRenderView(langUnitId, sourceText, subSegId));
+      if (bubble.innerHTML !== markup) {
+        bubble.innerHTML = markup;
+      }
+    });
+    refreshLangUnitBubbleGroupStyles(editor);
+    refreshLangUnitConnectors(editor);
+  });
+}
+
+async function refreshLangUnitsQuietly() {
+  const response = await fetch('/api/langUnits/items');
+  if (!response.ok) {
+    return;
+  }
+
+  state.langUnitItems = await response.json();
+  if (getFocusedSubSegEditor()) {
+    refreshLangUnitViewsInPlace();
+  } else if (state.enteredAudEpIndex >= 0) {
+    renderAudEps(state.audEpItems);
+  }
+  syncLangUnitRefsLists();
+}
+
+function scheduleChinDisambiguationRefresh() {
+  if (chinDisambiguationRefreshTimer !== null || chinDisambiguationRefreshActive) {
+    return;
+  }
+
+  const poll = async () => {
+    chinDisambiguationRefreshTimer = null;
+    chinDisambiguationRefreshActive = true;
+    try {
+      const response = await fetch('/api/langUnits/disambiguation-status');
+      if (!response.ok) {
+        return;
+      }
+
+      const status = await response.json();
+      await refreshLangUnitsQuietly();
+      if (status.pending > 0 || status.active) {
+        chinDisambiguationRefreshTimer = setTimeout(poll, 250);
+      }
+    } catch {
+      // Background convergence is best effort; a later save or reload can retry.
+    } finally {
+      chinDisambiguationRefreshActive = false;
+    }
+  };
+
+  chinDisambiguationRefreshTimer = setTimeout(poll, 0);
 }
 
 async function loadSubSegs() {
