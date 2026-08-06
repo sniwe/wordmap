@@ -1,0 +1,5 @@
+extent child replace to under chinWord/chinPhrase (to correct an oversighht / incorrect input without deleting)
+
+add some type of marker to indicate content edited vs non- audSegs
+
+maybe we can enforce fuzzy def guesses as being written alongside langUnit, and keep real investigatin on the langUnit subSeg itself

@@ -1,3 +1,5 @@
+note that the user's "r" key is broken on this machine
+
 all code edits use $ponytail skill
 in all code design, prioritize clean lean optimized data collection item shape and interaction design primarily; app code shape is secondary
 

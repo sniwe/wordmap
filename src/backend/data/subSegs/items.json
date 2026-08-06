@@ -1,17 +1,1271 @@
 [
   {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "我们从一条"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-1-0",
+        "text": "预警"
+      },
+      {
+        "type": "text",
+        "text": "说起，关于"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
+        "text": "eerninuo"
+      }
+    ],
+    "text": "我们从一条预警说起，关于eerninuo",
+    "createdAt": "2026-07-28T03:03:09.464Z",
+    "updatedAt": "2026-08-05T06:55:56.716Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-1-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "warning?"
+      }
+    ],
+    "text": "warning?",
+    "createdAt": "2026-07-28T03:03:32.918Z",
+    "updatedAt": "2026-08-05T07:25:09.769Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-1",
+        "text": "厄尔尼诺"
+      },
+      {
+        "type": "text",
+        "text": " el'nino"
+      }
+    ],
+    "text": "厄尔尼诺 el'nino",
+    "createdAt": "2026-07-28T03:04:34.575Z",
+    "updatedAt": "2026-07-31T22:22:23.039Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-2",
+    "content": [
+      {
+        "type": "text",
+        "text": "hot air whether phenomenon"
+      }
+    ],
+    "text": "hot air whether phenomenon",
+    "createdAt": "2026-07-28T03:04:53.157Z",
+    "updatedAt": "2026-07-28T03:05:08.298Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "秋冬季可能会"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-0",
+        "text": "发生一轮eerninuo"
+      },
+      {
+        "type": "text",
+        "text": "，而就在上上的周五，这个"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-3",
+        "text": "消息",
+        "compositionId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12",
+        "partId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12-part-0",
+        "partRole": "seed",
+        "partTargetType": "chinColl",
+        "partSourceId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-2"
+      },
+      {
+        "type": "text",
+        "text": "又被进一步"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-3",
+        "text": "升级了",
+        "compositionId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12",
+        "partId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12-addition",
+        "partRole": "addition",
+        "partTargetType": "chinPhrase"
+      }
+    ],
+    "text": "秋冬季可能会发生一轮eerninuo，而就在上上的周五，这个消息又被进一步升级了",
+    "createdAt": "2026-07-28T06:35:23.600Z",
+    "updatedAt": "2026-07-28T23:24:52.383Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "counted in "
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-1-0",
+        "text": "轮"
+      },
+      {
+        "type": "text",
+        "text": " = rounds "
+      }
+    ],
+    "text": "counted in 轮 = rounds ",
+    "createdAt": "2026-07-28T06:37:08.429Z",
+    "updatedAt": "2026-08-05T07:40:06.483Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-28T06:37:08.654Z",
+    "updatedAt": "2026-07-28T06:37:08.654Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "消息 can 升级?"
+      }
+    ],
+    "text": "消息 can 升级?",
+    "createdAt": "2026-07-28T06:37:15.766Z",
+    "updatedAt": "2026-07-28T06:39:11.143Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-1-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-1",
+    "content": [
+      {
+        "type": "text",
+        "text": "perhaps indicating wave-propegation type spread and intermittent cadence"
+      }
+    ],
+    "text": "perhaps indicating wave-propegation type spread and intermittent cadence",
+    "createdAt": "2026-07-28T06:38:00.651Z",
+    "updatedAt": "2026-07-28T06:38:44.072Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-10-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-10",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "比起结论，这个"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-10-0-0",
+        "text": "tudao"
+      },
+      {
+        "type": "text",
+        "text": "的过程也许更值得关注"
+      }
+    ],
+    "text": "比起结论，这个推倒 / 推导的过程也许更值得关注",
+    "createdAt": "2026-07-31T22:23:01.500Z",
+    "updatedAt": "2026-08-04T04:58:41.767Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-10-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-10",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-10-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-10-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "推倒"
+      },
+      {
+        "type": "text",
+        "text": "\n推导"
+      }
+    ],
+    "text": "推倒\n推导",
+    "createdAt": "2026-07-31T22:23:38.524Z",
+    "updatedAt": "2026-07-31T22:23:57.684Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "这两年关于全球化不是有很多不同的声音"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-0",
+        "text": "ma"
+      },
+      {
+        "type": "text",
+        "text": "\n有人说全球化"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-1",
+        "text": "zhongjie"
+      },
+      {
+        "type": "text",
+        "text": "，也有人说全球化"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-2",
+        "text": "tuichao"
+      }
+    ],
+    "text": "这两年关于全球化不是有很多不同的声音嘛 / 吗\n有人说全球化终结，也有人说全球化退潮 / 退朝",
+    "createdAt": "2026-07-31T22:24:06.818Z",
+    "updatedAt": "2026-07-31T22:51:17.360Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-11-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "嘛"
+      },
+      {
+        "type": "text",
+        "text": "\n吗"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      }
+    ],
+    "text": "嘛\n吗\n",
+    "createdAt": "2026-07-31T22:27:06.360Z",
+    "updatedAt": "2026-07-31T22:27:16.589Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-11-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-2-0",
+        "text": "终结"
+      },
+      {
+        "type": "text",
+        "text": " not sure..."
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      }
+    ],
+    "text": "终结 not sure...\n",
+    "createdAt": "2026-07-31T22:27:23.735Z",
+    "updatedAt": "2026-07-31T22:27:55.421Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-11-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "退潮"
+      },
+      {
+        "type": "text",
+        "text": "\n退朝"
+      }
+    ],
+    "text": "退潮\n退朝",
+    "createdAt": "2026-07-31T22:27:56.135Z",
+    "updatedAt": "2026-07-31T22:28:21.111Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "你看过这个厄尔尼诺的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0-1",
+        "text": "反应连"
+      },
+      {
+        "type": "text",
+        "text": "之后，也许会发现全球化的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0-0",
+        "text": "jinmidu"
+      },
+      {
+        "type": "text",
+        "text": "要超过我们的想象"
+      }
+    ],
+    "text": "你看过这个厄尔尼诺的反应连之后，也许会发现全球化的jinmidu要超过我们的想象",
+    "createdAt": "2026-07-31T22:28:36.943Z",
+    "updatedAt": "2026-07-31T22:29:59.675Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-12-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-1-0",
+        "text": "紧密度"
+      },
+      {
+        "type": "text",
+        "text": " density? seems the same as jsut 密度"
+      }
+    ],
+    "text": "紧密度 density? seems the same as jsut 密度",
+    "createdAt": "2026-07-31T22:29:54.412Z",
+    "updatedAt": "2026-07-31T22:53:09.632Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-12-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "maybe 链 供应链"
+      }
+    ],
+    "text": "maybe 链 供应链",
+    "createdAt": "2026-07-31T22:30:37.718Z",
+    "updatedAt": "2026-07-31T22:36:13.626Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-12-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-1-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-1",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T22:51:59.026Z",
+    "updatedAt": "2026-07-31T22:51:59.026Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "最明显的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-1",
+        "text": "影响体现在",
+        "compositionId": "885e9f28-fad1-43c5-a463-79773252ad95",
+        "partId": "885e9f28-fad1-43c5-a463-79773252ad95-part-0",
+        "partRole": "seed",
+        "partTargetType": "chinColl",
+        "partSourceId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-0"
+      },
+      {
+        "type": "text",
+        "text": "食物的价格"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-1",
+        "text": "上",
+        "compositionId": "885e9f28-fad1-43c5-a463-79773252ad95",
+        "partId": "885e9f28-fad1-43c5-a463-79773252ad95-addition",
+        "partRole": "addition",
+        "partTargetType": "chinChar"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-2",
+        "text": "按照通常的想象"
+      },
+      {
+        "type": "text",
+        "text": "，这应该是因为"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-3",
+        "text": "气候异常"
+      },
+      {
+        "type": "text",
+        "text": "导致某类食物"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-4",
+        "text": "减产"
+      },
+      {
+        "type": "text",
+        "text": "，进而食物涨价，对吧"
+      }
+    ],
+    "text": "最明显的影响体现在食物的价格上\n按照通常的想象，这应该是因为气候异常导致某类食物减产，进而食物涨价，对吧",
+    "createdAt": "2026-07-31T22:38:52.866Z",
+    "updatedAt": "2026-07-31T22:56:59.933Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T22:54:19.044Z",
+    "updatedAt": "2026-07-31T22:54:19.044Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "~ can be seen in"
+      },
+      {
+        "type": "text",
+        "text": "\n== roughly closer to \"takes shape in (the form of) ~\""
+      }
+    ],
+    "text": "~ can be seen in\n== roughly closer to \"takes shape in (the form of) ~\"",
+    "createdAt": "2026-07-31T22:54:36.435Z",
+    "updatedAt": "2026-07-31T22:55:15.443Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T22:56:05.848Z",
+    "updatedAt": "2026-07-31T22:56:05.848Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T22:56:44.474Z",
+    "updatedAt": "2026-07-31T22:56:44.474Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-5",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-4",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "decrease production"
+      }
+    ],
+    "text": "decrease production",
+    "createdAt": "2026-07-31T22:56:45.347Z",
+    "updatedAt": "2026-07-31T22:56:56.256Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-14-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-14",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "它的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-14-0-0",
+        "text": "发生方式"
+      },
+      {
+        "type": "text",
+        "text": "要复杂得多"
+      }
+    ],
+    "text": "它的发生方式要复杂得多",
+    "createdAt": "2026-07-31T22:57:09.507Z",
+    "updatedAt": "2026-07-31T22:57:50.057Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-14-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-14",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-14-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-14-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "the way in which ~ happens"
+      }
+    ],
+    "text": "the way in which ~ happens",
+    "createdAt": "2026-07-31T22:57:37.624Z",
+    "updatedAt": "2026-07-31T22:57:48.215Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "比如，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-0",
+        "text": "bilu"
+      },
+      {
+        "type": "text",
+        "text": "。bilu的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-1",
+        "text": "海面"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-2",
+        "text": "恰好"
+      },
+      {
+        "type": "text",
+        "text": "在厄尔尼诺的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-3",
+        "text": "影响范围内"
+      }
+    ],
+    "text": "比如，bilu。bilu的海面恰好在厄尔尼诺的影响范围内",
+    "createdAt": "2026-07-31T22:58:06.218Z",
+    "updatedAt": "2026-07-31T23:00:00.054Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-1-0",
+        "text": "秘鲁"
+      },
+      {
+        "type": "text",
+        "text": " Peru"
+      }
+    ],
+    "text": "秘鲁 Peru",
+    "createdAt": "2026-07-31T22:59:36.142Z",
+    "updatedAt": "2026-08-05T00:01:46.455Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "sea surface"
+      }
+    ],
+    "text": "sea surface",
+    "createdAt": "2026-07-31T22:59:37.143Z",
+    "updatedAt": "2026-08-05T00:02:56.793Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T22:59:37.352Z",
+    "updatedAt": "2026-07-31T22:59:37.352Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "range/field of effect"
+      }
+    ],
+    "text": "range/field of effect",
+    "createdAt": "2026-07-31T22:59:37.799Z",
+    "updatedAt": "2026-07-31T22:59:54.094Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-5",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-1-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-1",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-05T00:01:43.633Z",
+    "updatedAt": "2026-08-05T00:01:43.633Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "这里是全球最大的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0-0",
+        "text": "tinv"
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0-1",
+        "text": "bulao"
+      },
+      {
+        "type": "text",
+        "text": "国"
+      }
+    ],
+    "text": "这里是全球最大的鳀鱼 捕捞国",
+    "createdAt": "2026-07-31T23:00:06.655Z",
+    "updatedAt": "2026-08-05T03:39:26.821Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-16-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-1-0",
+        "text": "鳀鱼"
+      },
+      {
+        "type": "text",
+        "text": " anchovy"
+      }
+    ],
+    "text": "鳀鱼 anchovy",
+    "createdAt": "2026-07-31T23:01:01.716Z",
+    "updatedAt": "2026-08-05T00:07:33.923Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-16-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-2-0",
+        "text": "捕捞"
+      },
+      {
+        "type": "text",
+        "text": " capture (by fishing)"
+      }
+    ],
+    "text": "捕捞 capture (by fishing)",
+    "createdAt": "2026-07-31T23:01:12.627Z",
+    "updatedAt": "2026-08-05T00:04:16.447Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "就是不会直接"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-0",
+        "text": "zhidao"
+      },
+      {
+        "type": "text",
+        "text": "，潜台词就是你会间接zhidao"
+      },
+      {
+        "type": "text",
+        "text": "\n加工成鱼粉，而鱼粉又是"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-1",
+        "text": "水产养职业"
+      },
+      {
+        "type": "text",
+        "text": "最重要的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-2",
+        "text": "蛋白质饲料"
+      },
+      {
+        "type": "text",
+        "text": "之一"
+      },
+      {
+        "type": "text",
+        "text": "\nbilu的鱼粉大概是全球产量的20%，而咱们中国每年"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-3",
+        "text": "引进"
+      },
+      {
+        "type": "text",
+        "text": "的鱼粉大概是200万"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-4",
+        "text": "dun"
+      },
+      {
+        "type": "text",
+        "text": "，大概是一半来自bilu"
+      }
+    ],
+    "text": "就是不会直接吃到 / 知道，潜台词就是你会间接zhidao\n加工成鱼粉，而鱼粉又是水产养职业最重要的蛋白质饲料之一\nbilu的鱼粉大概是全球产量的20%，而咱们中国每年引进的鱼粉大概是200万dun，大概是一半来自bilu",
+    "createdAt": "2026-07-31T23:03:15.182Z",
+    "updatedAt": "2026-08-05T03:39:28.191Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "吃到"
+      },
+      {
+        "type": "text",
+        "text": "\n知道"
+      }
+    ],
+    "text": "吃到\n知道",
+    "createdAt": "2026-07-31T23:06:41.983Z",
+    "updatedAt": "2026-07-31T23:09:39.252Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T23:10:30.676Z",
+    "updatedAt": "2026-07-31T23:10:30.676Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "protein-rich feed"
+      }
+    ],
+    "text": "protein-rich feed",
+    "createdAt": "2026-07-31T23:10:37.450Z",
+    "updatedAt": "2026-07-31T23:11:01.529Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T23:11:20.396Z",
+    "updatedAt": "2026-07-31T23:11:20.396Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-5",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-4",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "吨 "
+      },
+      {
+        "type": "text",
+        "text": "\n顿 "
+      }
+    ],
+    "text": "吨 \n顿 ",
+    "createdAt": "2026-07-31T23:11:29.105Z",
+    "updatedAt": "2026-07-31T23:11:57.410Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "厄尔尼诺会导致"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-0",
+        "text": "bilu"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-0",
+        "text": "近海"
+      },
+      {
+        "type": "text",
+        "text": "水温异常升高"
+      },
+      {
+        "type": "text",
+        "text": "\n近海"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-1",
+        "text": "水温升高"
+      },
+      {
+        "type": "text",
+        "text": "了，那么"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-2",
+        "text": "tiyuzhongquan"
+      },
+      {
+        "type": "text",
+        "text": "就会选择向深水"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-3",
+        "text": "qu"
+      },
+      {
+        "type": "text",
+        "text": " 迁移，这就会导致捕捞量"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-4",
+        "text": "jiujie"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      }
+    ],
+    "text": "厄尔尼诺会导致秘鲁近海水温异常升高\n近海水温升高了，那么鳀鱼种群就会选择向深水去 / 区 迁移，这就会导致捕捞量纠结\n",
+    "createdAt": "2026-07-31T23:12:17.737Z",
+    "updatedAt": "2026-08-05T03:39:29.869Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-1-0",
+        "text": "秘鲁"
+      },
+      {
+        "type": "text",
+        "text": " ？"
+      }
+    ],
+    "text": "秘鲁 ？",
+    "createdAt": "2026-07-31T23:15:20.703Z",
+    "updatedAt": "2026-07-31T23:15:31.364Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T23:16:37.579Z",
+    "updatedAt": "2026-07-31T23:16:37.579Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-07-31T23:16:38.677Z",
+    "updatedAt": "2026-07-31T23:16:38.677Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-4-0",
+        "text": "鳀鱼种群"
+      },
+      {
+        "type": "text",
+        "text": " anchovy populations"
+      }
+    ],
+    "text": "鳀鱼种群 anchovy populations",
+    "createdAt": "2026-07-31T23:16:44.308Z",
+    "updatedAt": "2026-08-05T01:32:27.354Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-5",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "去"
+      },
+      {
+        "type": "text",
+        "text": "\n区"
+      }
+    ],
+    "text": "去\n区",
+    "createdAt": "2026-07-31T23:17:04.595Z",
+    "updatedAt": "2026-07-31T23:17:10.791Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-6",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-4",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-6-0",
+        "text": "纠结"
+      },
+      {
+        "type": "text",
+        "text": " problem "
+      }
+    ],
+    "text": "纠结 problem ",
+    "createdAt": "2026-07-31T23:17:14.707Z",
+    "updatedAt": "2026-07-31T23:18:40.664Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-7",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-4-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-4",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-7-0",
+        "text": "种群"
+      },
+      {
+        "type": "text",
+        "text": " population"
+      }
+    ],
+    "text": "种群 population",
+    "createdAt": "2026-08-05T00:10:16.985Z",
+    "updatedAt": "2026-08-05T00:13:25.106Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "今年6月份，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-0",
+        "text": "bilu"
+      },
+      {
+        "type": "text",
+        "text": "鱼粉的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0-0",
+        "text": "waipanli'an"
+      },
+      {
+        "type": "text",
+        "text": "价格已经"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0-2",
+        "text": "刷新了历史最高纪录"
+      },
+      {
+        "type": "text",
+        "text": "                                             "
+      }
+    ],
+    "text": "今年6月份，秘鲁鱼粉的外滩离岸 / 外盘立案价格已经刷新了历史最高纪录                                             ",
+    "createdAt": "2026-07-31T23:19:19.037Z",
+    "updatedAt": "2026-08-05T04:13:02.732Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-1-0",
+        "text": "秘鲁"
+      },
+      {
+        "type": "text",
+        "text": " Peru"
+      }
+    ],
+    "text": "秘鲁 Peru",
+    "createdAt": "2026-08-04T03:46:46.747Z",
+    "updatedAt": "2026-08-05T03:33:09.162Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "外滩离岸 "
+      },
+      {
+        "type": "text",
+        "text": "\n外盘立案"
+      }
+    ],
+    "text": "外滩离岸 \n外盘立案",
+    "createdAt": "2026-08-04T03:46:46.954Z",
+    "updatedAt": "2026-08-04T03:52:12.103Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-2",
+        "text": "刷新纪录"
+      },
+      {
+        "type": "text",
+        "text": " broke the all-time record"
+      }
+    ],
+    "text": "刷新纪录 broke the all-time record",
+    "createdAt": "2026-08-04T03:47:01.337Z",
+    "updatedAt": "2026-08-04T03:49:06.307Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-04T03:47:28.160Z",
+    "updatedAt": "2026-08-04T03:47:28.160Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-5",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-04T03:48:13.626Z",
+    "updatedAt": "2026-08-04T03:48:13.626Z"
+  },
+  {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
     "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
     "isRoot": true,
     "content": [
       {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-0",
-        "text": "海洋和daji管理局"
+        "type": "text",
+        "text": "海洋和daji管理局正式发布，说..."
       },
       {
         "type": "text",
-        "text": "正式发布，说这一轮厄尔尼诺有81%的概率达到"
+        "text": "\n有81% 的概率达到"
       },
       {
         "type": "langUnitRef",
@@ -19,36 +1273,681 @@
         "text": "有记录以来的最强级别"
       }
     ],
-    "text": "海洋和daji管理局正式发布，说这一轮厄尔尼诺有81%的概率达到有记录以来的最强级别",
-    "createdAt": "2026-07-25T07:27:10.604Z",
-    "updatedAt": "2026-07-25T07:28:27.894Z"
+    "text": "海洋和daji管理局正式发布，说...\n有81% 的概率达到有记录以来的最强级别",
+    "createdAt": "2026-07-28T06:39:39.653Z",
+    "updatedAt": "2026-07-28T23:25:57.732Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-1",
-    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
-    "isRoot": false,
-    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-0",
-    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
-    "content": [],
-    "text": "",
-    "createdAt": "2026-07-25T07:28:33.160Z",
-    "updatedAt": "2026-07-25T07:29:43.551Z"
-  },
-  {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-2",
     "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
     "isRoot": false,
     "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-1",
     "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
     "content": [
       {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-1-0",
+        "text": "有记录以来"
+      },
+      {
         "type": "text",
-        "text": "“in recorded history\""
+        "text": " in recorded history"
       }
     ],
-    "text": "“in recorded history\"",
-    "createdAt": "2026-07-25T07:29:11.359Z",
-    "updatedAt": "2026-07-25T07:29:25.646Z"
+    "text": "有记录以来 in recorded history",
+    "createdAt": "2026-07-28T06:40:16.553Z",
+    "updatedAt": "2026-07-28T06:41:09.975Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-20",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "鱼粉涨价，就意味着饲料涨价，尤其是水产饲料，而饲料涨价又会"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0-0",
+        "text": "带动"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0-1",
+        "text": "对应的"
+      },
+      {
+        "type": "text",
+        "text": "肉类涨价"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      }
+    ],
+    "text": "鱼粉涨价，就意味着饲料涨价，尤其是水产饲料，而饲料涨价又会带动对应的肉类涨价\n",
+    "createdAt": "2026-08-04T03:52:18.265Z",
+    "updatedAt": "2026-08-05T04:13:05.698Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "这个从饲料到"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-2",
+        "text": "yangzhipin"
+      },
+      {
+        "type": "text",
+        "text": "的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-1",
+        "text": "chuannao"
+      },
+      {
+        "type": "text",
+        "text": "周期大概是3-6个月"
+      }
+    ],
+    "text": "这个从饲料到养殖品的传闹周期大概是3-6个月",
+    "createdAt": "2026-08-04T03:53:55.845Z",
+    "updatedAt": "2026-08-05T04:13:08.397Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-21-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "养殖品 "
+      }
+    ],
+    "text": "养殖品 ",
+    "createdAt": "2026-08-04T03:55:08.930Z",
+    "updatedAt": "2026-08-05T03:39:42.709Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-21-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "传闹"
+      }
+    ],
+    "text": "传闹",
+    "createdAt": "2026-08-04T03:56:37.617Z",
+    "updatedAt": "2026-08-05T03:41:16.455Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-21-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-3-0",
+        "text": "养殖品"
+      },
+      {
+        "type": "text",
+        "text": " livestock?"
+      }
+    ],
+    "text": "养殖品 livestock?",
+    "createdAt": "2026-08-05T03:39:55.791Z",
+    "updatedAt": "2026-08-05T03:40:35.351Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-22",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "可以感受一下这个chuannao过程：bilu的tiyu原来"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-0",
+        "text": "是个万里之外的东西"
+      },
+      {
+        "type": "text",
+        "text": "，但是"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-1",
+        "text": "jieyou"
+      },
+      {
+        "type": "text",
+        "text": "全球化的协作网络，它的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-2",
+        "text": "影响面"
+      },
+      {
+        "type": "text",
+        "text": "居然可以这么广泛"
+      }
+    ],
+    "text": "可以感受一下这个chuannao过程：bilu的tiyu原来是个万里之外的东西，但是jieyou全球化的协作网络，它的影响面居然可以这么广泛",
+    "createdAt": "2026-08-04T03:56:50.848Z",
+    "updatedAt": "2026-08-05T04:13:16.169Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "这个一直"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-0",
+        "text": "环环相扣的协作网络"
+      },
+      {
+        "type": "text",
+        "text": "在运转，只不过他多数时间"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-1",
+        "text": "运行顺畅"
+      },
+      {
+        "type": "text",
+        "text": "，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-2",
+        "text": "以至于"
+      },
+      {
+        "type": "text",
+        "text": "很多人感受不到"
+      }
+    ],
+    "text": "这个一直环环相扣的协作网络在运转，只不过他多数时间运行顺畅，以至于很多人感受不到",
+    "createdAt": "2026-08-04T03:59:23.163Z",
+    "updatedAt": "2026-08-05T04:13:19.143Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-1-0",
+        "text": "环环相扣"
+      }
+    ],
+    "text": "环环相扣",
+    "createdAt": "2026-08-04T04:01:10.356Z",
+    "updatedAt": "2026-08-04T04:01:15.590Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-1-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-1",
+    "content": [
+      {
+        "type": "text",
+        "text": "interlinking (like a chain)"
+      }
+    ],
+    "text": "interlinking (like a chain)",
+    "createdAt": "2026-08-04T04:01:15.614Z",
+    "updatedAt": "2026-08-04T04:01:38.033Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-04T04:01:58.147Z",
+    "updatedAt": "2026-08-04T04:02:10.908Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-04T04:02:02.770Z",
+    "updatedAt": "2026-08-04T04:02:02.770Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-24-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-24",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "日用而不知"
+      }
+    ],
+    "text": "日用而不知",
+    "createdAt": "2026-08-04T04:02:19.428Z",
+    "updatedAt": "2026-08-05T04:13:21.755Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "但是现在，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-0",
+        "text": "一场厄尔尼诺预警"
+      },
+      {
+        "type": "text",
+        "text": "就把这个"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-2",
+        "text": "maizaishenzhong"
+      },
+      {
+        "type": "text",
+        "text": "的chuannao链"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-1",
+        "text": "拉进了人们的视野"
+      }
+    ],
+    "text": "但是现在，一场厄尔尼诺预警就把这个maizaishenzhong的chuannao链拉进了人们的视野",
+    "createdAt": "2026-08-04T04:02:45.207Z",
+    "updatedAt": "2026-08-05T04:14:30.632Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-25-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-05T04:13:56.316Z",
+    "updatedAt": "2026-08-05T04:13:56.316Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-25-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "埋在shenzhong"
+      }
+    ],
+    "text": "埋在shenzhong",
+    "createdAt": "2026-08-05T04:13:56.895Z",
+    "updatedAt": "2026-08-05T04:14:20.155Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "面包，饼干，方便面，这些东西的共同点就是大家都需要用到"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0-0",
+        "text": "棕榈油"
+      },
+      {
+        "type": "text",
+        "text": " 而"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0-1",
+        "text": "棕榈油最重要的产区"
+      },
+      {
+        "type": "text",
+        "text": "是印度尼西亚以及马来西亚"
+      }
+    ],
+    "text": "面包，饼干，方便面，这些东西的共同点就是大家都需要用到棕榈油 而棕榈油最重要的产区是印度尼西亚以及马来西亚",
+    "createdAt": "2026-08-05T01:49:57.330Z",
+    "updatedAt": "2026-08-05T04:14:33.767Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-26-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "palm oil"
+      }
+    ],
+    "text": "palm oil",
+    "createdAt": "2026-08-05T01:52:33.122Z",
+    "updatedAt": "2026-08-05T01:53:58.873Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-26-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "~ 's major producing region"
+      }
+    ],
+    "text": "~ 's major producing region",
+    "createdAt": "2026-08-05T01:52:33.372Z",
+    "updatedAt": "2026-08-05T03:11:10.763Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "这导致东南亚"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-0",
+        "text": "干旱"
+      },
+      {
+        "type": "text",
+        "text": "，棕榈油产量"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-2",
+        "text": "jiujiang"
+      },
+      {
+        "type": "text",
+        "text": "，那"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-1",
+        "text": "进而导致"
+      },
+      {
+        "type": "text",
+        "text": "棕榈油涨价20%到40%"
+      }
+    ],
+    "text": "这导致东南亚干旱，棕榈油产量jiujiang，那进而导致棕榈油涨价20%到40%",
+    "createdAt": "2026-08-05T01:54:11.546Z",
+    "updatedAt": "2026-08-05T04:14:47.710Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-27-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "drought?"
+      }
+    ],
+    "text": "drought?",
+    "createdAt": "2026-08-05T01:55:32.449Z",
+    "updatedAt": "2026-08-05T01:55:40.293Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-27-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "in turn leading to"
+      }
+    ],
+    "text": "in turn leading to",
+    "createdAt": "2026-08-05T01:55:41.602Z",
+    "updatedAt": "2026-08-05T04:15:56.435Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-27-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "?纠结 的纠？"
+      }
+    ],
+    "text": "?纠结 的纠？",
+    "createdAt": "2026-08-05T04:14:55.360Z",
+    "updatedAt": "2026-08-05T04:15:47.886Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-28-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-28",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-28-0-0",
+        "text": "供应冲击"
+      },
+      {
+        "type": "text",
+        "text": "会更加猛烈"
+      }
+    ],
+    "text": "供应冲击会更加猛烈",
+    "createdAt": "2026-08-05T01:56:08.224Z",
+    "updatedAt": "2026-08-05T04:14:39.158Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-28-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-28",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-28-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-28-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "supply shock"
+      }
+    ],
+    "text": "supply shock",
+    "createdAt": "2026-08-05T03:11:21.855Z",
+    "updatedAt": "2026-08-05T04:16:07.232Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "食物还可能包括，巴西的大豆，澳大利亚的"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-0",
+        "text": "小麦"
+      },
+      {
+        "type": "text",
+        "text": "，还有印度的大米，而"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-1",
+        "text": "pingmian"
+      },
+      {
+        "type": "text",
+        "text": "这些地方就是这些"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-2",
+        "text": "zuowu"
+      },
+      {
+        "type": "text",
+        "text": "的重要"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-3",
+        "text": "出口国"
+      }
+    ],
+    "text": "食物还可能包括，巴西的大豆，澳大利亚的小麦，还有印度的大米，而平面这些地方就是这些作物的重要出口国",
+    "createdAt": "2026-08-05T02:37:28.040Z",
+    "updatedAt": "2026-08-05T04:16:10.381Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "barley?"
+      }
+    ],
+    "text": "barley?",
+    "createdAt": "2026-08-05T02:40:04.424Z",
+    "updatedAt": "2026-08-05T02:40:08.788Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-2-0",
+        "text": "平面"
+      },
+      {
+        "type": "text",
+        "text": " ?"
+      }
+    ],
+    "text": "平面 ?",
+    "createdAt": "2026-08-05T02:40:09.758Z",
+    "updatedAt": "2026-08-05T02:40:21.403Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-3-0",
+        "text": "作物"
+      },
+      {
+        "type": "text",
+        "text": " crops?"
+      }
+    ],
+    "text": "作物 crops?",
+    "createdAt": "2026-08-05T02:40:23.317Z",
+    "updatedAt": "2026-08-05T02:40:36.201Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "exporting country; exporter (of);"
+      }
+    ],
+    "text": "exporting country; exporter (of);",
+    "createdAt": "2026-08-05T02:40:42.199Z",
+    "updatedAt": "2026-08-05T03:11:42.677Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-5",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-2-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-2",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-05T03:11:31.015Z",
+    "updatedAt": "2026-08-05T03:11:31.015Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
@@ -71,8 +1970,8 @@
       }
     ],
     "text": "中国国家海洋环境预报中心也同步发布了确认",
-    "createdAt": "2026-07-25T07:29:51.100Z",
-    "updatedAt": "2026-07-25T07:30:50.415Z"
+    "createdAt": "2026-07-28T06:41:20.630Z",
+    "updatedAt": "2026-07-28T06:41:58.715Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-1",
@@ -83,12 +1982,12 @@
     "content": [
       {
         "type": "text",
-        "text": "org name in english?"
+        "text": "english for this?"
       }
     ],
-    "text": "org name in english?",
-    "createdAt": "2026-07-25T07:30:31.620Z",
-    "updatedAt": "2026-07-25T07:34:31.244Z"
+    "text": "english for this?",
+    "createdAt": "2026-07-28T06:41:59.112Z",
+    "updatedAt": "2026-07-28T23:26:08.540Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2",
@@ -98,34 +1997,296 @@
     "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
     "content": [
       {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2-0",
-        "text": "同步发布"
+        "type": "text",
+        "text": "同步 usage"
       }
     ],
-    "text": "同步发布",
-    "createdAt": "2026-07-25T07:34:20.830Z",
-    "updatedAt": "2026-07-25T07:36:22.846Z"
+    "text": "同步 usage",
+    "createdAt": "2026-07-28T06:42:11.182Z",
+    "updatedAt": "2026-07-28T23:26:14.269Z"
   },
   {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-3",
-    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
-    "isRoot": false,
-    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2-0",
-    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2",
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30",
+    "isRoot": true,
     "content": [
       {
-        "type": "text",
-        "text": "in response?"
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-0",
+        "text": "澳大利亚农业资源经济科学局"
       },
       {
         "type": "text",
-        "text": "\nprompted by another, also~"
+        "text": "已经在"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-1",
+        "text": "官方报告"
+      },
+      {
+        "type": "text",
+        "text": "中付不了"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-2",
+        "text": "预测"
       }
     ],
-    "text": "in response?\nprompted by another, also~",
-    "createdAt": "2026-07-25T07:35:26.690Z",
-    "updatedAt": "2026-07-25T07:36:20.456Z"
+    "text": "澳大利亚农业资源经济科学局已经在官方报告中付不了预测",
+    "createdAt": "2026-08-05T02:41:25.129Z",
+    "updatedAt": "2026-08-05T04:16:13.123Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-30-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "\n"
+      }
+    ],
+    "text": "\n",
+    "createdAt": "2026-08-05T02:42:26.547Z",
+    "updatedAt": "2026-08-05T02:42:32.728Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-30-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "official report"
+      }
+    ],
+    "text": "official report",
+    "createdAt": "2026-08-05T02:42:46.503Z",
+    "updatedAt": "2026-08-05T02:43:04.300Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-30-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "projection?"
+      }
+    ],
+    "text": "projection?",
+    "createdAt": "2026-08-05T02:42:46.761Z",
+    "updatedAt": "2026-08-05T03:11:47.932Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-31",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "2026到2027"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0-0",
+        "text": "产期"
+      },
+      {
+        "type": "text",
+        "text": "，澳大利亚的小麦产量将"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0-1",
+        "text": "同比"
+      },
+      {
+        "type": "text",
+        "text": "下降26%"
+      }
+    ],
+    "text": "2026到2027产期，澳大利亚的小麦产量将同比下降26%",
+    "createdAt": "2026-08-05T02:43:14.040Z",
+    "updatedAt": "2026-08-05T02:44:31.949Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-31-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-31",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "production cycle?"
+      }
+    ],
+    "text": "production cycle?",
+    "createdAt": "2026-08-05T04:16:18.947Z",
+    "updatedAt": "2026-08-05T04:16:51.956Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-32-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-32",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "5年的平均水平要"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-32-0-0",
+        "text": "dishang"
+      },
+      {
+        "type": "text",
+        "text": "23%"
+      }
+    ],
+    "text": "5年的平均水平要dishang23%",
+    "createdAt": "2026-08-05T02:44:42.132Z",
+    "updatedAt": "2026-08-05T04:16:57.476Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-32-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-32",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-32-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-32-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "低上 lower by over ~"
+      }
+    ],
+    "text": "低上 lower by over ~",
+    "createdAt": "2026-08-05T02:45:12.973Z",
+    "updatedAt": "2026-08-05T02:45:32.290Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "含量要取决于接下来的实际下雨量 - 假如"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-0",
+        "text": "yusuochengzhen"
+      },
+      {
+        "type": "text",
+        "text": "的话，那么面包，面条，还有饼干的原材料"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-4",
+        "text": "成本",
+        "compositionId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6",
+        "partId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6-part-0",
+        "partRole": "seed",
+        "partTargetType": "chinWord",
+        "partSourceId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-3"
+      },
+      {
+        "type": "text",
+        "text": "都会"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-4",
+        "text": "承受压力",
+        "compositionId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6",
+        "partId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6-addition",
+        "partRole": "addition",
+        "partTargetType": "chinPhrase"
+      }
+    ],
+    "text": "含量要取决于接下来的实际下雨量 - 假如预测成真的话，那么面包，面条，还有饼干的原材料成本都会承受压力",
+    "createdAt": "2026-08-05T03:05:05.609Z",
+    "updatedAt": "2026-08-05T05:12:21.277Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-0",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-1-0",
+        "text": "预测成真"
+      },
+      {
+        "type": "text",
+        "text": " the predictions come true"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      }
+    ],
+    "text": "预测成真 the predictions come true\n",
+    "createdAt": "2026-08-05T03:07:43.235Z",
+    "updatedAt": "2026-08-05T03:10:56.047Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-05T03:07:43.400Z",
+    "updatedAt": "2026-08-05T03:07:43.400Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-05T03:08:21.007Z",
+    "updatedAt": "2026-08-05T03:08:21.007Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-05T03:08:39.973Z",
+    "updatedAt": "2026-08-05T03:08:39.973Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-5",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-4",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-05T03:08:51.591Z",
+    "updatedAt": "2026-08-05T03:08:51.591Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
@@ -140,9 +2301,10 @@
         "type": "langUnitRef",
         "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1",
         "text": "超过",
-        "compositionId": "f3702686-3efd-4624-9ebe-349bea31074a",
-        "partId": "f3702686-3efd-4624-9ebe-349bea31074a-part-0",
+        "compositionId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc",
+        "partId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc-part-0",
         "partRole": "seed",
+        "partTargetType": "chinColl",
         "partSourceId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-0"
       },
       {
@@ -153,16 +2315,15 @@
         "type": "langUnitRef",
         "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1",
         "text": "史上最强记录",
-        "remote": true,
-        "compositionId": "f3702686-3efd-4624-9ebe-349bea31074a",
-        "partId": "f3702686-3efd-4624-9ebe-349bea31074a-addition",
+        "compositionId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc",
+        "partId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc-addition",
         "partRole": "addition",
         "partTargetType": "chinPhrase"
       }
     ],
     "text": "可能会超过97-8年的那一轮史上最强记录",
-    "createdAt": "2026-07-25T07:36:25.011Z",
-    "updatedAt": "2026-07-25T07:37:31.661Z"
+    "createdAt": "2026-07-28T06:42:46.880Z",
+    "updatedAt": "2026-07-29T01:30:26.819Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-1",
@@ -172,8 +2333,8 @@
     "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
     "content": [],
     "text": "",
-    "createdAt": "2026-07-25T07:37:08.486Z",
-    "updatedAt": "2026-07-25T07:37:08.486Z"
+    "createdAt": "2026-07-28T06:43:47.612Z",
+    "updatedAt": "2026-07-28T06:43:47.612Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-2",
@@ -184,16 +2345,12 @@
     "content": [
       {
         "type": "text",
-        "text": "overtake"
-      },
-      {
-        "type": "text",
-        "text": "\nsurpass ~ as"
+        "text": "surpass the (highest) record"
       }
     ],
-    "text": "overtake\nsurpass ~ as",
-    "createdAt": "2026-07-25T07:37:17.765Z",
-    "updatedAt": "2026-07-25T07:38:20.331Z"
+    "text": "surpass the (highest) record",
+    "createdAt": "2026-07-28T06:43:56.196Z",
+    "updatedAt": "2026-07-28T23:26:32.764Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
@@ -201,73 +2358,13 @@
     "isRoot": true,
     "content": [
       {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
-        "text": "什么是",
-        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
-        "partId": "ee2de915-055d-4f30-ae3c-050f494cad35-part-0",
-        "partRole": "seed",
-        "partSourceId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-0"
-      },
-      {
         "type": "text",
-        "text": "厄尔尼诺，"
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
-        "text": "你",
-        "remote": true,
-        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
-        "partId": "ee2de915-055d-4f30-ae3c-050f494cad35-addition",
-        "partRole": "addition",
-        "partTargetType": "chinChar"
-      },
-      {
-        "type": "text",
-        "text": "大概率上"
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
-        "text": "不陌生",
-        "remote": true,
-        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
-        "partId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13-addition",
-        "partRole": "addition",
-        "partTargetType": "chinPhrase"
+        "text": "什么是eerninuo，你大概率上不陌生"
       }
     ],
-    "text": "什么是厄尔尼诺，你大概率上不陌生",
-    "createdAt": "2026-07-25T07:38:31.423Z",
-    "updatedAt": "2026-07-25T07:39:51.331Z"
-  },
-  {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-1",
-    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
-    "isRoot": false,
-    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-0",
-    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
-    "content": [],
-    "text": "",
-    "createdAt": "2026-07-25T07:38:59.404Z",
-    "updatedAt": "2026-07-25T07:38:59.404Z"
-  },
-  {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-2",
-    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
-    "isRoot": false,
-    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
-    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
-    "content": [
-      {
-        "type": "text",
-        "text": "you're most likely familiar with ~"
-      }
-    ],
-    "text": "you're most likely familiar with ~",
-    "createdAt": "2026-07-25T07:40:15.145Z",
-    "updatedAt": "2026-07-25T07:42:46.935Z"
+    "text": "什么是eerninuo，你大概率上不陌生",
+    "createdAt": "2026-07-28T06:45:06.530Z",
+    "updatedAt": "2026-07-29T01:31:18.935Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0",
@@ -276,21 +2373,21 @@
     "content": [
       {
         "type": "text",
-        "text": "机构是"
+        "text": "机构是把厄尔尼诺分成4"
       },
       {
         "type": "langUnitRef",
         "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0-0",
-        "text": "把厄尔尼诺分成4dang"
+        "text": "dang"
       },
       {
         "type": "text",
-        "text": "的，分别是：弱，中，强，超强"
+        "text": "的"
       }
     ],
-    "text": "机构是把厄尔尼诺分成4挡的，分别是：弱，中，强，超强",
-    "createdAt": "2026-07-25T07:43:12.605Z",
-    "updatedAt": "2026-07-26T07:23:50.104Z"
+    "text": "机构是把厄尔尼诺分成4档的",
+    "createdAt": "2026-07-29T01:31:27.830Z",
+    "updatedAt": "2026-07-29T02:35:57.743Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
@@ -306,16 +2403,42 @@
       {
         "type": "langUnitRef",
         "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-0",
+        "text": "档"
+      },
+      {
+        "type": "text",
+        "text": " gear?"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-1",
         "text": "挡"
       },
       {
         "type": "text",
-        "text": "\n等"
+        "text": " gear? "
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
+        "text": "等"
+      },
+      {
+        "type": "text",
+        "text": " as in 等级"
       }
     ],
-    "text": "=挡\n等",
-    "createdAt": "2026-07-25T07:44:13.885Z",
-    "updatedAt": "2026-07-26T07:48:00.753Z"
+    "text": "=档 gear?\n挡 gear? \n等 as in 等级",
+    "createdAt": "2026-07-29T01:31:53.122Z",
+    "updatedAt": "2026-07-29T02:35:55.065Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2",
@@ -326,46 +2449,46 @@
     "content": [
       {
         "type": "text",
-        "text": "i only know this as \"gears\": "
-      },
-      {
-        "type": "text",
-        "text": "\n"
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2-0",
-        "text": "一档"
-      },
-      {
-        "type": "text",
-        "text": " first gear "
-      },
-      {
-        "type": "text",
-        "text": "\n"
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2-1",
-        "text": "挂挡"
-      },
-      {
-        "type": "text",
-        "text": " put in gear?"
-      },
-      {
-        "type": "text",
-        "text": "\n"
-      },
-      {
-        "type": "text",
-        "text": "\n= \"category\" as in \"category 4 storm\""
+        "text": "category; gear;"
       }
     ],
-    "text": "i only know this as \"gears\": \n一档 first gear \n挂挡 put in gear?\n\n= \"category\" as in \"category 4 storm\"",
-    "createdAt": "2026-07-25T07:45:19.146Z",
-    "updatedAt": "2026-07-26T07:47:47.097Z"
+    "text": "category; gear;",
+    "createdAt": "2026-07-29T01:32:57.277Z",
+    "updatedAt": "2026-07-29T02:35:44.795Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
+    "content": [
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-3-0",
+        "text": "挡路"
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-3-1",
+        "text": "阻挡"
+      },
+      {
+        "type": "text",
+        "text": " "
+      }
+    ],
+    "text": "挡路 \n阻挡 ",
+    "createdAt": "2026-07-29T02:35:01.454Z",
+    "updatedAt": "2026-07-29T02:35:22.116Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
@@ -379,11 +2502,16 @@
       {
         "type": "langUnitRef",
         "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-0",
-        "text": "chuannaolian"
+        "text": "chuan'naolian"
       },
       {
         "type": "text",
-        "text": "会被彻底激活"
+        "text": "会"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-1",
+        "text": "被彻底激活"
       },
       {
         "type": "text",
@@ -391,17 +2519,48 @@
       },
       {
         "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-1",
-        "text": "能产生的影响它都会产生"
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-2",
+        "text": "能产生的影响"
       },
       {
         "type": "text",
-        "text": "， 包括 农业，矿业，航运，医药 同时可能都会遭到冲击"
+        "text": "它都会产生，包括农业，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-3",
+        "text": "矿业"
+      },
+      {
+        "type": "text",
+        "text": "，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-4",
+        "text": "航运"
+      },
+      {
+        "type": "text",
+        "text": "，"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-5",
+        "text": "医药"
+      },
+      {
+        "type": "text",
+        "text": " "
+      },
+      {
+        "type": "text",
+        "text": "\n"
       }
     ],
-    "text": "整个厄尔尼诺的全部传闹连会被彻底激活\n说白了就是，能产生的影响它都会产生， 包括 农业，矿业，航运，医药 同时可能都会遭到冲击",
-    "createdAt": "2026-07-25T07:45:54.088Z",
-    "updatedAt": "2026-07-25T07:57:40.293Z"
+    "text": "整个厄尔尼诺的全部传闹连 / 传导链会被彻底激活\n说白了就是，能产生的影响它都会产生，包括农业，矿业，航运，医药 \n",
+    "createdAt": "2026-07-29T05:52:53.099Z",
+    "updatedAt": "2026-08-01T03:11:08.816Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1",
@@ -411,18 +2570,39 @@
     "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
     "content": [
       {
+        "type": "text",
+        "text": "chuan2nao3lian4"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
         "type": "langUnitRef",
         "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1-0",
         "text": "传闹连"
       },
       {
         "type": "text",
-        "text": " transfer chaos chain?"
+        "text": " transmit disruption chain"
+      },
+      {
+        "type": "text",
+        "text": "\n"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1-1",
+        "text": "传导链"
+      },
+      {
+        "type": "text",
+        "text": " "
       }
     ],
-    "text": "传闹连 transfer chaos chain?",
-    "createdAt": "2026-07-25T07:48:11.889Z",
-    "updatedAt": "2026-07-25T07:54:41.890Z"
+    "text": "chuan2nao3lian4\n传闹连 transmit disruption chain\n传导链 ",
+    "createdAt": "2026-08-01T02:33:36.695Z",
+    "updatedAt": "2026-08-01T02:35:36.763Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-2",
@@ -432,18 +2612,57 @@
     "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
     "content": [
       {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-2-0",
-        "text": "产生影响"
-      },
-      {
         "type": "text",
-        "text": " produce an effect"
+        "text": "be completely activated"
       }
     ],
-    "text": "产生影响 produce an effect",
-    "createdAt": "2026-07-25T07:52:21.550Z",
-    "updatedAt": "2026-07-25T08:03:14.895Z"
+    "text": "be completely activated",
+    "createdAt": "2026-08-01T02:33:44.732Z",
+    "updatedAt": "2026-08-01T02:38:19.448Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-01T02:33:44.980Z",
+    "updatedAt": "2026-08-01T02:33:44.980Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-4",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-01T02:33:45.180Z",
+    "updatedAt": "2026-08-01T02:33:45.180Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-5",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-4",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-01T02:33:45.396Z",
+    "updatedAt": "2026-08-01T02:33:45.396Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-6",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-5",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-01T02:33:45.647Z",
+    "updatedAt": "2026-08-01T02:33:45.647Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
@@ -452,17 +2671,27 @@
     "content": [
       {
         "type": "text",
-        "text": "估计还会夸大州地"
+        "text": "估计还会"
       },
       {
         "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-0",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-1",
+        "text": "跨大洲地",
+        "compositionId": "a07e58bf-7f99-4d9a-9b49-67e499fcbcb2",
+        "partId": "a07e58bf-7f99-4d9a-9b49-67e499fcbcb2-part-0",
+        "partRole": "seed",
+        "partTargetType": "chinPhrase",
+        "partSourceId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-0"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-2",
         "text": "liandong"
       }
     ],
-    "text": "估计还会夸大州地联动 / 连动",
-    "createdAt": "2026-07-25T07:57:51.017Z",
-    "updatedAt": "2026-07-25T08:05:36.755Z"
+    "text": "估计还会跨大洲地liandong",
+    "createdAt": "2026-08-01T02:42:39.977Z",
+    "updatedAt": "2026-08-01T03:25:57.951Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-1",
@@ -473,24 +2702,105 @@
     "content": [
       {
         "type": "text",
+        "text": "intercontinentally"
+      }
+    ],
+    "text": "intercontinentally",
+    "createdAt": "2026-08-01T02:43:21.545Z",
+    "updatedAt": "2026-08-01T02:43:30.386Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-1",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
+    "content": [
+      {
+        "type": "text",
+        "text": "intercontinentally"
+      }
+    ],
+    "text": "intercontinentally",
+    "createdAt": "2026-08-01T02:43:33.945Z",
+    "updatedAt": "2026-08-01T03:26:41.714Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-3",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
+    "content": [
+      {
+        "type": "text",
         "text": "联动"
       },
       {
         "type": "text",
-        "text": "\n"
-      },
-      {
-        "type": "langUnitRef",
-        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-1-0",
-        "text": "连动"
+        "text": "\n=连动"
       },
       {
         "type": "text",
-        "text": " chain reaction?"
+        "text": "\n"
       }
     ],
-    "text": "联动\n连动 chain reaction?",
-    "createdAt": "2026-07-25T07:58:15.371Z",
-    "updatedAt": "2026-07-25T08:05:36.773Z"
+    "text": "联动\n=连动\n",
+    "createdAt": "2026-08-01T03:21:30.003Z",
+    "updatedAt": "2026-08-01T03:28:08.662Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9",
+    "isRoot": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "这个影响可能会"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-3",
+        "text": "以什么样的方式发生"
+      },
+      {
+        "type": "text",
+        "text": "呢？"
+      },
+      {
+        "type": "text",
+        "text": "\n接下来，咱们就"
+      },
+      {
+        "type": "langUnitRef",
+        "langUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-2",
+        "text": "展开说说"
+      }
+    ],
+    "text": "这个影响可能会以什么样的方式发生呢？\n接下来，咱们就展开说说",
+    "createdAt": "2026-08-04T03:43:20.124Z",
+    "updatedAt": "2026-08-04T03:45:17.379Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-9-1",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-3",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-04T03:45:01.315Z",
+    "updatedAt": "2026-08-04T03:45:01.315Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-9-2",
+    "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9",
+    "isRoot": false,
+    "linkTargetLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-2",
+    "parentSubSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0",
+    "content": [],
+    "text": "",
+    "createdAt": "2026-08-04T03:45:01.466Z",
+    "updatedAt": "2026-08-04T03:45:01.466Z"
   }
 ]

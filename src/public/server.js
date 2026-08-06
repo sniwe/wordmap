@@ -31,9 +31,20 @@ const subSegItemsFile = path.join(subSegDir, 'items.json');
 const subSegSchemaFile = path.join(subSegDir, 'schema');
 const mediaDir = path.join(root, 'src', 'backend', 'data', 'media');
 const port = Number(process.env.PORT || 3000);
+const codexWorkerRequestTimeoutMs = Number(process.env.CODEX_WORKER_REQUEST_TIMEOUT_MS || 60000);
+const codexWorkerRepairBaseMs = Number(process.env.CODEX_WORKER_REPAIR_BASE_MS || 250);
+const codexWorkerRepairMaxMs = Number(process.env.CODEX_WORKER_REPAIR_MAX_MS || 5000);
+const codexWorkerNoReadyWaitMs = Number(process.env.CODEX_WORKER_NO_READY_WAIT_MS || 500);
 const isDev = process.argv.includes('--dev');
 let langUnitWriteQueue = Promise.resolve();
+let langUnitMutationQueue = Promise.resolve();
 let lastGoodLangUnitItems = null;
+
+function runLangUnitMutation(mutator) {
+  const result = langUnitMutationQueue.then(mutator);
+  langUnitMutationQueue = result.catch(() => {});
+  return result;
+}
 
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -229,24 +240,44 @@ async function serveFile(req, res, filePath) {
   }
 }
 
-async function readAudEpItems() {
+async function readJsonArray(file, collectionName) {
+  let raw;
   try {
-    const items = JSON.parse(await fs.readFile(audEpItemsFile, 'utf8'));
-    const [normalized, changed] = normalizeAudEpItems(Array.isArray(items) ? items : []);
-    if (changed) {
-      await writeAudEpItems(normalized);
+    raw = await fs.readFile(file, 'utf8');
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      return [];
     }
 
-    return normalized;
-  } catch {
-    return [];
+    throw new Error(`Failed to read ${collectionName}: ${error?.message ?? error}`, { cause: error });
   }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (error) {
+    throw new Error(`Failed to parse ${collectionName}: ${error?.message ?? error}`, { cause: error });
+  }
+
+  if (!Array.isArray(parsed)) {
+    throw new Error(`Invalid ${collectionName}: expected a JSON array`);
+  }
+
+  return parsed;
+}
+
+async function readAudEpItems() {
+  const [normalized, changed] = normalizeAudEpItems(await readJsonArray(audEpItemsFile, 'audEps'));
+  if (changed) {
+    await writeAudEpItems(normalized);
+  }
+
+  return normalized;
 }
 
 async function writeAudEpItems(items) {
-  await fs.mkdir(audEpDir, { recursive: true });
   const [normalized] = normalizeAudEpItems(Array.isArray(items) ? items : []);
-  await fs.writeFile(audEpItemsFile, JSON.stringify(normalized, null, 2));
+  await atomicWriteJsonFile(audEpDir, audEpItemsFile, normalized);
 }
 
 function normalizeAudEpItems(items) {
@@ -272,20 +303,16 @@ function normalizeAudEpItems(items) {
 }
 
 async function readAudSegItems() {
-  try {
-    const [items, changed] = normalizeAudSegItems(JSON.parse(await fs.readFile(audSegItemsFile, 'utf8')));
-    if (changed) {
-      await writeAudSegItems(items);
-    }
-    return items;
-  } catch {
-    return [];
+  const [items, changed] = normalizeAudSegItems(await readJsonArray(audSegItemsFile, 'audSegs'));
+  if (changed) {
+    await writeAudSegItems(items);
   }
+
+  return items;
 }
 
 async function writeAudSegItems(items) {
-  await fs.mkdir(audSegDir, { recursive: true });
-  await fs.writeFile(audSegItemsFile, JSON.stringify(items, null, 2));
+  await atomicWriteJsonFile(audSegDir, audSegItemsFile, Array.isArray(items) ? items : []);
 }
 
 async function atomicWriteJsonFile(dir, file, value) {
@@ -367,6 +394,9 @@ function normalizeLangUnitItem(item, now = new Date().toISOString()) {
     ...item,
     _id,
     text: String(item.text ?? '').trim(),
+    status: ['default', 'done'].includes(String(item.status ?? '').trim())
+      ? String(item.status).trim()
+      : 'default',
     instances,
     target,
     ...(Array.isArray(item.compositions) ? { compositions: item.compositions } : {}),
@@ -498,7 +528,17 @@ function rewriteSubSegContentWithoutLangUnits(content, langUnitsById = new Map()
       continue;
     }
 
-    const text = String(token.text ?? langUnitsById.get(langUnitId)?.text ?? '');
+    const langUnit = langUnitsById.get(langUnitId);
+    let text = String(token.text ?? langUnit?.text ?? '');
+    if (!String(token.compositionId ?? '').trim() && !String(token.partId ?? '').trim()) {
+      const aggregateText = String(langUnit?.target?.text ?? langUnit?.text ?? '').trim();
+      const addition = (Array.isArray(langUnit?.compositions) ? langUnit.compositions : [])
+        .flatMap((composition) => Array.isArray(composition?.parts) ? composition.parts : [])
+        .find((part) => String(part?.role ?? '').trim() === 'addition' && String(part?.text ?? '').trim());
+      if (addition && text.trim() === aggregateText) {
+        text = String(addition.text);
+      }
+    }
     if (!text) {
       changed = true;
       continue;
@@ -1178,14 +1218,6 @@ function getLangUnitTargetType(text, contextType = '', selection = {}) {
     return 'chinFuzz';
   }
 
-  if (normalizedContextType === 'engPhrase' && onlyEnglishishChars) {
-    if (isEnglishWordPartSelection(selectionText || value, selectionStart, selectionEnd)) {
-      return 'engWordPart';
-    }
-
-    return hasSpaces ? 'engPhrase' : 'engWord';
-  }
-
   if (onlyEnglishishChars && allTokensArePinyin) {
     if (normalizedContextType === 'chinFuzzWord') {
       return 'chinFuzzPart';
@@ -1200,6 +1232,14 @@ function getLangUnitTargetType(text, contextType = '', selection = {}) {
     }
 
     return 'chinFuzz';
+  }
+
+  if (normalizedContextType === 'engPhrase' && onlyEnglishishChars) {
+    if (isEnglishWordPartSelection(selectionText || value, selectionStart, selectionEnd)) {
+      return 'engWordPart';
+    }
+
+    return hasSpaces ? 'engPhrase' : 'engWord';
   }
 
   if (hasSpaces) {
@@ -1417,6 +1457,66 @@ function canonicalizeLangUnitItems(items) {
   return [next, idMap, JSON.stringify(next) !== JSON.stringify(normalized)];
 }
 
+function repairLegacyCompositeSubSegItems(items, langUnitItems) {
+  const byId = new Map((Array.isArray(langUnitItems) ? langUnitItems : []).map((item) => [String(item?._id ?? ''), item]));
+  let changed = false;
+  const next = (Array.isArray(items) ? items : []).map((item) => {
+    if (!Array.isArray(item?.content)) {
+      return item;
+    }
+
+    let itemChanged = false;
+    const content = item.content.map((token) => {
+      if (token?.type !== 'langUnitRef' || String(token.compositionId ?? '').trim() || String(token.partId ?? '').trim()) {
+        return token;
+      }
+
+      const sourceId = String(token.langUnitId ?? '').trim();
+      const sourceText = String(token.text ?? '').trim();
+      for (const composite of byId.values()) {
+        const composition = (Array.isArray(composite?.compositions) ? composite.compositions : []).find((candidate) => {
+          const parts = Array.isArray(candidate?.parts) ? candidate.parts : [];
+          return (String(composite?._id ?? '').trim() === sourceId
+            || parts.some((part) => String(part?.sourceLangUnitId ?? '').trim() === sourceId))
+            && parts.some((part) => String(part?.role ?? '').trim() === 'addition');
+        });
+        if (!composition) {
+          continue;
+        }
+
+        const parts = Array.isArray(composition.parts) ? composition.parts : [];
+        const role = parts.some((part) => String(part?.sourceLangUnitId ?? '').trim() === sourceId)
+          ? 'seed'
+          : sourceText === String(composite?.text ?? composite?.target?.text ?? '').trim()
+            ? 'addition'
+            : '';
+        const part = parts.find((candidate) => String(candidate?.role ?? '').trim() === role);
+        if (!part || (role === 'addition' && sourceText !== String(composite?.text ?? composite?.target?.text ?? '').trim())) {
+          continue;
+        }
+
+        changed = true;
+        itemChanged = true;
+        return {
+          ...token,
+          langUnitId: String(composite._id),
+          text: String(part.text ?? ''),
+          compositionId: String(composition.compositionId),
+          partId: String(part.partId),
+          ...(part.role ? { partRole: String(part.role) } : {}),
+          ...(part.target?.type ? { partTargetType: String(part.target.type) } : {}),
+          ...(part.sourceLangUnitId ? { partSourceId: String(part.sourceLangUnitId) } : {}),
+        };
+      }
+      return token;
+    });
+
+    return itemChanged ? { ...item, content } : item;
+  });
+
+  return [next, changed];
+}
+
 function remapLangUnitInstanceIds(items, idMap) {
   if (!(idMap instanceof Map) || !idMap.size) {
     return [items, false];
@@ -1538,12 +1638,14 @@ function normalizeLangUnitItems(items, capturesById = new Map()) {
 
 async function rebuildLangUnitItems() {
   const subSegItems = await readSubSegItems();
-  const [nextSubSegItems, subSegChanged] = normalizeSubSegItemsForStorage(subSegItems);
+  const langUnitItems = await readLangUnitItems();
+  const [repairedSubSegItems, repairedSubSegChanged] = repairLegacyCompositeSubSegItems(subSegItems, langUnitItems);
+  const [nextSubSegItems, normalizedSubSegChanged] = normalizeSubSegItemsForStorage(repairedSubSegItems);
+  const subSegChanged = repairedSubSegChanged || normalizedSubSegChanged;
   if (subSegChanged) {
     await writeSubSegItems(sortSubSegItems(nextSubSegItems));
   }
 
-  const langUnitItems = await readLangUnitItems();
   let [canonicalLangUnitItems, idMap, canonicalChanged] = canonicalizeLangUnitItems(langUnitItems);
   if (idMap.size) {
     const [remappedSubSegItems, remappedSubSegChanged] = remapSubSegLangUnitIds(nextSubSegItems, idMap);
@@ -1563,11 +1665,6 @@ async function rebuildLangUnitItems() {
   }
 
   return sortLangUnitItems(items);
-}
-
-async function requestCodexWorker(payload) {
-  const worker = getCodexWorkerClient();
-  return worker.request(payload);
 }
 
 function normalizeLangUnitChineseTypeResult(result, payload) {
@@ -1592,10 +1689,11 @@ async function inferLangUnitChineseTypes(langUnitId, payload) {
     return null;
   }
 
-  const items = await readLangUnitItems();
-  const now = new Date().toISOString();
-  let updated = null;
-  const next = items.map((item) => {
+  return runLangUnitMutation(async () => {
+    const items = await readLangUnitItems();
+    const now = new Date().toISOString();
+    let updated = null;
+    const next = items.map((item) => {
     if (String(item?._id ?? '') !== String(langUnitId ?? '')) {
       return item;
     }
@@ -1670,14 +1768,15 @@ async function inferLangUnitChineseTypes(langUnitId, payload) {
       updatedAt: now,
     };
     return updated;
+    });
+
+    if (!updated) {
+      return null;
+    }
+
+    await writeLangUnitItems(sortLangUnitItems(next));
+    return { langUnit: updated, res: { contextType, targetType } };
   });
-
-  if (!updated) {
-    return null;
-  }
-
-  await writeLangUnitItems(sortLangUnitItems(next));
-  return { langUnit: updated, res: { contextType, targetType } };
 }
 
 function collectChinDisambiguationJobs(langUnits, enabled) {
@@ -1739,17 +1838,35 @@ function collectChinDisambiguationJobs(langUnits, enabled) {
 }
 
 const chinDisambiguationQueue = [];
+const chinDisambiguationQueuedKeys = new Set();
 let chinDisambiguationDrainActive = false;
 let chinDisambiguationRevision = 0;
 let chinDisambiguationLastError = '';
+const chinDisambiguationCompletions = [];
 
-function getChinDisambiguationStatus() {
+function getChinDisambiguationStatus(afterRevision = 0) {
   return {
     pending: chinDisambiguationQueue.length,
     active: chinDisambiguationDrainActive,
     revision: chinDisambiguationRevision,
     lastError: chinDisambiguationLastError,
+    completions: chinDisambiguationCompletions.filter((completion) => completion.revision > afterRevision),
   };
+}
+
+function getChinDisambiguationJobKey(job) {
+  return JSON.stringify([
+    job?.langUnitId,
+    job?.instance?.audSegId,
+    job?.instance?.subSegId,
+    job?.instance?.cycleGroupId,
+    job?.instance?.start,
+    job?.instance?.end,
+    job?.expectedContextText,
+    job?.expectedContextType,
+    job?.expectedTargetText,
+    job?.expectedTargetType,
+  ]);
 }
 
 async function drainChinDisambiguationQueue() {
@@ -1778,7 +1895,20 @@ async function drainChinDisambiguationQueue() {
         chinDisambiguationLastError = String(error?.message ?? error ?? 'chin disambiguation failed');
         console.error(`[chin-disambiguation] ${chinDisambiguationLastError}`);
       } finally {
+        chinDisambiguationQueuedKeys.delete(getChinDisambiguationJobKey(job));
         chinDisambiguationRevision += 1;
+        chinDisambiguationCompletions.push({
+          revision: chinDisambiguationRevision,
+          jobId: job.jobId,
+          langUnitId: job.langUnitId,
+          subSegId: job.instance?.subSegId ?? '',
+          target: job.target,
+          context: job.context,
+          error: chinDisambiguationLastError,
+        });
+        if (chinDisambiguationCompletions.length > 100) {
+          chinDisambiguationCompletions.shift();
+        }
       }
     }
   } finally {
@@ -1787,100 +1917,334 @@ async function drainChinDisambiguationQueue() {
 }
 
 function enqueueChinDisambiguationJobs(jobs) {
-  const queuedJobs = Array.isArray(jobs) ? jobs : [];
+  const queuedJobs = (Array.isArray(jobs) ? jobs : []).filter((job) => {
+    const key = getChinDisambiguationJobKey(job);
+    if (chinDisambiguationQueuedKeys.has(key)) {
+      return false;
+    }
+
+    chinDisambiguationQueuedKeys.add(key);
+    return true;
+  });
   if (!queuedJobs.length) {
-    return { queued: 0, queueId: '' };
+    return { queued: 0, queueId: '', queueStartRevision: chinDisambiguationRevision };
   }
 
   const queueId = randomUUID();
+  const queueStartRevision = chinDisambiguationRevision;
   chinDisambiguationQueue.push(...queuedJobs.map((job) => ({ ...job, queueId })));
   setImmediate(() => void drainChinDisambiguationQueue());
-  return { queued: queuedJobs.length, queueId };
+  return { queued: queuedJobs.length, queueId, queueStartRevision };
 }
 
-let codexWorkerClient = null;
-let codexWorkerPrimeComplete = false;
-let codexWorkerPrimeResolve = null;
-let codexWorkerPrimePromise = Promise.resolve();
+let codexWorkerPool = null;
 
-function getCodexWorkerClient() {
-  if (codexWorkerClient) {
-    return codexWorkerClient;
+function workerLog(slot, message, generation = slot.generation) {
+  process.stderr.write(`[codex-worker][${slot.slotId}][generation=${generation}] ${message}\n`);
+}
+
+function workerFailure(slot, message, cause = null) {
+  const error = new Error(message);
+  error.workerFailure = true;
+  error.slotId = slot.slotId;
+  error.generation = slot.generation;
+  error.cause = cause;
+  return error;
+}
+
+function killWorkerTree(child) {
+  if (!child?.pid) return;
+  if (process.platform === 'win32') {
+    spawn('taskkill', ['/pid', String(child.pid), '/t', '/f'], { windowsHide: true, stdio: 'ignore' });
+    return;
   }
+  try {
+    process.kill(-child.pid, 'SIGKILL');
+  } catch {
+    child.kill('SIGKILL');
+  }
+}
 
-  const child = spawn(process.execPath, [codexWorkerEntry], {
+function createWorkerSlot(slotId) {
+  return {
+    slotId,
+    generation: 0,
+    child: null,
+    stdout: null,
+    stderr: null,
+    pending: [],
+    requestQueue: Promise.resolve(),
+    primePromise: Promise.resolve(false),
+    primeComplete: false,
+    state: 'closed',
+    lastError: null,
+    lastExit: null,
+    repairPromise: null,
+    repairAttempt: 0,
+  };
+}
+
+function rejectWorkerPending(slot, error) {
+  while (slot.pending.length) {
+    slot.pending.shift()?.reject(error);
+  }
+}
+
+function spawnWorkerSlot(slot, repairing = false) {
+  const generation = slot.generation + 1;
+  slot.generation = generation;
+  slot.state = repairing ? 'repairing' : 'starting';
+  slot.primeComplete = false;
+  slot.lastError = null;
+  const child = spawn(process.execPath, [process.env.CODEX_WORKER_ENTRY || codexWorkerEntry], {
     cwd: codexWorkerDir,
     env: {
       ...process.env,
       CODEX_WORKER_STREAMED: '1',
+      CODEX_WORKER_SLOT: slot.slotId,
     },
     stdio: ['pipe', 'pipe', 'pipe'],
+    detached: process.platform !== 'win32',
     windowsHide: true,
   });
-  const stdout = createInterface({ input: child.stdout });
-  const pending = [];
-  let queue = Promise.resolve();
+  slot.child = child;
+  slot.stdout = createInterface({ input: child.stdout });
+  slot.stderr = createInterface({ input: child.stderr });
+  workerLog(slot, 'spawned');
 
-  codexWorkerPrimeComplete = false;
-  codexWorkerPrimePromise = new Promise((resolve) => {
-    codexWorkerPrimeResolve = resolve;
+  slot.primePromise = new Promise((resolve) => {
+    let done = false;
+    const finish = (ready) => {
+      if (done || slot.generation !== generation) return;
+      done = true;
+      slot.primeComplete = ready;
+      if (ready) {
+        slot.state = 'ready';
+        slot.repairAttempt = 0;
+        workerLog(slot, 'primed', generation);
+      }
+      resolve(ready);
+    };
+    slot.stderr.on('line', (line) => {
+      process.stderr.write(`${line}\n`);
+      if (line.includes('[codex-worker] ready')) finish(true);
+    });
+    child.once('error', (error) => {
+      if (slot.generation !== generation) return;
+      slot.lastError = workerFailure(slot, `worker spawn failed: ${error.message}`, error);
+      finish(false);
+    });
+    child.once('exit', (code, signal) => {
+      if (slot.generation !== generation) return;
+      slot.lastExit = { code, signal, at: new Date().toISOString() };
+      const error = workerFailure(slot, `worker exited code=${code} signal=${signal ?? 'none'}`);
+      slot.lastError = error;
+      if (codexWorkerPool) {
+        codexWorkerPool.lastFailure = {
+          at: slot.lastExit.at,
+          slotId: slot.slotId,
+          generation,
+          error: error.message,
+        };
+      }
+      workerLog(slot, `exited code=${code} signal=${signal ?? 'none'}`, generation);
+      slot.state = 'failed';
+      finish(false);
+      rejectWorkerPending(slot, error);
+      slot.stdout?.close();
+      slot.stderr?.close();
+    });
   });
 
-  child.stderr.on('data', (chunk) => {
-    const text = String(chunk);
-    process.stderr.write(text);
-    if (text.includes('[codex-worker] ready') && !codexWorkerPrimeComplete) {
-      codexWorkerPrimeComplete = true;
-      codexWorkerPrimeResolve?.();
-      codexWorkerPrimeResolve = null;
-    }
-  });
-
-  child.on('exit', () => {
-    codexWorkerClient = null;
-    codexWorkerPrimeResolve?.();
-    codexWorkerPrimeComplete = false;
-    codexWorkerPrimeResolve = null;
-    codexWorkerPrimePromise = Promise.resolve();
-    while (pending.length) {
-      pending.shift()?.reject(new Error('Codex worker exited.'));
-    }
-  });
-
-  stdout.on('line', (line) => {
-    const entry = pending.shift();
-    if (!entry) {
-      return;
-    }
-
+  slot.stdout.on('line', (line) => {
+    if (slot.generation !== generation) return;
+    const entry = slot.pending.shift();
+    if (!entry) return;
     try {
       entry.resolve(JSON.parse(line));
     } catch (error) {
-      entry.reject(error);
+      entry.reject(workerFailure(slot, `invalid worker response: ${error.message}`, error));
     }
   });
+  return slot;
+}
 
-  codexWorkerClient = {
-    request(payload) {
-      const job = queue.then(() => new Promise((resolve, reject) => {
-        pending.push({ resolve, reject });
-        child.stdin.write(`${JSON.stringify(payload)}\n`);
-      }));
-      queue = job.then(() => undefined, () => undefined);
-      return job;
-    },
-    close() {
-      child.kill();
-    },
+async function repairWorkerSlot(slot) {
+  if (slot.repairPromise) return slot.repairPromise;
+  slot.repairPromise = (async () => {
+    let delay = codexWorkerRepairBaseMs;
+    while (slot.state !== 'closed') {
+      if (slot.child?.pid) killWorkerTree(slot.child);
+      slot.stdout?.close();
+      slot.stderr?.close();
+      slot.repairAttempt += 1;
+      spawnWorkerSlot(slot, true);
+      if (await slot.primePromise) {
+        if (codexWorkerPool && !codexWorkerPool.activeSlot.primeComplete) {
+          codexWorkerPool.activeSlot = slot;
+        }
+        return true;
+      }
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      delay = Math.min(delay * 2, codexWorkerRepairMaxMs);
+    }
+    return false;
+  })().finally(() => {
+    slot.repairPromise = null;
+  });
+  return slot.repairPromise;
+}
+
+function startWorkerPool() {
+  if (codexWorkerPool) return codexWorkerPool;
+  const active = createWorkerSlot('active');
+  const standby = createWorkerSlot('standby');
+  codexWorkerPool = {
+    activeSlot: active,
+    slots: [active, standby],
+    requestQueue: Promise.resolve(),
+    failoverPromise: null,
+    lastFailure: null,
+    lastAttempt: null,
   };
+  spawnWorkerSlot(active);
+  spawnWorkerSlot(standby);
+  void standby.primePromise.then((ready) => {
+    if (!ready && standby.state !== 'closed') void repairWorkerSlot(standby);
+  });
+  void active.primePromise.then((ready) => {
+    if (!ready && active.state !== 'closed') {
+      void repairWorkerSlot(active);
+      if (standby.primeComplete) codexWorkerPool.activeSlot = standby;
+    }
+  });
+  return codexWorkerPool;
+}
 
-  return codexWorkerClient;
+async function waitForReadyWorker(pool) {
+  const deadline = Date.now() + codexWorkerNoReadyWaitMs;
+  while (Date.now() < deadline) {
+    const ready = pool.slots.find((slot) => slot.primeComplete && slot.state === 'ready');
+    if (ready) {
+      pool.activeSlot = ready;
+      return ready;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 25));
+  }
+  return null;
+}
+
+function getCodexWorkerClient() {
+  return startWorkerPool();
+}
+
+function requestWorkerSlot(slot, payload, attempt, logicalRequestId, pool = null) {
+  const job = slot.requestQueue.then(async () => {
+    if (slot.state !== 'ready' && slot.state !== 'busy') {
+      throw slot.lastError || workerFailure(slot, `worker ${slot.slotId} is ${slot.state}`);
+    }
+    await slot.primePromise;
+    if (!slot.child?.stdin.writable) throw workerFailure(slot, 'worker stdin is closed');
+    slot.state = 'busy';
+    pool && (pool.lastAttempt = {
+      id: logicalRequestId,
+      attempt,
+      slotId: slot.slotId,
+      generation: slot.generation,
+    });
+    workerLog(slot, `request-start id=${logicalRequestId} attempt=${attempt}`);
+    try {
+      return await new Promise((resolve, reject) => {
+        let settled = false;
+        const finish = (handler, value) => {
+          if (settled) return;
+          settled = true;
+          clearTimeout(timer);
+          handler(value);
+        };
+        const timer = setTimeout(() => {
+          const error = workerFailure(slot, `request timed out after ${codexWorkerRequestTimeoutMs}ms`);
+          finish(reject, error);
+          killWorkerTree(slot.child);
+        }, codexWorkerRequestTimeoutMs);
+        slot.pending.push({
+          resolve: (value) => finish(resolve, value),
+          reject: (error) => finish(reject, error),
+        });
+        try {
+          slot.child.stdin.write(`${JSON.stringify(payload)}\n`);
+        } catch (error) {
+          finish(reject, workerFailure(slot, `worker write failed: ${error.message}`, error));
+        }
+      });
+    } finally {
+      if (slot.state === 'busy') slot.state = 'ready';
+    }
+  });
+  slot.requestQueue = job.then(() => undefined, () => undefined);
+  return job;
+}
+
+async function failoverWorker(pool, failedSlot, payload, logicalRequestId, firstError) {
+  if (pool.failoverPromise) return pool.failoverPromise;
+  pool.failoverPromise = (async () => {
+    pool.lastFailure = {
+      at: new Date().toISOString(),
+      slotId: failedSlot.slotId,
+      generation: failedSlot.generation,
+      error: firstError.message,
+    };
+    failedSlot.state = 'failed';
+    const standby = pool.slots.find((slot) => slot !== failedSlot && slot.primeComplete && slot.state === 'ready');
+    if (!standby) {
+      void repairWorkerSlot(failedSlot);
+      const other = pool.slots.find((slot) => slot !== failedSlot);
+      if (other && other.state !== 'ready') void repairWorkerSlot(other);
+      throw workerFailure(failedSlot, `both worker slots unavailable: ${firstError.message}`);
+    }
+    pool.activeSlot = standby;
+    workerLog(standby, `promoted from ${failedSlot.slotId}`);
+    void repairWorkerSlot(failedSlot);
+    try {
+      return await requestWorkerSlot(standby, payload, 2, logicalRequestId, pool);
+    } catch (secondError) {
+      pool.lastFailure = {
+        ...pool.lastFailure,
+        second: secondError.message,
+        secondSlotId: standby.slotId,
+        secondGeneration: standby.generation,
+      };
+      standby.state = 'failed';
+      void repairWorkerSlot(standby);
+      throw workerFailure(standby, `active and standby failed: ${firstError.message}; ${secondError.message}`);
+    }
+  })().finally(() => {
+    pool.failoverPromise = null;
+  });
+  return pool.failoverPromise;
+}
+
+async function requestCodexWorker(payload) {
+  const pool = getCodexWorkerClient();
+  const logicalRequestId = payload?.jobId || randomUUID();
+  const job = pool.requestQueue.then(async () => {
+    await waitForReadyWorker(pool);
+    let slot = pool.activeSlot;
+    try {
+      return await requestWorkerSlot(slot, payload, 1, logicalRequestId, pool);
+    } catch (error) {
+      if (!error?.workerFailure) throw error;
+      return failoverWorker(pool, slot, payload, logicalRequestId, error);
+    }
+  });
+  pool.requestQueue = job.then(() => undefined, () => undefined);
+  return job;
 }
 
 async function waitForCodexWorkerPrimeComplete() {
-  getCodexWorkerClient();
-  await codexWorkerPrimePromise;
-  return codexWorkerPrimeComplete;
+  const pool = getCodexWorkerClient();
+  await pool.slots[0].primePromise;
+  return pool.activeSlot.primeComplete;
 }
 
 async function inferLangUnitRoot(langUnitId, payload) {
@@ -1890,10 +2254,11 @@ async function inferLangUnitRoot(langUnitId, payload) {
     return null;
   }
 
-  const items = await readLangUnitItems();
-  const now = new Date().toISOString();
-  let updated = null;
-  const next = items.map((item) => {
+  return runLangUnitMutation(async () => {
+    const items = await readLangUnitItems();
+    const now = new Date().toISOString();
+    let updated = null;
+    const next = items.map((item) => {
     if (String(item?._id ?? '') !== String(langUnitId ?? '')) {
       return item;
     }
@@ -1904,18 +2269,22 @@ async function inferLangUnitRoot(langUnitId, payload) {
       updatedAt: now,
     };
     return updated;
+    });
+
+    if (!updated) {
+      return null;
+    }
+
+    await writeLangUnitItems(sortLangUnitItems(next));
+    return { langUnit: updated, res: root };
   });
-
-  if (!updated) {
-    return null;
-  }
-
-  await writeLangUnitItems(sortLangUnitItems(next));
-  return { langUnit: updated, res: root };
 }
 
 process.once('exit', () => {
-  codexWorkerClient?.close();
+  for (const slot of codexWorkerPool?.slots ?? []) {
+    slot.state = 'closed';
+    killWorkerTree(slot.child);
+  }
 });
 
 async function handleCodexWorkerApi(req, res, url) {
@@ -1924,11 +2293,27 @@ async function handleCodexWorkerApi(req, res, url) {
   }
 
   await waitForCodexWorkerPrimeComplete();
+  const pool = getCodexWorkerClient();
+  const describe = (slot) => ({
+    slotId: slot.slotId,
+    state: slot.state,
+    generation: slot.generation,
+    primeComplete: slot.primeComplete,
+    lastError: slot.lastError?.message ?? null,
+    lastExit: slot.lastExit,
+  });
   send(
     res,
     200,
     { 'Content-Type': 'application/json; charset=utf-8' },
-    JSON.stringify({ primeComplete: codexWorkerPrimeComplete })
+    JSON.stringify({
+      primeComplete: pool.activeSlot.primeComplete,
+      active: describe(pool.activeSlot),
+      standby: describe(pool.slots.find((slot) => slot !== pool.activeSlot)),
+      repairing: pool.slots.some((slot) => slot.state === 'repairing'),
+      attempt: pool.lastAttempt,
+      lastFailure: pool.lastFailure,
+    })
   );
   return true;
 }
@@ -1952,20 +2337,102 @@ function normalizeAudSegItems(items) {
     return id === item._id ? item : { ...item, _id: id };
   });
 
+  const grouped = new Map();
+  for (const item of normalized) {
+    const grpId = String(item?.grpId ?? '').trim();
+    if (!grpId) {
+      continue;
+    }
+
+    if (!grouped.has(grpId)) {
+      grouped.set(grpId, []);
+    }
+    grouped.get(grpId).push(item);
+  }
+
+  for (const [grpId, members] of grouped) {
+    const audEpIds = new Set(members.map((item) => String(item?.audEpId ?? '').trim()));
+    const parentIndex = Number(members[0]?.audEpIndex);
+    const sameParent = audEpIds.size === 1 && members.every((item) => Number(item?.audEpIndex) === parentIndex);
+    const ordered = normalized
+      .filter((item) => String(item?.audEpId ?? '').trim() === String(members[0]?.audEpId ?? '').trim())
+      .slice()
+      .sort((a, b) => Number(a?.tcs ?? 0) - Number(b?.tcs ?? 0) || String(a?._id ?? '').localeCompare(String(b?._id ?? '')));
+    const indexes = members.map((item) => ordered.findIndex((candidate) => candidate?._id === item?._id)).sort((a, b) => a - b);
+    const contiguous = indexes.length >= 2 && indexes.every((index, position) => index === indexes[0] + position);
+    if (sameParent && contiguous) {
+      continue;
+    }
+
+    for (const item of members) {
+      if (Object.prototype.hasOwnProperty.call(item, 'grpId')) {
+        delete item.grpId;
+        changed = true;
+      }
+    }
+  }
+
   return [normalized, changed];
 }
 
-async function readSubSegItems() {
-  try {
-    return JSON.parse(await fs.readFile(subSegItemsFile, 'utf8'));
-  } catch {
-    return [];
+function getAudSegGroups(items, audEpId = '') {
+  const parentId = String(audEpId ?? '').trim();
+  const ordered = items
+    .filter((item) => !parentId || String(item?.audEpId ?? '').trim() === parentId)
+    .slice()
+    .sort((a, b) => Number(a?.tcs ?? 0) - Number(b?.tcs ?? 0) || String(a?._id ?? '').localeCompare(String(b?._id ?? '')));
+  const groups = new Map();
+  for (const item of ordered) {
+    const grpId = String(item?.grpId ?? '').trim();
+    if (!grpId) {
+      continue;
+    }
+    if (!groups.has(grpId)) {
+      groups.set(grpId, []);
+    }
+    groups.get(grpId).push(item);
   }
+
+  return [...groups.entries()]
+    .map(([grpId, members]) => {
+      const indexes = members.map((member) => ordered.findIndex((item) => item?._id === member?._id)).sort((a, b) => a - b);
+      const contiguous = indexes.length >= 2 && indexes.every((index, position) => index === indexes[0] + position);
+      return contiguous
+        ? {
+            grpId,
+            members,
+            startIndex: indexes[0],
+            endIndex: indexes[indexes.length - 1],
+            tcs: Math.min(...members.map((item) => Number(item?.tcs ?? 0))),
+            tce: Math.max(...members.map((item) => Number(item?.tce ?? item?.tcs ?? 0))),
+          }
+        : null;
+    })
+    .filter(Boolean);
+}
+
+function getNextAudSegGroupId(items, audEpId) {
+  const prefix = `${String(audEpId ?? '').trim()}-grp-`;
+  let ordinal = 0;
+  for (const item of items) {
+    const grpId = String(item?.grpId ?? '');
+    if (!grpId.startsWith(prefix)) {
+      continue;
+    }
+    const value = Number(grpId.slice(prefix.length));
+    if (Number.isInteger(value) && value >= ordinal) {
+      ordinal = value + 1;
+    }
+  }
+  return `${prefix}${ordinal}`;
+}
+
+async function readSubSegItems() {
+  return readJsonArray(subSegItemsFile, 'subSegs');
 }
 
 async function writeSubSegItems(items) {
-  await fs.mkdir(subSegDir, { recursive: true });
-  await fs.writeFile(subSegItemsFile, JSON.stringify(items, null, 2));
+  await atomicWriteJsonFile(subSegDir, subSegItemsFile, Array.isArray(items) ? items : []);
 }
 
 function sortSubSegItems(items) {
@@ -2224,6 +2691,13 @@ async function handleAudSegApi(req, res, url) {
     }
 
     const items = await readAudSegItems();
+    const existing = items.find((item) => item?._id === `${parentAudEpId}-${audSegOrdinal}`);
+    const candidates = getAudSegGroups(items, parentAudEpId).filter((group) => (
+      Number.isFinite(tcs) &&
+      Number.isFinite(tce) &&
+      tcs >= group.tcs &&
+      tce <= group.tce
+    ));
     const nextOrdinal = Number.isInteger(audSegOrdinal)
       ? audSegOrdinal
       : items.reduce((max, item) => {
@@ -2249,6 +2723,9 @@ async function handleAudSegApi(req, res, url) {
       tcs,
       tce,
       ssHead,
+      ...(String(existing?.grpId ?? '').trim()
+        ? { grpId: String(existing.grpId).trim() }
+        : candidates.length === 1 && !existing ? { grpId: candidates[0].grpId } : {}),
     };
     if (index >= 0) {
       items[index] = item;
@@ -2257,6 +2734,84 @@ async function handleAudSegApi(req, res, url) {
     }
     await writeAudSegItems(sortAudSegItems(items));
     send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(item));
+    return true;
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/audSegs/groups') {
+    let payload = {};
+    try {
+      payload = JSON.parse(await readBody(req) || '{}');
+    } catch {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'invalid JSON' }));
+      return true;
+    }
+
+    const action = String(payload.action ?? 'capture').trim();
+    const audEpId = String(payload.audEpId ?? '').trim();
+    const audSegIds = Array.isArray(payload.audSegIds)
+      ? [...new Set(payload.audSegIds.map((id) => String(id ?? '').trim()).filter(Boolean))]
+      : [];
+    const requestedGrpId = String(payload.grpId ?? '').trim();
+    const items = await readAudSegItems();
+    if (!audEpId) {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'audEpId is required' }));
+      return true;
+    }
+
+    if (action === 'ungroup') {
+      if (!requestedGrpId) {
+        send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'grpId is required' }));
+        return true;
+      }
+
+      for (const item of items) {
+        if (String(item?.audEpId ?? '').trim() === audEpId && String(item?.grpId ?? '').trim() === requestedGrpId) {
+          delete item.grpId;
+        }
+      }
+      await writeAudSegItems(sortAudSegItems(items));
+      send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ grpId: requestedGrpId, items: sortAudSegItems(items) }));
+      return true;
+    }
+
+    if (audSegIds.length < 2) {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'at least two audSegIds are required' }));
+      return true;
+    }
+
+    const selected = audSegIds.map((id) => items.find((item) => item?._id === id));
+    const selectedIndexes = selected.map((item) => items
+      .filter((candidate) => String(candidate?.audEpId ?? '').trim() === audEpId)
+      .slice()
+      .sort((a, b) => Number(a?.tcs ?? 0) - Number(b?.tcs ?? 0) || String(a?._id ?? '').localeCompare(String(b?._id ?? '')))
+      .findIndex((candidate) => candidate?._id === item?._id));
+    const orderedIndexes = selectedIndexes.slice().sort((a, b) => a - b);
+    const validSelection = selected.every(Boolean) &&
+      selected.every((item) => String(item?.audEpId ?? '').trim() === audEpId) &&
+      orderedIndexes.every((index, position) => index === orderedIndexes[0] + position);
+    if (!validSelection) {
+      send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'audSegIds must be contiguous members of one audEp' }));
+      return true;
+    }
+
+    const conflicts = new Set(selected.map((item) => String(item?.grpId ?? '').trim()).filter((grpId) => grpId && grpId !== requestedGrpId));
+    if (conflicts.size) {
+      send(res, 409, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'selection overlaps another group' }));
+      return true;
+    }
+
+    const grpId = requestedGrpId || getNextAudSegGroupId(items, audEpId);
+    for (const item of items) {
+      if (String(item?.audEpId ?? '').trim() === audEpId && String(item?.grpId ?? '').trim() === grpId) {
+        delete item.grpId;
+      }
+    }
+    for (const item of selected) {
+      item.grpId = grpId;
+    }
+
+    await writeAudSegItems(sortAudSegItems(items));
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ grpId, items: sortAudSegItems(items) }));
     return true;
   }
 
@@ -2292,13 +2847,64 @@ async function handleAudSegApi(req, res, url) {
 
 async function handleLangUnitApi(req, res, url) {
   if (req.method === 'GET' && url.pathname === '/api/langUnits/disambiguation-status') {
-    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(getChinDisambiguationStatus()));
+    const afterRevision = Number(url.searchParams.get('afterRevision') ?? 0);
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(
+      getChinDisambiguationStatus(Number.isFinite(afterRevision) ? afterRevision : 0)
+    ));
     return true;
   }
 
   if (req.method === 'GET' && url.pathname === '/api/langUnits/items') {
     send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(await rebuildLangUnitItems()));
     return true;
+  }
+
+  if (req.method === 'POST') {
+    const match = /^\/api\/langUnits\/items\/([^/]+)\/status$/.exec(url.pathname);
+    if (match) {
+      let payload = {};
+      try {
+        payload = JSON.parse(await readBody(req) || '{}');
+      } catch {
+        send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'invalid JSON' }));
+        return true;
+      }
+
+      const status = String(payload.status ?? '').trim();
+      if (!['default', 'done'].includes(status)) {
+        send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'status must be default or done' }));
+        return true;
+      }
+
+      const langUnitId = decodeURIComponent(match[1] || '').trim();
+      const updated = await runLangUnitMutation(async () => {
+        const items = await readLangUnitItems();
+        const index = items.findIndex((item) => String(item?._id ?? '') === langUnitId);
+        if (index < 0) {
+          return null;
+        }
+
+        const current = items[index];
+        const next = {
+          ...current,
+          status,
+          statusRevision: (Number(current.statusRevision) || 0) + 1,
+          statusUpdatedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        items[index] = next;
+        await writeLangUnitItems(sortLangUnitItems(items));
+        return next;
+      });
+
+      if (!updated) {
+        send(res, 404, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'langUnit not found' }));
+        return true;
+      }
+
+      send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(updated));
+      return true;
+    }
   }
 
   if (req.method === 'DELETE' && url.pathname === '/api/langUnits/items') {
@@ -2492,7 +3098,7 @@ async function handleSubSegApi(req, res, url) {
       updatedLangUnits = await rebuildLangUnitItems();
     }
     const chinDisambiguation = disambiguateChinContexts
-      ? enqueueChinDisambiguationJobs(collectChinDisambiguationJobs(updatedLangUnits, true))
+      ? enqueueChinDisambiguationJobs(collectChinDisambiguationJobs(payload.langUnits, true))
       : null;
     const refreshedSubSegItems = await readSubSegItems();
     const refreshedSubSeg = refreshedSubSegItems.find((item) => String(item?._id ?? '') === saved._id) ?? saved;
@@ -2515,58 +3121,8 @@ async function serveIndex(res, vite, urlPath, fromDist = false) {
   send(res, 200, { 'Content-Type': 'text/html; charset=utf-8' }, transformed);
 }
 
-async function createApp() {
-  if (isDev) {
-    const vite = await createViteServer({
-      appType: 'custom',
-      server: { middlewareMode: true },
-    });
-
-    const server = http.createServer(async (req, res) => {
-      const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
-
-      if (url.pathname === '/api/notes' && (await handleNotesApi(req, res))) {
-        return;
-      }
-
-      if (url.pathname.startsWith('/api/codex-worker/') && (await handleCodexWorkerApi(req, res, url))) {
-        return;
-      }
-
-      if (url.pathname.startsWith('/api/langUnits/') && (await handleLangUnitApi(req, res, url))) {
-        return;
-      }
-
-      if (url.pathname.startsWith('/api/subSegs/') && (await handleSubSegApi(req, res, url))) {
-        return;
-      }
-
-      if (url.pathname.startsWith('/api/audSegs/') && (await handleAudSegApi(req, res, url))) {
-        return;
-      }
-
-      if (url.pathname.startsWith('/api/audEps/') && (await handleAudEpApi(req, res, url))) {
-        return;
-      }
-
-      if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
-        await serveIndex(res, vite, url.pathname);
-        return;
-      }
-
-      vite.middlewares(req, res, () => {
-        send(res, 404, {}, 'Not found');
-      });
-    });
-
-    server.listen(port, () => {
-      console.log(`http://localhost:${port}`);
-    });
-
-    return;
-  }
-
-  const server = http.createServer(async (req, res) => {
+async function handleHttpRequest(req, res, vite = null, fromDist = false) {
+  try {
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
 
     if (url.pathname === '/api/notes' && (await handleNotesApi(req, res))) {
@@ -2594,7 +3150,14 @@ async function createApp() {
     }
 
     if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
-      await serveIndex(res, null, url.pathname, true);
+      await serveIndex(res, vite, url.pathname, fromDist);
+      return;
+    }
+
+    if (vite) {
+      vite.middlewares(req, res, () => {
+        send(res, 404, {}, 'Not found');
+      });
       return;
     }
 
@@ -2610,6 +3173,37 @@ async function createApp() {
     }
 
     await serveFile(req, res, filePath);
+  } catch (error) {
+    console.error('[request]', error);
+    if (!res.headersSent) {
+      send(res, 500, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'request failed' }));
+    } else if (!res.writableEnded) {
+      res.end();
+    }
+  }
+}
+
+async function createApp() {
+  startWorkerPool();
+  if (isDev) {
+    const vite = await createViteServer({
+      appType: 'custom',
+      server: { middlewareMode: true },
+    });
+
+    const server = http.createServer((req, res) => {
+      void handleHttpRequest(req, res, vite);
+    });
+
+    server.listen(port, () => {
+      console.log(`http://localhost:${port}`);
+    });
+
+    return;
+  }
+
+  const server = http.createServer((req, res) => {
+    void handleHttpRequest(req, res, null, true);
   });
 
   server.listen(port, () => {

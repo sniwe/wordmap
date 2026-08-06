@@ -3,10 +3,13 @@
 | Term | Definition |
 | --- | --- |
 | `audEp` | An audio episode item in the list, backed by `src/backend/data/audEps/items.json`. |
+| `audEp → audSeg → subSeg → langUnit` chain | The primary data relationship: an `audEp` owns audio/media, its `audSeg` records mark timed slices, each `audSeg` owns `subSeg` editor rows, and `subSeg.content` may point at reusable `langUnit` records. |
+| `audEp ownership` | An `audEp` is the top-level list item and media owner. Its stable `_id` is the preferred parent identity; `audEpIndex` remains a positional field used by capture/UI and shifted when episodes are inserted or deleted. |
 | `audEp id` | The stable `_id` on an `audEp`; it is the base id for that episode's `audSeg` and `subSeg` chain. |
 | `audEp list` | The main list rendered in the canvas for `audEp` items. |
 | `addAudEp button` | The `+` button used to add or upload a new `audEp`. |
 | `settings button` | The top-right gear button that opens the placeholder settings popover. |
+| `studyBtn` | The top-left book-icon button aligned above the audEp container. |
 | `settings popover` | The empty dropdown panel anchored to the settings button and currently showing `no options yet..`. |
 | `ethereal seed item` | A non-data-driven placeholder list item shown when the list needs a starter entry. |
 | `cycle targeting` | Keyboard-driven selection movement through list items. |
@@ -14,19 +17,27 @@
 | `entered state lock` | The expanded inline panel state on a targeted `audEp` after pressing `Enter`. |
 | `audSegs` | The empty segment list rendered inside an entered `audEp`, currently shown with placeholder text. |
 | `audSegs collection` | The backend data collection scaffold in `src/backend/data/audSegs`. |
-| `audSeg parent ref` | The `audEpIndex` field that ties an `audSeg` record to its parent `audEp`. |
+| `audSeg parent ref` | `audSeg.audEpId` is the stable foreign key to its parent `audEp`; `audEpIndex` is the positional companion used by the UI and legacy/index-shift maintenance. |
+| `audSeg data role` | A timed, ordered slice of one `audEp`, carrying `tcs`/`tce` playback bounds, optional `ssHead`, and optional contiguous-group membership. It does not own lexical text; its `subSeg` rows do. |
 | `audSeg card row` | The wrapped flexbox card layout used to show up to three `audSeg` items per row. |
 | `audSeg item` | A single card inside the `audSegs` row layout. |
 | `audSeg id` | The stable `_id` assigned to an `audSeg`; it is the foreign key for `subSeg` content. |
 | `audSeg derived id` | The chained `audSeg` id format `\`${audEpId}-${audSegOrdinal}\`` used by the new scheme. |
 | `audSeg targeting` | Keyboard focus/selection cycling across `audSeg` cards while inside entered state. |
 | `audSeg target indicator` | The blue outline used to show the currently targeted `audSeg` card. |
+| `grpSel` | The transient contiguous audSeg range selection active while Ctrl+Shift is held and no audSeg is in entered state. |
+| `grpSel anchor` | The audSeg cycle-target index where a transient group selection starts; modifier release restores this as the sole cycle target. |
+| `captured audSeg group` | A persisted group of two or more contiguous audSegs sharing one `grpId` and rendered with a permanent green boundary. |
+| `audSeg group id` | The shared `grpId` stored on each member audSeg; it identifies membership without persisting array indexes. |
+| `audSeg group bounds` | Derived earliest member `tcs` through latest member `tce` timing interval used for automatic membership of newly added audSegs. |
+| `audSeg group envelope` | The connected green border rendered around the contiguous members of a captured audSeg group. |
+| `audSeg ungroup` | Backspace action that removes a captured group's shared `grpId` from all members and restores ordinary cycle targeting. |
 | `audSeg row jump` | `Ctrl+ArrowUp/Down` moves `audSeg` targeting by whole visual rows of 3 cards inside entered `audEp` state. |
 | `lol overlay` | The centered faded `lol` text rendered on the page background. |
 | `audSeg capture flow` | Shift captures an unrounded `audio.currentTime` start into a tentative `audSeg`; Shift+Space captures and saves its unrounded end, while audSeg timing labels display `MM:SS` only. |
 | `audSeg add action` | The wired capture/save flow that creates an `audSeg`, stores its parent reference, and rerenders the parent `audEp`. |
 | `audSeg playback lock` | The entered-state mode where Enter on a targeted `audSeg` seeks audio to the segment start and keeps playback wrapped within that segment's time range. |
-| `shift-release cancel` | The auto-removal of a tentative `audSeg` draft when `Shift` is released without committing it with `Shift+Space`. |
+| `shift-release cancel` | The auto-removal of a tentative `audSeg` draft when `Shift` is released without committing it with `Shift+Space`, restoring the cycle target that was active before capture. |
 | `entered audSeg state` | The locked `audSeg` row mutation applied after Enter, distinct from the temporary targeted state used while cycling with arrows. |
 | `entered audSeg focus memory` | Session-scoped runtime memory that stores the last focused element for the currently entered `audSeg` and restores it when the browser window regains focus. |
 | `subSeg list` | The list rendered under an entered `audSeg`'s time text, seeded with a root editor row and persisted non-root child rows ordered directly under their linked parent subSeg. |
@@ -37,6 +48,8 @@
 | `destination subSeg path` | The ordered parent-to-child target sequence needed after clicking a `langUnitRef` so the destination `audSeg` expands the ancestor subSeg rows before targeting the clicked nested `langUnit`. |
 | `subSeg parent snapback` | `Ctrl+Backspace` from a non-root subSeg focuses only the direct parent subSeg that owns its `linkTargetLangUnitId`, one parent step at a time, with no fallback jump. |
 | `subSeg descendant expansion` | A child subSeg subtree and all of its descendants are visible only while the ancestor langUnit bubble that owns the branch is cycle-targeted; sibling branches stay collapsed. |
+| `subSeg ownership` | Every persisted `subSeg` carries `audSegId`; one root row represents the segment's primary editable text, while non-root rows are linked child editors rather than additional audio segments. |
+| `subSeg content shape` | The persisted editor payload is token data: plain text tokens plus `{ type: 'langUnitRef', langUnitId, ... }` occurrence pointers. Rendered HTML/bubble markup is a view, not the collection's source shape. |
 | `subSegId` | The stable `_id` assigned to a persisted `subSeg` row; root and non-root child rows each need their own `subSegId`. |
 | `subSeg derived id` | The chained `subSeg` id format `\`${audSegId}-${subSegOrdinal}\`` used by the new scheme. |
 | `subSeg editor` | The contenteditable host inside the seed `subSeg` item that accepts text, saves on debounce, and keeps Enter as a newline. |
@@ -70,10 +83,20 @@
 | `subSeg bubble` | Deprecated previous name for the `langUnit bubble`. |
 | `subSeg ref content` | The saved `subSeg` payload model that stores text tokens plus `langUnit` references instead of persisting bubble HTML directly. |
 | `normalized langUnit model` | The target storage design where `langUnit` owns the lexical text and metadata while `subSeg` stores only lightweight occurrence pointers. |
+| `langUnit ownership` | A `langUnit` owns canonical lexical identity (`text` plus normalized `target.type`), target metadata, optional root/composition data, and reverse-link `instances`; it is not owned by one `audSeg` or one `subSeg`. |
+| `langUnit instance relationship` | Each `langUnit.instances[]` entry witnesses one `subSeg` occurrence and binds it to `audSegId`, `subSegId`, offsets, context, target, and remote/cycle metadata. The backend rebuilds these reverse links from saved `subSeg.content`. |
+| `langUnit canonical identity` | Reuse is keyed by normalized final `target.type + target.text`; a derived capture id is only an initial id and can be rewritten when equivalent targets are canonicalized. |
+| `cross-collection data flow` | The browser loads all four collections, renders `audEp`, filters `audSeg` by parent id/index, renders `subSeg` by `audSegId`, and resolves each `langUnitRef` through `langUnits`. Saving a `subSeg` can merge langUnits, rebuild reverse instances, hydrate linked child rows, and return refreshed `subSegs` plus `langUnits`. |
+| `langUnit projection` | A canonical langUnit can cause a linked non-root subSeg to render under matching occurrences in other audSegs/audEps; the stored child still has one `audSegId`, while `parentSubSegId` records the local visible ancestor. |
 | `pointer-only langUnitRef` | The intended `subSeg.content` reference shape that keeps only `langUnitId` plus non-lexical occurrence metadata such as `remote`. |
 | `langUnit occurrence binding` | One saved link from a `subSeg` capture to a `langUnit`, counted as an occurrence rather than a new lexical identity. |
 | `langUnits collection` | The backend scaffold under `src/backend/data/langUnits` for reusable bubble text records. |
 | `langUnit item` | A reusable text record referenced by `subSeg` bubble spans through `data-langunit-id` and saved `langUnitRef` tokens; it owns `text`, `root`, and `instances`, with context living on the instances. |
+| `langUnit status` | The persisted two-state learning/progress marker on a canonical `langUnit`; valid values are `default` and `done`, with invalid or missing values normalized to `default`. |
+| `langUnit default state` | The baseline state for a new or unresolved `langUnit`; it is also the fallback state after loading malformed or unknown status values. |
+| `langUnit done state` | The completed/recognized state for a `langUnit`; it is toggled from a targeted bubble with `Ctrl+ArrowDown` or `Ctrl+ArrowUp`. |
+| `langUnit status cycling` | With a `langUnit` bubble targeted in a focused `subSeg`, `Ctrl+ArrowUp/Down` cycles `default ↔ done`, updates all visible bubbles in that canonical cycle group, and persists the canonical item's status. |
+| `langUnit status persistence` | Status changes are written through `/api/langUnits/items/:id/status`, increment `statusRevision`, update `statusUpdatedAt`/`updatedAt`, and are re-merged into the frontend before refreshing bubble indicators and segment content indicators. |
 | `langUnit derived id` | The chained `langUnit` id format `\`${subSegId}-${langUnitOrdinal}\`` used by the new capture scheme. |
 | `langUnit reverse link` | The stored list of occurrence bindings that point back to a `langUnit` from its `subSeg` locations; the runtime now treats these as `instances`. |
 | `langUnit context` | The immediate sentence or line substring around a specific `langUnit instance`, persisted on the instance record rather than the parent `langUnit`. |
@@ -100,6 +123,17 @@
 | `chinFuzz on chinPhrase` | A `chinFuzz` target inside a `chinPhrase` context; this is treated as already resolved enough and should not trigger a worker disambiguation call. |
 | `chinPhrase line length skip` | A save-time chin disambiguation shortcut where `chinPhrase` context text longer than 7 characters is accepted as phrase-shaped and not sent to the worker. |
 | `instance-targeted chin disambiguation` | The save-time chin disambiguation flow that sends one ambiguous `langUnit instance` occurrence to the worker, persists `contextType` to the matched instance's `context.type`, and persists `targetType` to the matched instance's `target.type`. |
+| `chin disambiguation queue` | The in-memory backend FIFO of instance-scoped chin disambiguation jobs created after a `subSeg` save when the Settings-controlled option is enabled; jobs are disposable across server restarts. |
+| `chin disambiguation queue batch` | The set of candidate jobs collected from the rebuilt langUnit collection for one save request; all jobs in the batch share a generated `queueId`, while each job keeps its own expected instance snapshot. |
+| `chin disambiguation drain` | The single backend drain guarded by `chinDisambiguationDrainActive`; `setImmediate` schedules it, it shifts one job at a time, awaits the worker-backed type inference, rebuilds langUnits after a successful mutation, and continues after individual errors. |
+| `chin disambiguation drain status` | The `/api/langUnits/disambiguation-status` response `{ pending, active, revision, lastError }`; `revision` increments in the drain finally block for every dequeued job, including failed or stale no-op jobs. |
+| `chin disambiguation completion event` | The bounded backend event record emitted for every dequeued job with its revision, langUnit/subSeg ids, target/context content, and any error; the frontend consumes events using `afterRevision`. |
+| `chin disambiguation completion toast` | The frontend toast shown once per completion event, queued into a client-side display sequence so rapid completions do not overwrite one another; target and bounded context text identify the update. |
+| `chin disambiguation job deduplication` | The backend key set that prevents the same langUnit instance snapshot from being enqueued repeatedly while it is already pending or active; the key is released when that job completes or fails. |
+| `codex worker request timeout` | The server-side 60-second guard around one worker request; a timed-out request kills the worker child so the next queue job can recreate and prime a clean worker instead of waiting indefinitely. |
+| `chin disambiguation stale-job guard` | `requireInstanceMatch: true` makes a queued job update only the same langUnit instance whose context text/type and target text/type still match the enqueue snapshot; changed content becomes a safe no-op. |
+| `chin disambiguation frontend poll` | The browser refresh loop started after a non-empty queue response; it polls status every 250ms while `pending > 0` or `active` is true and refreshes `/api/langUnits/items` on each poll before reporting completion. |
+| `langUnit write queue` | A separate Promise chain serializing atomic writes to `langUnits/items.json`; each write catches the previous rejection before appending, updates `lastGoodLangUnitItems`, and is independent of the chin disambiguation FIFO. |
 | `pinyin chinPhrase` | Pure ASCII pinyin-like context text, or mixed Chinese plus only valid pinyin syllables, that can be segmented into 2 or more valid pinyin syllables, so it is captured as `chinPhrase` instead of `chinFuzzWord` or `engPhrase`. |
 | `subSeg empty reset` | Clearing all text from the subSeg editor resets any bubble targeting back to `-1` so the next typed input behaves like normal plain text. |
 | `subSeg enter guard` | `Enter` while a bubble target is active opens or keeps the cycle row instead of inserting a newline. |
@@ -123,7 +157,7 @@
 | `langUnit bulk clear` | The settings action that clears all persisted `langUnit` records and rewrites `subSeg` content back to plain text. |
 | `subSeg unload flush` | The `pagehide` fallback that sends any pending debounced `subSeg` text to persistence before a page reload or navigation. |
 | `dev reload tone` | The short 880Hz chime that plays on Vite dev reloads once the browser has allowed audio playback. |
-| `subSeg playback hotkey` | `Ctrl+Space` while focused in a `subSeg` input toggles audio playback and other key combinations are ignored by the global shortcut layer. |
+| `subSeg playback hotkey` | `Ctrl+Space` while focused in a `subSeg` input toggles audio playback; page-level `Ctrl+Space` does the same outside entered `audSeg` state. |
 | `subSeg auto-focus` | The immediate focus jump to the `subSeg` input after Enter locks an `audSeg` into entered state. |
 | `subSeg focused guard` | The document-level shortcut handler checks the focused `subSeg` input first so `Ctrl+Backspace` exits entered `audSeg` state instead of deleting a word. |
 | `subSeg draft mirror` | The in-memory text cache keyed by `audSegId` that keeps the current input value visible across rerenders until the debounced save flushes it to persistence. |

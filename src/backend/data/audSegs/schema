@@ -12,6 +12,9 @@
       "_id": {
         "type": "string"
       },
+      "grpId": {
+        "type": "string"
+      },
       "tcs": {
         "type": "number"
       },

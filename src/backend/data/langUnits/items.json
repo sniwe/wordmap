@@ -1,63 +1,132 @@
 [
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
-    "text": "一条预警",
-    "instances": [],
+    "text": "eerninuo",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
+        "start": 12,
+        "end": 20,
+        "context": {
+          "text": "我们从一条预警说起，关于eerninuo",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "eerninuo",
+          "type": "engWord"
+        }
+      }
+    ],
     "target": {
-      "text": "一条预警",
-      "type": "chinPhrase"
+      "text": "eerninuo",
+      "type": "engWord"
     },
     "createdAt": "2026-07-24T08:25:32.170Z",
-    "updatedAt": "2026-07-25T07:26:17.767Z",
-    "compositions": []
+    "updatedAt": "2026-08-05T07:25:09.773Z",
+    "compositions": [],
+    "root": "fake-root-active",
+    "status": "done",
+    "statusRevision": 70,
+    "statusUpdatedAt": "2026-08-05T07:21:23.555Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-1-0",
     "text": "预警",
-    "instances": [],
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-1-0",
+        "start": 5,
+        "end": 7,
+        "context": {
+          "text": "我们从一条预警说起，关于eerninuo",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "预警",
+          "type": "chinWord"
+        }
+      }
+    ],
     "target": {
       "text": "预警",
       "type": "chinWord"
     },
     "createdAt": "2026-07-24T08:27:35.519Z",
-    "updatedAt": "2026-07-24T13:01:17.231Z",
-    "compositions": []
+    "updatedAt": "2026-08-05T07:25:09.773Z",
+    "compositions": [],
+    "status": "done",
+    "statusRevision": 22,
+    "statusUpdatedAt": "2026-08-05T07:21:22.211Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-1",
     "text": "厄尔尼诺",
-    "instances": [],
-    "target": {
-      "text": "厄尔尼诺",
-      "type": "chinPhrase"
-    },
-    "createdAt": "2026-07-24T08:27:58.997Z",
-    "updatedAt": "2026-07-25T07:26:17.767Z",
-    "compositions": []
-  },
-  {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-3-0",
-    "text": "厄尔尼诺",
-    "instances": [],
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-2",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-1",
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "厄尔尼诺 el'nino",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "厄尔尼诺",
+          "type": "chinWord"
+        }
+      }
+    ],
     "target": {
       "text": "厄尔尼诺",
       "type": "chinWord"
     },
-    "createdAt": "2026-07-24T10:08:48.817Z",
-    "updatedAt": "2026-07-24T13:01:17.231Z",
-    "compositions": []
+    "createdAt": "2026-07-24T08:27:58.997Z",
+    "updatedAt": "2026-08-05T07:21:25.628Z",
+    "compositions": [],
+    "status": "done",
+    "statusRevision": 3,
+    "statusUpdatedAt": "2026-08-05T07:21:25.628Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-0",
-    "text": "秋冬季",
-    "instances": [],
+    "text": "发生一轮eerninuo",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-0",
+        "start": 6,
+        "end": 18,
+        "context": {
+          "text": "秋冬季可能会发生一轮eerninuo，而就在上上的周五，这个消息又被进一步升级了",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "发生一轮eerninuo",
+          "type": "chinFuzz"
+        }
+      }
+    ],
     "target": {
-      "text": "秋冬季",
-      "type": "chinPhrase"
+      "text": "发生一轮eerninuo",
+      "type": "chinFuzz"
     },
     "createdAt": "2026-07-24T10:10:08.643Z",
-    "updatedAt": "2026-07-25T07:26:17.767Z",
-    "compositions": []
+    "updatedAt": "2026-08-05T07:40:03.655Z",
+    "compositions": [],
+    "status": "done",
+    "statusRevision": 1,
+    "statusUpdatedAt": "2026-08-05T07:40:03.655Z"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-1",
@@ -69,7 +138,8 @@
     },
     "createdAt": "2026-07-24T10:10:23.513Z",
     "updatedAt": "2026-07-25T07:26:17.767Z",
-    "compositions": []
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-2",
@@ -122,36 +192,21 @@
       }
     ],
     "createdAt": "2026-07-24T10:10:28.750Z",
-    "updatedAt": "2026-07-25T07:25:44.801Z"
+    "updatedAt": "2026-07-28T06:37:14.000Z",
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-0",
     "text": "海洋和daji管理局",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-0",
-        "start": 0,
-        "end": 10,
-        "context": {
-          "text": "海洋和daji管理局正式发布，说这一轮厄尔尼诺有81%的概率达到有记录以来的最强级别",
-          "type": "engPhrase"
-        },
-        "target": {
-          "text": "海洋和daji管理局",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "海洋和daji管理局",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:14:49.286Z",
-    "updatedAt": "2026-07-26T07:50:02.761Z",
-    "compositions": []
+    "updatedAt": "2026-07-26T09:41:17.478Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-1",
@@ -162,11 +217,11 @@
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0",
         "remote": false,
         "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-0-1",
-        "start": 32,
-        "end": 42,
+        "start": 30,
+        "end": 40,
         "context": {
-          "text": "海洋和daji管理局正式发布，说这一轮厄尔尼诺有81%的概率达到有记录以来的最强级别",
-          "type": "engPhrase"
+          "text": "有81% 的概率达到有记录以来的最强级别",
+          "type": "chinPhrase"
         },
         "target": {
           "text": "有记录以来的最强级别",
@@ -179,20 +234,39 @@
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:15:11.268Z",
-    "updatedAt": "2026-07-26T07:50:06.493Z",
-    "compositions": []
+    "updatedAt": "2026-07-28T23:25:57.745Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-2-1-0",
-    "text": "da'ji",
-    "instances": [],
+    "text": "有记录以来",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-2-1-0",
+        "start": 0,
+        "end": 5,
+        "context": {
+          "text": "有记录以来 in recorded history",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "有记录以来",
+          "type": "chinWord"
+        }
+      }
+    ],
     "target": {
-      "text": "da'ji",
-      "type": "chinFuzz"
+      "text": "有记录以来",
+      "type": "chinWord"
     },
     "createdAt": "2026-07-24T10:16:24.607Z",
-    "updatedAt": "2026-07-24T10:19:26.936Z",
-    "compositions": []
+    "updatedAt": "2026-08-05T06:56:19.305Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-0",
@@ -202,6 +276,7 @@
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
         "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-0",
         "start": 0,
         "end": 12,
         "context": {
@@ -219,8 +294,9 @@
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:29:31.835Z",
-    "updatedAt": "2026-07-25T07:30:50.419Z",
-    "compositions": []
+    "updatedAt": "2026-07-28T23:26:14.278Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-1",
@@ -230,6 +306,7 @@
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
         "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0-1",
         "start": 13,
         "end": 20,
         "context": {
@@ -247,8 +324,9 @@
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:29:41.068Z",
-    "updatedAt": "2026-07-25T07:30:50.419Z",
-    "compositions": []
+    "updatedAt": "2026-07-28T23:26:14.278Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-0",
@@ -259,8 +337,9 @@
       "type": "chinWord"
     },
     "createdAt": "2026-07-24T10:31:20.918Z",
-    "updatedAt": "2026-07-25T07:37:17.142Z",
-    "compositions": []
+    "updatedAt": "2026-07-28T06:43:52.663Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-0",
@@ -272,40 +351,42 @@
     },
     "createdAt": "2026-07-24T10:33:49.062Z",
     "updatedAt": "2026-07-25T07:39:08.403Z",
-    "compositions": []
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0-0",
-    "text": "把厄尔尼诺分成4dang",
+    "text": "dang",
     "instances": [
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0",
         "remote": false,
         "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-0-0",
-        "start": 3,
+        "start": 11,
         "end": 15,
         "context": {
-          "text": "机构是把厄尔尼诺分成4dang的，分别是：弱，中，强，超强",
+          "text": "机构是把厄尔尼诺分成4dang的",
           "type": "chinPhrase"
         },
         "target": {
-          "text": "把厄尔尼诺分成4dang",
+          "text": "dang",
           "type": "chinFuzz"
         }
       }
     ],
     "target": {
-      "text": "把厄尔尼诺分成4dang",
+      "text": "dang",
       "type": "chinFuzz"
     },
     "createdAt": "2026-07-24T10:39:29.156Z",
-    "updatedAt": "2026-07-26T07:48:00.758Z",
-    "compositions": []
+    "updatedAt": "2026-07-29T02:35:57.751Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-0",
-    "text": "挡",
+    "text": "档",
     "instances": [
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
@@ -315,8 +396,38 @@
         "start": 1,
         "end": 2,
         "context": {
-          "text": "=挡",
-          "type": "chinPhrase"
+          "text": "=档 gear?",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "档",
+          "type": "chinChar"
+        }
+      }
+    ],
+    "target": {
+      "text": "档",
+      "type": "chinChar"
+    },
+    "createdAt": "2026-07-24T10:57:56.757Z",
+    "updatedAt": "2026-07-29T02:35:55.069Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-1",
+    "text": "挡",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-1",
+        "start": 9,
+        "end": 10,
+        "context": {
+          "text": "挡 gear? ",
+          "type": "engPhrase"
         },
         "target": {
           "text": "挡",
@@ -328,21 +439,10 @@
       "text": "挡",
       "type": "chinChar"
     },
-    "createdAt": "2026-07-24T10:57:56.757Z",
-    "updatedAt": "2026-07-25T07:57:02.752Z",
-    "compositions": []
-  },
-  {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-1",
-    "text": "等",
-    "instances": [],
-    "target": {
-      "text": "等",
-      "type": "chinChar"
-    },
     "createdAt": "2026-07-24T10:59:31.528Z",
-    "updatedAt": "2026-07-25T07:26:17.767Z",
-    "compositions": []
+    "updatedAt": "2026-07-29T02:35:55.069Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-3",
@@ -354,19 +454,38 @@
     },
     "createdAt": "2026-07-24T12:41:01.122Z",
     "updatedAt": "2026-07-24T13:01:26.281Z",
-    "compositions": []
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
-    "text": "当",
-    "instances": [],
+    "text": "等",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-2",
+        "start": 18,
+        "end": 19,
+        "context": {
+          "text": "等 as in 等级",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "等",
+          "type": "chinChar"
+        }
+      }
+    ],
     "target": {
-      "text": "当",
+      "text": "等",
       "type": "chinChar"
     },
     "createdAt": "2026-07-24T12:57:40.987Z",
-    "updatedAt": "2026-07-25T07:26:17.767Z",
-    "compositions": []
+    "updatedAt": "2026-07-29T02:35:55.069Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-4",
@@ -378,7 +497,8 @@
     },
     "createdAt": "2026-07-24T12:58:27.178Z",
     "updatedAt": "2026-07-24T13:01:26.281Z",
-    "compositions": []
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-1-5",
@@ -390,12 +510,50 @@
     },
     "createdAt": "2026-07-24T12:58:27.178Z",
     "updatedAt": "2026-07-24T13:01:26.281Z",
-    "compositions": []
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-3",
     "text": "消息~升级了",
-    "instances": [],
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-3",
+        "compositionId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12",
+        "partId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12-part-0",
+        "start": 30,
+        "end": 32,
+        "context": {
+          "text": "秋冬季可能会发生一轮eerninuo，而就在上上的周五，这个消息又被进一步升级了",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "消息~升级了",
+          "type": "chinColl"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-3",
+        "compositionId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12",
+        "partId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12-addition",
+        "start": 37,
+        "end": 40,
+        "context": {
+          "text": "秋冬季可能会发生一轮eerninuo，而就在上上的周五，这个消息又被进一步升级了",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "消息~升级了",
+          "type": "chinColl"
+        }
+      }
+    ],
     "target": {
       "text": "消息~升级了",
       "type": "chinColl"
@@ -440,51 +598,76 @@
             }
           }
         ]
+      },
+      {
+        "compositionId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-2",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-3"
+        },
+        "text": "消息~升级了",
+        "target": {
+          "text": "消息~升级了",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0-2",
+            "text": "消息",
+            "role": "seed",
+            "start": 30,
+            "end": 32,
+            "target": {
+              "text": "消息",
+              "type": "chinColl"
+            }
+          },
+          {
+            "partId": "6b4aefdc-b2bb-49f2-8c4d-f2f44263fd12-addition",
+            "sourceLangUnitId": null,
+            "text": "升级了",
+            "role": "addition",
+            "start": 37,
+            "end": 40,
+            "target": {
+              "text": "升级了",
+              "type": "chinPhrase"
+            }
+          }
+        ]
       }
     ],
     "createdAt": "2026-07-25T07:25:44.797Z",
-    "updatedAt": "2026-07-25T07:26:17.767Z"
+    "updatedAt": "2026-08-01T02:42:24.479Z",
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2-0",
     "text": "同步发布",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-2-0",
-        "start": 0,
-        "end": 4,
-        "context": {
-          "text": "同步发布",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "同步发布",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "同步发布",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-25T07:35:17.365Z",
-    "updatedAt": "2026-07-25T07:36:22.851Z",
-    "compositions": []
+    "updatedAt": "2026-07-26T09:41:17.478Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1",
-    "text": "史上最强记录~史上最强记录",
+    "text": "超过~史上最强记录",
     "instances": [
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
         "remote": false,
         "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1",
-        "compositionId": "f3702686-3efd-4624-9ebe-349bea31074a",
-        "partId": "f3702686-3efd-4624-9ebe-349bea31074a-part-0",
+        "compositionId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc",
+        "partId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc-part-0",
         "start": 3,
         "end": 5,
         "context": {
@@ -492,17 +675,17 @@
           "type": "chinPhrase"
         },
         "target": {
-          "text": "史上最强记录~史上最强记录",
+          "text": "超过~史上最强记录",
           "type": "chinColl"
         }
       },
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
-        "remote": true,
+        "remote": false,
         "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1",
-        "compositionId": "f3702686-3efd-4624-9ebe-349bea31074a",
-        "partId": "f3702686-3efd-4624-9ebe-349bea31074a-addition",
+        "compositionId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc",
+        "partId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc-addition",
         "start": 14,
         "end": 20,
         "context": {
@@ -510,13 +693,13 @@
           "type": "chinPhrase"
         },
         "target": {
-          "text": "史上最强记录~史上最强记录",
+          "text": "超过~史上最强记录",
           "type": "chinColl"
         }
       }
     ],
     "target": {
-      "text": "史上最强记录~史上最强记录",
+      "text": "超过~史上最强记录",
       "type": "chinColl"
     },
     "compositions": [
@@ -559,10 +742,51 @@
             }
           }
         ]
+      },
+      {
+        "compositionId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-0",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-1"
+        },
+        "text": "超过~史上最强记录",
+        "target": {
+          "text": "超过~史上最强记录",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0-0",
+            "text": "超过",
+            "role": "seed",
+            "start": 3,
+            "end": 5,
+            "target": {
+              "text": "超过",
+              "type": "chinColl"
+            }
+          },
+          {
+            "partId": "08245cb5-60ff-4dfc-b5d7-da1f92e10ccc-addition",
+            "sourceLangUnitId": null,
+            "text": "史上最强记录",
+            "role": "addition",
+            "start": 14,
+            "end": 20,
+            "target": {
+              "text": "史上最强记录",
+              "type": "chinPhrase"
+            }
+          }
+        ]
       }
     ],
     "createdAt": "2026-07-25T07:37:17.136Z",
-    "updatedAt": "2026-07-25T07:38:20.339Z"
+    "updatedAt": "2026-07-29T01:30:26.833Z",
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-1",
@@ -615,67 +839,13 @@
       }
     ],
     "createdAt": "2026-07-25T07:39:08.394Z",
-    "updatedAt": "2026-07-25T07:39:13.736Z"
+    "updatedAt": "2026-07-25T07:39:13.736Z",
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
     "text": "什么是~不陌生",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
-        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
-        "partId": "ee2de915-055d-4f30-ae3c-050f494cad35-part-0",
-        "start": 0,
-        "end": 3,
-        "context": {
-          "text": "什么是厄尔尼诺，你大概率上不陌生",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "什么是~不陌生",
-          "type": "chinColl"
-        }
-      },
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
-        "remote": true,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
-        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
-        "partId": "ee2de915-055d-4f30-ae3c-050f494cad35-addition",
-        "start": 8,
-        "end": 9,
-        "context": {
-          "text": "什么是厄尔尼诺，你大概率上不陌生",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "什么是~不陌生",
-          "type": "chinColl"
-        }
-      },
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
-        "remote": true,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0-2",
-        "compositionId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13",
-        "partId": "9e525c22-7dc8-4e54-b5f4-33a0b0de5c13-addition",
-        "start": 13,
-        "end": 16,
-        "context": {
-          "text": "什么是厄尔尼诺，你大概率上不陌生",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "什么是~不陌生",
-          "type": "chinColl"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "什么是~不陌生",
       "type": "chinColl"
@@ -735,11 +905,12 @@
       }
     ],
     "createdAt": "2026-07-25T07:39:13.731Z",
-    "updatedAt": "2026-07-25T07:42:46.947Z"
+    "updatedAt": "2026-07-26T09:41:58.579Z",
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-0",
-    "text": "chuannaolian",
+    "text": "chuan'naolian",
     "instances": [
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
@@ -747,24 +918,25 @@
         "remote": false,
         "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-0",
         "start": 9,
-        "end": 21,
+        "end": 22,
         "context": {
-          "text": "整个厄尔尼诺的全部chuannaolian会被彻底激活",
+          "text": "整个厄尔尼诺的全部chuan'naolian会被彻底激活",
           "type": "chinPhrase"
         },
         "target": {
-          "text": "chuannaolian",
+          "text": "chuan'naolian",
           "type": "chinFuzz"
         }
       }
     ],
     "target": {
-      "text": "chuannaolian",
+      "text": "chuan'naolian",
       "type": "chinFuzz"
     },
     "createdAt": "2026-07-25T07:48:11.426Z",
-    "updatedAt": "2026-07-25T07:57:40.297Z",
-    "compositions": []
+    "updatedAt": "2026-08-01T03:11:08.824Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1-0",
@@ -774,96 +946,1657 @@
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1",
         "remote": false,
-        "start": 0,
-        "end": 3,
+        "start": 16,
+        "end": 19,
         "context": {
-          "text": "传闹连 transfer chaos chain?",
+          "text": "传闹连 transmit disruption chain",
           "type": "engPhrase"
         },
         "target": {
           "text": "传闹连",
-          "type": "chinPhrase"
+          "type": "chinWord"
         }
       }
     ],
     "target": {
       "text": "传闹连",
-      "type": "chinPhrase"
+      "type": "chinWord"
     },
     "createdAt": "2026-07-25T07:48:26.043Z",
-    "updatedAt": "2026-07-26T07:50:14.437Z",
-    "compositions": []
+    "updatedAt": "2026-08-05T06:56:25.223Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-1",
-    "text": "能产生的影响它都会产生",
+    "text": "被彻底激活",
     "instances": [
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
         "remote": false,
         "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-1",
-        "start": 34,
-        "end": 45,
+        "start": 23,
+        "end": 28,
         "context": {
-          "text": "说白了就是，能产生的影响它都会产生， 包括 农业，矿业，航运，医药 同时可能都会遭到冲击",
+          "text": "整个厄尔尼诺的全部chuan'naolian会被彻底激活",
           "type": "chinPhrase"
         },
         "target": {
-          "text": "能产生的影响它都会产生",
+          "text": "被彻底激活",
           "type": "chinPhrase"
         }
       }
     ],
     "target": {
-      "text": "能产生的影响它都会产生",
+      "text": "被彻底激活",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-25T07:52:07.350Z",
-    "updatedAt": "2026-07-25T07:57:40.297Z",
-    "compositions": []
+    "updatedAt": "2026-08-01T03:11:08.824Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-2-0",
     "text": "产生影响",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-2",
-        "remote": false,
-        "start": 0,
-        "end": 4,
-        "context": {
-          "text": "产生影响 produce an effect",
-          "type": "engPhrase"
-        },
-        "target": {
-          "text": "产生影响",
-          "type": "chinPhrase"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "产生影响",
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-25T07:57:26.701Z",
-    "updatedAt": "2026-07-26T07:50:21.192Z",
-    "compositions": []
+    "updatedAt": "2026-07-26T09:41:17.478Z",
+    "compositions": [],
+    "status": "default"
   },
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-0",
+    "text": "跨大洲地",
+    "instances": [],
+    "target": {
+      "text": "跨大洲地",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-25T07:58:14.529Z",
+    "updatedAt": "2026-08-01T03:22:14.858Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-1-0",
+    "text": "连动",
+    "instances": [],
+    "target": {
+      "text": "连动",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-25T07:58:43.469Z",
+    "updatedAt": "2026-07-26T09:41:17.478Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2-0",
+    "text": "一档",
+    "instances": [],
+    "target": {
+      "text": "一档",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-26T07:47:20.215Z",
+    "updatedAt": "2026-07-26T09:41:17.478Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2-1",
+    "text": "挂挡",
+    "instances": [],
+    "target": {
+      "text": "挂挡",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-26T07:47:29.216Z",
+    "updatedAt": "2026-07-26T09:41:17.478Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-0",
+    "text": "影响以",
+    "instances": [],
+    "target": {
+      "text": "影响以",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-27T04:34:35.378Z",
+    "updatedAt": "2026-07-27T04:34:46.564Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-1",
+    "text": "影响以~的方式发生",
+    "instances": [],
+    "target": {
+      "text": "影响以~的方式发生",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "8f78c69a-969e-4310-bf6a-b1cd338962ca",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-0",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-1"
+        },
+        "text": "影响以~的方式发生",
+        "target": {
+          "text": "影响以~的方式发生",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "8f78c69a-969e-4310-bf6a-b1cd338962ca-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-0",
+            "text": "影响以",
+            "role": "seed",
+            "start": 0,
+            "end": 3,
+            "target": {
+              "text": "影响以",
+              "type": "chinColl"
+            }
+          },
+          {
+            "partId": "8f78c69a-969e-4310-bf6a-b1cd338962ca-addition",
+            "sourceLangUnitId": null,
+            "text": "的方式发生",
+            "role": "addition",
+            "start": 6,
+            "end": 11,
+            "target": {
+              "text": "的方式发生",
+              "type": "chinPhrase"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-07-27T04:34:46.557Z",
+    "updatedAt": "2026-07-27T04:35:01.769Z",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-10-0-0",
+    "text": "tudao",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-10",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-10-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-10-0-0",
+        "start": 7,
+        "end": 12,
+        "context": {
+          "text": "比起结论，这个tudao的过程也许更值得关注",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "tudao",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "tudao",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-27T04:36:15.963Z",
+    "updatedAt": "2026-08-04T04:58:41.770Z",
+    "compositions": [],
+    "root": "derive",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-10-1-0",
+    "text": "推倒",
+    "instances": [],
+    "target": {
+      "text": "推倒",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-27T04:37:15.280Z",
+    "updatedAt": "2026-07-27T07:43:01.516Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-10-1-1",
+    "text": "推导",
+    "instances": [],
+    "target": {
+      "text": "推导",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-27T04:37:37.238Z",
+    "updatedAt": "2026-07-27T07:43:01.516Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-1-1-0",
+    "text": "轮",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-1-0",
+        "start": 11,
+        "end": 12,
+        "context": {
+          "text": "counted in 轮 = rounds ",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "轮",
+          "type": "chinChar"
+        }
+      }
+    ],
+    "target": {
+      "text": "轮",
+      "type": "chinChar"
+    },
+    "createdAt": "2026-07-28T06:38:00.463Z",
+    "updatedAt": "2026-08-05T07:40:06.493Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-3-0",
+    "text": "挡路",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-3",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "挡路 ",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "挡路",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "挡路",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-29T02:35:17.137Z",
+    "updatedAt": "2026-07-31T23:32:36.611Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-3-1",
+    "text": "阻挡",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-3",
+        "remote": false,
+        "start": 4,
+        "end": 6,
+        "context": {
+          "text": "阻挡 ",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "阻挡",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "阻挡",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-29T02:35:22.123Z",
+    "updatedAt": "2026-07-31T23:32:43.449Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-0",
+    "text": "ma",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-0",
+        "start": 18,
+        "end": 20,
+        "context": {
+          "text": "这两年关于全球化不是有很多不同的声音ma",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "ma",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "ma",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T22:27:01.469Z",
+    "updatedAt": "2026-07-31T22:51:17.372Z",
+    "compositions": [],
+    "root": "ma",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-1",
+    "text": "zhongjie",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-1",
+        "start": 27,
+        "end": 35,
+        "context": {
+          "text": "有人说全球化zhongjie，也有人说全球化tuichao",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "zhongjie",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "zhongjie",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T22:27:03.596Z",
+    "updatedAt": "2026-07-31T22:51:17.372Z",
+    "compositions": [],
+    "root": "zhongjie",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-2",
+    "text": "tuichao",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-0-2",
+        "start": 43,
+        "end": 50,
+        "context": {
+          "text": "有人说全球化zhongjie，也有人说全球化tuichao",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "tuichao",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "tuichao",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T22:27:06.156Z",
+    "updatedAt": "2026-07-31T22:51:17.372Z",
+    "compositions": [],
+    "root": "tuichao",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-11-2-0",
+    "text": "终结",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-11-2",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "终结 not sure",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "终结",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "终结",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T22:27:51.563Z",
+    "updatedAt": "2026-08-05T06:56:46.155Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0-0",
+    "text": "jinmidu",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0-0",
+        "start": 25,
+        "end": 32,
+        "context": {
+          "text": "你看过这个厄尔尼诺的反应连之后，也许会发现全球化的jinmidu要超过我们的想象",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "jinmidu",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "jinmidu",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T22:29:51.868Z",
+    "updatedAt": "2026-07-31T22:29:59.681Z",
+    "compositions": [],
+    "root": "jinmidu",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0-1",
+    "text": "反应连",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-0",
+        "remote": false,
+        "start": 10,
+        "end": 13,
+        "context": {
+          "text": "你看过这个厄尔尼诺的反应连之后，也许会发现全球化的jinmidu要超过我们的想象",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "反应连",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "反应连",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T22:29:59.681Z",
+    "updatedAt": "2026-07-31T22:29:59.681Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-12-1-0",
+    "text": "紧密度",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-12-1-0",
+        "start": 0,
+        "end": 3,
+        "context": {
+          "text": "紧密度 density? seems the same as jsut 密度",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "紧密度",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "紧密度",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T22:36:38.251Z",
+    "updatedAt": "2026-08-05T06:56:49.972Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-0",
+    "text": "影响体现在",
+    "instances": [],
+    "target": {
+      "text": "影响体现在",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T22:54:17.580Z",
+    "updatedAt": "2026-07-31T22:54:22.566Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-1",
+    "text": "影响体现在~上",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-1",
+        "compositionId": "885e9f28-fad1-43c5-a463-79773252ad95",
+        "partId": "885e9f28-fad1-43c5-a463-79773252ad95-part-0",
+        "start": 4,
+        "end": 9,
+        "context": {
+          "text": "最明显的影响体现在食物的价格上",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "影响体现在~上",
+          "type": "chinColl"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-1",
+        "compositionId": "885e9f28-fad1-43c5-a463-79773252ad95",
+        "partId": "885e9f28-fad1-43c5-a463-79773252ad95-addition",
+        "start": 14,
+        "end": 15,
+        "context": {
+          "text": "最明显的影响体现在食物的价格上",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "影响体现在~上",
+          "type": "chinColl"
+        }
+      }
+    ],
+    "target": {
+      "text": "影响体现在~上",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "885e9f28-fad1-43c5-a463-79773252ad95",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-0",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-1"
+        },
+        "text": "影响体现在~上",
+        "target": {
+          "text": "影响体现在~上",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "885e9f28-fad1-43c5-a463-79773252ad95-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-0",
+            "text": "影响体现在",
+            "role": "seed",
+            "start": 4,
+            "end": 9,
+            "target": {
+              "text": "影响体现在",
+              "type": "chinColl"
+            }
+          },
+          {
+            "partId": "885e9f28-fad1-43c5-a463-79773252ad95-addition",
+            "sourceLangUnitId": null,
+            "text": "上",
+            "role": "addition",
+            "start": 14,
+            "end": 15,
+            "target": {
+              "text": "上",
+              "type": "chinChar"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-07-31T22:54:22.553Z",
+    "updatedAt": "2026-07-31T22:56:59.941Z",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-2",
+    "text": "按照通常的想象",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-2",
+        "start": 16,
+        "end": 23,
+        "context": {
+          "text": "按照通常的想象，这应该是因为气候异常导致某类食物减产，进而食物涨价，对吧",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "按照通常的想象",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "按照通常的想象",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T22:56:01.541Z",
+    "updatedAt": "2026-07-31T22:56:59.941Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-3",
+    "text": "气候异常",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-3",
+        "start": 30,
+        "end": 34,
+        "context": {
+          "text": "按照通常的想象，这应该是因为气候异常导致某类食物减产，进而食物涨价，对吧",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "气候异常",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "气候异常",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T22:56:27.667Z",
+    "updatedAt": "2026-07-31T22:56:59.941Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-4",
+    "text": "减产",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-13-0-4",
+        "start": 40,
+        "end": 42,
+        "context": {
+          "text": "按照通常的想象，这应该是因为气候异常导致某类食物减产，进而食物涨价，对吧",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "减产",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "减产",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T22:56:35.642Z",
+    "updatedAt": "2026-07-31T22:56:59.941Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-14-0-0",
+    "text": "发生方式",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-14",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-14-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-14-0-0",
+        "start": 2,
+        "end": 6,
+        "context": {
+          "text": "它的发生方式要复杂得多",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "发生方式",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "发生方式",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T22:57:33.607Z",
+    "updatedAt": "2026-07-31T22:57:50.077Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-0",
+    "text": "bilu",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+        "remote": false,
+        "start": 3,
+        "end": 7,
+        "context": {
+          "text": "比如，bilu",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "bilu",
+          "type": "chinFuzz"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+        "remote": false,
+        "start": 7,
+        "end": 11,
+        "context": {
+          "text": "厄尔尼诺会导致bilu近海水温异常升高",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "bilu",
+          "type": "chinFuzz"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-0",
+        "start": 6,
+        "end": 10,
+        "context": {
+          "text": "今年6月份，bilu鱼粉的waipanli'an价格已经刷新了历史最高纪录                                             ",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "bilu",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "bilu",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T22:59:06.558Z",
+    "updatedAt": "2026-08-05T04:13:02.746Z",
+    "compositions": [],
+    "root": "bilu",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-1",
+    "text": "海面",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-1",
+        "start": 13,
+        "end": 15,
+        "context": {
+          "text": "bilu的海面恰好在厄尔尼诺的影响范围内",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "海面",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "海面",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T22:59:24.127Z",
+    "updatedAt": "2026-08-05T00:02:56.797Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-2",
+    "text": "恰好",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-2",
+        "start": 15,
+        "end": 17,
+        "context": {
+          "text": "bilu的海面恰好在厄尔尼诺的影响范围内",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "恰好",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "恰好",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T22:59:27.538Z",
+    "updatedAt": "2026-08-05T00:02:56.797Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-3",
+    "text": "影响范围内",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-0-3",
+        "start": 23,
+        "end": 28,
+        "context": {
+          "text": "bilu的海面恰好在厄尔尼诺的影响范围内",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "影响范围内",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "影响范围内",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T22:59:34.245Z",
+    "updatedAt": "2026-08-05T00:02:56.797Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0-0",
+    "text": "tinv",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0-0",
+        "start": 8,
+        "end": 12,
+        "context": {
+          "text": "这里是全球最大的tinv bulao国",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "tinv",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "tinv",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T23:00:59.910Z",
+    "updatedAt": "2026-08-05T03:39:26.827Z",
+    "compositions": [],
+    "root": "tinv",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0-1",
+    "text": "bulao",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-0-1",
+        "start": 13,
+        "end": 18,
+        "context": {
+          "text": "这里是全球最大的tinv bulao国",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "bulao",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "bulao",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T23:01:01.463Z",
+    "updatedAt": "2026-08-05T03:39:26.827Z",
+    "compositions": [],
+    "root": "bulao",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-16-2-0",
+    "text": "捕捞",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-2",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-2-0",
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "捕捞 capture (by fishing)",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "捕捞",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "捕捞",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T23:01:19.756Z",
+    "updatedAt": "2026-08-05T06:56:53.327Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-0",
+    "text": "zhidao",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-0",
+        "start": 6,
+        "end": 12,
+        "context": {
+          "text": "就是不会直接zhidao，潜台词就是你会间接zhidao",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "zhidao",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "zhidao",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T23:06:39.496Z",
+    "updatedAt": "2026-08-05T03:39:28.198Z",
+    "compositions": [],
+    "root": "zhidao",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-1",
+    "text": "水产养职业",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-1",
+        "start": 40,
+        "end": 45,
+        "context": {
+          "text": "加工成鱼粉，而鱼粉又是水产养职业最重要的蛋白质饲料之一",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "水产养职业",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "水产养职业",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T23:10:04.360Z",
+    "updatedAt": "2026-08-05T03:39:28.198Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-2",
+    "text": "蛋白质饲料",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-2",
+        "start": 49,
+        "end": 54,
+        "context": {
+          "text": "加工成鱼粉，而鱼粉又是水产养职业最重要的蛋白质饲料之一",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "蛋白质饲料",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "蛋白质饲料",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T23:10:14.392Z",
+    "updatedAt": "2026-08-05T03:39:28.198Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-3",
+    "text": "引进",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-3",
+        "start": 83,
+        "end": 85,
+        "context": {
+          "text": "bilu的鱼粉大概是全球产量的20%，而咱们中国每年引进的鱼粉大概是200万dun，大概是一半来自bilu",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "引进",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "引进",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T23:10:23.013Z",
+    "updatedAt": "2026-08-05T06:56:56.976Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-4",
+    "text": "dun",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-17-0-4",
+        "start": 95,
+        "end": 98,
+        "context": {
+          "text": "bilu的鱼粉大概是全球产量的20%，而咱们中国每年引进的鱼粉大概是200万dun，大概是一半来自bilu",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "dun",
+          "type": "engWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "dun",
+      "type": "engWord"
+    },
+    "createdAt": "2026-07-31T23:10:28.320Z",
+    "updatedAt": "2026-08-05T03:39:28.198Z",
+    "compositions": [],
+    "root": "dun",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-1-0",
+    "text": "秘鲁",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-15-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-1-0",
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "秘鲁 Peru",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "秘鲁",
+          "type": "chinWord"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-1",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "秘鲁 ？",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "秘鲁",
+          "type": "chinWord"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-1",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "秘鲁 Peru",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "秘鲁",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "秘鲁",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T23:15:28.383Z",
+    "updatedAt": "2026-08-05T06:57:07.586Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-0",
+    "text": "近海",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-0",
+        "start": 11,
+        "end": 13,
+        "context": {
+          "text": "厄尔尼诺会导致bilu近海水温异常升高",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "近海",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "近海",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T23:15:41.922Z",
+    "updatedAt": "2026-08-05T03:39:29.875Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-1",
+    "text": "水温升高",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-1",
+        "start": 22,
+        "end": 26,
+        "context": {
+          "text": "近海水温升高了，那么tiyuzhongquan就会选择向深水qu 迁移，这就会导致捕捞量jiujie",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "水温升高",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "水温升高",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-07-31T23:16:00.032Z",
+    "updatedAt": "2026-08-05T03:39:29.875Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-2",
+    "text": "tiyuzhongquan",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-2",
+        "start": 30,
+        "end": 43,
+        "context": {
+          "text": "近海水温升高了，那么tiyuzhongquan就会选择向深水qu 迁移，这就会导致捕捞量jiujie",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "tiyuzhongquan",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "tiyuzhongquan",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T23:16:10.645Z",
+    "updatedAt": "2026-08-05T03:39:29.875Z",
+    "compositions": [],
+    "root": "tiyuzhongquan",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-3",
+    "text": "qu",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-3",
+        "start": 50,
+        "end": 52,
+        "context": {
+          "text": "近海水温升高了，那么tiyuzhongquan就会选择向深水qu 迁移，这就会导致捕捞量jiujie",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "qu",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "qu",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T23:16:29.545Z",
+    "updatedAt": "2026-08-05T03:39:29.875Z",
+    "compositions": [],
+    "root": "qu",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-4",
+    "text": "jiujie",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-0-4",
+        "start": 64,
+        "end": 70,
+        "context": {
+          "text": "近海水温升高了，那么tiyuzhongquan就会选择向深水qu 迁移，这就会导致捕捞量jiujie",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "jiujie",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "jiujie",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-07-31T23:16:36.904Z",
+    "updatedAt": "2026-08-05T03:39:29.875Z",
+    "compositions": [],
+    "root": "jiujie",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-6-0",
+    "text": "纠结",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-6",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "纠结 problem ",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "纠结",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "纠结",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-07-31T23:18:22.035Z",
+    "updatedAt": "2026-08-05T06:57:11.159Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-2",
+    "text": "能产生的影响",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-2",
+        "start": 35,
+        "end": 41,
+        "context": {
+          "text": "说白了就是，能产生的影响它都会产生，包括农业，矿业，航运，医药 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "能产生的影响",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "能产生的影响",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-01T02:33:24.253Z",
+    "updatedAt": "2026-08-01T03:11:08.824Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-3",
+    "text": "矿业",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-3",
+        "start": 52,
+        "end": 54,
+        "context": {
+          "text": "说白了就是，能产生的影响它都会产生，包括农业，矿业，航运，医药 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "矿业",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "矿业",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-01T02:33:32.326Z",
+    "updatedAt": "2026-08-01T03:11:08.824Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-4",
+    "text": "航运",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-4",
+        "start": 55,
+        "end": 57,
+        "context": {
+          "text": "说白了就是，能产生的影响它都会产生，包括农业，矿业，航运，医药 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "航运",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "航运",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-01T02:33:34.211Z",
+    "updatedAt": "2026-08-01T03:11:08.824Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-5",
+    "text": "医药",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-5",
+        "start": 58,
+        "end": 60,
+        "context": {
+          "text": "说白了就是，能产生的影响它都会产生，包括农业，矿业，航运，医药 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "医药",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "医药",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-01T02:33:36.059Z",
+    "updatedAt": "2026-08-01T03:11:08.824Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1-1",
+    "text": "传导链",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-1",
+        "remote": false,
+        "start": 46,
+        "end": 49,
+        "context": {
+          "text": "传导链 ",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "传导链",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "传导链",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-01T02:35:36.770Z",
+    "updatedAt": "2026-08-05T02:43:11.221Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-1",
+    "text": "跨大洲地~liandong",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-1",
+        "compositionId": "a07e58bf-7f99-4d9a-9b49-67e499fcbcb2",
+        "partId": "a07e58bf-7f99-4d9a-9b49-67e499fcbcb2-part-0",
+        "start": 4,
+        "end": 8,
+        "context": {
+          "text": "估计还会跨大洲地liandong",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "跨大洲地",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "跨大洲地~liandong",
+      "type": "chinFuzz"
+    },
+    "compositions": [
+      {
+        "compositionId": "59983e7d-e07e-4aa7-a950-9963a5a48dcf",
+        "seedLangUnitId": null,
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-1"
+        },
+        "text": "跨大洲地~liandong",
+        "target": {
+          "text": "跨大洲地~liandong",
+          "type": "chinFuzz"
+        },
+        "parts": [
+          {
+            "partId": "59983e7d-e07e-4aa7-a950-9963a5a48dcf-addition",
+            "sourceLangUnitId": null,
+            "text": "liandong",
+            "role": "addition",
+            "start": 4,
+            "end": 12,
+            "target": {
+              "text": "liandong",
+              "type": "chinFuzz"
+            }
+          }
+        ]
+      },
+      {
+        "compositionId": "a07e58bf-7f99-4d9a-9b49-67e499fcbcb2",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-0",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-1"
+        },
+        "text": "跨大洲地~liandong",
+        "target": {
+          "text": "跨大洲地~liandong",
+          "type": "chinFuzz"
+        },
+        "parts": [
+          {
+            "partId": "a07e58bf-7f99-4d9a-9b49-67e499fcbcb2-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-0",
+            "text": "跨大洲地",
+            "role": "seed",
+            "start": 4,
+            "end": 8,
+            "target": {
+              "text": "跨大洲地",
+              "type": "chinPhrase"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-01T02:43:33.127Z",
+    "updatedAt": "2026-08-01T03:25:57.962Z",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-2",
     "text": "liandong",
     "instances": [
       {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0",
         "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-0-0",
         "start": 8,
         "end": 16,
         "context": {
-          "text": "估计还会夸大州地liandong",
+          "text": "估计还会跨大洲地liandong",
           "type": "chinPhrase"
         },
         "target": {
@@ -876,92 +2609,1602 @@
       "text": "liandong",
       "type": "chinFuzz"
     },
-    "createdAt": "2026-07-25T07:58:14.529Z",
-    "updatedAt": "2026-07-25T08:05:36.759Z",
-    "compositions": []
+    "createdAt": "2026-08-01T03:18:51.388Z",
+    "updatedAt": "2026-08-01T03:25:57.962Z",
+    "compositions": [],
+    "status": "default"
   },
   {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-8-1-0",
-    "text": "连动",
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-2",
+    "text": "展开说说",
     "instances": [
       {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-8-1",
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0",
         "remote": false,
-        "start": 3,
-        "end": 5,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-2",
+        "start": 26,
+        "end": 30,
         "context": {
-          "text": "连动 chain reaction?",
+          "text": "接下来，咱们就展开说说",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "展开说说",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "展开说说",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T03:44:24.027Z",
+    "updatedAt": "2026-08-04T03:45:17.382Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-3",
+    "text": "以什么样的方式发生",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-9-0-3",
+        "start": 7,
+        "end": 16,
+        "context": {
+          "text": "这个影响可能会以什么样的方式发生呢？",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "以什么样的方式发生",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "以什么样的方式发生",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T03:44:35.907Z",
+    "updatedAt": "2026-08-04T03:45:17.382Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0-0",
+    "text": "waipanli'an",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0-0",
+        "start": 13,
+        "end": 24,
+        "context": {
+          "text": "今年6月份，bilu鱼粉的waipanli'an价格已经刷新了历史最高纪录                                             ",
           "type": "engPhrase"
         },
         "target": {
-          "text": "连动",
+          "text": "waipanli'an",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "waipanli'an",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-04T03:46:39.943Z",
+    "updatedAt": "2026-08-05T04:13:02.738Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0-2",
+    "text": "刷新了历史最高纪录",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-0-2",
+        "start": 28,
+        "end": 37,
+        "context": {
+          "text": "今年6月份，bilu鱼粉的waipanli'an价格已经刷新了历史最高纪录                                             ",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "刷新了历史最高纪录",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "刷新了历史最高纪录",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T03:47:00.644Z",
+    "updatedAt": "2026-08-05T06:57:18.876Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-0",
+    "text": "刷新",
+    "instances": [],
+    "target": {
+      "text": "刷新",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-04T03:47:18.241Z",
+    "updatedAt": "2026-08-04T03:48:12.788Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-1",
+    "text": "刷新~记录",
+    "instances": [],
+    "target": {
+      "text": "刷新~记录",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "f41f66a5-3493-46bb-a4d7-d7531dcfc5d7",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-0",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-1"
+        },
+        "text": "刷新~记录",
+        "target": {
+          "text": "刷新~记录",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "f41f66a5-3493-46bb-a4d7-d7531dcfc5d7-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-0",
+            "text": "刷新",
+            "role": "seed",
+            "start": 0,
+            "end": 2,
+            "target": {
+              "text": "刷新",
+              "type": "chinWord"
+            }
+          },
+          {
+            "partId": "f41f66a5-3493-46bb-a4d7-d7531dcfc5d7-addition",
+            "sourceLangUnitId": null,
+            "text": "记录",
+            "role": "addition",
+            "start": 3,
+            "end": 5,
+            "target": {
+              "text": "记录",
+              "type": "chinWord"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-04T03:48:12.783Z",
+    "updatedAt": "2026-08-04T03:48:26.715Z",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3-2",
+    "text": "刷新纪录",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-19-3",
+        "remote": false,
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "刷新纪录 broke the all-time record",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "刷新纪录",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "刷新纪录",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T03:48:42.961Z",
+    "updatedAt": "2026-08-05T06:57:22.714Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0-0",
+    "text": "带动",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-20",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0-0",
+        "start": 29,
+        "end": 31,
+        "context": {
+          "text": "鱼粉涨价，就意味着饲料涨价，尤其是水产饲料，而饲料涨价又会带动对应的肉类涨价",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "带动",
           "type": "chinWord"
         }
       }
     ],
     "target": {
-      "text": "连动",
+      "text": "带动",
       "type": "chinWord"
     },
-    "createdAt": "2026-07-25T07:58:43.469Z",
-    "updatedAt": "2026-07-26T07:50:25.555Z",
-    "compositions": []
+    "createdAt": "2026-08-04T03:53:22.262Z",
+    "updatedAt": "2026-08-05T04:13:05.702Z",
+    "compositions": [],
+    "status": "default"
   },
   {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2-0",
-    "text": "一档",
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0-1",
+    "text": "对应的",
     "instances": [
       {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2",
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-20",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0",
         "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-20-0-1",
+        "start": 31,
+        "end": 34,
+        "context": {
+          "text": "鱼粉涨价，就意味着饲料涨价，尤其是水产饲料，而饲料涨价又会带动对应的肉类涨价",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "对应的",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "对应的",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T03:53:28.800Z",
+    "updatedAt": "2026-08-05T04:13:05.702Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-0",
+    "text": "yangzhipin",
+    "instances": [],
+    "target": {
+      "text": "yangzhipin",
+      "type": "engWord"
+    },
+    "createdAt": "2026-08-04T03:55:02.604Z",
+    "updatedAt": "2026-08-05T03:39:36.129Z",
+    "compositions": [],
+    "root": "yangzhipin",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-1",
+    "text": "chuannao",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-1",
+        "start": 17,
+        "end": 25,
+        "context": {
+          "text": "这个从饲料到yangzhipin的chuannao周期大概是3-6个月",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "chuannao",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "chuannao",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-04T03:55:06.329Z",
+    "updatedAt": "2026-08-05T04:13:08.400Z",
+    "compositions": [],
+    "root": "chuannao",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-0",
+    "text": "是个万里之外的东西",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-22",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-0",
         "start": 30,
+        "end": 39,
+        "context": {
+          "text": "可以感受一下这个chuannao过程：bilu的tiyu原来是个万里之外的东西，但是jieyou全球化的协作网络，它的影响面居然可以这么广泛",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "是个万里之外的东西",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "是个万里之外的东西",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T03:58:38.553Z",
+    "updatedAt": "2026-08-05T06:57:26.091Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-1",
+    "text": "jieyou",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-22",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-1",
+        "start": 42,
+        "end": 48,
+        "context": {
+          "text": "可以感受一下这个chuannao过程：bilu的tiyu原来是个万里之外的东西，但是jieyou全球化的协作网络，它的影响面居然可以这么广泛",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "jieyou",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "jieyou",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-04T03:58:42.109Z",
+    "updatedAt": "2026-08-05T04:13:16.180Z",
+    "compositions": [],
+    "root": "jieyou",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-2",
+    "text": "影响面",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-22",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-22-0-2",
+        "start": 59,
+        "end": 62,
+        "context": {
+          "text": "可以感受一下这个chuannao过程：bilu的tiyu原来是个万里之外的东西，但是jieyou全球化的协作网络，它的影响面居然可以这么广泛",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "影响面",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "影响面",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-04T03:58:53.576Z",
+    "updatedAt": "2026-08-05T06:57:29.650Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-0",
+    "text": "环环相扣的协作网络",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-0",
+        "start": 4,
+        "end": 13,
+        "context": {
+          "text": "这个一直环环相扣的协作网络在运转，只不过他多数时间运行顺畅，以至于很多人感受不到",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "环环相扣的协作网络",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "环环相扣的协作网络",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T04:00:32.026Z",
+    "updatedAt": "2026-08-05T04:13:19.147Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-1",
+    "text": "运行顺畅",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-1",
+        "start": 25,
+        "end": 29,
+        "context": {
+          "text": "这个一直环环相扣的协作网络在运转，只不过他多数时间运行顺畅，以至于很多人感受不到",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "运行顺畅",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "运行顺畅",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T04:01:03.591Z",
+    "updatedAt": "2026-08-05T04:13:19.147Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-2",
+    "text": "以至于",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-0-2",
+        "start": 30,
+        "end": 33,
+        "context": {
+          "text": "这个一直环环相扣的协作网络在运转，只不过他多数时间运行顺畅，以至于很多人感受不到",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "以至于",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "以至于",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T04:01:06.980Z",
+    "updatedAt": "2026-08-05T04:13:19.147Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-23-1-0",
+    "text": "环环相扣",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-23-1",
+        "remote": false,
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "环环相扣",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "环环相扣",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "环环相扣",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-04T04:01:15.593Z",
+    "updatedAt": "2026-08-05T02:44:40.482Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-0",
+    "text": "一场厄尔尼诺预警",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-0",
+        "start": 5,
+        "end": 13,
+        "context": {
+          "text": "但是现在，一场厄尔尼诺预警就把这个maizaishenzhong的chuannao链拉进了人们的视野",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "一场厄尔尼诺预警",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "一场厄尔尼诺预警",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T04:04:11.872Z",
+    "updatedAt": "2026-08-05T04:14:30.662Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-1",
+    "text": "拉进了人们的视野",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-1",
+        "start": 42,
+        "end": 50,
+        "context": {
+          "text": "但是现在，一场厄尔尼诺预警就把这个maizaishenzhong的chuannao链拉进了人们的视野",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "拉进了人们的视野",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "拉进了人们的视野",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-04T04:04:27.885Z",
+    "updatedAt": "2026-08-05T04:14:30.662Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-16-1-0",
+    "text": "鳀鱼",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-16-1-0",
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "鳀鱼 anchovy",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "鳀鱼",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "鳀鱼",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T00:07:19.877Z",
+    "updatedAt": "2026-08-05T06:57:37.419Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-4-0",
+    "text": "鳀鱼种群",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-4",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-4-0",
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "鳀鱼种群 anchovy populations",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "鳀鱼种群",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "鳀鱼种群",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T00:10:15.344Z",
+    "updatedAt": "2026-08-05T06:57:40.539Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-18-7-0",
+    "text": "种群",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-18-7",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "种群 population",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "种群",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "种群",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T00:13:25.111Z",
+    "updatedAt": "2026-08-05T06:57:45.886Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0-0",
+    "text": "棕榈油",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0-0",
+        "start": 27,
+        "end": 30,
+        "context": {
+          "text": "面包，饼干，方便面，这些东西的共同点就是大家都需要用到棕榈油 而棕榈油最重要的产区是印度尼西亚以及马来西亚",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "棕榈油",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "棕榈油",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T01:50:55.746Z",
+    "updatedAt": "2026-08-05T04:14:33.771Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0-1",
+    "text": "棕榈油最重要的产区",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0-1",
+        "start": 32,
+        "end": 41,
+        "context": {
+          "text": "面包，饼干，方便面，这些东西的共同点就是大家都需要用到棕榈油 而棕榈油最重要的产区是印度尼西亚以及马来西亚",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "棕榈油最重要的产区",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "棕榈油最重要的产区",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T01:52:32.204Z",
+    "updatedAt": "2026-08-05T04:14:33.771Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-0",
+    "text": "干旱",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-0",
+        "start": 6,
+        "end": 8,
+        "context": {
+          "text": "这导致东南亚干旱，棕榈油产量jiujiang，那进而导致棕榈油涨价20%到40%",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "干旱",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "干旱",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T01:55:22.605Z",
+    "updatedAt": "2026-08-05T06:57:49.789Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-1",
+    "text": "进而导致",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-1",
+        "start": 24,
+        "end": 28,
+        "context": {
+          "text": "这导致东南亚干旱，棕榈油产量jiujiang，那进而导致棕榈油涨价20%到40%",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "进而导致",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "进而导致",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T01:55:28.691Z",
+    "updatedAt": "2026-08-05T06:55:58.227Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-28-0-0",
+    "text": "供应冲击",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-28",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-28-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-28-0-0",
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "供应冲击会更加猛烈",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "供应冲击",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "供应冲击",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T01:56:28.113Z",
+    "updatedAt": "2026-08-05T04:16:07.236Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "instances": [],
+    "target": {
+      "text": "???",
+      "type": "chinPhrase"
+    },
+    "_id": "runtime-queue-verification-20260805115945370",
+    "text": "???",
+    "createdAt": "2026-08-05T01:59:45.379Z",
+    "updatedAt": "2026-08-05T02:33:06.354Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "instances": [],
+    "target": {
+      "text": "验证词",
+      "type": "chinPhrase"
+    },
+    "_id": "runtime-utf8-queue-20260805120046029",
+    "text": "验证词",
+    "createdAt": "2026-08-05T02:00:46.040Z",
+    "updatedAt": "2026-08-05T02:32:56.953Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "instances": [],
+    "target": {
+      "text": "队列词",
+      "type": "chinPhrase"
+    },
+    "_id": "runtime-dedupe-20260805121134773",
+    "text": "队列词",
+    "createdAt": "2026-08-05T02:11:34.784Z",
+    "updatedAt": "2026-08-05T02:32:53.644Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "instances": [],
+    "target": {
+      "text": "超斸词",
+      "type": "chinPhrase"
+    },
+    "_id": "runtime-timeout-20260805121203541",
+    "text": "超斸词",
+    "createdAt": "2026-08-05T02:12:03.552Z",
+    "updatedAt": "2026-08-05T02:32:49.578Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-0",
+    "text": "小麦",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-0",
+        "start": 19,
+        "end": 21,
+        "context": {
+          "text": "食物还可能包括，巴西的大豆，澳大利亚的小麦，还有印度的大米，而pingmian这些地方就是这些zuowu的重要出口国",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "小麦",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "小麦",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T02:39:31.844Z",
+    "updatedAt": "2026-08-05T04:16:10.385Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-1",
+    "text": "pingmian",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-1",
+        "start": 31,
+        "end": 39,
+        "context": {
+          "text": "食物还可能包括，巴西的大豆，澳大利亚的小麦，还有印度的大米，而pingmian这些地方就是这些zuowu的重要出口国",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "pingmian",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "pingmian",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-05T02:39:55.381Z",
+    "updatedAt": "2026-08-05T04:16:10.385Z",
+    "compositions": [],
+    "root": "plane",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-2",
+    "text": "zuowu",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-2",
+        "start": 47,
+        "end": 52,
+        "context": {
+          "text": "食物还可能包括，巴西的大豆，澳大利亚的小麦，还有印度的大米，而pingmian这些地方就是这些zuowu的重要出口国",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "zuowu",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "zuowu",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-05T02:39:58.700Z",
+    "updatedAt": "2026-08-05T04:16:10.385Z",
+    "compositions": [],
+    "root": "crop",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-3",
+    "text": "出口国",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-0-3",
+        "start": 55,
+        "end": 58,
+        "context": {
+          "text": "食物还可能包括，巴西的大豆，澳大利亚的小麦，还有印度的大米，而pingmian这些地方就是这些zuowu的重要出口国",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "出口国",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "出口国",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T02:40:03.443Z",
+    "updatedAt": "2026-08-05T04:16:10.385Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-2-0",
+    "text": "平面",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-2",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "平面 ?",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "平面",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "平面",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T02:40:20.165Z",
+    "updatedAt": "2026-08-05T06:56:01.621Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-29-3-0",
+    "text": "作物",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29-3",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "作物 crops?",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "作物",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "作物",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T02:40:34.338Z",
+    "updatedAt": "2026-08-05T06:56:05.854Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-0",
+    "text": "澳大利亚农业资源经济科学局",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-0",
+        "start": 0,
+        "end": 13,
+        "context": {
+          "text": "澳大利亚农业资源经济科学局已经在官方报告中付不了预测",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "澳大利亚农业资源经济科学局",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "澳大利亚农业资源经济科学局",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T02:42:22.177Z",
+    "updatedAt": "2026-08-05T04:16:13.126Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-1",
+    "text": "官方报告",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-1",
+        "start": 16,
+        "end": 20,
+        "context": {
+          "text": "澳大利亚农业资源经济科学局已经在官方报告中付不了预测",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "官方报告",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "官方报告",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T02:42:42.764Z",
+    "updatedAt": "2026-08-05T04:16:13.126Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-2",
+    "text": "预测",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-30-0-2",
+        "start": 24,
+        "end": 26,
+        "context": {
+          "text": "澳大利亚农业资源经济科学局已经在官方报告中付不了预测",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "预测",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "预测",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T02:42:46.017Z",
+    "updatedAt": "2026-08-05T04:16:13.126Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0-0",
+    "text": "产期",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-31",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0-0",
+        "start": 9,
+        "end": 11,
+        "context": {
+          "text": "2026到2027产期，澳大利亚的小麦产量将同比下降26%",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "产期",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "产期",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T02:44:12.678Z",
+    "updatedAt": "2026-08-05T04:16:51.961Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0-1",
+    "text": "同比",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-31",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-31-0-1",
+        "start": 22,
+        "end": 24,
+        "context": {
+          "text": "2026到2027产期，澳大利亚的小麦产量将同比下降26%",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "同比",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "同比",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T02:44:23.248Z",
+    "updatedAt": "2026-08-05T04:16:51.961Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-32-0-0",
+    "text": "dishang",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-32",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-32-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-32-0-0",
+        "start": 8,
+        "end": 15,
+        "context": {
+          "text": "5年的平均水平要dishang23%",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "dishang",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "dishang",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-05T02:45:12.947Z",
+    "updatedAt": "2026-08-05T04:16:57.481Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-0",
+    "text": "yusuochengzhen",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-0",
+        "start": 20,
+        "end": 34,
+        "context": {
+          "text": "含量要取决于接下来的实际下雨量 - 假如yusuochengzhen的话，那么面包，面条，还有饼干的原材料成本都会承受压力",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "yusuochengzhen",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "yusuochengzhen",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-05T03:07:36.452Z",
+    "updatedAt": "2026-08-05T05:12:21.379Z",
+    "compositions": [],
+    "root": "yusuochengzhen",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-1",
+    "text": "料成",
+    "instances": [],
+    "target": {
+      "text": "料成",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T03:07:43.044Z",
+    "updatedAt": "2026-08-05T03:07:46.808Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-2",
+    "text": "料成~承受压力",
+    "instances": [],
+    "target": {
+      "text": "料成~承受压力",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "00d59dd7-4838-4028-b69a-26cc590a8bfb",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-1",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-2"
+        },
+        "text": "料成~承受压力",
+        "target": {
+          "text": "料成~承受压力",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "00d59dd7-4838-4028-b69a-26cc590a8bfb-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-1",
+            "text": "料成",
+            "role": "seed",
+            "start": 52,
+            "end": 54,
+            "target": {
+              "text": "料成",
+              "type": "chinWord"
+            }
+          },
+          {
+            "partId": "00d59dd7-4838-4028-b69a-26cc590a8bfb-addition",
+            "sourceLangUnitId": null,
+            "text": "承受压力",
+            "role": "addition",
+            "start": 57,
+            "end": 61,
+            "target": {
+              "text": "承受压力",
+              "type": "chinPhrase"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-05T03:07:46.795Z",
+    "updatedAt": "2026-08-05T03:08:32.750Z",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-3",
+    "text": "成本",
+    "instances": [],
+    "target": {
+      "text": "成本",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T03:08:39.333Z",
+    "updatedAt": "2026-08-05T03:08:49.805Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-4",
+    "text": "成本~承受压力",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-4",
+        "compositionId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6",
+        "partId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6-part-0",
+        "start": 53,
+        "end": 55,
+        "context": {
+          "text": "含量要取决于接下来的实际下雨量 - 假如yusuochengzhen的话，那么面包，面条，还有饼干的原材料成本都会承受压力",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "成本",
+          "type": "chinWord"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-4",
+        "compositionId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6",
+        "partId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6-addition",
+        "start": 57,
+        "end": 61,
+        "context": {
+          "text": "含量要取决于接下来的实际下雨量 - 假如yusuochengzhen的话，那么面包，面条，还有饼干的原材料成本都会承受压力",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "承受压力",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "成本~承受压力",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-3",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-4"
+        },
+        "text": "成本~承受压力",
+        "target": {
+          "text": "成本~承受压力",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0-3",
+            "text": "成本",
+            "role": "seed",
+            "start": 53,
+            "end": 55,
+            "target": {
+              "text": "成本",
+              "type": "chinWord"
+            }
+          },
+          {
+            "partId": "3fe3a3c3-5c60-4626-a2d8-ce7777ba79f6-addition",
+            "sourceLangUnitId": null,
+            "text": "承受压力",
+            "role": "addition",
+            "start": 57,
+            "end": 61,
+            "target": {
+              "text": "承受压力",
+              "type": "chinPhrase"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-05T03:08:49.791Z",
+    "updatedAt": "2026-08-05T05:12:21.379Z",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-33-1-0",
+    "text": "预测成真",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-1",
+        "remote": false,
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "预测成真 the predictions come true",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "预测成真",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "target": {
+      "text": "预测成真",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-05T03:09:32.253Z",
+    "updatedAt": "2026-08-05T06:56:09.481Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-2",
+    "text": "yangzhipin",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-0-2",
+        "start": 6,
+        "end": 16,
+        "context": {
+          "text": "这个从饲料到yangzhipin的chuannao周期大概是3-6个月",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "yangzhipin",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "target": {
+      "text": "yangzhipin",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-05T03:39:50.046Z",
+    "updatedAt": "2026-08-05T04:13:08.400Z",
+    "compositions": [],
+    "root": "aquaculture",
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-21-3-0",
+    "text": "养殖品",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-21-3",
+        "remote": false,
+        "start": 0,
+        "end": 3,
+        "context": {
+          "text": "养殖品 livestock?",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "养殖品",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "target": {
+      "text": "养殖品",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-05T03:40:05.570Z",
+    "updatedAt": "2026-08-05T06:56:12.777Z",
+    "compositions": [],
+    "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-2",
+    "text": "maizaishenzhong",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-25-0-2",
+        "start": 17,
         "end": 32,
         "context": {
-          "text": "一档 first gear ",
-          "type": "engPhrase"
+          "text": "但是现在，一场厄尔尼诺预警就把这个maizaishenzhong的chuannao链拉进了人们的视野",
+          "type": "chinPhrase"
         },
         "target": {
-          "text": "一档",
-          "type": "chinWord"
+          "text": "maizaishenzhong",
+          "type": "chinFuzz"
         }
       }
     ],
     "target": {
-      "text": "一档",
-      "type": "chinWord"
+      "text": "maizaishenzhong",
+      "type": "chinFuzz"
     },
-    "createdAt": "2026-07-26T07:47:20.215Z",
-    "updatedAt": "2026-07-26T07:50:29.145Z",
-    "compositions": []
+    "createdAt": "2026-08-05T04:13:40.486Z",
+    "updatedAt": "2026-08-05T04:14:30.662Z",
+    "compositions": [],
+    "status": "default"
   },
   {
-    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2-1",
-    "text": "挂挡",
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-2",
+    "text": "jiujiang",
     "instances": [
       {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-6-2",
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0",
         "remote": false,
-        "start": 45,
-        "end": 47,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-27-0-2",
+        "start": 14,
+        "end": 22,
         "context": {
-          "text": "挂挡 put in gear?",
+          "text": "这导致东南亚干旱，棕榈油产量jiujiang，那进而导致棕榈油涨价20%到40%",
           "type": "engPhrase"
         },
         "target": {
-          "text": "挂挡",
-          "type": "chinWord"
+          "text": "jiujiang",
+          "type": "chinFuzz"
         }
       }
     ],
     "target": {
-      "text": "挂挡",
-      "type": "chinWord"
+      "text": "jiujiang",
+      "type": "chinFuzz"
     },
-    "createdAt": "2026-07-26T07:47:29.216Z",
-    "updatedAt": "2026-07-26T07:50:33.176Z",
-    "compositions": []
+    "createdAt": "2026-08-05T04:14:47.715Z",
+    "updatedAt": "2026-08-05T04:15:56.439Z",
+    "compositions": [],
+    "status": "default"
   }
 ]

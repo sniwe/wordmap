@@ -1,0 +1,14 @@
+1
+extend the chinFuzz replace from only parent to all subSegs with containing any exact match pinyin-syllable valid character substring under the same audEp
+scan src ; identify langUnit-linked
+  subSeg child line-initial replace on
+  parent. prime context with this then
+  report back with "ready"
+we must devise a modification to
+  this logic whereby the replace is
+  applied across all subSegs under the
+  same episode and, in the case of
+  other subSegs than the parent,
+  regardless of whether the matched
+  text is within langUnit bounds or
+  not.
