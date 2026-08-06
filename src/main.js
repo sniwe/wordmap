@@ -1,4 +1,5 @@
 import './styles.css';
+import { createTimeTracker } from './timeTracking.js';
 
 const app = document.querySelector('#app');
 
@@ -125,6 +126,7 @@ const langUnitRefResizeObserver =
     : null;
 let lastSubSegPlaybackShortcutAt = 0;
 let subSegPlaybackShortcutActive = false;
+let activeSubSegPlaybackSourceId = '';
 let enteredAudSegFocusContextId = '';
 let restoringEnteredAudSegFocus = false;
 let settingsOpen = false;
@@ -5166,6 +5168,7 @@ function handleAudioPlay(index) {
 }
 
 function handleAudioStop(index) {
+  timeTracker?.tick?.();
   const audio = audioPlayers.get(index);
   const lock = getAudSegPlaybackLock(index);
   if (audio?.ended && lock?.loopTcs != null) {
@@ -5175,6 +5178,9 @@ function handleAudioStop(index) {
   }
 
   stopAudioLoop(audio);
+  if (activeSubSegPlaybackSourceId && String(audio?._timeTrackingSubSegId ?? '') === activeSubSegPlaybackSourceId) {
+    activeSubSegPlaybackSourceId = '';
+  }
   syncAudEpPlaybackLabel(index);
 }
 
@@ -5337,7 +5343,7 @@ function resetAudioPlayers() {
   pendingSeekFrameByIndex.clear();
 }
 
-async function toggleAudEpPlaybackByIndex(audEpIndex) {
+async function toggleAudEpPlaybackByIndex(audEpIndex, sourceSubSegId = '') {
   if (!Number.isInteger(audEpIndex) || audEpIndex < 0) {
     return;
   }
@@ -5348,6 +5354,7 @@ async function toggleAudEpPlaybackByIndex(audEpIndex) {
   }
 
   if (audio.paused) {
+    activeSubSegPlaybackSourceId = sourceSubSegId;
     pauseOtherAudio(audEpIndex);
     const lock = getAudSegPlaybackLock(audEpIndex);
     if (lock && (audio.currentTime < lock.tcs || audio.currentTime >= lock.tce)) {
@@ -5368,9 +5375,15 @@ async function toggleSelectedAudEpPlayback() {
 }
 
 async function toggleSubSegAudEpPlayback(editor) {
+  const sourceSubSegId = editor instanceof HTMLElement ? String(editor.dataset.subsegId ?? '').trim() : '';
   const audSegId = editor instanceof HTMLElement ? String(editor.dataset.subsegAudsegId ?? '').trim() : '';
   const audEpIndex = getAudEpIndexForAudSegItem(getAudSegItemById(audSegId));
-  await toggleAudEpPlaybackByIndex(audEpIndex);
+  activeSubSegPlaybackSourceId = sourceSubSegId;
+  const audio = getAudioForIndex(audEpIndex);
+  if (audio) {
+    audio._timeTrackingSubSegId = sourceSubSegId;
+  }
+  await toggleAudEpPlaybackByIndex(audEpIndex, sourceSubSegId);
 }
 
 function cycleAudEpSelection(step) {
@@ -6830,6 +6843,89 @@ settingsPopoverClearSubSegsButton?.addEventListener('click', () => {
 
 settingsPopoverClearLangUnitsButton?.addEventListener('click', () => {
   void clearAllLangUnits();
+});
+
+function getTimeTrackingContext() {
+  for (const [index, audio] of audioPlayers.entries()) {
+    if (audio.paused || audio.ended) {
+      continue;
+    }
+
+    const audEpId = getAudEpIdByIndex(index);
+    const items = getAudSegItemsForAudEp(index);
+    const time = Number(audio.currentTime);
+    const audSeg = items.find((item) => {
+      const range = getAudSegPlaybackRange(item);
+      return range && time >= range.tcs && time < range.tce;
+    });
+    let audSegGroupId = '';
+    if (audSeg) {
+      const group = getAudSegGroupAtIndex(items, items.indexOf(audSeg));
+      const first = getAudSegPlaybackRange(items[group?.startIndex]);
+      const last = getAudSegPlaybackRange(items[group?.endIndex]);
+      if (group && first && last && time >= first.tcs && time < last.tce) {
+        audSegGroupId = group.grpId;
+      }
+    } else {
+      const group = getAudSegGroupRanges(items).find((candidate) => {
+        const first = getAudSegPlaybackRange(items[candidate.startIndex]);
+        const last = getAudSegPlaybackRange(items[candidate.endIndex]);
+        return first && last && time >= first.tcs && time < last.tce;
+      });
+      audSegGroupId = group?.grpId || '';
+    }
+
+    const sourceSubSeg = getSubSegItemById(activeSubSegPlaybackSourceId);
+    const subSegId = sourceSubSeg && String(sourceSubSeg.audSegId ?? '') === String(audSeg?._id ?? '')
+      ? activeSubSegPlaybackSourceId
+      : '';
+    return {
+      playing: true,
+      audEpId,
+      audSegId: String(audSeg?._id ?? ''),
+      audSegGroupId,
+      subSegId,
+    };
+  }
+  return { playing: false };
+}
+
+const timeTracker = createTimeTracker({
+  getContext: getTimeTrackingContext,
+  flush: async (deltas) => {
+    const response = await fetch('/api/timeTracking/deltas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ deltas }),
+      keepalive: true,
+    });
+    if (!response.ok) {
+      throw new Error(`time tracking flush failed: ${response.status}`);
+    }
+  },
+});
+if (import.meta.env.DEV) {
+  window.__timeTracker = timeTracker;
+  window.__timeTrackingDebug = {
+    getContext: getTimeTrackingContext,
+    getAudioForIndex,
+    toggleAudEpPlaybackByIndex,
+    toggleSubSegAudEpPlayback,
+  };
+}
+
+for (const eventName of ['pointerdown', 'pointermove', 'keydown', 'input', 'wheel', 'touchstart', 'scroll']) {
+  document.addEventListener(eventName, (event) => timeTracker.signalActivity(eventName), { capture: true, passive: true });
+}
+window.addEventListener('focus', () => {
+  timeTracker.setVisibility(true);
+  timeTracker.signalActivity('focus');
+});
+window.addEventListener('blur', () => timeTracker.setVisibility(false));
+document.addEventListener('visibilitychange', () => timeTracker.setVisibility(document.visibilityState !== 'hidden'));
+window.addEventListener('pagehide', () => {
+  timeTracker.tick();
+  void timeTracker.flush({ reason: 'pagehide', beacon: true });
 });
 
 document.addEventListener('click', (event) => {

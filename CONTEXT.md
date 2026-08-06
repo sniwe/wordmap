@@ -169,6 +169,17 @@
 | `delete confirm dialog` | The in-item confirmation state shown before deleting an `audEp`. |
 | `audSeg delete dialog` | The in-row confirmation state shown before deleting an `audSeg`. |
 | `audSeg delete confirm` | The confirm action that deletes the targeted `audSeg` and its dependent `subSeg` data. |
+| `time tracking` | The aggregate usage recorder in `src/timeTracking.js` plus the `timeTracking` backend collection; it records visible page time and nested playback time without mutating domain items. |
+| `page open time` | `timeTracking` scope `page:app` `openMs`, counted only while the app document is visible. |
+| `active page time` | `page:app` `activeMs`, counted while visible and after a qualifying user signal within the 30-second idle window. |
+| `playtime` | `playMs` on an `audEp`, `audSeg`, `audSegGroup`, or `subSeg` aggregate; counted only while the associated audio element is actually playing and its context qualifies. |
+| `active playtime` | `activePlayMs`, the playback counterpart counted only when the page is also active. It supplies active audEp, audSeg, group, and subSeg time. |
+| `audSeg group playtime` | `audSegGroup:<grpId>` `playMs`, counted across the group's derived envelope, including gaps between contiguous grouped members; gap time is not assigned to a member audSeg. |
+| `subSeg playback source` | The subSeg editor that initiated playback; subSeg time follows this explicit source and is not inferred from focus alone. |
+| `time tracking aggregate bucket` | One record keyed by `${scopeType}:${scopeId}` with optional parent ids, `totals`, and `updatedAt`; deltas are additively merged into `src/backend/data/timeTracking/items.json`. |
+| `time tracking activity` | Pointer, keyboard, input, wheel, touch, scroll, focus, and visibility signals used to reset idle state and gate active totals. |
+| `time tracking flush` | A batched POST to `/api/timeTracking/deltas`, with in-memory deltas retained after failed fetches and a best-effort `sendBeacon` pagehide path. |
+| `time tracking debug hook` | Dev-only `window.__timeTracker` and `window.__timeTrackingDebug` handles used to inspect pending scopes and drive live verification without affecting production builds. |
 | `functionalityStatus` | Per-note lifecycle record that tracks whether the note's described functionality is active, retired, or partially active, plus what remains, what is missing, and what replaced it. |
 | `functionalityStatus maintenance skill` | The skill used to update `functionalityStatus` records as runtime behavior changes. |
 | `edit-notes store` | The persisted note file tree under `mgmt/edit-notes`, with `notes.json` as the source of truth for saved selector notes. |

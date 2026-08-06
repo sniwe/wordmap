@@ -1,0 +1,16 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "_id": { "type": "string" },
+      "scopeType": { "type": "string" },
+      "scopeId": { "type": "string" },
+      "parent": { "type": ["object", "null"], "additionalProperties": true },
+      "totals": { "type": "object", "additionalProperties": { "type": "number" } },
+      "updatedAt": { "type": "string" }
+    },
+    "required": ["_id", "scopeType", "scopeId", "totals"],
+    "additionalProperties": true
+  }
+}

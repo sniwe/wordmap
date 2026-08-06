@@ -30,6 +30,8 @@ const subSegDir = path.join(root, 'src', 'backend', 'data', 'subSegs');
 const subSegItemsFile = path.join(subSegDir, 'items.json');
 const subSegSchemaFile = path.join(subSegDir, 'schema');
 const mediaDir = path.join(root, 'src', 'backend', 'data', 'media');
+const timeTrackingDir = path.join(root, 'src', 'backend', 'data', 'timeTracking');
+const timeTrackingItemsFile = path.join(timeTrackingDir, 'items.json');
 const port = Number(process.env.PORT || 3000);
 const codexWorkerRequestTimeoutMs = Number(process.env.CODEX_WORKER_REQUEST_TIMEOUT_MS || 60000);
 const codexWorkerRepairBaseMs = Number(process.env.CODEX_WORKER_REPAIR_BASE_MS || 250);
@@ -39,6 +41,7 @@ const isDev = process.argv.includes('--dev');
 let langUnitWriteQueue = Promise.resolve();
 let langUnitMutationQueue = Promise.resolve();
 let lastGoodLangUnitItems = null;
+let timeTrackingWriteQueue = Promise.resolve();
 
 function runLangUnitMutation(mutator) {
   const result = langUnitMutationQueue.then(mutator);
@@ -1455,6 +1458,98 @@ function canonicalizeLangUnitItems(items) {
 
   const next = sortLangUnitItems([...nextById.values()]);
   return [next, idMap, JSON.stringify(next) !== JSON.stringify(normalized)];
+}
+
+async function readTimeTrackingItems() {
+  return readJsonArray(timeTrackingItemsFile, 'timeTracking');
+}
+
+function normalizeTimeTrackingDelta(delta) {
+  const scopeType = String(delta?.scopeType ?? '').trim();
+  const scopeId = String(delta?.scopeId ?? '').trim();
+  const allowed = new Set(['page', 'audEp', 'audSeg', 'audSegGroup', 'subSeg']);
+  if (!allowed.has(scopeType) || !scopeId || scopeId.length > 300) {
+    return null;
+  }
+
+  const totals = {};
+  for (const metric of ['openMs', 'activeMs', 'playMs', 'activePlayMs']) {
+    const value = Number(delta?.totals?.[metric] ?? 0);
+    if (!Number.isFinite(value) || value < 0 || value > 86_400_000) {
+      return null;
+    }
+    if (value) {
+      totals[metric] = Math.round(value);
+    }
+  }
+
+  return {
+    _id: `${scopeType}:${scopeId}`,
+    scopeType,
+    scopeId,
+    ...(delta?.parent && typeof delta.parent === 'object' ? { parent: delta.parent } : {}),
+    totals,
+  };
+}
+
+async function mergeTimeTrackingDeltas(deltas) {
+  timeTrackingWriteQueue = timeTrackingWriteQueue.catch(() => {}).then(async () => {
+    const items = await readTimeTrackingItems();
+    const byId = new Map(items.filter((item) => item && typeof item === 'object').map((item) => [String(item._id), item]));
+    const now = new Date().toISOString();
+    for (const delta of deltas) {
+      const existing = byId.get(delta._id) || {
+        _id: delta._id,
+        scopeType: delta.scopeType,
+        scopeId: delta.scopeId,
+        ...(delta.parent ? { parent: delta.parent } : {}),
+        totals: {},
+      };
+      existing.parent = delta.parent || existing.parent || null;
+      existing.totals = existing.totals || {};
+      for (const [metric, value] of Object.entries(delta.totals)) {
+        existing.totals[metric] = (Number(existing.totals[metric]) || 0) + value;
+      }
+      existing.updatedAt = now;
+      byId.set(delta._id, existing);
+    }
+    await atomicWriteJsonFile(timeTrackingDir, timeTrackingItemsFile, [...byId.values()]);
+    return [...byId.values()];
+  });
+  return timeTrackingWriteQueue;
+}
+
+async function handleTimeTrackingApi(req, res, url) {
+  if (req.method === 'GET' && url.pathname === '/api/timeTracking/items') {
+    send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify(await readTimeTrackingItems()));
+    return true;
+  }
+
+  if (req.method !== 'POST' || url.pathname !== '/api/timeTracking/deltas') {
+    return false;
+  }
+
+  let payload;
+  try {
+    payload = JSON.parse(await readBody(req) || '{}');
+  } catch {
+    send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'invalid JSON' }));
+    return true;
+  }
+
+  const rawDeltas = Array.isArray(payload?.deltas) ? payload.deltas : [];
+  if (!rawDeltas.length || rawDeltas.length > 100) {
+    send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'deltas must contain 1-100 items' }));
+    return true;
+  }
+  const deltas = rawDeltas.map(normalizeTimeTrackingDelta);
+  if (deltas.some((delta) => !delta)) {
+    send(res, 400, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ error: 'invalid time delta' }));
+    return true;
+  }
+  const items = await mergeTimeTrackingDeltas(deltas);
+  send(res, 200, { 'Content-Type': 'application/json; charset=utf-8' }, JSON.stringify({ accepted: deltas.length, items }));
+  return true;
 }
 
 function repairLegacyCompositeSubSegItems(items, langUnitItems) {
@@ -3126,6 +3221,10 @@ async function handleHttpRequest(req, res, vite = null, fromDist = false) {
     const url = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
 
     if (url.pathname === '/api/notes' && (await handleNotesApi(req, res))) {
+      return;
+    }
+
+    if (url.pathname.startsWith('/api/timeTracking/') && (await handleTimeTrackingApi(req, res, url))) {
       return;
     }
 

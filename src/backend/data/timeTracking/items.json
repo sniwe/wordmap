@@ -1,0 +1,73 @@
+[
+  {
+    "_id": "page:app",
+    "scopeType": "page",
+    "scopeId": "app",
+    "totals": {
+      "openMs": 35096,
+      "activeMs": 35096
+    },
+    "parent": null,
+    "updatedAt": "2026-08-06T01:45:00.299Z"
+  },
+  {
+    "_id": "audEp:767e5d96-9f62-45f4-89a5-f98c43303144",
+    "scopeType": "audEp",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0"
+    },
+    "totals": {
+      "playMs": 1913,
+      "activePlayMs": 1913
+    },
+    "updatedAt": "2026-08-06T01:44:02.259Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-0",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0"
+    },
+    "totals": {
+      "playMs": 1913,
+      "activePlayMs": 1913
+    },
+    "updatedAt": "2026-08-06T01:44:02.259Z"
+  },
+  {
+    "_id": "audSegGroup:767e5d96-9f62-45f4-89a5-f98c43303144-grp-0",
+    "scopeType": "audSegGroup",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0"
+    },
+    "totals": {
+      "playMs": 1913,
+      "activePlayMs": 1913
+    },
+    "updatedAt": "2026-08-06T01:44:02.259Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0"
+    },
+    "totals": {
+      "playMs": 1913,
+      "activePlayMs": 1913
+    },
+    "updatedAt": "2026-08-06T01:44:02.259Z"
+  }
+]
