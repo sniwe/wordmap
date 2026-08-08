@@ -127,6 +127,7 @@ body {
 }
 
 .item {
+  position: relative;
   flex: 0 0 auto;
   width: fit-content;
   min-height: 35px;
@@ -142,10 +143,26 @@ body {
   overflow: hidden;
 }
 
+.item__playtime-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: 4px;
+  margin: 0;
+  background: linear-gradient(
+    to right,
+    rgba(128, 128, 128, 0.5) var(--playtime-percent),
+    transparent var(--playtime-percent)
+  );
+}
+
 .item--entered {
   flex-direction: column;
   align-items: stretch;
   gap: 8px;
+  padding-bottom: 7px;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -215,16 +232,26 @@ body {
   --audseg-group-color: #1677d2;
 }
 
-.item__segment--grp-selecting {
-  outline: 3px solid #2f9e59;
+.item__segment.item__segment--grp-selecting {
+  --audseg-group-color: rgba(47, 158, 89, 0.5);
+  outline: 3px solid rgba(47, 158, 89, 0.5);
   outline-offset: 2px;
   position: relative;
   z-index: 2;
 }
 
 .item__segment.is-targeted.item__segment--grp-selecting {
-  outline-color: #2f9e59;
+  outline-color: rgba(47, 158, 89, 0.5);
   z-index: 3;
+}
+
+.item__segment.item__segment--group-target.item__segment--grp-selecting {
+  z-index: 5;
+}
+
+.item__segment.item__segment--group-target.item__segment--grp-selecting::before {
+  --audseg-group-color: #1677d2;
+  z-index: 6;
 }
 
 .item__segment.is-targeted.item__segment--grouped:not(.item__segment--grp-selecting) {
@@ -405,11 +432,28 @@ body {
   text-align: center;
 }
 
+.item__segment-playtime-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    rgba(128, 128, 128, 0.5) var(--playtime-percent),
+    transparent var(--playtime-percent)
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
 .item__segment--entered {
+  --audseg-playtime-buffer: 3px;
   position: relative;
   grid-column: 1 / -1;
   width: 100%;
   padding-top: 18px;
+  padding-bottom: calc(3px + var(--audseg-playtime-buffer));
 }
 
 .item__segment--draft {
@@ -486,11 +530,27 @@ body {
 }
 
 .item__subseg {
+  position: relative;
   width: 100%;
   min-width: 0;
   contain: inline-size;
   padding-left: calc(var(--subseg-depth, 0) * 5px);
   box-sizing: border-box;
+}
+
+.item__subseg-playtime-progress {
+  position: absolute;
+  left: calc(var(--subseg-depth, 0) * 5px);
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    rgba(128, 128, 128, 0.5) var(--playtime-percent),
+    transparent var(--playtime-percent)
+  );
+  pointer-events: none;
+  z-index: 2;
 }
 
 .item__subseg--seed {

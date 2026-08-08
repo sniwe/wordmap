@@ -1080,27 +1080,34 @@ function countPinyinSyllables(text) {
     return 0;
   }
 
-  let count = 0;
-  let index = 0;
-  while (index < value.length) {
-    let matched = '';
-    for (let end = value.length; end > index; end -= 1) {
-      const chunk = value.slice(index, end);
-      if (PINYIN_SYLLABLES.has(chunk)) {
-        matched = chunk;
-        break;
+  const syllables = value.split("'");
+  if (syllables.some((syllable) => !syllable)) {
+    return 0;
+  }
+
+  let total = 0;
+  for (const syllable of syllables) {
+    const counts = Array(syllable.length + 1).fill(Infinity);
+    counts[0] = 0;
+    for (let index = 0; index < syllable.length; index += 1) {
+      if (!Number.isFinite(counts[index])) {
+        continue;
+      }
+      for (let end = index + 1; end <= syllable.length; end += 1) {
+        if (PINYIN_SYLLABLES.has(syllable.slice(index, end))) {
+          counts[end] = Math.min(counts[end], counts[index] + 1);
+        }
       }
     }
 
-    if (!matched) {
+    if (!Number.isFinite(counts[syllable.length])) {
       return 0;
     }
 
-    count += 1;
-    index += matched.length;
+    total += counts[syllable.length];
   }
 
-  return count;
+  return total;
 }
 
 const PINYIN_INITIALS = ['zh', 'ch', 'sh', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'r', 'z', 'c', 's'];

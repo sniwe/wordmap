@@ -2,30 +2,13 @@
   {
     "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
     "text": "eerninuo",
-    "instances": [
-      {
-        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
-        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
-        "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
-        "start": 12,
-        "end": 20,
-        "context": {
-          "text": "我们从一条预警说起，关于eerninuo",
-          "type": "chinPhrase"
-        },
-        "target": {
-          "text": "eerninuo",
-          "type": "engWord"
-        }
-      }
-    ],
+    "instances": [],
     "target": {
       "text": "eerninuo",
       "type": "engWord"
     },
     "createdAt": "2026-07-24T08:25:32.170Z",
-    "updatedAt": "2026-08-05T07:25:09.773Z",
+    "updatedAt": "2026-08-07T08:49:32.241Z",
     "compositions": [],
     "root": "fake-root-active",
     "status": "done",
@@ -44,7 +27,7 @@
         "start": 5,
         "end": 7,
         "context": {
-          "text": "我们从一条预警说起，关于eerninuo",
+          "text": "我们从一条预警说起，关于e'erninuo",
           "type": "chinPhrase"
         },
         "target": {
@@ -58,7 +41,7 @@
       "type": "chinWord"
     },
     "createdAt": "2026-07-24T08:27:35.519Z",
-    "updatedAt": "2026-08-05T07:25:09.773Z",
+    "updatedAt": "2026-08-07T09:39:17.349Z",
     "compositions": [],
     "status": "done",
     "statusRevision": 22,
@@ -72,12 +55,26 @@
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-2",
         "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-1",
         "start": 0,
         "end": 4,
         "context": {
           "text": "厄尔尼诺 el'nino",
           "type": "engPhrase"
+        },
+        "target": {
+          "text": "厄尔尼诺",
+          "type": "chinPhrase"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-7",
+        "remote": false,
+        "start": 1,
+        "end": 5,
+        "context": {
+          "text": "=厄尔尼诺 ",
+          "type": "chinWord"
         },
         "target": {
           "text": "厄尔尼诺",
@@ -90,7 +87,7 @@
       "type": "chinWord"
     },
     "createdAt": "2026-07-24T08:27:58.997Z",
-    "updatedAt": "2026-08-05T07:21:25.628Z",
+    "updatedAt": "2026-08-07T09:39:33.931Z",
     "compositions": [],
     "status": "done",
     "statusRevision": 3,
@@ -113,16 +110,16 @@
         },
         "target": {
           "text": "发生一轮eerninuo",
-          "type": "chinFuzz"
+          "type": "chinPhrase"
         }
       }
     ],
     "target": {
       "text": "发生一轮eerninuo",
-      "type": "chinFuzz"
+      "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:10:08.643Z",
-    "updatedAt": "2026-08-05T07:40:03.655Z",
+    "updatedAt": "2026-08-07T08:50:34.254Z",
     "compositions": [],
     "status": "done",
     "statusRevision": 1,
@@ -234,7 +231,7 @@
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:15:11.268Z",
-    "updatedAt": "2026-07-28T23:25:57.745Z",
+    "updatedAt": "2026-08-07T08:50:35.829Z",
     "compositions": [],
     "status": "default"
   },
@@ -294,7 +291,7 @@
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:29:31.835Z",
-    "updatedAt": "2026-07-28T23:26:14.278Z",
+    "updatedAt": "2026-08-07T08:50:37.187Z",
     "compositions": [],
     "status": "default"
   },
@@ -324,7 +321,7 @@
       "type": "chinPhrase"
     },
     "createdAt": "2026-07-24T10:29:41.068Z",
-    "updatedAt": "2026-07-28T23:26:14.278Z",
+    "updatedAt": "2026-08-07T08:50:37.187Z",
     "compositions": [],
     "status": "default"
   },
@@ -531,8 +528,8 @@
           "type": "chinPhrase"
         },
         "target": {
-          "text": "消息~升级了",
-          "type": "chinColl"
+          "text": "消息",
+          "type": "chinWord"
         }
       },
       {
@@ -549,8 +546,8 @@
           "type": "chinPhrase"
         },
         "target": {
-          "text": "消息~升级了",
-          "type": "chinColl"
+          "text": "升级了",
+          "type": "chinPhrase"
         }
       }
     ],
@@ -641,7 +638,7 @@
       }
     ],
     "createdAt": "2026-07-25T07:25:44.797Z",
-    "updatedAt": "2026-08-01T02:42:24.479Z",
+    "updatedAt": "2026-08-07T08:50:34.254Z",
     "status": "default"
   },
   {
@@ -675,8 +672,8 @@
           "type": "chinPhrase"
         },
         "target": {
-          "text": "超过~史上最强记录",
-          "type": "chinColl"
+          "text": "超过",
+          "type": "chinWord"
         }
       },
       {
@@ -693,8 +690,8 @@
           "type": "chinPhrase"
         },
         "target": {
-          "text": "超过~史上最强记录",
-          "type": "chinColl"
+          "text": "史上最强记录",
+          "type": "chinPhrase"
         }
       }
     ],
@@ -785,7 +782,7 @@
       }
     ],
     "createdAt": "2026-07-25T07:37:17.136Z",
-    "updatedAt": "2026-07-29T01:30:26.833Z",
+    "updatedAt": "2026-08-07T08:50:39.197Z",
     "status": "default"
   },
   {
@@ -1212,7 +1209,7 @@
       "type": "chinChar"
     },
     "createdAt": "2026-07-28T06:38:00.463Z",
-    "updatedAt": "2026-08-05T07:40:06.493Z",
+    "updatedAt": "2026-08-07T05:15:11.087Z",
     "compositions": [],
     "status": "default"
   },
@@ -2382,10 +2379,25 @@
     "text": "矿业",
     "instances": [
       {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-3",
+        "start": 5,
+        "end": 7,
+        "context": {
+          "text": "当我们说到矿业的时候，我们说的并不仅仅是矿石这个东西，而是它所在的一整套产业链",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "矿业",
+          "type": "chinWord"
+        }
+      },
+      {
         "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7",
         "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0",
         "remote": false,
-        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-7-0-3",
         "start": 52,
         "end": 54,
         "context": {
@@ -2403,7 +2415,7 @@
       "type": "chinWord"
     },
     "createdAt": "2026-08-01T02:33:32.326Z",
-    "updatedAt": "2026-08-01T03:11:08.824Z",
+    "updatedAt": "2026-08-07T06:39:27.280Z",
     "compositions": [],
     "status": "default"
   },
@@ -3320,7 +3332,7 @@
       "type": "chinPhrase"
     },
     "createdAt": "2026-08-05T01:50:55.746Z",
-    "updatedAt": "2026-08-05T04:14:33.771Z",
+    "updatedAt": "2026-08-07T06:31:34.624Z",
     "compositions": [],
     "status": "default"
   },
@@ -3350,7 +3362,7 @@
       "type": "chinPhrase"
     },
     "createdAt": "2026-08-05T01:52:32.204Z",
-    "updatedAt": "2026-08-05T04:14:33.771Z",
+    "updatedAt": "2026-08-07T06:31:34.624Z",
     "compositions": [],
     "status": "default"
   },
@@ -3882,7 +3894,7 @@
       "type": "chinFuzz"
     },
     "createdAt": "2026-08-05T03:07:36.452Z",
-    "updatedAt": "2026-08-05T05:12:21.379Z",
+    "updatedAt": "2026-08-07T06:24:35.728Z",
     "compositions": [],
     "root": "yusuochengzhen",
     "status": "default"
@@ -4055,7 +4067,7 @@
       }
     ],
     "createdAt": "2026-08-05T03:08:49.791Z",
-    "updatedAt": "2026-08-05T05:12:21.379Z",
+    "updatedAt": "2026-08-07T06:24:35.728Z",
     "status": "default"
   },
   {
@@ -4206,5 +4218,1917 @@
     "updatedAt": "2026-08-05T04:15:56.439Z",
     "compositions": [],
     "status": "default"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-0",
+    "text": "矿场这个东西，它是死的呀",
+    "instances": [],
+    "status": "default",
+    "target": {
+      "text": "矿场这个东西，它是死的呀",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:34:38.598Z",
+    "updatedAt": "2026-08-07T06:36:47.097Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-1",
+    "text": "矿场这个东西，它是死的呀~依赖",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-1",
+        "compositionId": "37bc7925-c172-4cd4-91cb-e1ab919872a2",
+        "partId": "37bc7925-c172-4cd4-91cb-e1ab919872a2-part-0",
+        "start": 0,
+        "end": 12,
+        "context": {
+          "text": "矿场这个东西，它是死的呀",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "矿场这个东西，它是死的呀",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "矿场这个东西，它是死的呀~依赖",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "37bc7925-c172-4cd4-91cb-e1ab919872a2",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-0",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-1"
+        },
+        "text": "矿场这个东西，它是死的呀~依赖",
+        "target": {
+          "text": "矿场这个东西，它是死的呀~依赖",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "37bc7925-c172-4cd4-91cb-e1ab919872a2-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-0",
+            "text": "矿场这个东西，它是死的呀",
+            "role": "seed",
+            "start": 0,
+            "end": 12,
+            "target": {
+              "text": "矿场这个东西，它是死的呀",
+              "type": "chinPhrase"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-07T06:36:39.683Z",
+    "updatedAt": "2026-08-07T06:37:12.154Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-2",
+    "text": "依赖",
+    "instances": [],
+    "status": "default",
+    "target": {
+      "text": "依赖",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:37:02.185Z",
+    "updatedAt": "2026-08-07T06:37:06.239Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-3",
+    "text": "依赖~雨水阳光",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-3",
+        "compositionId": "2b2a05fe-7aa0-408d-b9dd-06b58df53d0d",
+        "partId": "2b2a05fe-7aa0-408d-b9dd-06b58df53d0d-part-0",
+        "start": 16,
+        "end": 18,
+        "context": {
+          "text": "它又不依赖什么雨水阳光，怎么会受厄尔尼诺的影响呢？",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "依赖",
+          "type": "chinWord"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-3",
+        "compositionId": "2b2a05fe-7aa0-408d-b9dd-06b58df53d0d",
+        "partId": "2b2a05fe-7aa0-408d-b9dd-06b58df53d0d-addition",
+        "start": 20,
+        "end": 24,
+        "context": {
+          "text": "它又不依赖什么雨水阳光，怎么会受厄尔尼诺的影响呢？",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "雨水阳光",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "依赖~雨水阳光",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "2b2a05fe-7aa0-408d-b9dd-06b58df53d0d",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-2",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-3"
+        },
+        "text": "依赖~雨水阳光",
+        "target": {
+          "text": "依赖~雨水阳光",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "2b2a05fe-7aa0-408d-b9dd-06b58df53d0d-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0-2",
+            "text": "依赖",
+            "role": "seed",
+            "start": 16,
+            "end": 18,
+            "target": {
+              "text": "依赖",
+              "type": "chinWord"
+            }
+          },
+          {
+            "partId": "2b2a05fe-7aa0-408d-b9dd-06b58df53d0d-addition",
+            "sourceLangUnitId": null,
+            "text": "雨水阳光",
+            "role": "addition",
+            "start": 20,
+            "end": 24,
+            "target": {
+              "text": "雨水阳光",
+              "type": "chinPhrase"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-07T06:37:06.228Z",
+    "updatedAt": "2026-08-07T06:37:12.154Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-35-0-0",
+    "text": "矿石",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-35-0-0",
+        "start": 20,
+        "end": 22,
+        "context": {
+          "text": "当我们说到矿业的时候，我们说的并不仅仅是矿石这个东西，而是它所在的一整套产业链",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "矿石",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "矿石",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:38:46.296Z",
+    "updatedAt": "2026-08-07T06:39:27.269Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-35-0-1",
+    "text": "产业链",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-35-0-1",
+        "start": 36,
+        "end": 39,
+        "context": {
+          "text": "当我们说到矿业的时候，我们说的并不仅仅是矿石这个东西，而是它所在的一整套产业链",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "产业链",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "产业链",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:39:02.336Z",
+    "updatedAt": "2026-08-07T06:39:27.269Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-36-0-0",
+    "text": "铜矿",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-36",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-36-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-36-0-0",
+        "start": 13,
+        "end": 15,
+        "context": {
+          "text": "就贡献了全球大概3分之1的铜矿供应",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "铜矿",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "铜矿",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:40:24.653Z",
+    "updatedAt": "2026-08-07T06:40:38.290Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-36-0-1",
+    "text": "供应",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-36",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-36-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-36-0-1",
+        "start": 15,
+        "end": 17,
+        "context": {
+          "text": "就贡献了全球大概3分之1的铜矿供应",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "供应",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "供应",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:40:29.519Z",
+    "updatedAt": "2026-08-07T06:40:38.290Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0-0",
+    "text": "fengkuang",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0-0",
+        "start": 37,
+        "end": 46,
+        "context": {
+          "text": "这里矿区集中在高海拔山区，而超强厄尔尼诺可能会引发暴风雪，而暴风雪导致封路fengkuang",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "fengkuang",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "fengkuang",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T06:42:09.454Z",
+    "updatedAt": "2026-08-07T06:43:12.630Z",
+    "compositions": [],
+    "root": "fengkuang"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0-1",
+    "text": "暴风雪",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0-1",
+        "start": 25,
+        "end": 28,
+        "context": {
+          "text": "这里矿区集中在高海拔山区，而超强厄尔尼诺可能会引发暴风雪，而暴风雪导致封路fengkuang",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "暴风雪",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "暴风雪",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:42:16.725Z",
+    "updatedAt": "2026-08-07T06:43:12.630Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0-2",
+    "text": "矿区",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0-2",
+        "start": 2,
+        "end": 4,
+        "context": {
+          "text": "这里矿区集中在高海拔山区，而超强厄尔尼诺可能会引发暴风雪，而暴风雪导致封路fengkuang",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "矿区",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "矿区",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:42:25.672Z",
+    "updatedAt": "2026-08-07T06:43:12.630Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0-3",
+    "text": "高海拔山区",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0-3",
+        "start": 7,
+        "end": 12,
+        "context": {
+          "text": "这里矿区集中在高海拔山区，而超强厄尔尼诺可能会引发暴风雪，而暴风雪导致封路fengkuang",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "高海拔山区",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "高海拔山区",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:42:29.127Z",
+    "updatedAt": "2026-08-07T06:43:12.630Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-37-1-0",
+    "text": "封矿",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-1-0",
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "封矿 ？",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "封矿",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "封矿",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:42:55.645Z",
+    "updatedAt": "2026-08-07T06:43:12.657Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0-0",
+    "text": "山洪",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0-0",
+        "start": 12,
+        "end": 14,
+        "context": {
+          "text": "超强厄尔尼诺的影响下出现山洪，而山洪又可能冲断铁路，矿石yijiu运不出来",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "山洪",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "山洪",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:44:32.189Z",
+    "updatedAt": "2026-08-07T06:46:20.222Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0-1",
+    "text": "冲断铁路",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0-1",
+        "start": 21,
+        "end": 25,
+        "context": {
+          "text": "超强厄尔尼诺的影响下出现山洪，而山洪又可能冲断铁路，矿石yijiu运不出来",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "冲断铁路",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "冲断铁路",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:44:36.418Z",
+    "updatedAt": "2026-08-07T06:46:20.222Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0-2",
+    "text": "yijiu",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0-2",
+        "start": 28,
+        "end": 33,
+        "context": {
+          "text": "超强厄尔尼诺的影响下出现山洪，而山洪又可能冲断铁路，矿石yijiu运不出来",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "yijiu",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "yijiu",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T06:44:40.284Z",
+    "updatedAt": "2026-08-07T06:46:20.222Z",
+    "compositions": [],
+    "root": "still"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-38-3-0",
+    "text": "以这",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-3",
+        "remote": false,
+        "start": 4,
+        "end": 6,
+        "context": {
+          "text": "以这 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "以这",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "以这",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:44:55.298Z",
+    "updatedAt": "2026-08-07T06:45:09.531Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-38-3-1",
+    "text": "也就",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-3",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "也就 ",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "也就",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "也就",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:45:06.067Z",
+    "updatedAt": "2026-08-07T06:45:07.712Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-39-0-0",
+    "text": "chengya",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-39-0-0",
+        "start": 9,
+        "end": 16,
+        "context": {
+          "text": "而两大产地假如同时chengya的话，那么全球的铜矿供应都可能会出现收紧的可能",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "chengya",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "chengya",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T06:47:31.593Z",
+    "updatedAt": "2026-08-07T06:49:23.450Z",
+    "compositions": [],
+    "root": "pressure"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-39-0-1",
+    "text": "出现收紧",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-39-0-1",
+        "start": 32,
+        "end": 36,
+        "context": {
+          "text": "而两大产地假如同时chengya的话，那么全球的铜矿供应都可能会出现收紧的可能",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "出现收紧",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "出现收紧",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:48:08.286Z",
+    "updatedAt": "2026-08-07T06:49:23.450Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-39-1-0",
+    "text": "承压",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39-1",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "承压 be under pressure / strained",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "承压",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "承压",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:48:47.448Z",
+    "updatedAt": "2026-08-07T06:48:57.636Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-40-0-0",
+    "text": "充电桩",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-40",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-40-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-40-0-0",
+        "start": 12,
+        "end": 15,
+        "context": {
+          "text": "汽车，空调，手机，冰箱，充电桩，还有数据中心的服务器，里面都是有铜的",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "充电桩",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "充电桩",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:50:24.406Z",
+    "updatedAt": "2026-08-07T06:51:01.886Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-40-0-1",
+    "text": "数据中心的服务器",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-40",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-40-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-40-0-1",
+        "start": 18,
+        "end": 26,
+        "context": {
+          "text": "汽车，空调，手机，冰箱，充电桩，还有数据中心的服务器，里面都是有铜的",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "数据中心的服务器",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "数据中心的服务器",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:50:28.052Z",
+    "updatedAt": "2026-08-07T06:51:01.886Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-41-0-0",
+    "text": "含铜制品",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-41",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-41-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-41-0-0",
+        "start": 16,
+        "end": 20,
+        "context": {
+          "text": "压力又会chuannao给所有的含铜制品，包括消费电磁，xinlimianche，家电，建筑，yemo基础建设等等 - 这些行业都可能会受到影响",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "含铜制品",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "含铜制品",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:54:34.523Z",
+    "updatedAt": "2026-08-07T06:54:58.394Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-41-0-1",
+    "text": "xinlimianche",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-41",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-41-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-41-0-1",
+        "start": 28,
+        "end": 40,
+        "context": {
+          "text": "压力又会chuannao给所有的含铜制品，包括消费电磁，xinlimianche，家电，建筑，yemo基础建设等等 - 这些行业都可能会受到影响",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "xinlimianche",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "xinlimianche",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T06:54:41.498Z",
+    "updatedAt": "2026-08-07T06:54:58.394Z",
+    "compositions": [],
+    "root": "vehicle"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-41-0-2",
+    "text": "yemo基础建设",
+    "instances": [],
+    "status": "default",
+    "target": {
+      "text": "yemo基础建设",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T06:54:46.763Z",
+    "updatedAt": "2026-08-07T06:54:50.852Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0-0",
+    "text": "水闸式",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0-0",
+        "start": 33,
+        "end": 36,
+        "context": {
+          "text": "很多人可能不知道，巴拿马运河并不是haipingmian运河，它是水闸式的",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "水闸式",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "水闸式",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:55:59.749Z",
+    "updatedAt": "2026-08-07T06:57:50.399Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0-1",
+    "text": "巴拿马运河",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0-1",
+        "start": 9,
+        "end": 14,
+        "context": {
+          "text": "很多人可能不知道，巴拿马运河并不是haipingmian运河，它是水闸式的",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "巴拿马运河",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "巴拿马运河",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:56:07.358Z",
+    "updatedAt": "2026-08-07T06:57:50.399Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0-2",
+    "text": "haipingmian",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0-2",
+        "start": 17,
+        "end": 28,
+        "context": {
+          "text": "很多人可能不知道，巴拿马运河并不是haipingmian运河，它是水闸式的",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "haipingmian",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "haipingmian",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T06:56:41.616Z",
+    "updatedAt": "2026-08-07T06:57:50.399Z",
+    "compositions": [],
+    "root": "level"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-42-2-0",
+    "text": "还平原",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-2",
+        "remote": false,
+        "start": 5,
+        "end": 8,
+        "context": {
+          "text": "还平原 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "还平原",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "还平原",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T06:57:18.103Z",
+    "updatedAt": "2026-08-07T06:57:19.049Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-42-2-1",
+    "text": "海平面",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-2",
+        "remote": false,
+        "start": 0,
+        "end": 3,
+        "context": {
+          "text": "海平面 ",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "海平面",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "海平面",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T06:57:19.049Z",
+    "updatedAt": "2026-08-07T06:57:23.381Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0-0",
+    "text": "jiatonghu",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0",
+        "remote": false,
+        "start": 7,
+        "end": 16,
+        "context": {
+          "text": "它是靠一个叫做jiatonghu的人工大水湖来taishengchuanshen",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "jiatonghu",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "jiatonghu",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T07:02:18.895Z",
+    "updatedAt": "2026-08-07T07:04:49.727Z",
+    "compositions": [],
+    "root": "lake"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0-1",
+    "text": "水湖",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0",
+        "remote": false,
+        "start": 20,
+        "end": 22,
+        "context": {
+          "text": "它是靠一个叫做jiatonghu的人工大水湖来taishengchuanshen",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "水湖",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "水湖",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:02:28.810Z",
+    "updatedAt": "2026-08-07T07:04:49.727Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0-2",
+    "text": "taisheng",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0",
+        "remote": false,
+        "start": 23,
+        "end": 31,
+        "context": {
+          "text": "它是靠一个叫做jiatonghu的人工大水湖来taishengchuanshen",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "taisheng",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "taisheng",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T07:02:34.560Z",
+    "updatedAt": "2026-08-07T07:04:49.727Z",
+    "compositions": [],
+    "root": "raise"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0-3",
+    "text": "chuanshen",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0",
+        "remote": false,
+        "start": 31,
+        "end": 40,
+        "context": {
+          "text": "它是靠一个叫做jiatonghu的人工大水湖来taishengchuanshen",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "chuanshen",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "chuanshen",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T07:02:48.346Z",
+    "updatedAt": "2026-08-07T07:04:49.727Z",
+    "compositions": [],
+    "root": "hull"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0-4",
+    "text": "jingzhi",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0",
+        "remote": false,
+        "start": 72,
+        "end": 79,
+        "context": {
+          "text": "说白了，船并不是在一个水平面上jingzhi开过去的，而是被水给tuoju过去的",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "jingzhi",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "jingzhi",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T07:04:47.007Z",
+    "updatedAt": "2026-08-07T07:04:49.785Z",
+    "compositions": [],
+    "root": "still"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0-5",
+    "text": "tuoju",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0",
+        "remote": false,
+        "start": 89,
+        "end": 94,
+        "context": {
+          "text": "说白了，船并不是在一个水平面上jingzhi开过去的，而是被水给tuoju过去的",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "tuoju",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "tuoju",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T07:04:49.727Z",
+    "updatedAt": "2026-08-07T07:04:52.645Z",
+    "compositions": [],
+    "root": "lift"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-5-0",
+    "text": "湖",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-5",
+        "remote": false,
+        "start": 0,
+        "end": 1,
+        "context": {
+          "text": "湖 vs 浒 ",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "湖",
+          "type": "chinChar"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "湖",
+      "type": "chinChar"
+    },
+    "createdAt": "2026-08-07T07:05:21.100Z",
+    "updatedAt": "2026-08-07T07:06:02.320Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-5-1",
+    "text": "浒",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-5",
+        "remote": false,
+        "start": 5,
+        "end": 6,
+        "context": {
+          "text": "湖 vs 浒 ",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "浒",
+          "type": "chinChar"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "浒",
+      "type": "chinChar"
+    },
+    "createdAt": "2026-08-07T07:06:02.320Z",
+    "updatedAt": "2026-08-07T07:06:02.320Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-4-0",
+    "text": "抬升",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-4",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "抬升 ",
+          "type": "chinWord"
+        },
+        "target": {
+          "text": "抬升",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "抬升",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:06:16.048Z",
+    "updatedAt": "2026-08-07T07:06:18.480Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-3-0",
+    "text": "船身",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-3",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "船身 body of the ship (prob has a proper noun)",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "船身",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "船身",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:06:25.619Z",
+    "updatedAt": "2026-08-07T07:06:54.763Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-43-1-0",
+    "text": "托举",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-1-0",
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "托举 ？？",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "托举",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "托举",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:07:38.249Z",
+    "updatedAt": "2026-08-07T07:07:49.360Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-44-0-0",
+    "text": "通航能力",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-44",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-44-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-44-0-0",
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "通航能力直接取决于当年的降雨量",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "通航能力",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "通航能力",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T07:13:27.251Z",
+    "updatedAt": "2026-08-07T07:13:41.271Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-45-0-0",
+    "text": "只能够限流",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-45",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-45-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-45-0-0",
+        "start": 29,
+        "end": 34,
+        "context": {
+          "text": "jiatonghu的水位降到了历史低点，运河管理局没办法，只能够限流",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "只能够限流",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "只能够限流",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T07:14:19.898Z",
+    "updatedAt": "2026-08-07T07:15:23.228Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-45-0-1",
+    "text": "水位",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-45",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-45-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-45-0-1",
+        "start": 10,
+        "end": 12,
+        "context": {
+          "text": "jiatonghu的水位降到了历史低点，运河管理局没办法，只能够限流",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "水位",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "水位",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:14:32.302Z",
+    "updatedAt": "2026-08-07T07:15:23.228Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0-0",
+    "text": "haowangjiao",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0",
+        "remote": false,
+        "start": 17,
+        "end": 28,
+        "context": {
+          "text": "排不上号的航运公司，就只能临时绕行haowangjiao，导致运费大幅度上涨",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "haowangjiao",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "haowangjiao",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T07:16:14.498Z",
+    "updatedAt": "2026-08-07T07:17:01.832Z",
+    "compositions": [],
+    "root": "cape"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0-1",
+    "text": "绕行",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0",
+        "remote": false,
+        "start": 15,
+        "end": 17,
+        "context": {
+          "text": "排不上号的航运公司，就只能临时绕行haowangjiao，导致运费大幅度上涨",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "绕行",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "绕行",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:16:21.232Z",
+    "updatedAt": "2026-08-07T07:17:06.201Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0-2",
+    "text": "排不上号",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0",
+        "remote": false,
+        "start": 0,
+        "end": 4,
+        "context": {
+          "text": "排不上号的航运公司，就只能临时绕行haowangjiao，导致运费大幅度上涨",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "排不上号",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "排不上号",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T07:16:45.818Z",
+    "updatedAt": "2026-08-07T07:17:09.104Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0-3",
+    "text": "航运公司",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0",
+        "remote": false,
+        "start": 5,
+        "end": 9,
+        "context": {
+          "text": "排不上号的航运公司，就只能临时绕行haowangjiao，导致运费大幅度上涨",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "航运公司",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "航运公司",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:16:49.172Z",
+    "updatedAt": "2026-08-07T07:17:14.222Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0-4",
+    "text": "上涨",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0",
+        "remote": false,
+        "start": 36,
+        "end": 38,
+        "context": {
+          "text": "排不上号的航运公司，就只能临时绕行haowangjiao，导致运费大幅度上涨",
+          "type": "engPhrase"
+        },
+        "target": {
+          "text": "上涨",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "上涨",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:17:00.842Z",
+    "updatedAt": "2026-08-07T07:17:17.439Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-0",
+    "text": "中国货物",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-0",
+        "start": 17,
+        "end": 21,
+        "context": {
+          "text": "运河管理局的数据，2023-4年，中国货物占据了运河运量的21",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "中国货物",
+          "type": "chinPhrase"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "中国货物",
+      "type": "chinPhrase"
+    },
+    "createdAt": "2026-08-07T07:17:59.535Z",
+    "updatedAt": "2026-08-07T07:18:19.762Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-1",
+    "text": "占据",
+    "instances": [],
+    "status": "default",
+    "target": {
+      "text": "占据",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:18:01.369Z",
+    "updatedAt": "2026-08-07T07:18:10.632Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-2",
+    "text": "占据~运量",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-2",
+        "compositionId": "0cfc9c22-d758-4b4d-9b7b-0e154315f1fa",
+        "partId": "0cfc9c22-d758-4b4d-9b7b-0e154315f1fa-part-0",
+        "start": 21,
+        "end": 23,
+        "context": {
+          "text": "运河管理局的数据，2023-4年，中国货物占据了运河运量的21",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "占据",
+          "type": "chinWord"
+        }
+      },
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0",
+        "remote": true,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-2",
+        "compositionId": "0cfc9c22-d758-4b4d-9b7b-0e154315f1fa",
+        "partId": "0cfc9c22-d758-4b4d-9b7b-0e154315f1fa-addition",
+        "start": 26,
+        "end": 28,
+        "context": {
+          "text": "运河管理局的数据，2023-4年，中国货物占据了运河运量的21",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "运量",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "占据~运量",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "0cfc9c22-d758-4b4d-9b7b-0e154315f1fa",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-1",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-2"
+        },
+        "text": "占据~运量",
+        "target": {
+          "text": "占据~运量",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "0cfc9c22-d758-4b4d-9b7b-0e154315f1fa-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0-1",
+            "text": "占据",
+            "role": "seed",
+            "start": 21,
+            "end": 23,
+            "target": {
+              "text": "占据",
+              "type": "chinWord"
+            }
+          },
+          {
+            "partId": "0cfc9c22-d758-4b4d-9b7b-0e154315f1fa-addition",
+            "sourceLangUnitId": null,
+            "text": "运量",
+            "role": "addition",
+            "start": 26,
+            "end": 28,
+            "target": {
+              "text": "运量",
+              "type": "chinWord"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-07T07:18:10.618Z",
+    "updatedAt": "2026-08-07T07:18:19.802Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-48-0-0",
+    "text": "tongdao",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48-0",
+        "remote": false,
+        "start": 22,
+        "end": 29,
+        "context": {
+          "text": "限流的后果可不是某一类商品涨价，而是整条物流tongdao都变贵",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "tongdao",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "tongdao",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T07:19:30.142Z",
+    "updatedAt": "2026-08-07T07:19:32.574Z",
+    "compositions": [],
+    "root": "channel"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-48-1-0",
+    "text": "通道",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-48-1-0",
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "通道 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "通道",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "通道",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:19:37.566Z",
+    "updatedAt": "2026-08-07T07:19:59.055Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-48-1-1",
+    "text": "同道",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48-1",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-48-1-1",
+        "start": 4,
+        "end": 6,
+        "context": {
+          "text": "同道 ",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "同道",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "同道",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:19:50.495Z",
+    "updatedAt": "2026-08-07T07:19:59.055Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-49-0-0",
+    "text": "chongdian",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49-0",
+        "remote": false,
+        "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-49-0-0",
+        "start": 5,
+        "end": 14,
+        "context": {
+          "text": "情况不排除chongdian的可能",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "chongdian",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "chongdian",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T07:20:28.619Z",
+    "updatedAt": "2026-08-07T07:23:04.258Z",
+    "compositions": [],
+    "root": "charge"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-49-1-0",
+    "text": "冲点",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49-1",
+        "remote": false,
+        "start": 0,
+        "end": 2,
+        "context": {
+          "text": "冲点 ？",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "冲点",
+          "type": "chinWord"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "冲点",
+      "type": "chinWord"
+    },
+    "createdAt": "2026-08-07T07:20:42.821Z",
+    "updatedAt": "2026-08-07T07:20:52.684Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-2",
+    "text": "我们从一条预警说起，关于eerninuo",
+    "instances": [],
+    "status": "done",
+    "target": {
+      "text": "eerninuo~我们从一条预警说起，关于eerninuo",
+      "type": "chinColl"
+    },
+    "compositions": [
+      {
+        "compositionId": "6f707a1a-3fa4-49af-872f-f6b96ada0b33",
+        "seedLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
+        "scope": {
+          "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+          "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+          "cycleGroupId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-2"
+        },
+        "text": "我们从一条预警说起，关于eerninuo",
+        "target": {
+          "text": "eerninuo~我们从一条预警说起，关于eerninuo",
+          "type": "chinColl"
+        },
+        "parts": [
+          {
+            "partId": "6f707a1a-3fa4-49af-872f-f6b96ada0b33-addition",
+            "sourceLangUnitId": null,
+            "text": "我们从一条预警说起，关于eerninuo",
+            "role": "addition",
+            "start": 0,
+            "end": 20,
+            "target": {
+              "text": "我们从一条预警说起，关于eerninuo",
+              "type": "chinPhrase"
+            }
+          },
+          {
+            "partId": "6f707a1a-3fa4-49af-872f-f6b96ada0b33-part-0",
+            "sourceLangUnitId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-0",
+            "text": "",
+            "role": "seed",
+            "start": 20,
+            "end": 20,
+            "target": {
+              "text": "",
+              "type": "no-op"
+            }
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-08-07T08:49:10.623Z",
+    "updatedAt": "2026-08-07T08:49:44.266Z"
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-3",
+    "text": "e'erninuo",
+    "instances": [],
+    "status": "default",
+    "target": {
+      "text": "e'erninuo",
+      "type": "engWord"
+    },
+    "createdAt": "2026-08-07T08:49:57.859Z",
+    "updatedAt": "2026-08-07T09:39:08.910Z",
+    "compositions": []
+  },
+  {
+    "_id": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0-4",
+    "text": "e'erninuo",
+    "instances": [
+      {
+        "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+        "subSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
+        "remote": false,
+        "start": 12,
+        "end": 21,
+        "context": {
+          "text": "我们从一条预警说起，关于e'erninuo",
+          "type": "chinPhrase"
+        },
+        "target": {
+          "text": "e'erninuo",
+          "type": "chinFuzz"
+        }
+      }
+    ],
+    "status": "default",
+    "target": {
+      "text": "e'erninuo",
+      "type": "chinFuzz"
+    },
+    "createdAt": "2026-08-07T09:39:17.349Z",
+    "updatedAt": "2026-08-07T09:39:17.349Z",
+    "compositions": []
   }
 ]

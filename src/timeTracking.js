@@ -70,12 +70,24 @@ export function createTimeTracker({
         ['audEp', nextContext.audEpId],
         ['audSeg', nextContext.audSegId],
         ['audSegGroup', nextContext.audSegGroupId],
-        ['subSeg', nextContext.subSegId],
       ]) {
         if (scopeId) {
           scopes.push({ scopeType, scopeId, parent, playMs: elapsed, activePlayMs: active ? elapsed : 0 });
         }
       }
+    }
+
+    if (visible && nextContext.focusedSubSegId) {
+      scopes.push({
+        scopeType: 'subSeg',
+        scopeId: nextContext.focusedSubSegId,
+        parent: {
+          audEpId: nextContext.focusedSubSegAudEpId || undefined,
+          audSegId: nextContext.focusedSubSegAudSegId || undefined,
+        },
+        playMs: elapsed,
+        activePlayMs: nextContext.playing ? elapsed : 0,
+      });
     }
 
     for (const scope of scopes) {

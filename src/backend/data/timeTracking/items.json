@@ -4,11 +4,11 @@
     "scopeType": "page",
     "scopeId": "app",
     "totals": {
-      "openMs": 35096,
-      "activeMs": 35096
+      "openMs": 10473415,
+      "activeMs": 4337493
     },
     "parent": null,
-    "updatedAt": "2026-08-06T01:45:00.299Z"
+    "updatedAt": "2026-08-08T02:46:39.959Z"
   },
   {
     "_id": "audEp:767e5d96-9f62-45f4-89a5-f98c43303144",
@@ -16,14 +16,14 @@
     "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144",
     "parent": {
       "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
-      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
-      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0"
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
     },
     "totals": {
-      "playMs": 1913,
-      "activePlayMs": 1913
+      "playMs": 3028788,
+      "activePlayMs": 2807785
     },
-    "updatedAt": "2026-08-06T01:44:02.259Z"
+    "updatedAt": "2026-08-07T07:23:06.856Z"
   },
   {
     "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-0",
@@ -35,10 +35,10 @@
       "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0"
     },
     "totals": {
-      "playMs": 1913,
-      "activePlayMs": 1913
+      "playMs": 63206,
+      "activePlayMs": 63206
     },
-    "updatedAt": "2026-08-06T01:44:02.259Z"
+    "updatedAt": "2026-08-06T08:21:05.560Z"
   },
   {
     "_id": "audSegGroup:767e5d96-9f62-45f4-89a5-f98c43303144-grp-0",
@@ -50,10 +50,10 @@
       "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0"
     },
     "totals": {
-      "playMs": 1913,
-      "activePlayMs": 1913
+      "playMs": 88252,
+      "activePlayMs": 88252
     },
-    "updatedAt": "2026-08-06T01:44:02.259Z"
+    "updatedAt": "2026-08-06T08:21:05.560Z"
   },
   {
     "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
@@ -61,13 +61,1192 @@
     "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-0",
     "parent": {
       "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
-      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0"
+    },
+    "totals": {
+      "playMs": 196445,
+      "activePlayMs": 11911
+    },
+    "updatedAt": "2026-08-07T09:49:46.152Z"
+  },
+  {
+    "_id": "audEp:e093167c-6310-44d9-9e9e-aac4be2443f2",
+    "scopeType": "audEp",
+    "scopeId": "e093167c-6310-44d9-9e9e-aac4be2443f2",
+    "parent": {
+      "audEpId": "e093167c-6310-44d9-9e9e-aac4be2443f2"
+    },
+    "totals": {
+      "playMs": 54624,
+      "activePlayMs": 54624
+    },
+    "updatedAt": "2026-08-06T02:44:39.722Z"
+  },
+  {
+    "_id": "audSeg:e093167c-6310-44d9-9e9e-aac4be2443f2-0",
+    "scopeType": "audSeg",
+    "scopeId": "e093167c-6310-44d9-9e9e-aac4be2443f2-0",
+    "parent": {
+      "audEpId": "e093167c-6310-44d9-9e9e-aac4be2443f2",
+      "audSegId": "e093167c-6310-44d9-9e9e-aac4be2443f2-0"
+    },
+    "totals": {
+      "playMs": 7000,
+      "activePlayMs": 7000
+    },
+    "updatedAt": "2026-08-06T02:44:19.722Z"
+  },
+  {
+    "_id": "subSeg:e093167c-6310-44d9-9e9e-aac4be2443f2-0-0",
+    "scopeType": "subSeg",
+    "scopeId": "e093167c-6310-44d9-9e9e-aac4be2443f2-0-0",
+    "parent": {
+      "audEpId": "e093167c-6310-44d9-9e9e-aac4be2443f2",
+      "audSegId": "e093167c-6310-44d9-9e9e-aac4be2443f2-0"
+    },
+    "totals": {
+      "playMs": 10000,
+      "activePlayMs": 7000
+    },
+    "updatedAt": "2026-08-06T08:16:03.630Z"
+  },
+  {
+    "_id": "audSeg:e093167c-6310-44d9-9e9e-aac4be2443f2-1",
+    "scopeType": "audSeg",
+    "scopeId": "e093167c-6310-44d9-9e9e-aac4be2443f2-1",
+    "parent": {
+      "audEpId": "e093167c-6310-44d9-9e9e-aac4be2443f2",
+      "audSegId": "e093167c-6310-44d9-9e9e-aac4be2443f2-1"
+    },
+    "totals": {
+      "playMs": 17000,
+      "activePlayMs": 17000
+    },
+    "updatedAt": "2026-08-06T02:44:29.722Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-1",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1",
       "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-0"
     },
     "totals": {
-      "playMs": 1913,
-      "activePlayMs": 1913
+      "playMs": 24047,
+      "activePlayMs": 24047
     },
-    "updatedAt": "2026-08-06T01:44:02.259Z"
+    "updatedAt": "2026-08-06T08:21:05.560Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1"
+    },
+    "totals": {
+      "playMs": 31319,
+      "activePlayMs": 19048
+    },
+    "updatedAt": "2026-08-07T08:50:36.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-0-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0"
+    },
+    "totals": {
+      "playMs": 49688,
+      "activePlayMs": 30999
+    },
+    "updatedAt": "2026-08-06T08:20:25.559Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-0-2",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-2",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0"
+    },
+    "totals": {
+      "playMs": 29002,
+      "activePlayMs": 18001
+    },
+    "updatedAt": "2026-08-06T08:20:55.562Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-1-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-1-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-1"
+    },
+    "totals": {
+      "playMs": 2999
+    },
+    "updatedAt": "2026-08-07T05:15:10.495Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-33",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-33",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33"
+    },
+    "totals": {
+      "playMs": 18001,
+      "activePlayMs": 10000
+    },
+    "updatedAt": "2026-08-07T06:32:46.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-33-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-33"
+    },
+    "totals": {
+      "playMs": 5019,
+      "activePlayMs": 5019
+    },
+    "updatedAt": "2026-08-07T06:24:36.855Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-36",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-36",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-36",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 72000,
+      "activePlayMs": 72000
+    },
+    "updatedAt": "2026-08-07T06:40:46.854Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-37",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-37",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 156000,
+      "activePlayMs": 156000
+    },
+    "updatedAt": "2026-08-07T06:43:16.857Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-38",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-38",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 161996,
+      "activePlayMs": 161996
+    },
+    "updatedAt": "2026-08-07T06:48:26.857Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-49",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-49",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 186002,
+      "activePlayMs": 89000
+    },
+    "updatedAt": "2026-08-07T07:23:06.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-26-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-26-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26"
+    },
+    "totals": {
+      "playMs": 2001
+    },
+    "updatedAt": "2026-08-07T06:31:36.856Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-26",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-26",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-26"
+    },
+    "totals": {
+      "playMs": 9999,
+      "activePlayMs": 9999
+    },
+    "updatedAt": "2026-08-07T06:31:46.857Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-27",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-27",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-27"
+    },
+    "totals": {
+      "playMs": 6999,
+      "activePlayMs": 6999
+    },
+    "updatedAt": "2026-08-07T06:31:56.860Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-28",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-28",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-28"
+    },
+    "totals": {
+      "playMs": 2000,
+      "activePlayMs": 2000
+    },
+    "updatedAt": "2026-08-07T06:32:06.856Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-29",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-29",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-29"
+    },
+    "totals": {
+      "playMs": 9000
+    },
+    "updatedAt": "2026-08-07T06:32:16.855Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-30",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-30",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-30"
+    },
+    "totals": {
+      "playMs": 4001
+    },
+    "updatedAt": "2026-08-07T06:32:26.857Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-31",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-31",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-31"
+    },
+    "totals": {
+      "playMs": 5000
+    },
+    "updatedAt": "2026-08-07T06:32:26.857Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-32",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-32",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-32"
+    },
+    "totals": {
+      "playMs": 3001
+    },
+    "updatedAt": "2026-08-07T06:32:36.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-34-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34"
+    },
+    "totals": {
+      "playMs": 144999,
+      "activePlayMs": 142000
+    },
+    "updatedAt": "2026-08-07T06:37:16.856Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-34",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-34",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 166533,
+      "activePlayMs": 166533
+    },
+    "updatedAt": "2026-08-07T06:37:16.856Z"
+  },
+  {
+    "_id": "audSegGroup:767e5d96-9f62-45f4-89a5-f98c43303144-grp-3",
+    "scopeType": "audSegGroup",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 2450534,
+      "activePlayMs": 2269532
+    },
+    "updatedAt": "2026-08-07T07:23:06.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-34-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-34-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-34"
+    },
+    "totals": {
+      "playMs": 35372,
+      "activePlayMs": 22533
+    },
+    "updatedAt": "2026-08-07T06:36:26.856Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-35",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-35",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 130000,
+      "activePlayMs": 130000
+    },
+    "updatedAt": "2026-08-07T06:39:36.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-35-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-35-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35"
+    },
+    "totals": {
+      "playMs": 116998,
+      "activePlayMs": 112998
+    },
+    "updatedAt": "2026-08-07T06:39:26.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-35-2",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-35-2",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35"
+    },
+    "totals": {
+      "playMs": 3001,
+      "activePlayMs": 3001
+    },
+    "updatedAt": "2026-08-07T06:39:16.860Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-35-3",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-35-3",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-35"
+    },
+    "totals": {
+      "playMs": 13001,
+      "activePlayMs": 13001
+    },
+    "updatedAt": "2026-08-07T06:39:26.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-36-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-36-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-36"
+    },
+    "totals": {
+      "playMs": 66000,
+      "activePlayMs": 66000
+    },
+    "updatedAt": "2026-08-07T06:40:46.854Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-36-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-36-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-36"
+    },
+    "totals": {
+      "playMs": 4001,
+      "activePlayMs": 4001
+    },
+    "updatedAt": "2026-08-07T06:40:36.854Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-37-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37"
+    },
+    "totals": {
+      "playMs": 121998,
+      "activePlayMs": 121998
+    },
+    "updatedAt": "2026-08-07T06:43:16.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-37-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37"
+    },
+    "totals": {
+      "playMs": 27000,
+      "activePlayMs": 27000
+    },
+    "updatedAt": "2026-08-07T06:43:06.863Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-37-5",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-37-5",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-37"
+    },
+    "totals": {
+      "playMs": 4003,
+      "activePlayMs": 4003
+    },
+    "updatedAt": "2026-08-07T06:43:06.863Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-38-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38"
+    },
+    "totals": {
+      "playMs": 100004,
+      "activePlayMs": 98003
+    },
+    "updatedAt": "2026-08-07T06:46:26.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-38-3",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-3",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38"
+    },
+    "totals": {
+      "playMs": 28001,
+      "activePlayMs": 28001
+    },
+    "updatedAt": "2026-08-07T06:45:16.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-38-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38"
+    },
+    "totals": {
+      "playMs": 9997,
+      "activePlayMs": 9997
+    },
+    "updatedAt": "2026-08-07T06:45:26.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-38-2",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-38-2",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-38"
+    },
+    "totals": {
+      "playMs": 48999,
+      "activePlayMs": 12000
+    },
+    "updatedAt": "2026-08-07T06:46:26.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-39-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-39-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39"
+    },
+    "totals": {
+      "playMs": 118000,
+      "activePlayMs": 89998
+    },
+    "updatedAt": "2026-08-07T06:49:26.857Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-39",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-39",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 90004,
+      "activePlayMs": 90004
+    },
+    "updatedAt": "2026-08-07T06:48:26.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-39-2",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-39-2",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39"
+    },
+    "totals": {
+      "playMs": 30001,
+      "activePlayMs": 13001
+    },
+    "updatedAt": "2026-08-07T06:48:46.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-39-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-39-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-39"
+    },
+    "totals": {
+      "playMs": 34001
+    },
+    "updatedAt": "2026-08-07T06:49:16.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-40-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-40-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-40"
+    },
+    "totals": {
+      "playMs": 70000,
+      "activePlayMs": 69001
+    },
+    "updatedAt": "2026-08-07T06:51:06.855Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-40",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-40",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-40",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 97001,
+      "activePlayMs": 97001
+    },
+    "updatedAt": "2026-08-07T06:51:06.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-40-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-40-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-40"
+    },
+    "totals": {
+      "playMs": 20000,
+      "activePlayMs": 20000
+    },
+    "updatedAt": "2026-08-07T06:50:56.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-40-2",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-40-2",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-40"
+    },
+    "totals": {
+      "playMs": 8000,
+      "activePlayMs": 8000
+    },
+    "updatedAt": "2026-08-07T06:51:06.855Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-41",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-41",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-41",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 204001,
+      "activePlayMs": 200001
+    },
+    "updatedAt": "2026-08-07T06:54:36.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-41-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-41-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-41"
+    },
+    "totals": {
+      "playMs": 235002,
+      "activePlayMs": 205001
+    },
+    "updatedAt": "2026-08-07T06:55:06.860Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-42-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42"
+    },
+    "totals": {
+      "playMs": 117998,
+      "activePlayMs": 116998
+    },
+    "updatedAt": "2026-08-07T06:57:56.855Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-42",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-42",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 170000,
+      "activePlayMs": 170000
+    },
+    "updatedAt": "2026-08-07T06:57:56.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-42-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42"
+    },
+    "totals": {
+      "playMs": 6001,
+      "activePlayMs": 6001
+    },
+    "updatedAt": "2026-08-07T06:56:56.854Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-42-2",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-2",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42"
+    },
+    "totals": {
+      "playMs": 29001,
+      "activePlayMs": 29001
+    },
+    "updatedAt": "2026-08-07T06:57:26.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-42-3",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-42-3",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-42"
+    },
+    "totals": {
+      "playMs": 18000,
+      "activePlayMs": 18000
+    },
+    "updatedAt": "2026-08-07T06:57:46.856Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-43",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 600993,
+      "activePlayMs": 521993
+    },
+    "updatedAt": "2026-08-07T07:07:56.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-43-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43"
+    },
+    "totals": {
+      "playMs": 442971,
+      "activePlayMs": 441971
+    },
+    "updatedAt": "2026-08-07T07:07:56.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-43-6",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-6",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43"
+    },
+    "totals": {
+      "playMs": 14000,
+      "activePlayMs": 14000
+    },
+    "updatedAt": "2026-08-07T07:05:16.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-43-5",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-5",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43"
+    },
+    "totals": {
+      "playMs": 45366,
+      "activePlayMs": 45366
+    },
+    "updatedAt": "2026-08-07T07:06:06.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-43-4",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-4",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43"
+    },
+    "totals": {
+      "playMs": 8001,
+      "activePlayMs": 8001
+    },
+    "updatedAt": "2026-08-07T07:06:16.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-43-3",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-3",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43"
+    },
+    "totals": {
+      "playMs": 28000,
+      "activePlayMs": 28000
+    },
+    "updatedAt": "2026-08-07T07:06:46.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-43-2",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-2",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43"
+    },
+    "totals": {
+      "playMs": 42000,
+      "activePlayMs": 42000
+    },
+    "updatedAt": "2026-08-07T07:07:36.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-43-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-43-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-43"
+    },
+    "totals": {
+      "playMs": 14000,
+      "activePlayMs": 14000
+    },
+    "updatedAt": "2026-08-07T07:07:46.856Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-44",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-44",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-44",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 72000,
+      "activePlayMs": 71000
+    },
+    "updatedAt": "2026-08-07T07:13:26.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-44-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-44-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-44"
+    },
+    "totals": {
+      "playMs": 337999,
+      "activePlayMs": 72000
+    },
+    "updatedAt": "2026-08-07T07:13:46.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-44-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-44-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-44"
+    },
+    "totals": {
+      "playMs": 7001
+    },
+    "updatedAt": "2026-08-07T07:13:46.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-45-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-45-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-45"
+    },
+    "totals": {
+      "playMs": 60999,
+      "activePlayMs": 60000
+    },
+    "updatedAt": "2026-08-07T07:15:26.856Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-45",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-45",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-45",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 100010,
+      "activePlayMs": 100010
+    },
+    "updatedAt": "2026-08-07T07:15:26.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-45-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-45-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-45"
+    },
+    "totals": {
+      "playMs": 9000,
+      "activePlayMs": 9000
+    },
+    "updatedAt": "2026-08-07T07:14:46.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-45-2",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-45-2",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-45"
+    },
+    "totals": {
+      "playMs": 31000,
+      "activePlayMs": 31000
+    },
+    "updatedAt": "2026-08-07T07:15:26.856Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-46",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-46",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 98001,
+      "activePlayMs": 98001
+    },
+    "updatedAt": "2026-08-07T07:17:06.854Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-46-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-46-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-46"
+    },
+    "totals": {
+      "playMs": 96000,
+      "activePlayMs": 96000
+    },
+    "updatedAt": "2026-08-07T07:17:06.854Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-47",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-47",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 48001,
+      "activePlayMs": 48001
+    },
+    "updatedAt": "2026-08-07T07:17:56.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-47-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-47-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-47"
+    },
+    "totals": {
+      "playMs": 76000,
+      "activePlayMs": 48001
+    },
+    "updatedAt": "2026-08-07T07:18:26.855Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-48-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-48-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48"
+    },
+    "totals": {
+      "playMs": 70999,
+      "activePlayMs": 69999
+    },
+    "updatedAt": "2026-08-07T07:20:06.857Z"
+  },
+  {
+    "_id": "audSeg:767e5d96-9f62-45f4-89a5-f98c43303144-48",
+    "scopeType": "audSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-48",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48",
+      "grpId": "767e5d96-9f62-45f4-89a5-f98c43303144-grp-3"
+    },
+    "totals": {
+      "playMs": 98001,
+      "activePlayMs": 98001
+    },
+    "updatedAt": "2026-08-07T07:20:06.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-48-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-48-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-48"
+    },
+    "totals": {
+      "playMs": 27002,
+      "activePlayMs": 27002
+    },
+    "updatedAt": "2026-08-07T07:19:56.858Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-49-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-49-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49"
+    },
+    "totals": {
+      "playMs": 34000,
+      "activePlayMs": 34000
+    },
+    "updatedAt": "2026-08-07T07:23:06.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-49-1",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-49-1",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-49"
+    },
+    "totals": {
+      "playMs": 150002,
+      "activePlayMs": 150002
+    },
+    "updatedAt": "2026-08-07T07:23:06.856Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-0-5",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-5",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0"
+    },
+    "totals": {
+      "playMs": 69053
+    },
+    "updatedAt": "2026-08-07T09:39:06.152Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-3-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-3"
+    },
+    "totals": {
+      "playMs": 1000
+    },
+    "updatedAt": "2026-08-07T08:50:36.857Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-4-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-4"
+    },
+    "totals": {
+      "playMs": 2000
+    },
+    "updatedAt": "2026-08-07T08:50:46.858Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-5-0",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-5"
+    },
+    "totals": {
+      "playMs": 10691
+    },
+    "updatedAt": "2026-08-07T08:50:50.547Z"
+  },
+  {
+    "_id": "subSeg:767e5d96-9f62-45f4-89a5-f98c43303144-0-7",
+    "scopeType": "subSeg",
+    "scopeId": "767e5d96-9f62-45f4-89a5-f98c43303144-0-7",
+    "parent": {
+      "audEpId": "767e5d96-9f62-45f4-89a5-f98c43303144",
+      "audSegId": "767e5d96-9f62-45f4-89a5-f98c43303144-0"
+    },
+    "totals": {
+      "playMs": 135065
+    },
+    "updatedAt": "2026-08-07T23:16:59.960Z"
   }
 ]

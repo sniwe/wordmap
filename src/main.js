@@ -70,6 +70,7 @@ canvas.tabIndex = -1;
 
 const state = {
   audEpItems: [],
+  timeTrackingItems: [],
   audSegItems: [],
   subSegItems: [],
   langUnitItems: [],
@@ -126,7 +127,6 @@ const langUnitRefResizeObserver =
     : null;
 let lastSubSegPlaybackShortcutAt = 0;
 let subSegPlaybackShortcutActive = false;
-let activeSubSegPlaybackSourceId = '';
 let enteredAudSegFocusContextId = '';
 let restoringEnteredAudSegFocus = false;
 let settingsOpen = false;
@@ -414,6 +414,7 @@ function renderAudEps(items) {
               }
             </span>
             ${audSegMarkup}
+            ${item.__seed ? '' : `<div class="item__playtime-progress" role="progressbar" aria-label="audEp playtime share" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${getAudEpPlaytimePercent(item)}" style="--playtime-percent:${getAudEpPlaytimePercent(item)}%"></div>`}
           `}
         </li>
       `;
@@ -425,6 +426,29 @@ function renderAudEps(items) {
   syncSubSegTextareaHeights();
   syncLangUnitRefsLists();
   syncEnteredAudSegFocusContext();
+}
+
+function getAudEpPlaytimePercent(item) {
+  const totalPlayMs = state.timeTrackingItems
+    .filter((trackingItem) => trackingItem?.scopeType === 'audEp')
+    .reduce((total, trackingItem) => total + (Number(trackingItem?.totals?.playMs) || 0), 0);
+  if (!totalPlayMs) {
+    return 0;
+  }
+
+  const playMs = state.timeTrackingItems.find(
+    (trackingItem) => trackingItem?.scopeType === 'audEp' && String(trackingItem.scopeId) === String(item?._id)
+  )?.totals?.playMs;
+  return Math.max(0, Math.min(100, ((Number(playMs) || 0) / totalPlayMs) * 100));
+}
+
+function syncAudEpPlaytimeProgress() {
+  audEpList.querySelectorAll('.item__playtime-progress').forEach((bar) => {
+    const item = state.audEpItems[Number(bar.closest('.item')?.dataset.audepIndex) - 1];
+    const percent = getAudEpPlaytimePercent(item);
+    bar.style.setProperty('--playtime-percent', `${percent}%`);
+    bar.setAttribute('aria-valuenow', String(percent));
+  });
 }
 
 function getAudEpItems() {
@@ -645,12 +669,10 @@ function moveAudSegGrpSel(direction) {
 
   const items = getAudSegItemsForAudEp(state.enteredAudEpIndex);
   if (selection.grpId) {
-    const size = selection.endIndex - selection.startIndex + 1;
     if (direction > 0) {
       selection.endIndex = Math.min(items.length - 1, selection.endIndex + 1);
-    } else if (selection.startIndex > 0) {
-      selection.startIndex -= 1;
-      selection.endIndex = selection.startIndex + size - 1;
+    } else if (selection.endIndex > selection.startIndex + 1) {
+      selection.endIndex -= 1;
     }
   } else {
     selection.endpointIndex = Math.max(0, Math.min(items.length - 1, selection.endpointIndex + direction));
@@ -1025,6 +1047,7 @@ function renderAudSegList(audEpIndex) {
                 ${subSegMarkup}
                 ${langUnitRefsMarkup}
               `}
+              <div class="item__segment-playtime-progress" role="progressbar" aria-label="audSeg playtime share" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${getAudSegPlaytimePercent(item)}" style="--playtime-percent:${getAudSegPlaytimePercent(item)}%"></div>
             </li>
           `;
         })
@@ -1038,6 +1061,29 @@ function renderAudSegList(audEpIndex) {
       </ul>
     </div>
   `;
+}
+
+function getAudSegPlaytimePercent(item) {
+  const totalPlayMs = state.timeTrackingItems
+    .filter((trackingItem) => trackingItem?.scopeType === 'audSeg')
+    .reduce((total, trackingItem) => total + (Number(trackingItem?.totals?.playMs) || 0), 0);
+  if (!totalPlayMs) {
+    return 0;
+  }
+
+  const playMs = state.timeTrackingItems.find(
+    (trackingItem) => trackingItem?.scopeType === 'audSeg' && String(trackingItem.scopeId) === String(item?._id)
+  )?.totals?.playMs;
+  return Math.max(0, Math.min(100, ((Number(playMs) || 0) / totalPlayMs) * 100));
+}
+
+function syncAudSegPlaytimeProgress() {
+  audEpList.querySelectorAll('.item__segment-playtime-progress').forEach((bar) => {
+    const item = getAudSegItemById(bar.closest('.item__segment')?.dataset.audsegId);
+    const percent = getAudSegPlaytimePercent(item);
+    bar.style.setProperty('--playtime-percent', `${percent}%`);
+    bar.setAttribute('aria-valuenow', String(percent));
+  });
 }
 
 function getAudSegContentIndicator(audSegId) {
@@ -2039,6 +2085,7 @@ function renderSubSegList(audSegItem) {
           ${parentSubSegId ? ` data-parent-subseg-id="${escapeHtml(parentSubSegId)}"` : ''}
           ${subSegItem?.isRoot === false ? ' data-placeholder="no subSeg yet.."' : ''}
         >${subSegItem?.isRoot === false && !content ? '' : content}</div>
+        <div class="item__subseg-playtime-progress" role="progressbar" aria-label="subSeg active playtime share" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${getSubSegActivePlaytimePercent(subSegItem)}" style="--playtime-percent:${getSubSegActivePlaytimePercent(subSegItem)}%"></div>
       </li>
     `;
   };
@@ -2696,30 +2743,50 @@ function countPinyinSyllables(text) {
 
   let total = 0;
   for (const syllable of syllables) {
-    let count = 0;
-    let index = 0;
-    while (index < syllable.length) {
-      let matched = '';
-      for (let end = syllable.length; end > index; end -= 1) {
-        const chunk = syllable.slice(index, end);
-        if (PINYIN_SYLLABLES.has(chunk)) {
-          matched = chunk;
-          break;
+    const counts = Array(syllable.length + 1).fill(Infinity);
+    counts[0] = 0;
+    for (let index = 0; index < syllable.length; index += 1) {
+      if (!Number.isFinite(counts[index])) {
+        continue;
+      }
+      for (let end = index + 1; end <= syllable.length; end += 1) {
+        if (PINYIN_SYLLABLES.has(syllable.slice(index, end))) {
+          counts[end] = Math.min(counts[end], counts[index] + 1);
         }
       }
-
-      if (!matched) {
-        return 0;
-      }
-
-      count += 1;
-      index += matched.length;
     }
 
-    total += count;
+    if (!Number.isFinite(counts[syllable.length])) {
+      return 0;
+    }
+
+    total += counts[syllable.length];
   }
 
   return total;
+}
+
+function getSubSegActivePlaytimePercent(item) {
+  const totalActivePlayMs = state.timeTrackingItems
+    .filter((trackingItem) => trackingItem?.scopeType === 'subSeg')
+    .reduce((total, trackingItem) => total + (Number(trackingItem?.totals?.activePlayMs) || 0), 0);
+  if (!totalActivePlayMs) {
+    return 0;
+  }
+
+  const activePlayMs = state.timeTrackingItems.find(
+    (trackingItem) => trackingItem?.scopeType === 'subSeg' && String(trackingItem.scopeId) === String(item?._id)
+  )?.totals?.activePlayMs;
+  return Math.max(0, Math.min(100, ((Number(activePlayMs) || 0) / totalActivePlayMs) * 100));
+}
+
+function syncSubSegPlaytimeProgress() {
+  audEpList.querySelectorAll('.item__subseg-playtime-progress').forEach((bar) => {
+    const item = getSubSegItemById(bar.closest('.item__subseg')?.dataset.subsegId);
+    const percent = getSubSegActivePlaytimePercent(item);
+    bar.style.setProperty('--playtime-percent', `${percent}%`);
+    bar.setAttribute('aria-valuenow', String(percent));
+  });
 }
 
 // ponytail: explicit inventory keeps legal y/w forms and rejects generated near-misses.
@@ -4580,7 +4647,7 @@ function getLinkedSubSegLineStartAutoLangUnitRange(editor) {
   const parentLangUnit = getLangUnitItem(linkTargetLangUnitId) ?? getLangUnitItem(getLangUnitCycleTargetId(linkTargetLangUnitId));
   const parentTargetType = String(parentLangUnit?.target?.type ?? '').trim();
   const parentTargetText = String(parentLangUnit?.target?.text || getLangUnitText(parentLangUnit) || '');
-  if (!['chinChar', 'chinWord', 'chinPhrase', 'chinFuzz'].includes(parentTargetType) || !parentTargetText) {
+  if (!parentTargetText) {
     return null;
   }
 
@@ -4597,11 +4664,15 @@ function getLinkedSubSegLineStartAutoLangUnitRange(editor) {
   const beforeText = getSubSegTextBeforeRange(editor, range);
   const lineStartMatch = beforeText.match(/(?:^|\n)(=*)([\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]+)$/u);
   const lineStart = lineStartMatch?.[2] ?? '';
+  const matchingPinyinSpan = getMatchingPinyinSpan(parentTargetText, lineStart);
+  if (!['chinChar', 'chinWord', 'chinPhrase', 'chinFuzz'].includes(parentTargetType) && !matchingPinyinSpan) {
+    return null;
+  }
   const text = parentTargetType === 'chinChar' && lineStart.length > 1
     ? lineStart
     : parentTargetText.includes(lineStart) && lineStart.length === 1
       ? lineStart
-      : getMatchingPinyinSpan(parentTargetText, lineStart)
+      : matchingPinyinSpan
         ? lineStart
         : '';
   if (!text) {
@@ -4634,7 +4705,12 @@ function autoLangUnitifyLinkedSubSegLineStart(editor) {
   }
 
   const { range, text } = match;
-  const target = getSubSegSelectionTarget(editor, range);
+  const linkTargetLangUnitId = getSubSegEditorLinkTargetLangUnitId(editor);
+  const parentLangUnit = getLangUnitItem(linkTargetLangUnitId) ?? getLangUnitItem(getLangUnitCycleTargetId(linkTargetLangUnitId));
+  const parentTargetText = String(parentLangUnit?.target?.text || getLangUnitText(parentLangUnit) || '');
+  const target = getMatchingPinyinSpan(parentTargetText, text)
+    ? { text, type: 'chinFuzz' }
+    : getSubSegSelectionTarget(editor, range);
   const langUnit = getLangUnitItemByCanonicalTarget(target, text);
   const subSegId = getSubSegEditorKey(editor);
   const langUnitId = langUnit?._id || buildLangUnitId(subSegId, getNextLangUnitOrdinal(editor, subSegId)) || createItemId();
@@ -5178,9 +5254,6 @@ function handleAudioStop(index) {
   }
 
   stopAudioLoop(audio);
-  if (activeSubSegPlaybackSourceId && String(audio?._timeTrackingSubSegId ?? '') === activeSubSegPlaybackSourceId) {
-    activeSubSegPlaybackSourceId = '';
-  }
   syncAudEpPlaybackLabel(index);
 }
 
@@ -5343,7 +5416,7 @@ function resetAudioPlayers() {
   pendingSeekFrameByIndex.clear();
 }
 
-async function toggleAudEpPlaybackByIndex(audEpIndex, sourceSubSegId = '') {
+async function toggleAudEpPlaybackByIndex(audEpIndex) {
   if (!Number.isInteger(audEpIndex) || audEpIndex < 0) {
     return;
   }
@@ -5354,7 +5427,6 @@ async function toggleAudEpPlaybackByIndex(audEpIndex, sourceSubSegId = '') {
   }
 
   if (audio.paused) {
-    activeSubSegPlaybackSourceId = sourceSubSegId;
     pauseOtherAudio(audEpIndex);
     const lock = getAudSegPlaybackLock(audEpIndex);
     if (lock && (audio.currentTime < lock.tcs || audio.currentTime >= lock.tce)) {
@@ -5375,15 +5447,9 @@ async function toggleSelectedAudEpPlayback() {
 }
 
 async function toggleSubSegAudEpPlayback(editor) {
-  const sourceSubSegId = editor instanceof HTMLElement ? String(editor.dataset.subsegId ?? '').trim() : '';
   const audSegId = editor instanceof HTMLElement ? String(editor.dataset.subsegAudsegId ?? '').trim() : '';
   const audEpIndex = getAudEpIndexForAudSegItem(getAudSegItemById(audSegId));
-  activeSubSegPlaybackSourceId = sourceSubSegId;
-  const audio = getAudioForIndex(audEpIndex);
-  if (audio) {
-    audio._timeTrackingSubSegId = sourceSubSegId;
-  }
-  await toggleAudEpPlaybackByIndex(audEpIndex, sourceSubSegId);
+  await toggleAudEpPlaybackByIndex(audEpIndex);
 }
 
 function cycleAudEpSelection(step) {
@@ -5555,11 +5621,27 @@ async function loadSubSegs() {
   }
 }
 
+async function loadTimeTracking() {
+  try {
+    const response = await fetch('/api/timeTracking/items');
+    if (!response.ok) {
+      return;
+    }
+    state.timeTrackingItems = await response.json();
+    syncAudEpPlaytimeProgress();
+    syncAudSegPlaytimeProgress();
+    syncSubSegPlaytimeProgress();
+  } catch {
+    // Tracking is additive UI; an unavailable read leaves the last display intact.
+  }
+}
+
 async function reloadAudData() {
   await loadAudEps();
   await loadAudSegs();
   await loadLangUnits();
   await loadSubSegs();
+  await loadTimeTracking();
 }
 
 function getSelectedAudEpDataIndex() {
@@ -6476,6 +6558,12 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      cycleAudSegGroupTarget(event.key === 'ArrowDown' ? 1 : -1);
+      return;
+    }
+
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
       if (!state.audSegGrpSel) {
@@ -6512,19 +6600,9 @@ document.addEventListener('keydown', (event) => {
 
       state.selectedAudSegIndex =
         state.selectedAudSegIndex < 0
-          ? 0
-          : (state.selectedAudSegIndex + (event.key === 'ArrowRight' ? 1 : -1) + items.length) % items.length;
+          ? event.key === 'ArrowRight' ? 0 : items.length - 1
+          : (state.selectedAudSegIndex + (event.key === 'ArrowRight' ? 1 : -1) + 1) % (items.length + 1) - 1;
       renderAudEps(state.audEpItems);
-      return;
-    }
-
-    if (
-      state.enteredAudEpIndex >= 0 &&
-      state.enteredAudSegIndex < 0 &&
-      (event.key === 'ArrowUp' || event.key === 'ArrowDown')
-    ) {
-      event.preventDefault();
-      cycleAudSegGroupTarget(event.key === 'ArrowDown' ? 1 : -1);
       return;
     }
 
@@ -6546,15 +6624,63 @@ document.addEventListener('keydown', (event) => {
       return;
     }
 
-    if (event.key === 'Backspace' && state.enteredAudEpIndex >= 0) {
+    if (
+      event.key === 'Backspace' &&
+      state.enteredAudEpIndex >= 0 &&
+      state.enteredAudSegIndex < 0 &&
+      state.selectedAudSegIndex >= 0
+    ) {
+      event.preventDefault();
+      state.selectedAudSegIndex = -1;
+      renderAudEps(state.audEpItems);
+      return;
+    }
+
+    if (
+      event.key === 'Backspace' &&
+      state.enteredAudEpIndex >= 0 &&
+      state.enteredAudSegIndex < 0 &&
+      state.audSegGrpTargetIndex < 0
+    ) {
       event.preventDefault();
       closeEnteredAudEp();
+      return;
+    }
+
+    if (event.key === 'Backspace' && state.enteredAudEpIndex >= 0 && state.enteredAudSegIndex < 0) {
+      event.preventDefault();
       return;
     }
 
     if (event.key === 'Backspace') {
       event.preventDefault();
       clearAudEpSelection();
+      return;
+    }
+
+    if (state.audSegGrpTargetIndex >= 0 && (event.key === 'ArrowUp' || event.key === 'ArrowDown')) {
+      event.preventDefault();
+      return;
+    }
+
+    if (
+      state.enteredAudEpIndex >= 0 &&
+      state.enteredAudSegIndex < 0 &&
+      (event.key === 'ArrowUp' || event.key === 'ArrowDown')
+    ) {
+      event.preventDefault();
+      const items = getAudSegItemsForAudEp(state.enteredAudEpIndex);
+      if (!items.length) {
+        return;
+      }
+
+      state.selectedAudSegIndex =
+        state.selectedAudSegIndex < 0
+          ? 0
+          : event.key === 'ArrowUp' && state.selectedAudSegIndex < 3
+            ? -1
+            : (state.selectedAudSegIndex + (event.key === 'ArrowDown' ? 3 : -3) + items.length) % items.length;
+      renderAudEps(state.audEpItems);
       return;
     }
 
@@ -6846,6 +6972,17 @@ settingsPopoverClearLangUnitsButton?.addEventListener('click', () => {
 });
 
 function getTimeTrackingContext() {
+  const focusedEditor = getFocusedSubSegEditor();
+  const focusedSubSegId = focusedEditor instanceof HTMLElement ? String(focusedEditor.dataset.subsegId ?? '').trim() : '';
+  const focusedSubSegAudSegId = focusedEditor instanceof HTMLElement ? String(focusedEditor.dataset.subsegAudsegId ?? '').trim() : '';
+  const focusedSubSegAudEpIndex = getAudEpIndexForAudSegItem(getAudSegItemById(focusedSubSegAudSegId));
+  const focusedSubSegAudEpId = focusedSubSegAudEpIndex >= 0 ? getAudEpIdByIndex(focusedSubSegAudEpIndex) : '';
+  const focusContext = {
+    focusedSubSegId,
+    focusedSubSegAudSegId,
+    focusedSubSegAudEpId,
+  };
+
   for (const [index, audio] of audioPlayers.entries()) {
     if (audio.paused || audio.ended) {
       continue;
@@ -6875,24 +7012,20 @@ function getTimeTrackingContext() {
       audSegGroupId = group?.grpId || '';
     }
 
-    const sourceSubSeg = getSubSegItemById(activeSubSegPlaybackSourceId);
-    const subSegId = sourceSubSeg && String(sourceSubSeg.audSegId ?? '') === String(audSeg?._id ?? '')
-      ? activeSubSegPlaybackSourceId
-      : '';
     return {
       playing: true,
       audEpId,
       audSegId: String(audSeg?._id ?? ''),
       audSegGroupId,
-      subSegId,
+      ...focusContext,
     };
   }
-  return { playing: false };
+  return { playing: false, ...focusContext };
 }
 
 const timeTracker = createTimeTracker({
   getContext: getTimeTrackingContext,
-  flush: async (deltas) => {
+  flush: async (deltas, options) => {
     const response = await fetch('/api/timeTracking/deltas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -6901,6 +7034,9 @@ const timeTracker = createTimeTracker({
     });
     if (!response.ok) {
       throw new Error(`time tracking flush failed: ${response.status}`);
+    }
+    if (!options?.beacon) {
+      void loadTimeTracking();
     }
   },
 });
